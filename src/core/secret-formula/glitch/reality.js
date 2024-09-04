@@ -1,0 +1,158 @@
+
+export const realityUG = [
+  {
+    name: "realitize",
+    id: 0,
+    requirement: () => `reach ${format("1e6000")} eternity points before your first reality`,
+    hasFailed: () => player.realities != 0,
+    checkRequirement: () => player.eternityPoints.e >= 6000 && player.realities == 0,
+    checkevent: GAME_EVENT.GAME_TICK_BEFORE,
+    description: "gain x1e25 more EP",
+    effect: () => 1e25,
+    formatEffect: value => formatX(value, 2, 2),
+    isUseless: () => Pelle.isDoomed
+  },
+  {
+  name: "dialated",
+    id: 1,
+    requirement: () => `reach ${format("1e1050")} (pending) EP while dialated before your first reality (check multiplier breakdown)`,
+    hasFailed: () => player.realities != 0,
+    checkRequirement: () => gainedEternityPoints().greaterThanOrEqualTo("1e1050") && player.dilation.active && player.realities == 0,
+    checkevent: GAME_EVENT.GAME_TICK_BEFORE,
+    description: "gain 15 times more tachyon particles",
+    effect: () => 15,
+    formatEffect: value => formatX(value, 2, 2)
+  },
+  {
+    name: "real time complex",
+    id: 2,
+    requirement: () => `reach ${format("1e8000")} eternity points before your first reality`,
+    hasFailed: () => player.realities != 0,
+    checkRequirement: () => player.eternityPoints.e >= 8000 && player.realities == 0,
+    checkevent: GAME_EVENT.GAME_TICK_BEFORE,
+    description: "gain 25 more perks and realitys",
+    effect: () => 25,
+    formatEffect: value => format(value, 2, 2)
+  },
+  {
+    name: "immisinity",
+    id: 3,
+    requirement: () => `reach ${format(1e6)} RM`,
+    hasFailed: () =>false,
+    checkRequirement: () => player.reality.realityMachines.e >= 6,
+    checkevent: GAME_EVENT.GAME_TICK_BEFORE,
+    description: "all TD gain a 1e100 multiplier",
+    effect: () => Decimal.add(1e100),
+    formatEffect: value => formatX(value, 2, 2)
+  },
+  {
+    name: "sacrifisal power",
+    id: 4,
+    requirement: () => `reach ${format("1e5000")} eternity points in teresa's reality the first time`,
+    hasFailed: () => player.celestials.teresa.bestRunAM.e >= 10000,
+    checkRequirement: () => player.eternityPoints.e >= 5000 && Teresa.isRunning && player.celestials.teresa.bestRunAM.e < 10000,
+    checkevent: GAME_EVENT.GAME_TICK_BEFORE,
+    description: "EC8 and EC4 have no path reqierment (unlock other paths at the same row)",
+    effect: 1,
+    formatEffect: value => formatX(value, 2, 2),
+  },
+  {
+    name: "limiting reality",
+    id: 5,
+    requirement: () => `reach ${format(1e24)} RM`,
+    hasFailed: () =>false,
+    checkRequirement: () => player.reality.realityMachines.e >= 24,
+    checkevent: GAME_EVENT.GAME_TICK_BEFORE,
+    description: "gain 25 additional perk points",
+    effect: () => 25,
+    formatEffect: value => format(value, 2, 2)
+  },
+{
+    name: "exteral dilation",
+    id: 6,
+    requirement: () => `reach ${format(1.79e308)} antimater in effarigs reality (infinity layer) with three glyphs maxium`,
+    hasFailed: () => Effarig.currentStage > 1 || player.reality.glyphs.active.length > 3,
+    checkRequirement: () => player.antimatter.greaterThanOrEqualTo(1.79e308) && Effarig.isRunning && Effarig.currentStage == 1 && player.reality.glyphs.active.length <= 3,
+    checkevent: GAME_EVENT.GAME_TICK_BEFORE,
+    description: "glyphs have another effect",
+    effect: 1,
+    formatEffect: value => formatX(value, 2, 2)
+  },
+  {
+    name: "alternitve realitive",
+    id: 7,
+    requirement: "fill the nameless ones real time storage",
+    hasFailed: () =>false,
+    checkRequirement: () =>  player.celestials.enslaved.storedReal >= Enslaved.storedRealTimeCap,
+    checkevent: GAME_EVENT.GAME_TICK_BEFORE,
+    description: "real time storing is fulled automatically and 60 times faster",
+    effect: 60,
+    formatEffect: value => format(value, 2, 2)
+  },
+  {
+    name: "i hate V",
+    id: 8,
+    requirement: "unlock V",
+    hasFailed: () =>false,
+    checkRequirement: () =>  player.celestials.v.unlockBits != 0,
+    checkevent: GAME_EVENT.GAME_TICK_BEFORE,
+    description: "gain space theorem",
+    effect: 10,
+    formatEffect: value => format(value, 2, 2)
+  },
+  {
+    name: "memorys",
+    id: 9,
+    requirement: "unlock Ra",
+    hasFailed: () =>false,
+    checkRequirement: () =>  Ra.isUnlocked,
+    checkevent: GAME_EVENT.GAME_TICK_BEFORE,
+    description: "unlock a glitched memory",
+    effect: 1,
+    formatEffect: value => format(value, 2, 2)
+  },
+  {
+    name: "astral confrontment",
+    id: 10,
+    requirement: "unlock lai'tela",
+    hasFailed: () => false,
+    checkRequirement: () =>  Laitela.isUnlocked,
+    checkevent: GAME_EVENT.GAME_TICK_BEFORE,
+    description: "dark matter energy gained is 50 times faster",
+    effect: 50,
+    formatEffect: () => "active"
+  },
+  {
+    name: "galatic overload",
+    id: 11,
+    requirement: () => `have ${format(10000)} singularities without desablizing once`,
+    hasFailed: () => Laitela.difficultyTier != 0,
+    checkRequirement: () =>  player.celestials.laitela.singularities.gte(10000) && Laitela.difficultyTier == 0,
+    checkevent: GAME_EVENT.GAME_TICK_BEFORE,
+    description: "singularities gain is boosted by their amount",
+    effect: () => player.celestials.laitela.singularities.add(10).log10(),
+    formatEffect: value => format(value, 2, 2)
+  },
+  {
+    name: "pre galatic ",
+    id: 12,
+    requirement: () => `reach ${format("1e66.66E9")} antimatter in effarig's reality with 5 cursed glyphs, before destablizing latela's reality thrice`,
+    hasFailed: () => Laitela.difficultyTier > 2,
+    checkRequirement: () =>  player.requirementChecks.reality.maxGlyphs <= -15 && Effarig.isRunning && Laitela.difficultyTier <= 2 && Currency.antimatter.gt("1e6.666E10"),
+    checkevent: GAME_EVENT.GAME_TICK_BEFORE,
+    description: "unlock two new treasa shop items",
+    effect: () => 1,
+    formatEffect: () => "active"
+  },
+  {
+    name: "overlight powerforce",
+    id: 13,
+    requirement: "complete all other glitch challanges",
+    hasFailed: () => player.glitch.preinfinity.upgradebits != 255 || player.glitch.breakinfinity.upgradebits != 63 || player.glitch.eternity.upgradebits != 63 || player.glitch.reality.upgradebits != 8191,
+    checkRequirement: () =>  player.glitch.preinfinity.upgradebits >= 255 && player.glitch.breakinfinity.upgradebits >= 63 && player.glitch.eternity.upgradebits >= 63 && player.glitch.reality.upgradebits >= 8191,
+    checkevent: GAME_EVENT.GAME_TICK_BEFORE,
+    description: "unlock pelle rift",
+    effect: () => 1,
+    formatEffect: () => "unlocked"
+  },
+];
