@@ -85,7 +85,7 @@ export const AutoGlyphProcessor = {
       case AUTO_GLYPH_SCORE.LOWEST_ALCHEMY: {
         const resource = AlchemyResource[glyph.type];
         const refinementGain = GlyphSacrificeHandler.glyphRefinementGain(glyph);
-        return (resource.isUnlocked && refinementGain.gt(0))
+        return (resource.isUnlocked && refinementGain > 0)
           ? resource.amount.neg()
           : Decimal.NUMBER_MAX_VALUE.neg();
       }
