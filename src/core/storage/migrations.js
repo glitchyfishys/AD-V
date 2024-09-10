@@ -411,6 +411,10 @@ export const migrations = {
         player.reality.automator.constantSortOrder = [...definedConstants];
       }
     },
+    25: player => {
+      player.celestials.glitch.riftForce = player.celestials.glitch.riftforce;
+      delete player.celestials.glitch.riftforce;
+    },
   },
 
   normalizeTimespans(player) {

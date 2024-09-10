@@ -2,13 +2,16 @@
 import ChallengeGrid from "@/components/ChallengeGrid";
 import ChallengeTabHeader from "@/components/ChallengeTabHeader";
 import EternityChallengeBox from "./EternityChallengeBox";
+import PrimaryButton from "@/components/PrimaryButton";
+import { Enslaved } from "../../../core/globals";
 
 export default {
   name: "EternityChallengesTab",
   components: {
     ChallengeTabHeader,
     ChallengeGrid,
-    EternityChallengeBox
+    EternityChallengeBox,
+    PrimaryButton
   },
   data() {
     return {
@@ -21,6 +24,9 @@ export default {
       untilNextEC: TimeSpan.zero,
       untilAllEC: TimeSpan.zero,
       hasECR: false,
+      allowECcomplete: false,
+      ECreq: [],
+      isEnslaved: true,
     };
   },
   computed: {
@@ -64,10 +70,26 @@ export default {
         this.untilAllEC.copyFrom(new TimeSpan(untilNextEC.totalMilliseconds.add(autoECInterval.mul(remainingCompletions - 1))) );
       }
       this.hasECR = Perk.studyECRequirement.isBought;
+      this.allowECcomplete = PlayerProgress.realityUnlocked();
+      this.ECreq = [undefined,"1e30", "1e30", "1e30", "1e40", "1e50", "1e60", "1e70", "1e80", "1e100","1e150","1e1300","1e1400","1e1E300"];
+      this.isEnslaved = Enslaved.isRunning;
     },
     isChallengeVisible(challenge) {
       return challenge.completions > 0 || challenge.isUnlocked || challenge.hasUnlocked ||
         (this.showAllChallenges && PlayerProgress.realityUnlocked());
+    },
+    ECc(){
+      if(this.isEnslaved) return GameUI.notify.error("can't be used in the Namelessones' reality",3000)
+      if(Effarig.isRunning && Effarig.currentStage < 4) return GameUI.notify.error("can't be used in the Effarig's reality, untill reality layer is complete",3000)
+      let h=0;
+      for(let i=1; i <= 12; i++){
+        if(!Currency.eternityPoints.gte(this.ECreq[i])) break;
+        if(player.eternityChalls["eterc" + i] < 5 || player.eternityChalls["eterc" + i] == undefined) {
+          player.eternityChalls["eterc" + i] = 5;
+        }
+          h = i;
+      }
+       if(!Currency.eternityPoints.gte("1e4000")) h == 12 ?  GameUI.notify.eternity("All EC's are completed",3000) : GameUI.notify.eternity("fully completed EC's up to " + (h) + ", next ec" + (h+1) + " at " + format( new Decimal(this.ECreq[h+1])) + " EP",3000);
     }
   }
 };
@@ -76,6 +98,22 @@ export default {
 <template>
   <div class="l-challenges-tab">
     <ChallengeTabHeader />
+
+    <span v-if="allowECcomplete">
+      <PrimaryButton
+      class="o-primary-btn--subtab-option"
+      @click="ECc"
+        >
+        <span v-if="isEnslaved">
+        broken by compaction of this reality
+        </span>
+        <span v-else>
+        complete EC's
+        </span>
+        
+      </PrimaryButton>
+    </span>
+
     <div v-if="isAutoECVisible">
       Eternity Challenges are automatically completed sequentially, requiring all previous
       Eternity Challenges to be fully completed before any progress is made.

@@ -53,7 +53,7 @@ export class DimBoost {
   }
 
   static get maxBoosts() {
-    if (Ra.isRunning || Glitch.augmenteffectactive(6)) {
+    if (Ra.isRunning || Glitch.augmentEffectActive(6)) {
       // Ra makes boosting impossible. Note that this function isn't called
       // when giving initial boosts, so the player will still get those.
       return 0;
@@ -84,7 +84,7 @@ export class DimBoost {
 
   static get lockText() {
     if (DimBoost.purchasedBoosts >= this.maxBoosts) {
-      if (Ra.isRunning || Glitch.augmenteffectactive(6)) return Glitch.augmenteffectactive(6) ? "Locked (Glitch's Reality effect)" : "Locked (Ra's Reality)";
+      if (Ra.isRunning || Glitch.augmentEffectActive(6)) return Glitch.augmentEffectActive(6) ? "Locked (Glitch's Reality effect)" : "Locked (Ra's Reality)";
       if (InfinityChallenge(1).isRunning) return "Locked (Infinity Challenge 1)";
       if (NormalChallenge(8).isRunning) return "Locked (8th Antimatter Dimension Autobuyer Challenge)";
     }
@@ -156,7 +156,7 @@ export class DimBoost {
   }
 
   static get imaginaryBoosts() {
-    return (Ra.isRunning || Glitch.augmenteffectactive(6)) ? 0 : ImaginaryUpgrade(12).effectOrDefault(0) * ImaginaryUpgrade(23).effectOrDefault(1);
+    return (Ra.isRunning || Glitch.augmentEffectActive(6)) ? 0 : ImaginaryUpgrade(12).effectOrDefault(0) * ImaginaryUpgrade(23).effectOrDefault(1);
   }
 
   static get totalBoosts() {
@@ -214,28 +214,28 @@ export function manualRequestDimensionBoost(bulk) {
   if (Currency.antimatter.gt(Player.infinityLimit) || !DimBoost.requirement.isSatisfied) return;
   if (!DimBoost.canBeBought) return;
   if (GameEnd.creditsEverClosed) return;
+  if((!preInfinityUGs.all[0].config.hasFailed() && !preInfinityUGs.all[0].isBought) && player.options.confirmations.glitchCL && player.dimensionBoosts == 0){
+    Modal.message.show(`you will fail glitch challenge ${preInfinityUGs.all[0].config.name} <br> which is to ${preInfinityUGs.all[1].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
+    return;
+  }
+  else if((!preInfinityUGs.all[1].config.hasFailed() && !preInfinityUGs.all[1].isBought) && player.options.confirmations.glitchCL && player.dimensionBoosts == 1){
+    Modal.message.show(`you will fail glitch challenge ${preInfinityUGs.all[1].config.name} <br> which is to ${preInfinityUGs.all[1].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
+    return;
+  }
+  else if((!preInfinityUGs.all[2].config.hasFailed() && !preInfinityUGs.all[2].isBought) && player.options.confirmations.glitchCL && player.dimensionBoosts == 2){
+    Modal.message.show(`you will fail glitch challenge ${preInfinityUGs.all[2].config.name} <br> which is to ${preInfinityUGs.all[2].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
+    return;
+  }
+  else if((!preInfinityUGs.all[3].config.hasFailed() && !preInfinityUGs.all[3].isBought) && player.options.confirmations.glitchCL && player.dimensionBoosts == 6){
+    Modal.message.show(`you will fail glitch challenge ${preInfinityUGs.all[3].config.name} <br> which is to ${preInfinityUGs.all[3].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
+    return;
+  }
+  else if(((!preInfinityUGs.all[5].config.hasFailed() && !preInfinityUGs.all[5].isBought) && player.options.confirmations.glitchCL && player.dimensionBoosts == 0 && player.galaxies == 1)){
+    Modal.message.show(`you will fail glitch challenge ${preInfinityUGs.all[5].config.name} <br> which is to ${preInfinityUGs.all[5].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
+    return;
+  }
   if (player.options.confirmations.dimensionBoost) {
     Modal.dimensionBoost.show({ bulk });
-    return;
-  }
-  if((!preinfinityUGs.all[0].config.hasFailed() && !preinfinityUGs.all[0].isBought) && player.options.confirmations.glitchCL && player.dimensionBoosts == 0){
-    Modal.message.show(`you will fail glitch challenge ${preinfinityUGs.all[0].config.name} <br> which is to ${preinfinityUGs.all[1].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
-    return;
-  }
-  else if((!preinfinityUGs.all[1].config.hasFailed() && !preinfinityUGs.all[1].isBought) && player.options.confirmations.glitchCL && player.dimensionBoosts == 1){
-    Modal.message.show(`you will fail glitch challenge ${preinfinityUGs.all[1].config.name} <br> which is to ${preinfinityUGs.all[1].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
-    return;
-  }
-  else if((!preinfinityUGs.all[2].config.hasFailed() && !preinfinityUGs.all[2].isBought) && player.options.confirmations.glitchCL && player.dimensionBoosts == 2){
-    Modal.message.show(`you will fail glitch challenge ${preinfinityUGs.all[2].config.name} <br> which is to ${preinfinityUGs.all[2].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
-    return;
-  }
-  else if((!preinfinityUGs.all[3].config.hasFailed() && !preinfinityUGs.all[3].isBought) && player.options.confirmations.glitchCL && player.dimensionBoosts == 6){
-    Modal.message.show(`you will fail glitch challenge ${preinfinityUGs.all[3].config.name} <br> which is to ${preinfinityUGs.all[3].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
-    return;
-  }
-  else if(((!preinfinityUGs.all[5].config.hasFailed() && !preinfinityUGs.all[5].isBought) && player.options.confirmations.glitchCL && player.dimensionBoosts == 0 && player.galaxies == 1)){
-    Modal.message.show(`you will fail glitch challenge ${preinfinityUGs.all[5].config.name} <br> which is to ${preinfinityUGs.all[5].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
     return;
   }
   requestDimensionBoost(bulk);
@@ -244,6 +244,22 @@ export function manualRequestDimensionBoost(bulk) {
 export function requestDimensionBoost(bulk) {
   if (Currency.antimatter.gt(Player.infinityLimit) || !DimBoost.requirement.isSatisfied) return;
   if (!DimBoost.canBeBought) return;
+  if((!preInfinityUGs.all[0].config.hasFailed() && !preInfinityUGs.all[0].isBought) && player.options.confirmations.glitchCL && player.dimensionBoosts == 0){
+    return;
+  }
+  else if((!preInfinityUGs.all[1].config.hasFailed() && !preInfinityUGs.all[1].isBought) && player.options.confirmations.glitchCL && player.dimensionBoosts == 1){
+    return;
+  }
+  else if((!preInfinityUGs.all[2].config.hasFailed() && !preInfinityUGs.all[2].isBought) && player.options.confirmations.glitchCL && player.dimensionBoosts == 2){
+    return;
+  }
+  else if((!preInfinityUGs.all[3].config.hasFailed() && !preInfinityUGs.all[3].isBought) && player.options.confirmations.glitchCL && player.dimensionBoosts == 4){
+    return;
+  }
+  else if((!preInfinityUGs.all[5].config.hasFailed() && !preInfinityUGs.all[5].isBought) && player.options.confirmations.glitchCL && player.dimensionBoosts == 0 && player.galaxies == 1){
+    return;
+  }
+
   Tutorial.turnOffEffect(TUTORIAL_STATE.DIMBOOST);
   if (BreakInfinityUpgrade.autobuyMaxDimboosts.isBought && bulk) maxBuyDimBoosts();
   else softReset(1);

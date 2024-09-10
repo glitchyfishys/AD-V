@@ -1,11 +1,11 @@
-import {preinfinityUG } from "./preinfinity";
-import {breakinfinityUG} from "./break infinity";
+import {preInfinityUG } from "./preinfinity";
+import {breakInfinityUG} from "./break infinity";
 import {eternityUG} from "./eternity";
 import {realityUG} from "./reality";
 
 export const glitch = {
-  preinfinityUG: preinfinityUG,
-  breakinfinityUG: breakinfinityUG,
+  preInfinityUG: preInfinityUG,
+  breakInfinityUG: breakInfinityUG,
   eternityUG: eternityUG,
   realityUG: realityUG
 };

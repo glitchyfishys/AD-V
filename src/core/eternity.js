@@ -61,6 +61,20 @@ export function eternityAnimation() {
 export function eternityResetRequest() {
   if (!Player.canEternity) return;
   if (GameEnd.creditsEverClosed) return;
+
+  if((!breakInfinityUGs.all[0].config.hasFailed() && !breakInfinityUGs.all[0].isBought) && player.options.confirmations.glitchCL){
+    Modal.message.show(`you will fail glitch challenge ${breakInfinityUGs.all[0].config.name} <br> which is to ${breakInfinityUGs.all[0].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
+    return;
+  }
+  else if((!breakInfinityUGs.all[1].config.hasFailed() && !breakInfinityUGs.all[1].isBought) && player.options.confirmations.glitchCL){
+    Modal.message.show(`you will fail glitch challenge ${breakInfinityUGs.all[1].config.name} <br> which is to ${breakInfinityUGs.all[1].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
+    return;
+  }
+  else if((!eternityUGs.all[0].config.hasFailed() && !eternityUGs.all[0].isBought) && player.options.confirmations.glitchCL){
+    Modal.message.show(`you will fail glitch challenge ${eternityUGs.all[0].config.name} <br> which is to ${eternityUGs.all[0].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
+    return;
+  }
+
   askEternityConfirmation();
 }
 

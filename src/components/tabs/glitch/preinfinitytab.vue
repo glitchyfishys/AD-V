@@ -12,7 +12,7 @@ export default {
     }
   },
   computed: {
-    upgrades: () => preinfinityUGs.all
+    upgrades: () => preInfinityUGs.all
   }
 };
   
@@ -21,9 +21,9 @@ export default {
 <template>
   <div class="l-reality-upgrade-grid">
     <div class="c-preinfinity-infotext">
-      hello destroyer.
+      Hello destroyer.
       <br>
-      i have some tests for you.
+      I have some tests for you.
     </div>
   
       <div

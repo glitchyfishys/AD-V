@@ -21,9 +21,9 @@ export default {
 <template>
   <div class="l-reality-upgrade-grid">
     <div class="c-eternity-infotext">
-      this is the biggest threshold
+      This is the biggest threshold
       <br>
-      get a many as you can
+      Get a many as you can
     </div>
   
       <div

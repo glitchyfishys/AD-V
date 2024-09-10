@@ -176,13 +176,29 @@ export const ShopPurchase = mapGameDataToObject(
 shop.purchaseTimeSkip = function() {
   let time = 3600 * 6;
   Speedrun.setSTDUse(true);
-  player.IAP.STDcoins -= 24;//remove due to gain over time
+ 
+  if(Enslaved.isStoringRealTime){
+    player.celestials.enslaved.storedReal += time * 1000;
+    time = player.celestials.enslaved.storedReal % Enslaved.storedRealTimeCap
+    player.celestials.enslaved.storedReal = Math.min(player.celestials.enslaved.storedReal, Enslaved.storedRealTimeCap);
+  }
+
+  player.IAP.STDcoins -= time / 900;
   simulateTime(time);
+  
 };
 
 shop.purchaseLongerTimeSkip = function() {
   let time = 3600 * 24;
   Speedrun.setSTDUse(true);
-  player.IAP.STDcoins -= 96;
+  
+  if(Enslaved.isStoringRealTime){
+    player.celestials.enslaved.storedReal += time * 1000;
+    time = player.celestials.enslaved.storedReal % Enslaved.storedRealTimeCap
+    player.celestials.enslaved.storedReal = Math.min(player.celestials.enslaved.storedReal, Enslaved.storedRealTimeCap);
+  }
+
+  player.IAP.STDcoins -= time / 900;
   simulateTime(time);
+  
 };

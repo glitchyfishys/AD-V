@@ -21,11 +21,11 @@ export default {
 <template>
   <div class="l-reality-upgrade-grid">
     <div class="c-reality-infotext">
-      here we are
+      Here we are
       <br>
-      the end is nigh
+      The end is nigh
       <br>
-      the most powerfull
+      the most powerful
     </div>
   
       <div

@@ -384,8 +384,9 @@ export const normalTimeStudies = [
     requirement: [132],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     requiresST: [141, 143],
-    description: () => `You gain ${formatX(passiveIPMult())} more Infinity Points, which raises and decays with a static amount`,
+    description: () => `You gain more Infinity Points, which grows and decays over this Infinity with a static 5x multiplier`,
     effect: passiveIPMult,
+    formatEffect: value => formatX(passiveIPMult(), 2, 1),
     cap: () => (Effarig.eternityCap === undefined ? undefined : Effarig.eternityCap.toNumber())
   },
   {
@@ -434,7 +435,7 @@ export const normalTimeStudies = [
     requirement: [161, 162],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     description: () => `Time Shard requirement for the next Tickspeed upgrade goes up slower
-      ${formatX(1.33, 0, 2)} ➜ ${formatX(1.25, 0, 2)}`,
+      ${ formatX(eternityUGs.all[1].isBought ? 1.3 : 1.33, 0, 2)} ➜ ${formatX(GlitchRifts.beta.milestones[2].isUnlocked ? 1.2 : 1.25, 0, 2)}`,
     effect: () => TS171_MULTIPLIER
   },
   {

@@ -112,6 +112,7 @@ export class Sacrifice {
     let postPowerSacrifice = prePowerBoost.clampMin(1).pow(this.sacrificeExponent);
 
     let softcap = postPowerSacrifice.div("1e1E16").pow(0.9);
+    player.sacrificed = player.sacrificed.min("1e1E27");
     return postPowerSacrifice.gte("1e1E16") ? postPowerSacrifice.div(softcap) : postPowerSacrifice;
   }
 }
@@ -129,7 +130,7 @@ export function sacrificeReset() {
   EventHub.dispatch(GAME_EVENT.SACRIFICE_RESET_BEFORE);
   const nextBoost = Sacrifice.nextBoost;
   player.chall8TotalSacrifice = player.chall8TotalSacrifice.times(nextBoost);
-  player.sacrificed = player.sacrificed.plus(AntimatterDimension(1).amount);
+  player.sacrificed = player.sacrificed.plus(AntimatterDimension(1).amount).min("1e1E27");
   const isAch118Unlocked = Achievement(118).canBeApplied;
   if (NormalChallenge(8).isRunning) {
     if (!isAch118Unlocked) {

@@ -1,3 +1,4 @@
+import { Currency } from "../../currency";
 import { GameDatabase } from "../../secret-formula/game-database";
 import { Quotes } from "../quotes";
 import { GlitchRifts } from "./glitchrift";
@@ -9,16 +10,16 @@ export const Glitch = {
     return GlitchRifts.gamma.milestones[5].effectOrDefault(0) == 0 ? false : true;
   },
 
-  augmenteffectactive(id = 0, force = false){
+  augmentEffectActive(id = 0, force = false){
     if(!this.isRunning && !force) return false;
     return (player.celestials.glitch.augment.effectbits & (1 << id)) > 0;
   },
 
-  get augmenteffectbits(){
+  get augmentEffectBits(){
     return player.celestials.glitch.augment.effectbits;
   },
 
-  augmenteffects(id = 0){
+  augmentEffects(id = 0){
       if(id == 0) return "Teresa Reality";
       if(id == 1) return "Effarig Reality";
       if(id == 2) return "Nameless one's Reality";
@@ -32,23 +33,23 @@ export const Glitch = {
       return "out of range";
   },
 
-  get activeaugments(){
+  get activeAugments(){
       let effect = [];
-      this.augmenteffectactive(0, true) ? effect.push("Teresa Reality") : undefined;
-      this.augmenteffectactive(1, true) ? effect.push("Effarig Reality") : undefined;
-      this.augmenteffectactive(2, true) ? effect.push("Nameless one's Reality") : undefined;
-      this.augmenteffectactive(3, true) ? effect.push("Nameless one's dim limit") : undefined;
-      this.augmenteffectactive(4, true) ? effect.push("Nameless one's low tachyon gain") : undefined;
-      this.augmenteffectactive(5, true) ? effect.push("V's Reality") : undefined;
-      this.augmenteffectactive(6, true) ? effect.push("Ra's no dim boost") : undefined;
-      this.augmenteffectactive(7, true) ? effect.push("Ra's static tickspeed") : undefined;
-      this.augmenteffectactive(8, true) ? effect.push(`Lai'tela's Reality (at ${this.laitelamaxdim}dims)`) : undefined;
-      this.augmenteffectactive(9, true) ? effect.push(`timed decay`) : undefined;
+      this.augmentEffectActive(0, true) ? effect.push("Teresa Reality") : undefined;
+      this.augmentEffectActive(1, true) ? effect.push("Effarig Reality") : undefined;
+      this.augmentEffectActive(2, true) ? effect.push("Nameless one's Reality") : undefined;
+      this.augmentEffectActive(3, true) ? effect.push("Nameless one's dim limit") : undefined;
+      this.augmentEffectActive(4, true) ? effect.push("Nameless one's low tachyon gain") : undefined;
+      this.augmentEffectActive(5, true) ? effect.push("V's Reality") : undefined;
+      this.augmentEffectActive(6, true) ? effect.push("Ra's no Dimension Boosts") : undefined;
+      this.augmentEffectActive(7, true) ? effect.push("Ra's static tickspeed") : undefined;
+      this.augmentEffectActive(8, true) ? effect.push(`Lai'tela's Reality at ${this.laitelamaxdim} max Dimensions`) : undefined;
+      this.augmentEffectActive(9, true) ? effect.push(`timed decay`) : undefined;
       return effect;
   },
 
   get totalaugmentsactive(){
-    return activeaugments().length;
+    return activeAugments().length;
   },
   
   initializeRun() {
@@ -79,11 +80,11 @@ export const Glitch = {
       player.reality.glyphs.undo=[];
       
       
-      this.augmenteffectactive(0) ?  player.celestials.teresa.run = true : undefined;
-      this.augmenteffectactive(1) ? player.celestials.effarig.run = true : undefined;
-      this.augmenteffectactive(2) ? player.celestials.enslaved.run = true : undefined;
-      this.augmenteffectactive(5) ? player.celestials.v.run = true : undefined;
-      this.augmenteffectactive(8) ? player.celestials.laitela.run = true : undefined;
+      this.augmentEffectActive(0) ?  player.celestials.teresa.run = true : undefined;
+      this.augmentEffectActive(1) ? player.celestials.effarig.run = true : undefined;
+      this.augmentEffectActive(2) ? player.celestials.enslaved.run = true : undefined;
+      this.augmentEffectActive(5) ? player.celestials.v.run = true : undefined;
+      this.augmentEffectActive(8) ? player.celestials.laitela.run = true : undefined;
     }
     if(this.tier == 1){
       
@@ -126,11 +127,23 @@ export const Glitch = {
   },
 
   get riftForce(){
-    return new Decimal(player.celestials.glitch.riftforce);
+    return player.celestials.glitch.riftForce;
+  },
+
+  set riftForce(value){
+    player.celestials.glitch.riftForce = new Decimal(value);
+  },
+
+  get chaosCores(){
+    return player.celestials.glitch.chaosCores;
+  },
+
+  set chaosCores(value){
+    player.celestials.glitch.chaosCores = new Decimal(value);
   },
 
   get riftForceGain(){
-    if(!this.isRunning || this.activeaugments.length < 9) return new Decimal(0);
+    if(!this.isRunning || this.activeAugments.length < 9) return new Decimal(0);
 
     function form (value) {return (GlitchSpeedUpgrades.all[2].isBought ? (value.log10() ** 0.2) : Decimal.log10(Decimal.log10(value)))};
     
@@ -145,25 +158,44 @@ export const Glitch = {
     let value = new Decimal(total / 24).times(GlitchRealityUpgrades.all[0].effectOrDefault(1)).pow(3.33);
     if(value.gt("1e450")) value = value.mul( new Decimal(Decimal.log10(value)).pow(25));
     
+    const CC = Currency.chaosCores.value.mul(Currency.chaosCores.value.log(2)).pow(5);
+
+    value = value.mul(CC);
+
     return value
+  },
+
+  get chaosCoresBoost(){
+     return Math.max(Currency.chaosCores.value.log10() ** 0.25, 1)
+  },
+
+  riftToCore(){
+    if(this.riftForce.lt(10)) return;
+    Currency.chaosCores.add(Currency.riftForce.value.log(5) ** 0.2);
+    Currency.riftForce.value = new Decimal(0);
+  },
+
+  get riftToCoreGain(){
+    if(this.riftForce.lt(10)) return "0";
+    return format(Currency.riftForce.value.log(5) ** 0.2, 2);
   },
 
   get laitelamaxdim(){
     return Math.min(5 + GlitchRealityUpgrades.all[5].effectOrDefault(0),8);
   },
   get decay(){
-    if(!this.augmenteffectactive(9)) return 1;
+    if(!this.augmentEffectActive(9)) return 1;
     return Math.pow(2, Math.max(Time.thisRealityRealTime.totalSeconds.toNumber() / 30 , 0));
   },
   
   get ADnerf(){
-    return (this.augmenteffectactive(9) ? (0.95 / this.decay) : 0.95);
+    return (this.augmentEffectActive(9) ? (0.95 / this.decay) : 0.95);
   },
   get IDnerf(){
-    return (this.augmenteffectactive(9) ? (0.15 / this.decay) : 0.15);
+    return (this.augmentEffectActive(9) ? (0.15 / this.decay) : 0.15);
   },
   get TDnerf(){
-    return (this.augmenteffectactive(9) ? (0.3 / this.decay) : 0.3);
+    return (this.augmentEffectActive(9) ? (0.3 / this.decay) : 0.3);
   },
   
   get discription() {
@@ -184,8 +216,8 @@ EventHub.logic.on(GAME_EVENT.GAME_LOAD, () => {
 });
 
 EventHub.logic.on(GAME_EVENT.DIMBOOST_AFTER, () => {
-  Glitch.quotes.dimboost.show();
-  if(AntimatterDimension(8).amount.gt(0)) Glitch.quotes.dimeight.show();
+  Glitch.quotes.dimBoost.show();
+  if(AntimatterDimension(8).amount.gt(0)) Glitch.quotes.dimEight.show();
 });
 
 EventHub.logic.on(GAME_EVENT.GALAXY_RESET_AFTER, () => {
@@ -213,5 +245,9 @@ EventHub.logic.on(GAME_EVENT.ACHIEVEMENT_UNLOCKED, () => {
 });
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
-  if(Tab.celestials.glitch.isOpen) Glitch.quotes.glitchreality.show();
+  if(Tab.celestials.glitch.isOpen) Glitch.quotes.glitchReality.show();
+});
+
+EventHub.logic.on(GAME_EVENT.ti, () => {
+  if(Tab.celestials.glitch.isOpen) Glitch.quotes.glitchReality.show();
 });

@@ -127,6 +127,10 @@ export const awayProgressTypes = [
     reference: ["celestials", "laitela", "singularities"],
     isUnlocked: () => Laitela.isUnlocked,
   }, {
+    name: "riftForce",
+    reference: ["celestials", "glitch", "riftForce"],
+    isUnlocked: () => Glitch.isUnlocked,
+  }, {
     name: "realityShards",
     reference: ["celestials", "pelle", "realityShards"],
     isUnlocked: () => Pelle.isDoomed,

@@ -44,7 +44,7 @@ export default {
     update() {
       // Technically not entirely accurate (you can still invert within Laitela), but it's cleaner to just hide it all
       // because Laitela disables everything else and it technically still displays as pulsing even if it isn't
-      this.canModifyBlackHoles = BlackHoles.areUnlocked && !Laitela.isRunning;
+      this.canModifyBlackHoles = BlackHoles.areUnlocked && (!Laitela.isRunning || GlitchRealityUpgrade(11).isBought);
       this.displaySingle = BlackHoles.arePermanent;
       if (this.displaySingle) this.singleState = BlackHole(1).displayState;
       this.pauseText = this.pauseButtonText();

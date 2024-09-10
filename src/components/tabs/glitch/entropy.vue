@@ -22,8 +22,12 @@ export default {
 
 <template>
     <div class="c-entropy-infotext">
-      hello destroyer.
-      fill these please.
+      Hello destroyer.
+      Fill these please.
+      <br>
+      They will fill based on how many of my challenges you complete.
+      <br>
+      Also some challenges can not be compleated later so do them before than, I will warn you when you are going to be unable to complete them
 
       <div>
       <GlitchRift

@@ -1533,7 +1533,12 @@ export const devMigrations = {
     player => {
       player.options.lightGlyphs = !player.options.forceDarkGlyphs;
       delete player.options.forceDarkGlyphs;
-    }
+    },
+    player => {
+      // Glitch stuff
+      player.celestials.glitch.riftForce = player.celestials.glitch.riftforce;
+      delete player.celestials.glitch.riftforce;
+    },
   ],
 
   patch(player) {
@@ -1547,5 +1552,5 @@ export const devMigrations = {
 
   setLatestTestVersion(player) {
     player.options.testVersion = this.patches.length;
-  }
+  },
 };

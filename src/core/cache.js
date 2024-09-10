@@ -114,6 +114,12 @@ export const GameCache = {
   challengeTimeSum: new Lazy(() => {let y = new Decimal(0); player.challenge.normal.bestTimes.forEach(x => y = y.add(x)); return y}),
 
   infinityChallengeTimeSum: new Lazy(() =>  {let y = new Decimal(0); player.challenge.infinity.bestTimes.forEach(x => y = y.add(x)); return y} ),
+
+  chaosDimensionCommonMultiplier: new Lazy(() => chaosDimensionCommonMultiplier()),
+
+  chaosDimensionFinalMultipliers: Array.range(0, 9)
+    .map(tier => new Lazy(() => getChaosDimensionFinalMultiplierUncached(tier))),
+
 };
 
 EventHub.logic.on(GAME_EVENT.GLYPHS_CHANGED, () => {

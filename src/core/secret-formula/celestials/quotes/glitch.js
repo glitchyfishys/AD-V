@@ -1,101 +1,135 @@
 
 const Pelle = ["Pelle", "Creater", "Master"];
+const V = ["V", "Vulnor", "Vanquish"];
+const Glitch = ["Glitch", "Galinar", "Devastator"];
 const Power = ["Power", "Strength", "Frightment", "Fear"];
 const Destroy = ["Destroy", "Annihilate", "Eliminate", "Remove"];
-// { text: "That you trample in pursuit of your $1.", 1: pelle }
+
+const primaryBackground = cel => [[cel, 1]];
+
+
 export const glitchQuotes = {
   start: {
     id: 0,
     lines: [
-      "Hello Destroyer",
-      "are you the one to help me?",
-      "let's see"
+      "Hello \"Creature\"",
+      "Are you the one to help me?",
+      "Let's see..."
     ],
   },
-  dimboost: {
+  dimBoost: {
     id: 1,
     lines: [
-      "well your going fast",
-      "hmm",
-      "it is you isn't it"
+      "Well, you're going fast",
+      "Hmm",
+      "Is it really you? After all this time"
     ],
   },
-  dimeight: {
+  dimEight: {
     id: 2,
     lines: [
-      "only eight?",
-      "it looks like your the one",
-      "it took so long to find you"
+      "Only Eight Dimensions?",
+      "It looks like your the one",
+      "It took so long to find you",
+      "Welcome Destroyer, There is a lot to cover"
     ],
   },
   galaxy: {
     id: 3,
     lines: [
-      "ah yes galaxies, thier a bit strange",
-      "let's just say that you dimensions are not effected by them exactly",
-      "they boost tick speed (i made that for you), the effect of mass",
-      "getting more is harder due to how big they are"
+      "Ah yes galaxies, Thier a bit strange",
+      "Let's just say that you Dimensions are not effected by them exactly",
+      "They boost Tickspeed (I made that for you), the effect of mass",
+      "Getting more is harder due to how big they are",
+      "You have no idea how much room they take up"
     ],
   },
     infinity: {
     id: 4,
     lines: [
-      "so fast",
-      "it is going to be fun, you and me are going to stop HIM",
-      "... i'll come back when you have infinited fast enough"
+      "So fast",
+      "It is going to be fun, you and me are going to stop HIM",
+      "... I'll come back when you have infinited fast enough"
     ],
   },
   break: {
     id: 5,
     lines: [
-      "good you found it",
-      "i hope that didn't take long",
-      "the next thing you need is replacanti",
-      "it's something i made to fill up space though it has it's limits"
+      "Good you found it",
+      "I hope that didn't take long",
+      "The next thing you need is Replacanti",
+      "It's something I made (with help) to fill up space, though it has it's limits"
     ],
   },
   eternity: {
     id: 6,
     lines: [
-      "you may have completed challenges getting here",
-      "don't worry thiers more for you, have fun completing them all",
-      "all so the time studys i have designed them for you",
-      "i will let you make some later"
+      "You may have completed challenges getting here",
+      "Don't worry there's more for you, have fun completing them all",
+      "Also the Time Studies I have designed for you, they will help a lot",
+      "I will let you make some later"
     ],
   },
   dilation: {
     id: 7,
     lines: [
-      "i want to see your power",
-      "i want you to grow",
-      "you will need it to beat HIM"
+      "I want to see the limit of your power",
+      "I want to watch it grow",
+      "You will need it to beat HIM"
     ],
   },
   reality: {
     id: 8,
     lines: [
-      "you know what to do",
-      "just get to it"
+      "You know what to do",
+      "Just get to it",
+      "Huh, These upgrades can be locked for some reason, I don't know who did it, Do You?"
     ],
   },
   celestials: {
     id: 9,
     lines: [
-      "now \"Destroyer\" i reqiure you to go in this order",
-      "Teresa, Effarig, Nameless though i call them Vela, V (yes that is his name), Ra, Lai'tela",
-      { text: "then you will show me you power before $1.", 1: Pelle },
-      "haha, the power might be enough, i will be back for my reality"
+      "Now \"Destroyer\" I reqiure you to go in this order",
+      "Teresa, Effarig, Nameless though I call them Vela, V (yes that is his name), Ra, Lai'tela",
+      { text: "Then you will show me your power before $1.", 1: Pelle },
+      "Haha, the power might be enough, I will be back for my reality"
     ],
   },
-  glitchreality: {
+  glitchReality: {
     id: 10,
     lines: [
-      "hey \"Destroyer\" complete my reality with all the others realitys combined",
-      "please do",
-      { text: "you would need this $1 to $2 HIM.", 1: Power, 2: Destroy },
-      "you may have notest me saying \"HIM\" alot hes one of the most powerful celestial, i can not say his name here",
-      "i must be careful, i have been a bit strange, well these upgrades are broken",
-      "take your time to fix them i'll be waiting"
+      "Hey \"Destroyer\", can you complete my reality with all the others realitys combined",
+      "Please do",
+      { text: "You would need this $1 to $2 HIM.", 1: Power, 2: Destroy },
+      "You may have notice me saying \"HIM\" a lot he's one of the most powerful celestial, I can't say his name here",
+      "I must be careful, I have been a bit strange, huh? these upgrades are broken",
+      "Take your time to fix them I'll be waiting"
     ],
-  }
+  },
+  glitchFinishPowerUGs: {
+    id: 11,
+    lines: [
+      "You have done well",
+      { text: "However $1 is next", 1: Pelle},
+      "Pelle... he's not from here, Let me look around for awhile",
+      "Hmm... Pelle?"
+    ],
+  },
+  glitchBuySpeed4: {
+    id: 12,
+    lines: [
+      { text: "Hello $1", name: "Glitch", 1: V},
+      "I have a request",
+      { text: "What? Why?", name: "V", background: primaryBackground("v")},
+      { text: "Who are you?", name: "V", background: primaryBackground("v")},
+      { text: "I am $1 the Celestial of Programing, hence the name", celestialName: "Glitch", 1: Glitch},
+      { text: "You Want ME TO HELP THE DESTROYER DON'T YOU", name: "V", background: primaryBackground("v")},
+      { text: "Yes that's it, I will explain what for later, for now can you please help", name: "Glitch"},
+      { text: "Only if they do not ruin the last of my Achievements", name: "V", background: primaryBackground("v")},
+      { text: "I will give them access to my Chaos Dimensions", name: "Glitch"},
+      { text: "Very Well", name: "V", background: primaryBackground("v")},
+      "Ok, Destroyer as long as you don't ruin his Achievements you don't have anything to worry about",
+      "I will see you soon very soon... or after you finish with him",
+    ],
+  },
 };

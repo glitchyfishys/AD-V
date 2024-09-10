@@ -92,13 +92,12 @@ export * from "./speedrun";
 export * from "./automator/script-templates";
 
 // mod
-export * from "./glitchpreinfinityUG";
-export * from "./glitchbreakinfinityupgrade";
-export * from "./glitcheternityUG";
-export * from "./glitchrealityUG";
+export * from "./glitchChallengeUG";
 export * from "./celestials/glitch/glitchrift";
 
 export * from "./celestials/glitch/glitch";
 
-export * from "./glitchupgrades";
+export * from "./glitchRealityUpgrades";
 
+export * from "./dimensions/chaos-dimension";
+''

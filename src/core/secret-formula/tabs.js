@@ -37,6 +37,16 @@ export const tabs = [
         id: 2,
         hidable: true,
       },
+      {
+        key: "chaos",
+        name: "Chaos Dimensions",
+        hideAt: 2.5,
+        symbol: "Ῠ",
+        component: "ChaosDimensionsTab",
+        condition: () => GlitchSpeedUpgrade(4).isBought,
+        id: 3,
+        hidable: true,
+      },
     ]
   },
   {
@@ -545,7 +555,7 @@ export const tabs = [
         name: "eternity",
         symbol: "Δ",
         component: "glitcheternity",
-        condition: () => PlayerProgress.eternityUnlocked() || Currency.infinityPoints.gte(Decimal.NUMBER_MAX_VALUE),
+        condition: () => PlayerProgress.eternityUnlocked() || Currency.infinityPoints.gte(1e250),
         id: 3,
         hidable: true
       },

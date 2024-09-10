@@ -4,6 +4,10 @@ import { DimensionState } from "./dimension";
 
 export function buySingleTimeDimension(tier, auto = false) {
   const dim = TimeDimension(tier);
+  if((!eternityUGs.all[1].config.hasFailed() && !eternityUGs.all[1].isBought) && player.options.confirmations.glitchCL && player.eternities.eq(1)){
+    Modal.message.show(`you will fail glitch challenge ${eternityUGs.all[1].config.name} <br> which is to ${eternityUGs.all[1].config.requirement} <br> you can disable this for <i>all</i> challenges in confirmations`);
+    return;
+  }
   if (tier > 4) {
     if (!TimeStudy.timeDimension(tier).isBought) return false;
     if (RealityUpgrade(13).isLockingMechanics && Currency.eternityPoints.gte(dim.cost)) {
@@ -14,7 +18,7 @@ export function buySingleTimeDimension(tier, auto = false) {
   if (Currency.eternityPoints.lt(dim.cost)) return false;
   
   const allow = (Enslaved.isRunning && !Glitch.isRunning);
-  const allowed = (allow || Glitch.augmenteffectactive(3));
+  const allowed = (allow || Glitch.augmentEffectActive(3));
   
   if (allowed && dim.bought > 0) return false;
   if (ImaginaryUpgrade(15).isLockingMechanics && EternityChallenge(7).completions > 0) {
@@ -53,6 +57,10 @@ export function toggleAllTimeDims() {
 }
 
 export function buyMaxTimeDimension(tier, portionToSpend = 1, isMaxAll = false) {
+  if((!eternityUGs.all[1].config.hasFailed() && !eternityUGs.all[1].isBought) && player.options.confirmations.glitchCL && player.eternities.eq(1)){
+    Modal.message.show(`you will fail glitch challenge ${eternityUGs.all[1].config.name} <br> which is to ${eternityUGs.all[1].config.requirement} <br> you can disable this for <i>all</i> challenges in confirmations`);
+    return;
+  }
   const canSpend = Currency.eternityPoints.value.times(portionToSpend);
   const dim = TimeDimension(tier);
   if (canSpend.lt(dim.cost)) return false;
@@ -72,7 +80,7 @@ export function buyMaxTimeDimension(tier, portionToSpend = 1, isMaxAll = false) 
   }
   
   const allow = (Enslaved.isRunning && !Glitch.isRunning);
-  const allowed = (allow || Glitch.augmenteffectactive(3));
+  const allowed = (allow || Glitch.augmentEffectActive(3));
   
   if (allowed) return buySingleTimeDimension(tier);
   if (dim.bought > 1e15) dim.bought = 1e15

@@ -298,7 +298,7 @@ Currency.infinityPoints = new class extends DecimalCurrency {
 
 Currency.infinityPower = new class extends DecimalCurrency {
   get value() { return player.infinityPower; }
-  set value(value) { player.infinityPower = value; }
+  set value(value) { player.infinityPower = value.clampMax("1e2E25"); }
 }();
 
 Currency.eternities = new class extends DecimalCurrency {
@@ -481,6 +481,11 @@ Currency.galaxyGeneratorGalaxies = new class extends NumberCurrency {
 }();
 
 Currency.riftForce = new class extends DecimalCurrency {
-  get value() { return player.celestials.glitch.riftforce; }
-  set value(value) { player.celestials.glitch.riftforce = value; }
+  get value() { return player.celestials.glitch.riftForce; }
+  set value(value) { player.celestials.glitch.riftForce = value; }
+}();
+
+Currency.chaosCores = new class extends DecimalCurrency {
+  get value() { return player.celestials.glitch.chaosCores; }
+  set value(value) { player.celestials.glitch.chaosCores = value; }
 }();

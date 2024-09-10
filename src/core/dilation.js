@@ -98,7 +98,7 @@ export function buyDilationUpgrade(id, bulk = 1) {
         Perk.retroactiveTP4
       );
       const allow = (Enslaved.isRunning && !Glitch.isRunning);
-      const allowed = (allow || Glitch.augmenteffectactive(4));
+      const allowed = (allow || Glitch.augmentEffectActive(4));
       if (allowed) {
         retroactiveTPFactor = Math.pow(retroactiveTPFactor, Enslaved.tachyonNerf);
       }
@@ -144,7 +144,7 @@ export function getDilationGainPerSecond() {
   dtRate = dtRate.times(
     Math.clampMin(Decimal.log10(Replicanti.amount) * getAdjustedGlyphEffect("replicationdtgain"), 1));
   const allow = (Enslaved.isRunning && !Glitch.isRunning);
-  const allowed = (allow || Glitch.augmenteffectactive(4));
+  const allowed = (allow || Glitch.augmentEffectActive(4));
   
   if (allowed && !dtRate.eq(0)) dtRate = Decimal.pow10(Math.pow(dtRate.plus(1).log10(), 0.85) - 1);
   if (V.isRunning) dtRate = dtRate.pow(0.5);
@@ -153,7 +153,7 @@ export function getDilationGainPerSecond() {
 
 export function tachyonGainMultiplier() {
   const allow = (Enslaved.isRunning && !Glitch.isRunning);
-  const allowed = (allow || Glitch.augmenteffectactive(4));
+  const allowed = (allow || Glitch.augmentEffectActive(4));
   
   if (Pelle.isDisabled("tpMults")) return new Decimal(1).times(realityUGs.all[1].effectOrDefault(1));
   const pow = allowed ? Enslaved.tachyonNerf : 1;
@@ -183,7 +183,7 @@ export function getBaseTP(antimatter, requireEternity) {
   let baseTP = Decimal.pow(Decimal.log10(am) / 400, 1.5);
 
   const allow = (Enslaved.isRunning && !Glitch.isRunning);
-  const allowed = (allow || Glitch.augmenteffectactive(4));
+  const allowed = (allow || Glitch.augmentEffectActive(4));
   
   if (allowed) baseTP = baseTP.pow(Enslaved.tachyonNerf);
   return baseTP;
@@ -203,7 +203,7 @@ export function getTachyonGain(requireEternity) {
 // Returns the minimum antimatter needed in order to gain more TP; used only for display purposes
 export function getTachyonReq() {
   const allow = (Enslaved.isRunning && !Glitch.isRunning);
-  const allowed = (allow || Glitch.augmenteffectactive(4));
+  const allowed = (allow || Glitch.augmentEffectActive(4));
   
   let effectiveTP = Currency.tachyonParticles.value.dividedBy(tachyonGainMultiplier());
   if (allowed) effectiveTP = effectiveTP.pow(1 / Enslaved.tachyonNerf);

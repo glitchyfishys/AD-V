@@ -77,7 +77,7 @@ export const Enslaved = {
   },
   get storedRealTimeCap() {
     const addedCap = Ra.unlocks.improvedStoredTime.effects.realTimeCap.effectOrDefault(0);
-    return 1000 * 3600 * 8 + addedCap;
+    return Math.min(1000 * 3600 * 8 + addedCap, 86400000);
   },
   get isAutoReleasing() {
     return player.celestials.enslaved.isAutoReleasing && !BlackHoles.areNegative && !Pelle.isDisabled("blackhole");

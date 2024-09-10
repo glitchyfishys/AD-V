@@ -104,7 +104,7 @@ export const glyphSacrifice = {
       const sac = player.reality.glyphs.sac.reality.add(added ?? 0);
       return Decimal.clampMax(Decimal.sqrt(sac).div(15).add(1), 100);
     },
-    description: amount => `+${formatPercents(amount / 100, 2)} Glitchs Instability`,
+    description: amount => `+${formatPercents(amount.div(100).toNumber(), 2)} Chaos Dimensions`,
     cap: () => GlyphSacrificeHandler.maxSacrificeForEffects
   }
 };

@@ -15,7 +15,7 @@ export default {
       return GameDatabase.celestials.descriptions[6].effects().split("\n");
     },
     runDescription() {
-      return Glitch.activeaugments;
+      return Glitch.activeAugments;
     },
     isDoomed: () => Pelle.isDoomed,
     runButtonClassObject() {
@@ -43,7 +43,7 @@ export default {
       this.time = player.records.thisReality.realTime;
     },
     decay(){
-      return Glitch.augmenteffectactive(9) ? " and a decay of 1 /" +  format(Glitch.decay,2,2) + " to glitch's reality nerfs": "";
+      return Glitch.augmentEffectActive(9) ? " and a decay of 1 /" +  format(Glitch.decay,2,2) + " to glitch's reality nerfs": "";
     },
     startRun() {
       if (this.isDoomed) return;

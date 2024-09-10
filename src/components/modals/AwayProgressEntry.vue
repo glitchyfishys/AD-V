@@ -237,6 +237,10 @@ export default {
   color: var(--color-pelle--base);
 }
 
+.c-modal-away-progress__rift-force {
+  color: var(--color-glitch--accent);
+}
+
 .c-modal-away-progress__disabled b,
 .c-modal-away-progress__disabled {
   font-style: italic;

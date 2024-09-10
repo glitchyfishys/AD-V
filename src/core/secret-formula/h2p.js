@@ -1833,6 +1833,68 @@ Rifts once the current cap has been reached.`,
       tags: ["reality", "antimatter", "lategame", "endgame", "final", "pelle", "galaxy",
         "galaxies", "generator", "celestial"],
       tab: "celestials/pelle"
+    }, {
+      name: "Glitch Challenges",
+      alias: "Glitch Challenges",
+      tags: ["Glitch", "Challenges", "Celestial", "Rifts"],
+      tab: "glitch/entropy",
+      isUnlocked: () => true,
+      info: () => `
+      Glitch's Challenges prove you can handle <i>his</i> Reality
+      Some of Glitch's Challenges can only be completed at a certain parts of the game, so try to get them soon
+      Glitch will warn you if you will be locked out of completing a Challenge which can be disabled in confirmations
+      
+      Completing a Challenge also fills a Rift with Entropy, which unlock more Rewards
+      Completing all of the Challenges unlocks Glitch, The Celestial of Programing 
+<br>
+`,
+    }, {
+      name: "Mod",
+      alias: "Mod",
+      tags: ["Glitch", "Challenges", "Celestial", "Mod"],
+      isUnlocked: () => true,
+      info: () => `
+      This Mod changes:
+      Four Achievement info and unlock requirements and two Rewards
+
+      EC1 reuirement amount
+
+      Teresa RM pouring cap
+      V Achievement requrements and for Unlocking V
+      Ra memory level cap
+      Alchemy cap
+      One Pelle Quote
+      End tab names
+      End Game
+
+      And Adds:
+      New Teresa pouring Milestone
+      New Effarig upgrade
+      New V Achievement
+      
+
+      Glitch Challenges and Rifts
+      Glitch Celestial and upgrades
+      Destroying Pelle many times
+
+      Secret Achievements (NYI)
+      Glitch Glyph (NYI)
+      Chaos Dimensions (NYI)
+
+      QOL:
+      Buy max AD Autobuyer upgrades
+      Toggle ADs buy max
+      Sticky Header, The Prestige buttons and Currency will scroll down with you
+      Complete ECs based on the amount of EP that you would have needed to complete that Challenge
+      Time study Export, Respec and Import are added to the side of the Time Therom shop
+      Shift clicking Reality upgrades, Black hole power upgrades bulk buy 25
+      Shift clicking the Infinity Prestige button will buy a Tesseract without switching tabs
+      STD coins are gained over time at one per fifteen minutes
+
+      Other:
+      News ticker speed can go upto 1000%
+<br>
+`,
     }
   ]
 };

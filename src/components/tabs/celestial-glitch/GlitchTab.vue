@@ -21,6 +21,7 @@ export default {
       return GameDatabase.celestials.descriptions[6].effects().split("\n");
     },
     runDescription() {
+      if(this.augments == "") return "Nothing";
       return this.augments;
     },
     collapseIcon() {
@@ -38,8 +39,8 @@ export default {
       isRunning: false,
       quote: "",
       bits: 0,
-      augments: makeEnumeration(Glitch.activeaugments),
-      riftforce: "RIP",
+      augments: makeEnumeration(Glitch.activeAugments),
+      riftForce: "RIP",
       collapsedPower: false,
       collapsedSpeed: false,
       completions: 0,
@@ -52,9 +53,9 @@ export default {
       this.collapsedSpeed = player.celestials.glitch.collapsed.forspeed;
       this.isRunning = Glitch.isRunning;
       this.quote = Glitch.quote;
-      this.bits = Glitch.augmenteffectbits;
-      this.augments = makeEnumeration(Glitch.activeaugments);
-      this.riftforce = format(Currency.riftForce.value,2);
+      this.bits = Glitch.augmentEffectBits;
+      this.augments = makeEnumeration(Glitch.activeAugments);
+      this.riftForce = format(Currency.riftForce.value,2);
     },
     startRun() {
       if (this.isDoomed) return;
@@ -66,10 +67,10 @@ export default {
       else player.celestials.glitch.augment.effectbits |= (1 << id);
     },
     activeaugment(id){
-      return Glitch.augmenteffectactive(id, true);
+      return Glitch.augmentEffectActive(id, true);
     },
     effectname(id){
-      return Glitch.augmenteffects(id);
+      return Glitch.augmentEffects(id);
     },
     id(row, column) {
       return (row - 1) * 4 + column - 1;
@@ -95,7 +96,7 @@ export default {
 
     <div class="c-glitch-compact-top">
       <div>
-        <p>you have <span class="o-riftforce">{{ riftforce}}</span> RiftForce </p>
+        <p>you have <span class="o-riftForce">{{ riftForce}}</span> RiftForce </p>
         
         <CelestialQuoteHistory celestial="glitch"/>
         <GlitchRunButton />
@@ -197,9 +198,6 @@ export default {
       </div>
     
     </div>
-  
-    
-  </div>
 </template>
 
 <style scoped>
@@ -213,7 +211,7 @@ export default {
   margin: 1.5rem 0 1.5rem;
 }
 
-.o-riftforce{
+.o-riftForce{
   color: lime;
   font-size: 2rem;
 }

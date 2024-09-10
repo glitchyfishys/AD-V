@@ -92,12 +92,12 @@ export function gainedInfinityPoints() {
   );
   if (Pelle.isDisabled("IPMults")) {
     let x = Decimal.add(1)
-    x = x.times(preinfinityUGs.all[6].effectOrDefault(1));
-    x = x.times(preinfinityUGs.all[7].effectOrDefault(1));
+    x = x.times(preInfinityUGs.all[6].effectOrDefault(1));
+    x = x.times(preInfinityUGs.all[7].effectOrDefault(1));
 
-    x = x.times(breakinfinityUGs.all[0].effectOrDefault(1));
-    x = x.times(breakinfinityUGs.all[1].effectOrDefault(1));
-    x = x.times(breakinfinityUGs.all[3].effectOrDefault(1));
+    x = x.times(breakInfinityUGs.all[0].effectOrDefault(1));
+    x = x.times(breakInfinityUGs.all[1].effectOrDefault(1));
+    x = x.times(breakInfinityUGs.all[3].effectOrDefault(1));
 
     x = x.times(GlitchRifts.alpha.milestones[3].effectOrDefault(1));
     
@@ -114,13 +114,13 @@ export function gainedInfinityPoints() {
   }
   ip = ip.times(GameCache.totalIPMult.value);
   
-  ip = ip.times(preinfinityUGs.all[6].effectOrDefault(1));
-  ip = ip.times(preinfinityUGs.all[7].effectOrDefault(1));
+  ip = ip.times(preInfinityUGs.all[6].effectOrDefault(1));
+  ip = ip.times(preInfinityUGs.all[7].effectOrDefault(1));
 
-  ip = ip.times(breakinfinityUGs.all[0].effectOrDefault(1));
-  ip = ip.times(breakinfinityUGs.all[1].effectOrDefault(1));
-  ip = ip.times(breakinfinityUGs.all[2].effectOrDefault(1));
-  ip = ip.times(breakinfinityUGs.all[3].effectOrDefault(1));
+  ip = ip.times(breakInfinityUGs.all[0].effectOrDefault(1));
+  ip = ip.times(breakInfinityUGs.all[1].effectOrDefault(1));
+  ip = ip.times(breakInfinityUGs.all[2].effectOrDefault(1));
+  ip = ip.times(breakInfinityUGs.all[3].effectOrDefault(1));
   
   if (Teresa.isRunning) {
     ip = ip.pow(0.55 * GlitchSpeedUpgrades.all[0].effectOrDefault(1));
@@ -383,7 +383,7 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
   // otherwise it gets applied twice
   if (effects.includes(GAME_SPEED_EFFECT.NERFS)) {
     if (Effarig.isRunning) {
-      factor = Effarig.multiplier(factor);
+      if(factor.gt(1)) factor = Effarig.multiplier(factor);
     }
     if (Laitela.isRunning && !GlitchRealityUpgrades.all[7].isBought) {
       const nerfModifier = Math.clampMax(Time.thisRealityRealTime.totalMinutes.div(10).toNumber(), 1);
@@ -463,18 +463,18 @@ export function gameLoop(passDiff, options = {}) {
 
   EventHub.dispatch(GAME_EVENT.GAME_TICK_BEFORE);
 
-  for (let i = 0; i < preinfinityUGs.all.length; i++) {
-    if(!preinfinityUGs.all[i].isBought) preinfinityUGs.all[i].tryUnlock()
-  }
-  for (let i = 0; i < breakinfinityUGs.all.length; i++) {
-    if(!breakinfinityUGs.all[i].isBought) breakinfinityUGs.all[i].tryUnlock()
-  }
-  for (let i = 0; i < eternityUGs.all.length; i++) {
-    if(!eternityUGs.all[i].isBought) eternityUGs.all[i].tryUnlock()
-  }
-  for (let i = 0; i < realityUGs.all.length; i++) {
-    if(!realityUGs.all[i].isBought) realityUGs.all[i].tryUnlock()
-  }
+  // for (let i = 0; i < preInfinityUGs.all.length; i++) {
+  //   if(!preInfinityUGs.all[i].isBought) preInfinityUGs.all[i].tryUnlock()
+  // }
+  // for (let i = 0; i < breakInfinityUGs.all.length; i++) {
+  //   if(!breakInfinityUGs.all[i].isBought) breakInfinityUGs.all[i].tryUnlock()
+  // }
+  // for (let i = 0; i < eternityUGs.all.length; i++) {
+  //   if(!eternityUGs.all[i].isBought) eternityUGs.all[i].tryUnlock()
+  // }
+  // for (let i = 0; i < realityUGs.all.length; i++) {
+  //   if(!realityUGs.all[i].isBought) realityUGs.all[i].tryUnlock()
+  // }
   
   // In certain cases we want to allow the player to interact with the game's settings and tabs, but prevent any actual
   // resource generation from happening - in these cases, we have to make sure this all comes before the hibernation
@@ -616,6 +616,7 @@ export function gameLoop(passDiff, options = {}) {
   TimeDimensions.tick(diff);
   InfinityDimensions.tick(diff);
   AntimatterDimensions.tick(diff);
+  ChaosDimensions.tick(new Decimal(realDiff));
 
   const gain = Math.clampMin(FreeTickspeed.fromShards(Currency.timeShards.value).newAmount - player.totalTickGained, 0);
   player.totalTickGained += gain;
@@ -1207,7 +1208,8 @@ animateTweens();
 
 function randomInt(min = 0, max = 10) {return Math.floor(min + (Math.random() * (max - min)))};
 
-var titles = ["help me", "now with upgrades", "the antimater update", "uhhh, i think i broke something", "no don't do that", "now with a 9th dimension",
-              "THERE'S NEW CONTENT?!?!?!", "also try minecraft", "you know what that means FISHHHHH", "now with dimensions", "THE NEWS IS NOT FAKE", "now's you chance to make [ANTIMATTER]",
-              "that's bananas", "update in 5 hours", "hevipelle is good at using git hub :)", "the update that makes the game bad", " i'm now poor :(", "nerf the galaxies plz",
-              "get more antimatter", "can give me more galaxies please?", "NG+infinte", "how do i cheat", "when do the memes get added?", "how much is infinity?"];
+var titles = ["Help me", "Now with upgrades", "The antimater update", "Uhhh, I think I broke something", "No don't do that", "Now with a 9th dimension",
+              "THERE'S NEW CONTENT?!?!?!", "Also try minecraft", "You know what that means FISHHHHH", "Now with dimensions", "THE NEWS IS NOT FAKE", "Now's you chance to make [ANTIMATTER]",
+              "That's bananas", "update in 5 hours", "Hevipelle is good at using GitHub :)", "The update that makes the game bad", " I'm poor now :(", "Nerf the galaxies plz",
+              "Get more antimatter", "Can give me more galaxies please?", "NG+infinite", "How do I cheat", "When do the memes get added?", "How much is infinity?",
+              "Never gonna give you up", "Hexa you need to slow down with all your mods!", "Stop looking at me", "Who is \"Royal\"?", "Join the Discord"];

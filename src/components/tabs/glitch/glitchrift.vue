@@ -51,6 +51,7 @@ export default {
 
 <template>
   <div
+  v-if="this.rift.isUnlocked"
     class="c-pelle-single-bar"
   >
     <div class="c-pelle-rift">

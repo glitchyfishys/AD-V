@@ -77,6 +77,9 @@ class QuoteLine {
     this._parent = parent;
     this._showCelestialName = line.showCelestialName ?? true;
 
+    this.name = line.name ?? undefined;
+
+
     this._celestialArray = line.background
       ? () => blendCel(line.background)
       : [[parent.celestial, 1]];
@@ -106,6 +109,7 @@ class QuoteLine {
   }
 
   get celestialName() {
+    if(this.name != undefined) return this.name;
     return Celestials[this._parent.celestial].displayName;
   }
 }

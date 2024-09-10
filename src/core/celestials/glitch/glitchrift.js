@@ -48,6 +48,10 @@ class GRift extends GameMechanicState {
     return true;
   }
 
+  get isUnlocked() {
+    return this.config.unlock();
+  }
+
   get name() {
     return this.config.name;
   }

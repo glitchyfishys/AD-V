@@ -31,8 +31,6 @@ export default {
       renderedConnectionCount: 0,
       isEnslaved: false,
       delayTimer: 0,
-      allowECcomplete: false,
-      ECreq: [],
       remaine: 60,
     };
   },
@@ -111,8 +109,6 @@ export default {
       this.layoutType = STUDY_TREE_LAYOUT_TYPE.current;
       this.vLevel = Ra.pets.v.level;
       this.isEnslaved = Enslaved.isRunning || Date.now() - this.delayTimer < 1000;
-      this.allowECcomplete = PlayerProgress.realityUnlocked();
-      this.ECreq = [undefined,"1e20", "1e20", "1e20", "1e40", "1e50", "1e60", "1e70", "1e80", "1e100","1e150","1e1300","1e1400","1e1E300"];
       this.remaine = EternityChallenges.remainingCompletions;
     },
     studyComponent(study) {
@@ -132,19 +128,7 @@ export default {
         GameUI.notify.info("Exported current Time Studies to your clipboard");
       }
     },
-    ECc(){
-      if(this.isEnslaved) return GameUI.notify.error("can't be used in the Namelessones' reality",3000)
-      if(Effarig.isRunning && Effarig.currentStage < 4) return GameUI.notify.error("can't be used in the Effarig's reality, untill reality layer is complete",3000)
-      let h=0;
-      for(let i=1; i <= 12; i++){
-        if(!Currency.eternityPoints.gte(this.ECreq[i])) break;
-        if(player.eternityChalls["eterc" + i] < 5 || player.eternityChalls["eterc" + i] == undefined) {
-          player.eternityChalls["eterc" + i] = 5;
-        }
-          h = i;
-      }
-       if(!Currency.eternityPoints.gte("1e4000")) h == 12 ?  GameUI.notify.eternity("All EC's are completed",3000) : GameUI.notify.eternity("full completed EC's up to " + (h) + ", next ec" + (h+1) + " at " + format( new Decimal(this.ECreq[h+1])) + " EP",3000);
-    },
+    
   }
 }
 </script>
@@ -169,22 +153,6 @@ export default {
       >
         Import tree
       </PrimaryButton>
-
-
-    <span v-if="allowECcomplete">
-      <PrimaryButton
-      class="o-primary-btn--subtab-option"
-      @click="ECc"
-        >
-        <span v-if="isEnslaved">
-        broken by compaction of this reality
-        </span>
-        <span v-else>
-        complete EC's
-        </span>
-        
-      </PrimaryButton>
-    </span>
       
     </div>
     <div

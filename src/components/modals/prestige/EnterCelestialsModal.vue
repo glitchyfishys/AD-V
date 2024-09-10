@@ -27,7 +27,7 @@ export default {
       effarigLayer: "",
       enslavedDone: false,
       laitelaTime: "",
-      augments: makeEnumeration(Glitch.activeaugments),
+
     };
   },
   computed: {
@@ -64,7 +64,11 @@ export default {
         case 5: return this.laitelaFastest.gte(300)
           ? "You have not completed Lai'tela at this tier."
           : `Your fastest completion on this tier is ${this.laitelaTime}.`;
-        case 6: return "start Glitch's reality with " + makeEnumeration(Glitch.activeaugments) + " active?";
+        case 6: {
+          let augments = makeEnumeration(Glitch.activeAugments);
+          if(augments == "") augments = "Nothing";
+          return "start Glitch's reality with " + augments + " active?";
+        }
         default: throw new Error(`Attempted to start an Unknown Celestial in Celestial Modal Confirmation.`);
       }
     }
@@ -79,10 +83,11 @@ export default {
       this.enslavedDone = Enslaved.isCompleted;
       this.laitelaFastest = Time.laitelaFastestCompletion.totalMilliseconds;
       this.laitelaTime = TimeSpan.fromSeconds(this.laitelaFastest).toStringShort();
-      this.augments = makeEnumeration(Glitch.activeaugments);
     },
     handleYesClick() {
+
       beginProcessReality(getRealityProps(true));
+      
       switch (this.number) {
         case 0: return Teresa.initializeRun();
         case 1: return Effarig.initializeRun();
@@ -93,6 +98,7 @@ export default {
         case 6: return Glitch.initializeRun();
         default: throw new Error(`Attempted to start an Unknown Celestial in Celestial Modal Confirmation.`);
       }
+
     },
   },
 };

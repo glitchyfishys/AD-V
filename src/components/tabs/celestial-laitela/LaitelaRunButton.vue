@@ -42,6 +42,16 @@ export default {
     },
     startRun() {
       if (this.isDoomed) return;
+
+      if ((!realityUGs.all[11].config.hasFailed() && !realityUGs.all[11].isBought) && player.options.confirmations.glitchCL){
+        Modal.message.show(`you will fail glitch challenge ${realityUGs.all[11].config.name} <br> which is to ${realityUGs.all[11].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
+        return;
+      }
+      else if((!realityUGs.all[12].config.hasFailed() && !realityUGs.all[12].isBought) && player.options.confirmations.glitchCL && Laitela.difficultyTier == 2){
+        Modal.message.show(`you will fail glitch challenge ${realityUGs.all[12].config.name} <br> which is to ${realityUGs.all[12].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
+        return;
+      }
+
       Modal.celestials.show({ name: "Lai'tela's", number: 5 });
     },
     classObject() {

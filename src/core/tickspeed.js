@@ -22,8 +22,11 @@ export function effectiveBaseGalaxies() {
 
 export function getTickSpeedMultiplier() {
   if (InfinityChallenge(3).isRunning) return DC.D1;
-  if (Ra.isRunning || Glitch.augmenteffectactive(7)) return DC.C1D1_1245.div(GlitchSpeedUpgrades.all[1].effectOrDefault(1));
+  if (Ra.isRunning || Glitch.augmentEffectActive(7)) return DC.C1D1_1245.div(GlitchSpeedUpgrades.all[1].effectOrDefault(1));
   let galaxies = effectiveBaseGalaxies();
+
+  const CC = Math.max( Currency.chaosCores.value.pow(0.1).mul(Currency.chaosCores.value.log10()).toNumber() ** 0.25, 1);
+
   const effects = Effects.product(
     InfinityUpgrade.galaxyBoost,
     InfinityUpgrade.galaxyBoost.chargedEffect,
@@ -35,7 +38,9 @@ export function getTickSpeedMultiplier() {
     InfinityChallenge(5).reward,
     PelleUpgrade.galaxyPower,
     PelleRifts.decay.milestones[1]
-  );
+  ) * CC;
+
+
   if (galaxies < 3) {
     // Magic numbers are to retain balancing from before while displaying
     // them now as positive multipliers rather than negative percentages
@@ -47,7 +52,8 @@ export function getTickSpeedMultiplier() {
       if (player.galaxies === 1) baseMultiplier = 1 / 1.07632;
       if (player.galaxies === 2) baseMultiplier = 1 / 1.072;
     }
-    const perGalaxy = 0.02 * effects;
+
+    const perGalaxy = Math.min(0.02 * effects, 1e308);
     if (Pelle.isDoomed) galaxies *= 0.5;
 
     galaxies *= Pelle.specialGlyphEffect.power;
@@ -167,26 +173,32 @@ export const Tickspeed = {
   },
 
   get baseValue() {
-    let v = DC.E3.timesEffectsOf(
+    let tickspeed = DC.E3.timesEffectsOf(
       Achievement(36),
       Achievement(45),
       Achievement(66),
       Achievement(83)
     ).times(getTickSpeedMultiplier().pow(this.totalUpgrades));
-    return v;
+
+    if(tickspeed.gt("1e1E20")) tickspeed = tickspeed.pow( 1 / ( (tickspeed.log10() / 1e20) ** 0.95) );
+
+    return tickspeed.min("1e1E300");
   },
 
   get totalUpgrades() {
     let x = 0;
-    x += preinfinityUGs.all[4].effectOrDefault(0);
-    x += preinfinityUGs.all[5].effectOrDefault(0);
+    x += preInfinityUGs.all[4].effectOrDefault(0);
+    x += preInfinityUGs.all[5].effectOrDefault(0);
     x += eternityUGs.all[3].effectOrDefault(0);
     if(!Pelle.isDoomed) x += eternityUGs.all[5].effectOrDefault(0);
     
     let boughtTickspeed;
     if (Laitela.continuumActive) boughtTickspeed = this.continuumValue;
     else boughtTickspeed = player.totalTickBought;
-    return boughtTickspeed + player.totalTickGained + x;
+    let total = boughtTickspeed + player.totalTickGained + x;
+    if(total > 1e20) total = total / ((total / 1e20) ** 0.9);
+
+    return total;
   },
 
   get perSecond() {
@@ -210,8 +222,8 @@ export const FreeTickspeed = {
 
   get amount() {
     let x = 0;
-    x += preinfinityUGs.all[4].effectOrDefault(0);
-    x += preinfinityUGs.all[5].effectOrDefault(0);
+    x += preInfinityUGs.all[4].effectOrDefault(0);
+    x += preInfinityUGs.all[5].effectOrDefault(0);
     x += eternityUGs.all[3].effectOrDefault(0);
     x += GlitchRifts.delta.milestones[1].effectOrDefault(0);
     if (!Pelle.isDoomed) x += eternityUGs.all[5].effectOrDefault(0);

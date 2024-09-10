@@ -51,7 +51,7 @@ class GlitchRealityUpgradeState extends BitPurchasableMechanicState {
   }
 
   onPurchased() {
-
+    if(this.id == 16) Glitch.quotes.glitchFinishPowerUGs.show();
   }
 
   tryUnlock() {
@@ -157,7 +157,7 @@ class GlitchSpeedUpgradeState extends BitPurchasableMechanicState {
   }
 
   onPurchased() {
-
+    if(this.id == 4) Glitch.quotes.glitchBuySpeed4.show()
   }
 
   tryUnlock() {

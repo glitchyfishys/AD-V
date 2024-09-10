@@ -31,6 +31,17 @@ export class ECTimeStudyState extends TimeStudyState {
       // send you into the EC, deduct your resources, and move you to the EC tab if that isn't disabled
       ui.lastClickTime = 0;
 
+      if((!eternityUGs.all[4].config.hasFailed() && !eternityUGs.all[4].isBought) && player.options.confirmations.glitchCL && this.id == 1){
+        Modal.message.show(`you will fail glitch challenge ${eternityUGs.all[4].config.name} <br> which is to ${eternityUGs.all[4].config.requirement} <br> you can disable this for <i>all</i> challenges in confirmations`);
+        return;
+      }
+      if((!eternityUGs.all[5].config.hasFailed() && !eternityUGs.all[5].isBought) && player.options.confirmations.glitchCL && (this.id == 1 || this.id == 2 || this.id == 3)){
+        if(EternityChallenge(this.id).completions == 4){
+          Modal.message.show(`you will fail glitch challenge ${eternityUGs.all[5].config.name} <br> which is to ${eternityUGs.all[5].config.requirement} <br> you can disable this for <i>all</i> challenges in confirmations`);
+          return;
+        }
+      }
+
       player.challenge.eternity.unlocked = this.id;
       if (!auto) {
         Tab.challenges.eternity.show();

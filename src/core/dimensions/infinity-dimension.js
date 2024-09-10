@@ -220,7 +220,7 @@ class InfinityDimensionState extends DimensionState {
 
   get purchaseCap() {
     const allow = (Enslaved.isRunning && !Glitch.isRunning);
-    const allowed = (allow || Glitch.augmenteffectactive(3));
+    const allowed = (allow || Glitch.augmentEffectActive(3));
     
     if (allowed) {
       return 1;

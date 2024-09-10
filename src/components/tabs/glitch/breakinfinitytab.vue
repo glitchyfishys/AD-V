@@ -12,7 +12,7 @@ export default {
     }
   },
   computed: {
-    upgrades: () => breakinfinityUGs.all
+    upgrades: () => breakInfinityUGs.all
   }
 };
   
@@ -21,9 +21,9 @@ export default {
 <template>
   <div class="l-reality-upgrade-grid">
     <div class="c-breakinfinity-infotext">
-      progressing fast
+      Progressing fast
       <br>
-      these should slow you down
+      These should slow you down
     </div>
   
       <div

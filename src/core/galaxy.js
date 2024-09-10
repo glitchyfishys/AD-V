@@ -134,6 +134,14 @@ function galaxyReset() {
 export function manualRequestGalaxyReset(bulk) {
   if (!Galaxy.canBeBought || !Galaxy.requirement.isSatisfied) return;
   if (GameEnd.creditsEverClosed) return;
+
+  if((!preInfinityUGs.all[3].config.hasFailed() && !preInfinityUGs.all[3].isBought) && player.options.confirmations.glitchCL && player.galaxies == 0){
+    Modal.message.show(`you will fail glitch challenge ${preInfinityUGs.all[3].config.name} <br> which is to ${preInfinityUGs.all[3].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
+  }
+  else if((!preInfinityUGs.all[6].config.hasFailed() && !preInfinityUGs.all[6].isBought) && player.options.confirmations.glitchCL && player.galaxies == 1){
+    Modal.message.show(`you will fail glitch challenge ${preInfinityUGs.all[6].config.name} <br> which is to ${preInfinityUGs.all[6].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
+  }
+
   if (RealityUpgrade(7).isLockingMechanics && player.galaxies > 0) {
     RealityUpgrade(7).tryShowWarningModal();
     return;
@@ -149,12 +157,10 @@ export function manualRequestGalaxyReset(bulk) {
 // to restrict galaxy count for RUPG7's requirement here and nowhere else
 export function requestGalaxyReset(bulk, limit = Number.MAX_VALUE) {
   let restrictedLimit = RealityUpgrade(7).isLockingMechanics ? 1 : limit;
-  if((!preinfinityUGs.all[3].config.hasFailed() && !preinfinityUGs.all[3].isBought) && player.options.confirmations.glitchCL && player.galaxies == 0){
-    Modal.message.show(`you will fail glitch challenge ${preinfinityUGs.all[3].config.name} <br> which is to ${preinfinityUGs.all[3].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
+  if((!preInfinityUGs.all[3].config.hasFailed() && !preInfinityUGs.all[3].isBought) && player.options.confirmations.glitchCL && player.galaxies == 0){
     restrictedLimit = 0;
   }
-  else if((!preinfinityUGs.all[6].config.hasFailed() && !preinfinityUGs.all[6].isBought) && player.options.confirmations.glitchCL && player.galaxies == 1){
-    Modal.message.show(`you will fail glitch challenge ${preinfinityUGs.all[6].config.name} <br> which is to ${preinfinityUGs.all[6].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
+  else if((!preInfinityUGs.all[6].config.hasFailed() && !preInfinityUGs.all[6].isBought) && player.options.confirmations.glitchCL && player.galaxies == 1){
     restrictedLimit = 1;
   }
   if (EternityMilestone.autobuyMaxGalaxies.isReached && bulk) return maxBuyGalaxies(restrictedLimit);

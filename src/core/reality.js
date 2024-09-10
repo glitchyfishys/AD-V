@@ -1,4 +1,5 @@
 import { DC } from "./constants";
+import { Effarig, Teresa } from "./globals";
 
 /**
  * Object that manages the selection of glyphs offered to the player
@@ -147,15 +148,39 @@ export function simulatedRealityCount(advancePartSimCounters) {
 export function requestManualReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
   if (GameEnd.creditsEverClosed) return;
+
+  if((!realityUGs.all[0].config.hasFailed() && !realityUGs.all[0].isBought) && player.options.confirmations.glitchCL){
+    Modal.message.show(`you will fail glitch challenge ${realityUGs.all[0].config.name} <br> which is to ${realityUGs.all[0].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
+    return;
+  }
+  else if((!realityUGs.all[1].config.hasFailed() && !realityUGs.all[1].isBought) && player.options.confirmations.glitchCL){
+    Modal.message.show(`you will fail glitch challenge ${realityUGs.all[1].config.name} <br> which is to ${realityUGs.all[1].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
+    return;
+  }
+  else if((!realityUGs.all[2].config.hasFailed() && !realityUGs.all[2].isBought) && player.options.confirmations.glitchCL){
+    Modal.message.show(`you will fail glitch challenge ${realityUGs.all[2].config.name} <br> which is to ${realityUGs.all[2].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
+    return;
+  }
+  else if((!realityUGs.all[4].config.hasFailed() && !realityUGs.all[4].isBought) && player.options.confirmations.glitchCL && Teresa.isRunning){
+    Modal.message.show(`you will fail glitch challenge ${realityUGs.all[4].config.name} <br> which is to ${realityUGs.all[4].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
+    return;
+  }
+  else if((!realityUGs.all[6].config.hasFailed() && !realityUGs.all[6].isBought) && player.options.confirmations.glitchCL && Effarig.isRunning && Effarig.currentStage == 1){
+    Modal.message.show(`you will fail glitch challenge ${realityUGs.all[6].config.name} <br> which is to ${realityUGs.all[6].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
+    return;
+  }
+  
   if (player.options.confirmations.glyphSelection || ui.view.shiftDown) {
     Modal.reality.show();
     return;
   }
+
   if (GameCache.glyphInventorySpace.value === 0) {
     Modal.message.show("No available inventory space; free up space by shift-clicking Glyphs to get rid of them.",
       { closeEvent: GAME_EVENT.GLYPHS_CHANGED });
     return;
   }
+  
   startManualReality(false);
 }
 
@@ -367,7 +392,7 @@ function giveRealityRewards(realityProps) {
 
   if (Glitch.isRunning) {
 
-    const effects = Glitch.activeaugments.length > 0 ? (makeEnumeration(Glitch.activeaugments) + " active, congratulations"): "nothing active, try making a new reality";
+    const effects = Glitch.activeAugments.length > 0 ? (makeEnumeration(Glitch.activeAugments) + " active, congratulations"): "nothing active, try making a new reality";
     const modalText = `You have completed Glitch's Reality! with ${ effects }`;
     Modal.message.show(modalText, {}, 2);
     

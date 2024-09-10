@@ -134,7 +134,7 @@ export function totalReplicantiSpeedMult(overCap) {
   totalMult = totalMult.times(PelleRifts.decay.effectValue);
   totalMult = totalMult.times(Pelle.specialGlyphEffect.replication);
   totalMult = totalMult.times(ShopPurchase.replicantiPurchases.currentMult);
-  totalMult = totalMult.times(breakinfinityUGs.all[5].effectOrDefault(1));
+  totalMult = totalMult.times(breakInfinityUGs.all[5].effectOrDefault(1));
   totalMult = totalMult.times(GlitchRifts.delta.milestones[0].effectOrDefault(1));
   if (Pelle.isDisabled("replicantiIntervalMult")) return totalMult;
 
@@ -142,7 +142,7 @@ export function totalReplicantiSpeedMult(overCap) {
     TimeStudy(62),
     TimeStudy(213),
     RealityUpgrade(6),
-    breakinfinityUGs.all[4]
+    breakInfinityUGs.all[4]
   );
   
   totalMult = totalMult.times(preCelestialEffects).mul(RealityUpgrade(2).effectOrDefault(DC.D1)).mul(RealityUpgrade(23).effectOrDefault(1));
@@ -307,6 +307,16 @@ class ReplicantiUpgradeState {
 
   purchase() {
     if (!this.canBeBought) return;
+
+    if((!breakInfinityUGs.all[4].config.hasFailed() && !breakInfinityUGs.all[4].isBought) && player.options.confirmations.glitchCL && (this.id == 1 || this.id == 2)){
+      Modal.message.show(`you will fail glitch challenge ${breakInfinityUGs.all[4].config.name} <br> which is to ${breakInfinityUGs.all[4].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
+      return;
+    }
+    else if((!breakInfinityUGs.all[5].config.hasFailed() && !breakInfinityUGs.all[5].isBought) && player.options.confirmations.glitchCL && (this.id == 1 || this.id == 2)){
+      Modal.message.show(`you will fail glitch challenge ${breakInfinityUGs.all[5].config.name} <br> which is to ${breakInfinityUGs.all[5].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
+      return;
+    }
+    
     Currency.infinityPoints.subtract(this.cost);
     this.baseCost = Decimal.times(this.baseCost, this.costIncrease);
     this.value = this.nextValue;

@@ -8,7 +8,7 @@ import { GlyphTypes } from "./glyph-effects";
 
 // This is actually reassigned when importing saves
 // eslint-disable-next-line prefer-const
-top.player = {
+window.player = {
   antimatter: DC.E1,
   dimensions: {
     antimatter: Array.range(0, 8).map(() => ({
@@ -27,7 +27,11 @@ top.player = {
       cost: [DC.D1, DC.D5, DC.E2, DC.E3, DC.E2350, DC.E2650, DC.E3000, DC.E3350][tier],
       amount: DC.D0,
       bought: 0
-    }))
+    })),
+    chaos: Array.range(0, 8).map(() => ({
+      bought: 0,
+      amount: DC.D0
+    })),
   },
   buyUntil10: true,
   sacrificed: DC.D0,
@@ -772,7 +776,8 @@ top.player = {
       quoteBits: 0,
       run: false,
       tier: 0,
-      riftforce: DC.D0,
+      riftForce: DC.D0,
+      chaosCores: DC.E1,
       augment: {
         effectbits: 0,
       },

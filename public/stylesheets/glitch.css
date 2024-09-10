@@ -7,6 +7,9 @@
 
   --color-glitch--accent: #00ff00;
   --color-glitch--base: #00aa00;
+
+  --color-chaos--bg: #206020;
+
 }
 
 .l-glitch-celestial-tab {
@@ -160,3 +163,13 @@
   font-weight: bold;
   color: var(--color-glitch--base);
 }
+
+
+/*
+Chaos Styles
+*/
+
+.l-dimension-row-chaos-dim:nth-child(even) {
+  background-color: var(--color-chaos--bg);
+}
+
