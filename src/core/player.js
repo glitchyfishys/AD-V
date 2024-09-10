@@ -777,7 +777,7 @@ window.player = {
       run: false,
       tier: 0,
       riftForce: DC.D0,
-      chaosCores: DC.E1,
+      chaosCores: DC.D0,
       augment: {
         effectbits: 0,
       },
