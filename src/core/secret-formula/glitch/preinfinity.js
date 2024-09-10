@@ -19,7 +19,7 @@ export const preInfinityUG = [
     checkRequirement: () => player.antimatter.e >= 25 && player.dimensionBoosts <= 1 && !PlayerProgress.infinityUnlocked(),
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
     description: "AD multiplier from Tickspeed purchases",
-    effect: () => 1 + player.totalTickBought / 15,
+    effect: () => 1 + Tickspeed.totalUpgrades / 15,
     formatEffect: value => formatX(value, 2, 2)
   },
   {
@@ -52,7 +52,7 @@ export const preInfinityUG = [
     checkRequirement: () => player.antimatter.e >= 7 && !player.dimensions.antimatter[1].amount.gt(20) && player.galaxies <= 1 && !player.dimensionBoosts > 0 && !PlayerProgress.infinityUnlocked(),
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
     description: "additonal Tickspeed purchases by their amount",
-    effect: () => Math.floor(Math.log2(player.totalTickBought + 1) ** 2),
+    effect: () => Math.floor(Math.log2(player.totalTickBought + Tickspeed.continuumValue + 1) ** 2),
     formatEffect: value => "+" + formatInt(value)
   },
   {
