@@ -1,4 +1,4 @@
-
+// entropy
 export const GlitchRifts = {
   alpha: {
     id: 1,
