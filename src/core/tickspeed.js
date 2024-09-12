@@ -201,6 +201,16 @@ export const Tickspeed = {
     return total;
   },
 
+  get totalForEffect() {    
+    let boughtTickspeed;
+    if (Laitela.continuumActive) boughtTickspeed = this.continuumValue;
+    else boughtTickspeed = player.totalTickBought;
+    let total = boughtTickspeed + player.totalTickGained ;
+    if(total > 1e20) total = total / ((total / 1e20) ** 0.9);
+
+    return total;
+  },
+
   get perSecond() {
     if(Decimal.divide(1000, this.current).lt(1)) new Decimal("1e1E300")
     return Decimal.divide(1000, this.current);
