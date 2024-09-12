@@ -156,9 +156,9 @@ export const Glitch = {
     
     if(total > 200) total = total * ((total /200) ** 1.25);
     let value = new Decimal(total / 24).times(GlitchRealityUpgrades.all[0].effectOrDefault(1)).pow(3.33);
-    if(value.gt("1e450")) value = value.mul( new Decimal(Decimal.log10(value)).pow(25));
+    if(value.gt("1e450") && player.records.fullGameCompletions > 0) value = value.mul( new Decimal(Decimal.log10(value)).pow(25));
     
-    const CC = Currency.chaosCores.value.mul(Currency.chaosCores.value.log(2)).pow(5);
+    const CC = Currency.chaosCores.value.mul(Currency.chaosCores.value.log(2)).pow(5).max(1);
 
     value = value.mul(CC);
 
@@ -166,7 +166,8 @@ export const Glitch = {
   },
 
   get chaosCoresBoost(){
-     return Math.max(Currency.chaosCores.value.log10() ** 0.25, 1)
+    if(Currency.chaosCores.eq(0)) return 1;
+     return Math.max(Currency.chaosCores.value.log10() ** 0.25, 1);
   },
 
   riftToCore(){
@@ -208,7 +209,7 @@ export const Glitch = {
     return player.celestials.glitch.run;
   },
   quotes: Quotes.glitch,
-  symbol: "ὡ",
+  symbol: "ὼ",
 };
 
 EventHub.logic.on(GAME_EVENT.GAME_LOAD, () => {
@@ -217,9 +218,11 @@ EventHub.logic.on(GAME_EVENT.GAME_LOAD, () => {
 
 EventHub.logic.on(GAME_EVENT.DIMBOOST_AFTER, () => {
   Glitch.quotes.dimBoost.show();
-  if(AntimatterDimension(8).amount.gt(0)) Glitch.quotes.dimEight.show();
 });
 
+EventHub.logic.on(GAME_EVENT.GAME_TICK_AFTER, () => {
+  if(AntimatterDimension(8).amount.gt(0)) Glitch.quotes.dimEight.show();
+});
 EventHub.logic.on(GAME_EVENT.GALAXY_RESET_AFTER, () => {
   Glitch.quotes.galaxy.show();
 });
@@ -245,9 +248,5 @@ EventHub.logic.on(GAME_EVENT.ACHIEVEMENT_UNLOCKED, () => {
 });
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
-  if(Tab.celestials.glitch.isOpen) Glitch.quotes.glitchReality.show();
-});
-
-EventHub.logic.on(GAME_EVENT.ti, () => {
   if(Tab.celestials.glitch.isOpen) Glitch.quotes.glitchReality.show();
 });

@@ -129,7 +129,7 @@ GameDatabase.celestials.descriptions = [
     },
     description() {
       if(Glitch.tier == 0){
-        return "while in glitch's Reality you can gain Rift Force (all effects acive) witch can unlock upgrades after completing their goals";
+        return "while in glitch's Reality you can gain Rift Force (all effects active) witch can unlock upgrades after completing their goals";
       }
     },
       

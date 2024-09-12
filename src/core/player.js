@@ -508,7 +508,7 @@ window.player = {
     autoSort: 0,
     autoCollapse: false,
     autoAutoClean: true,
-    applyFilterToPurge: true,
+    applyFilterToPurge: false,
     moveGlyphsOnProtection: true,
     perkPoints: 0,
     unlockedEC: 0,
@@ -777,7 +777,7 @@ window.player = {
       run: false,
       tier: 0,
       riftForce: DC.D0,
-      chaosCores: DC.E1,
+      chaosCores: DC.D0,
       augment: {
         effectbits: 0,
       },

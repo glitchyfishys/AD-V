@@ -43,7 +43,7 @@ export const glitchSpeedUpgrades = [
     cost: new Decimal("1e600"),
     requirement: () => `Reach ${format(1e60000)} Eternity Points with a negitive Blackhole of ${format("1e1E10")} (first 9 effects)`,
     hasFailed: () => !(Glitch.augmentEffectBits == 511),
-    checkRequirement: () => Glitch.isRunning && Glitch.augmentEffectBits == 511 && player.requirementChecks.reality.slowestBH.lt("1e1E10") && Currency.eternityPoints.gte("1e60000"),
+    checkRequirement: () => Glitch.isRunning && Glitch.augmentEffectBits == 511 && player.requirementChecks.reality.slowestBH.lte(1e-10) && Currency.eternityPoints.gte("1e60000"),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     description: "Unlock Chaos Dimensions",
     effect: () =>  1.25,

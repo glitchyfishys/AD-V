@@ -490,7 +490,7 @@ export const tabs = [
       {
         key: "glitch",
         name: "glitch",
-        symbol: "ὡ",
+        symbol: "ὼ",
         component: "GlitchTab",
         condition: () => (GlitchRifts.gamma.milestones[5].effectOrDefault(0)),
         id: 8,

@@ -249,7 +249,7 @@ export const pelleRifts = {
       {
         resource: "glitch",
         requirement: 0.5,
-        description: "unlock galaxy generator"
+        description: "unlock galaxy generator first"
       },
       {
         resource: "glitch",

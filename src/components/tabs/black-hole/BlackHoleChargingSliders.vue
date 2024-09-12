@@ -54,8 +54,8 @@ export default {
       this.negativeBHDivisor = Decimal.pow10(this.negativeSlider);
       const maxInversion = player.requirementChecks.reality.slowestBH.lte(1e-300);
       this.isDisabled = ImaginaryUpgrade(24).isLockingMechanics && Ra.isRunning && maxInversion;
-      this.maxNegativeBlackHole = (GlitchSpeedUpgrades.all[0].isBought ? 1e100 : 300);
-      this.lowermax = GlitchSpeedUpgrades.all[0].isBought;
+      this.maxNegativeBlackHole = (GlitchSpeedUpgrades.all[2].isBought ? 1e100 : 300);
+      this.lowermax = GlitchSpeedUpgrades.all[2].isBought;
 
       if (this.isFocused) return;
       this.updateDisplayValue();

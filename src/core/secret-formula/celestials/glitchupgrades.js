@@ -104,7 +104,7 @@ export const glitchRealityUpgrades = [
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     description: "You start with 5 DimBoosts and Lai'tela Reality at 10 minutes",
     effect: () =>  1,
-    formatEffect: value => "acive"
+    formatEffect: value => "active"
   },
   {
     name: "Lai'tela Rebound",
@@ -194,12 +194,12 @@ export const glitchRealityUpgrades = [
     name: () => (GlitchRealityUpgrades.all[15].isAvailableForPurchase ? "The Darkness Has Arived" : "Locked"),
     id: 16,
     cost: new Decimal("4.44e444"),
-    requirement: () => `Reach ${format("1.8e308")} Projected RM all effects excluding Ra's and Nameless One's reality (also reqires ${GlitchRealityUpgrades.all[14].name})`,
+    requirement: () => `Reach ${format("1.8e308")} Projected RM all effects excluding Ra's and Nameless One's Reality (also reqires ${GlitchRealityUpgrades.all[14].name})`,
     hasFailed: () => !GlitchRealityUpgrades.all[14].isBought || Glitch.augmentEffectBits != 315,
     checkRequirement: () =>  GlitchRealityUpgrades.all[14].isBought && MachineHandler.gainedRealityMachines.times(simulatedRealityCount()).gte("1.8e308") && Glitch.isRunning && Glitch.augmentEffectBits == 315,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    description: "Glitch stays compleate past Pelle and unlock Glitch's second layer, also ADs are powered by 2.5",
+    description: "Glitch stays complete past Pelle and unlock Glitch's second layer affter beating Pelle, also ADs are powered by 2.5",
     effect: () =>  1.5,
-    formatEffect: value => (GlitchRealityUpgrades.all[15].isBought ? "Unlocked" : "Locked" + ", ^2.5 AD")
+    formatEffect: value => (GlitchRealityUpgrades.all[15].isBought ? "Unlocked" : "Locked, ^2.5 AD")
   },
 ];

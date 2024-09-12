@@ -5,14 +5,15 @@ const Glitch = ["Glitch", "Galinar", "Devastator"];
 const Power = ["Power", "Strength", "Frightment", "Fear"];
 const Destroy = ["Destroy", "Annihilate", "Eliminate", "Remove"];
 
-const primaryBackground = cel => [[cel, 1]];
+const celBackground = cel => [[cel, 0]];
+const primaryBackground = cel => [["glitch", 1.5],[cel, 1.5]];
 
 
 export const glitchQuotes = {
   start: {
     id: 0,
     lines: [
-      "Hello \"Creature\"",
+      "Hello \"Destroyer\"",
       "Are you the one to help me?",
       "Let's see..."
     ],
@@ -37,8 +38,8 @@ export const glitchQuotes = {
   galaxy: {
     id: 3,
     lines: [
-      "Ah yes galaxies, Thier a bit strange",
-      "Let's just say that you Dimensions are not effected by them exactly",
+      "Ah yes Galaxies, Thier a bit strange",
+      "Let's just say that your Dimensions are not effected by them exactly",
       "They boost Tickspeed (I made that for you), the effect of mass",
       "Getting more is harder due to how big they are",
       "You have no idea how much room they take up"
@@ -49,7 +50,7 @@ export const glitchQuotes = {
     lines: [
       "So fast",
       "It is going to be fun, you and me are going to stop HIM",
-      "... I'll come back when you have infinited fast enough"
+      "... I'll come back when you have Infinited fast enough"
     ],
   },
   break: {
@@ -64,7 +65,7 @@ export const glitchQuotes = {
   eternity: {
     id: 6,
     lines: [
-      "You may have completed challenges getting here",
+      "You may have completed Challenges getting here",
       "Don't worry there's more for you, have fun completing them all",
       "Also the Time Studies I have designed for you, they will help a lot",
       "I will let you make some later"
@@ -74,7 +75,7 @@ export const glitchQuotes = {
     id: 7,
     lines: [
       "I want to see the limit of your power",
-      "I want to watch it grow",
+      "I want to watch it grow beyond not just Infinity or Eternity, Everything",
       "You will need it to beat HIM"
     ],
   },
@@ -89,27 +90,26 @@ export const glitchQuotes = {
   celestials: {
     id: 9,
     lines: [
-      "Now \"Destroyer\" I reqiure you to go in this order",
-      "Teresa, Effarig, Nameless though I call them Vela, V (yes that is his name), Ra, Lai'tela",
+      "Now \"Destroyer\" I reqiure you to go in this order, for the best outcome",
+      "Teresa, Effarig, Nameless one though I call them Vela, V (yes that is his name), Ra, Lai'tela",
       { text: "Then you will show me your power before $1.", 1: Pelle },
-      "Haha, the power might be enough, I will be back for my reality"
+      "Haha, the power might be enough, I will be back for my Reality"
     ],
   },
   glitchReality: {
     id: 10,
     lines: [
-      "Hey \"Destroyer\", can you complete my reality with all the others realitys combined",
-      "Please do",
+      "Hey \"Destroyer\", can you complete my reality with all the others realitys combined?",
       { text: "You would need this $1 to $2 HIM.", 1: Power, 2: Destroy },
-      "You may have notice me saying \"HIM\" a lot he's one of the most powerful celestial, I can't say his name here",
-      "I must be careful, I have been a bit strange, huh? these upgrades are broken",
-      "Take your time to fix them I'll be waiting"
+      "Also you may have notice me saying \"HIM\" a lot he's one of the most powerful celestials, I can't say his name here",
+      "I must be careful, I have been a bit strange",
+      "Huh? these upgrades are broken, take your time to fix them I'll be waiting"
     ],
   },
   glitchFinishPowerUGs: {
     id: 11,
     lines: [
-      "You have done well",
+      "You have done well \"Destroyer\"",
       { text: "However $1 is next", 1: Pelle},
       "Pelle... he's not from here, Let me look around for awhile",
       "Hmm... Pelle?"
@@ -120,14 +120,15 @@ export const glitchQuotes = {
     lines: [
       { text: "Hello $1", name: "Glitch", 1: V},
       "I have a request",
-      { text: "What? Why?", name: "V", background: primaryBackground("v")},
-      { text: "Who are you?", name: "V", background: primaryBackground("v")},
+      { text: "What? Why?", name: "V", background: celBackground("v")},
+      { text: "Who are you?", name: "V", background: celBackground("v")},
       { text: "I am $1 the Celestial of Programing, hence the name", celestialName: "Glitch", 1: Glitch},
-      { text: "You Want ME TO HELP THE DESTROYER DON'T YOU", name: "V", background: primaryBackground("v")},
+      { text: "What do you want..?", name: "V", background: celBackground("v")},
+      { text: "You Want ME TO HELP THE DESTROYER DON'T YOU", name: "V", background: celBackground("v")},
       { text: "Yes that's it, I will explain what for later, for now can you please help", name: "Glitch"},
-      { text: "Only if they do not ruin the last of my Achievements", name: "V", background: primaryBackground("v")},
-      { text: "I will give them access to my Chaos Dimensions", name: "Glitch"},
-      { text: "Very Well", name: "V", background: primaryBackground("v")},
+      { text: "Only if they do not ruin the last of my Achievements", name: "V", background: celBackground("v")},
+      { text: "Thanks V, I will give them access to my Chaos Dimensions", name: "Glitch"},
+      { text: "Very well, you better be watching them", name: "V", background: celBackground("v")},
       "Ok, Destroyer as long as you don't ruin his Achievements you don't have anything to worry about",
       "I will see you soon very soon... or after you finish with him",
     ],

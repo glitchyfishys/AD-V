@@ -85,14 +85,14 @@ export const AutoGlyphProcessor = {
       case AUTO_GLYPH_SCORE.LOWEST_ALCHEMY: {
         const resource = AlchemyResource[glyph.type];
         const refinementGain = GlyphSacrificeHandler.glyphRefinementGain(glyph);
-        return (resource.isUnlocked && refinementGain.gt(0))
-          ? resource.amount.neg()
-          : Decimal.NUMBER_MAX_VALUE.neg();
+        return (resource.isUnlocked && refinementGain > 0)
+          ? -resource.amount
+          : -Number.MAX_VALUE;
       }
       case AUTO_GLYPH_SCORE.ALCHEMY_VALUE:
         return AlchemyResource[glyph.type].isUnlocked
           ? GlyphSacrificeHandler.glyphRefinementGain(glyph)
-          : Decimal.NUMBER_MAX_VALUE.neg();
+          : -Number.MAX_VALUE;
       default:
         throw new Error("Unknown glyph score mode in score assignment");
     }
