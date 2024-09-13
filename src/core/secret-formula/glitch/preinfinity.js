@@ -52,7 +52,7 @@ export const preInfinityUG = [
     checkRequirement: () => player.antimatter.e >= 7 && !player.dimensions.antimatter[1].amount.gt(20) && player.galaxies <= 1 && !player.dimensionBoosts > 0 && !PlayerProgress.infinityUnlocked(),
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
     description: "additonal Tickspeed purchases by their amount",
-    effect: () => Math.floor(Math.log2(Tickspeed.totalForEffect) ** 2),
+    effect: () => Math.floor(Math.log2(Tickspeed.totalForEffect + 2) ** 2) - 1,
     formatEffect: value => "+" + formatInt(value)
   },
   {
