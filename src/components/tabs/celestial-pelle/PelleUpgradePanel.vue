@@ -23,6 +23,11 @@ export default {
     };
   },
   computed: {
+    sName(){
+      if(player.options.themeModern == "S14") return "Ra-Pelle";
+      if(player.options.themeModern == "S13") return "V-Pelle";
+      return "Pelle";
+    },
     collapseIcon() {
       return this.isCollapsed
         ? "fas fa-expand-arrows-alt"
@@ -70,7 +75,7 @@ export default {
         class="c-collapse-icon-clickable"
         @click="toggleCollapse"
       />
-      Pelle Upgrades
+      {{sName}} Upgrades
     </div>
     <div
       v-if="!isCollapsed"

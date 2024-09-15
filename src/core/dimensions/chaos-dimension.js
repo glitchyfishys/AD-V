@@ -87,7 +87,7 @@ class ChaosDimensionState extends DimensionState {
     return new ExponentialCostScaling({
       baseCost: this._baseCost,
       baseIncrease: this._baseCostMultiplier,
-      costScale: 10000,
+      costScale: 10,
       scalingCostThreshold: Number.MAX_VALUE
     });
   }
@@ -144,7 +144,6 @@ class ChaosDimensionState extends DimensionState {
     * @returns {boolean}
     */
   get isAffordable() {
-    if (this.cost.gt(Decimal.NUMBER_MAX_VALUE)) return false;
     return this.cost.lte(this.currencyAmount);
   }
 

@@ -25,7 +25,8 @@ export function getTickSpeedMultiplier() {
   if (Ra.isRunning || Glitch.augmentEffectActive(7)) return DC.C1D1_1245.div(GlitchSpeedUpgrades.all[1].effectOrDefault(1));
   let galaxies = effectiveBaseGalaxies();
 
-  const CC = Math.max( Currency.chaosCores.value.pow(0.1).mul(Currency.chaosCores.value.log10()).toNumber() ** 0.25, 1);
+  let CC = Math.max( Currency.chaosCores.value.pow(0.1).mul(Currency.chaosCores.value.log10()).toNumber() ** 0.25, 1);
+  if(Pelle.isDoomed) CC = CC ** 0.1;
 
   const effects = Effects.product(
     InfinityUpgrade.galaxyBoost,

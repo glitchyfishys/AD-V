@@ -57,9 +57,19 @@ export default {
       this.augments = makeEnumeration(Glitch.activeAugments);
       this.riftForce = format(Currency.riftForce.value,2);
     },
+    sName(){
+      if(player.options.themeModern == "S14") return "Ra-Glitch's";
+      if(player.options.themeModern == "S13") return "V-Glitch's";
+      return "Glitch's";
+    },
+    sCel(){
+      if(player.options.themeModern == "S14") return "Ra-Glitch";
+      if(player.options.themeModern == "S13") return "V-Glitch";
+      return "Glitch";
+    },
     startRun() {
       if (this.isDoomed) return;
-      Modal.celestials.show({ name: "glitch'", number: 6 });
+      Modal.celestials.show({ name: "Glitch's", number: 6 });
     },
     effects(id){
       if(this.isRunning) return false;
@@ -92,7 +102,7 @@ export default {
 
 <template>
   <div class="l-glitch-celestial-tab">
-   work in progress
+   this is a work in progress
 
     <div class="c-glitch-compact-top">
       <div>
@@ -132,7 +142,7 @@ export default {
             class="c-collapse-icon-clickable"
             @click="toggleCollapsePower"
           />
-          Glitch layer one upgrades (power)
+          {{sName()}} layer one upgrades (power)
         </div>
       <div
         v-if="!collapsedPower"
@@ -169,7 +179,7 @@ export default {
             class="c-collapse-icon-clickable"
             @click="toggleCollapseSpeed"
           />
-          Glitch layer two upgrades (speed)
+          {{sName()}} layer two upgrades (speed)
         </div>
       <div
         v-if="!collapsedSpeed"

@@ -96,12 +96,31 @@ class QuoteLine {
     return typeof this._line === "function" ? this._line() : this._line;
   }
 
-  get celestials() {
+  sName(){
+    if(player.options.themeModern == "S14") return "Ra";
+    if(player.options.themeModern == "S13") return "V";
+    if(this.name != undefined) return this.name;
+    return Celestials[this._parent.celestial].displayName;
+  }
+
+  sIcon(){
+    if(player.options.themeModern == "S14") return [[Celestials.ra.symbol, 1]];
+    if(player.options.themeModern == "S13") return [[Celestials.v.symbol, 1]];
     return typeof this._celestialArray === "function" ? this._celestialArray() : this._celestialArray;
   }
 
-  get celestialSymbols() {
+  sSingleIcon(){
+    if(player.options.themeModern == "S14") return [Celestials.ra.symbol];
+    if(player.options.themeModern == "S13") return [Celestials.v.symbol];
     return this.celestials.map(c => Celestials[c[0]].symbol);
+  }
+
+  get celestials() {
+    return this.sIcon();
+  }
+
+  get celestialSymbols() {
+    return this.sSingleIcon();
   }
 
   get showCelestialName() {
@@ -109,8 +128,7 @@ class QuoteLine {
   }
 
   get celestialName() {
-    if(this.name != undefined) return this.name;
-    return Celestials[this._parent.celestial].displayName;
+    return this.sName();
   }
 }
 

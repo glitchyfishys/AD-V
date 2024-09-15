@@ -38,6 +38,16 @@ export default {
     };
   },
   computed: {
+    sName(){
+      if(player.options.themeModern == "S14") return "Ra-Lai'tela's";
+      if(player.options.themeModern == "S13") return "V-Lai'tela's";
+      return "Lai'tela's";
+    },
+    sCel(){
+      if(player.options.themeModern == "S14") return "Ra-Lai'tela";
+      if(player.options.themeModern == "S13") return "V-Lai'tela";
+      return "Lai'tela";
+    },
     styleObject() {
       return {
         color: this.isDMCapped ? "var(--color-bad)" : "",
@@ -84,7 +94,7 @@ export default {
         class="o-primary-btn--subtab-option"
         @click="showLaitelaHowTo()"
       >
-        Click for Lai'tela info
+        Click for {{sName}} info
       </PrimaryButton>
       <PrimaryButton
         class="o-primary-btn--subtab-option"

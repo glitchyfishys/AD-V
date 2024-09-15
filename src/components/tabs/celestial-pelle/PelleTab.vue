@@ -23,6 +23,11 @@ export default {
     };
   },
   computed: {
+    sName(){
+      if(player.options.themeModern == "S14") return "Ra-Pelle";
+      if(player.options.themeModern == "S13") return "V-Pelle";
+      return "Pelle";
+    },
     symbol() {
       return Pelle.symbol;
     },
@@ -53,6 +58,9 @@ export default {
       Modal.pelleEffects.show();
     },
     enterDoomModal() {
+      if(!GlitchRealityUpgrade(16).isBought){
+        Modal.message.show(`I recommend you complete my Reaity first<br> but if you want... doom your Reality and lose you progress`);
+      }
       Modal.armageddon.show();
     }
   }
@@ -94,7 +102,7 @@ export default {
       class="pelle-unlock-requirements"
     >
       You must have {{ formatInt(totalRows) }} rows of Achievements
-      and all of your Glyph Alchemy Resources capped to unlock Pelle, Celestial of Antimatter.
+      and all of your Glyph Alchemy Resources capped to unlock {{sName}}, Celestial of Antimatter.
       <br>
       <br>
       {{ formatInt(completedRows) }} / {{ formatInt(totalRows) }} Achievement rows completed

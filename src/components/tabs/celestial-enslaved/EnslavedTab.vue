@@ -53,8 +53,8 @@ export default {
       return Enslaved.storedTimeInsideEnslaved(this.storedBlackHole);
     },
     realityTitle() {
-      if (this.isRunning) return "You are inside The Nameless Ones' Reality";
-      return "Start The Nameless Ones' Reality";
+      if (this.isRunning) return `You are inside The ${this.sName()} Reality`;
+      return `Start The ${this.sName()} Reality`;
     },
     runButtonClassObject() {
       return {
@@ -144,6 +144,11 @@ export default {
       this.hasNoCharge = player.celestials.enslaved.stored.eq(0);
       this.hasReachedCurrentCap = this.storedReal === this.storedRealCap;
     },
+    sName(){
+      if(player.options.themeModern == "S14") return "The Nameless Ra's";
+      if(player.options.themeModern == "S13") return "The Nameless V's";
+      return "TheNameless Ones'";
+    },
     toggleStoreBlackHole() {
       Enslaved.toggleStoreBlackHole();
     },
@@ -168,7 +173,7 @@ export default {
     },
     startRun() {
       if (this.isDoomed) return;
-      Modal.celestials.show({ name: "The Nameless Ones'", number: 2 });
+      Modal.celestials.show({ name: this.sName(), number: 2 });
     },
     hasUnlock(info) {
       return Enslaved.has(info);

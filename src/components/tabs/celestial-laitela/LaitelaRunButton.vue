@@ -18,6 +18,16 @@ export default {
     };
   },
   computed: {
+    sName(){
+      if(player.options.themeModern == "S14") return "Ra-Lai'tela's";
+      if(player.options.themeModern == "S13") return "V-Lai'tela's";
+      return "Lai'tela's";
+    },
+    sCel(){
+      if(player.options.themeModern == "S14") return "Ra-Lai'tela";
+      if(player.options.themeModern == "S13") return "V-Lai'tela";
+      return "Lai'tela";
+    },
     completionTime() {
       if (this.tierNotCompleted) return "Not completed at this tier";
       return `Fastest Completion: ${TimeSpan.fromSeconds(this.realityTime).toStringShort()}`;
@@ -75,7 +85,7 @@ export default {
 <template>
   <button :class="classObject()">
     <span :class="{ 'o-pelle-disabled': isDoomed }">
-      <b>Start Lai'tela's Reality</b>
+      <b>Start {{sName}} Reality</b>
     </span>
     <div
       :class="runButtonClassObject()"
@@ -107,7 +117,7 @@ export default {
           You also gain an additional {{ formatX(8) }} Dark Energy.
         </b>
         <br><br>
-        Lai'tela's Reality has been fully destabilized and cannot have its reward further improved.
+        {{ sName }} Reality has been fully destabilized and cannot have its reward further improved.
       </span>
       <br>
     </div>

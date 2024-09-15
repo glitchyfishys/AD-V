@@ -1,6 +1,7 @@
 <script>
 import EnterCelestialsRaPet from "@/components/modals/prestige/EnterCelestialsRaPet";
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
+import { Celestials } from "../../../core/globals";
 
 export default {
   name: "EnterCelestialsModal",
@@ -27,7 +28,6 @@ export default {
       effarigLayer: "",
       enslavedDone: false,
       laitelaTime: "",
-
     };
   },
   computed: {
@@ -39,35 +39,35 @@ export default {
       return description ? description() : "";
     },
     topLabel() {
-      return `${this.name} Reality`;
+      return `${this.sName()} Reality`;
     },
     message() {
-      return `Perform a Reality reset and enter ${this.name} Reality, in which:`;
+      return `Perform a Reality reset and enter ${this.sName()} Reality, in which:`;
     },
     extraLine() {
       switch (this.number) {
         case 0:
           return this.teresaBestAM.eq(1)
-            ? `You have not unlocked the reward for Teresa's Reality yet. Unlocking the reward requires
+            ? `You have not unlocked the reward for ${this.sName()} Reality yet. Unlocking the reward requires
               purchasing the Reality study and completing the Reality for the first time.`
-            : `Your highest Teresa completion was for ${format(this.teresaBestAM, 2, 2)} antimatter,
+            : `Your highest ${this.sName()} completion was for ${format(this.teresaBestAM, 2, 2)} antimatter,
               gaining you a ${formatX(this.teresaRunMult, 2)} multiplier to Glyph Sacrifice power.`;
         case 1: return this.effarigDone
-          ? "Effarig is completed!"
+          ? `${this.sCel()} is completed!`
           : `You are currently on the ${this.effarigLayer} Layer.`;
         case 2: return this.enslavedDone
           ? "Have... we... not helped enough..."
           : "We... can help... Let us... help...";
         case 3: return "";
-        case 4: return `Within Ra's Reality, some resources will generate Memory Chunks
+        case 4: return `Within ${this.sName()} Reality, some resources will generate Memory Chunks
           for Celestial Memories based on their amounts:`;
         case 5: return this.laitelaFastest.gte(300)
-          ? "You have not completed Lai'tela at this tier."
+          ? `You have not completed ${this.sCel()} at this tier.`
           : `Your fastest completion on this tier is ${this.laitelaTime}.`;
         case 6: {
           let augments = makeEnumeration(Glitch.activeAugments);
           if(augments == "") augments = "Nothing";
-          return "start Glitch's reality with " + augments + " active?";
+          return `start ${this.sName()} reality with ${augments} active?`;
         }
         default: throw new Error(`Attempted to start an Unknown Celestial in Celestial Modal Confirmation.`);
       }
@@ -83,6 +83,16 @@ export default {
       this.enslavedDone = Enslaved.isCompleted;
       this.laitelaFastest = Time.laitelaFastestCompletion.totalMilliseconds;
       this.laitelaTime = TimeSpan.fromSeconds(this.laitelaFastest).toStringShort();
+    },
+    sName(){
+      if(player.options.themeModern == "S14") return `${( !this.name.includes("Ra")) ? "Ra-" + this.name : this.name}`;
+      if(player.options.themeModern == "S13") return `${( !this.name.includes("V")) ? "V-" + this.name : this.name}`;
+      return this.name;
+    },
+    sCel(){
+      if(player.options.themeModern == "S14") return "Ra";
+      if(player.options.themeModern == "S13") return "V";
+      return Celestials[this.name].name;
     },
     handleYesClick() {
 

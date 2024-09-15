@@ -60,7 +60,7 @@ export const breakInfinityUG = [
   {
     name: "Cloned Replication",
     id: 5,
-    requirement: () => `Have ${format(1.79e308)} Replicanti without any upgrades (pre-Eternity)`,
+    requirement: () => `Have ${format(Number.MAX_VALUE, 2)} Replicanti without any upgrades (pre-Eternity)`,
     hasFailed: () => player.replicanti.chance > 0.01 || player.replicanti.interval < 1000 || PlayerProgress.eternityUnlocked(),
     checkRequirement: () => player.replicanti.amount.gte(1.79e308) && player.replicanti.chance == 0.01 && player.replicanti.interval >= 1000 && !PlayerProgress.eternityUnlocked(),
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,

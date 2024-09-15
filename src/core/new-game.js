@@ -122,6 +122,7 @@ export const NG = {
       if(player.records.fullGameCompletions > 1) {
         player.celestials.v = JSON.parse(v);
         player.celestials.ra = JSON.parse(ra);
+        player.reality.imaginaryUpgReqs = 67108800;
         player.celestials.ra.charged = new Set([
         "36Mult","galaxyBoost","resetBoost","18Mult","timeMult","dimMult","passiveGen","resetMult","timeMult2","unspentBonus","45Mult","27Mult"]);
       }

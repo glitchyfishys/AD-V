@@ -1840,13 +1840,12 @@ Rifts once the current cap has been reached.`,
       tab: "glitch/entropy",
       isUnlocked: () => true,
       info: () => `
-      Glitch's Challenges prove you can handle <i>his</i> Reality
-      Some of Glitch's Challenges can only be completed at a certain parts of the game, so try to get them soon
-      Glitch will warn you if you will be locked out of completing a Challenge which can be disabled in confirmations
+      Glitch's Challenges prove you can handle <i>his</i> Reality <br>
+      Some of Glitch's Challenges can only be completed at certain parts of the game, so try to get them soon <br>
+      Glitch will warn you if you will be locked out of completing a Challenge which can be disabled in confirmations <br>
       
-      Completing a Challenge also fills a Rift with Entropy, which unlock more Rewards
-      Completing all of the Challenges unlocks Glitch, The Celestial of Programing 
-<br>
+      Completing a Challenge also fills a Rift with Entropy, which unlock more Rewards <br>
+      Completing all of the Challenges unlocks Glitch, The Celestial of Programing <br>
 `,
     }, {
       name: "Mod",
@@ -1854,46 +1853,47 @@ Rifts once the current cap has been reached.`,
       tags: ["Glitch", "Challenges", "Celestial", "Mod"],
       isUnlocked: () => true,
       info: () => `
-      This Mod changes:
-      Four Achievement info and unlock requirements and two Rewards
+      This Mod changes: <br>
+      Four Achievement info and unlock requirements and two Rewards <br>
 
-      EC1 reuirement amount
+      EC1 reuirement amount <br>
 
-      Teresa RM pouring cap
-      V Achievement requrements and for Unlocking V
-      Ra memory level cap
-      Alchemy cap
-      One Pelle Quote
-      End tab names
-      End Game
-
-      And Adds:
-      New Teresa pouring Milestone
-      New Effarig upgrade
-      New V Achievement
-      
-
-      Glitch Challenges and Rifts
-      Glitch Celestial and upgrades
-      Destroying Pelle many times
-
-      Secret Achievements (NYI)
-      Glitch Glyph (NYI)
-      Chaos Dimensions (NYI)
-
-      QOL:
-      Buy max AD Autobuyer upgrades
-      Toggle ADs buy max
-      Sticky Header, The Prestige buttons and Currency will scroll down with you
-      Complete ECs based on the amount of EP that you would have needed to complete that Challenge
-      Time study Export, Respec and Import are added to the side of the Time Therom shop
-      Shift clicking Reality upgrades, Black hole power upgrades bulk buy 25
-      Shift clicking the Infinity Prestige button will buy a Tesseract without switching tabs
-      STD coins are gained over time at one per fifteen minutes
-
-      Other:
-      News ticker speed can go upto 1000%
-<br>
+      Teresa RM pouring cap <br>
+      V Achievement requrements and for Unlocking V <br>
+      Ra memory level cap <br>
+      Alchemy cap <br>
+      One Pelle Quote <br>
+      End tab names <br>
+      End Game <br>
+      <br>
+      And Adds: <br>
+      New Teresa pouring Milestone <br>
+      New Effarig upgrade <br>
+      New V Hard Achievement <br>
+      <br>
+      <br>
+      Glitch Challenges and Rifts <br>
+      Glitch Celestial and upgrades <br>
+      Destroying Pelle many times <br>
+      <br>
+      Chaos Dimensions <br>
+      <br>
+      Secret Achievements (NYI) <br>
+      Glitch Glyph (NYI) <br>
+      <br>
+      QOL: <br>
+      Buy max AD Autobuyer upgrades <br>
+      Toggle ADs buy max <br>
+      Sticky Header, The Prestige buttons and Currencys will scroll down with you <br>
+      Complete ECs based on the amount of EP that you would have needed to complete that Challenge <br>
+      Time study Export, Respec and Import are added to the side of the Time Therom shop <br>
+      Shift clicking Reality upgrades, Black hole power upgrades bulk buy 25 <br>
+      Shift clicking the Infinity Prestige button will buy a Tesseract without switching tabs <br>
+      STD coins are gained over time at one per fifteen minutes <br>
+      <br>
+      Other: <br>
+      News ticker speed can go upto 1000% <br>
+      Two new secret themes <br>
 `,
     }
   ]

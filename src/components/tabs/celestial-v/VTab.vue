@@ -106,12 +106,20 @@ export default {
       this.isRunning = V.isRunning;
       this.hasAlchemy = Ra.unlocks.unlockGlyphAlchemy.canBeApplied;
     },
+    sName(){
+      if(player.options.themeModern == "S14") return "Ra-V's";
+      return "V's";
+    },
+    sCel(){
+      if(player.options.themeModern == "S14") return "Ra-V";
+      return "V";
+    },
     unlockCelestial() {
       if (V.canUnlockCelestial) V.unlockCelestial();
     },
     startRun() {
       if (this.isDoomed) return;
-      Modal.celestials.show({ name: "V's", number: 3 });
+      Modal.celestials.show({ name: this.sName(), number: 3 });
     },
     has(info) {
       return info.isUnlocked;
@@ -192,7 +200,7 @@ export default {
         >
           <span v-if="wantsFlipped">Hide</span>
           <span v-else>Show</span>
-          Hard V
+          Hard {{ sCel() }}
         </PrimaryButton>
         <PrimaryButton
           class="o-primary-btn--subtab-option l-cursed-glyph-creation"
@@ -207,10 +215,10 @@ export default {
         <br>
         <span v-if="!isDoomed">The Black Hole can now be used to slow down time if they are both permanent.</span>
         <br><br>
-        Each Hard V-Achievement counts as two V-Achievements and will award {{ formatInt(2) }} Space Theorems
+        Each Hard {{ sCel() }}-Achievement counts as two {{ sCel() }}-Achievements and will award {{ formatInt(2) }} Space Theorems
         instead of {{ formatInt(1) }}.
         <br>
-        Goal reduction is significantly more expensive for Hard V-Achievements.
+        Goal reduction is significantly more expensive for Hard {{ sCel() }}-Achievements.
       </div>
       <div
         v-if="showReduction"
@@ -280,7 +288,7 @@ export default {
             >
               <span v-if="isRunning">You are in </span>
               <span v-else>Start </span>
-              V's Reality.
+              {{ sName() }} Reality.
             </b>
             <br>
             <div :style="{ 'font-size': hasAlchemy ? '1.2rem' : '' }">
@@ -296,11 +304,11 @@ export default {
         </li>
       </div>
       <div class="c-v-info-text">
-        V-Achievements can only be completed within V's Reality, but are permanent and do not reset upon leaving
+        {{ sCel() }}-Achievements can only be completed within {{ sName() }} Reality, but are permanent and do not reset upon leaving
         and re-entering the Reality.
       </div>
       <div class="c-v-info-text">
-        You have {{ formatInt(totalUnlocks) }} V-Achievements done.
+        You have {{ formatInt(totalUnlocks) }} {{ sCel() }}-Achievements done.
         <span v-if="!isDoomed">
           You gain {{ formatInt(1) }} Space Theorem for each completion,
           allowing you to purchase Time Studies which are normally locked.

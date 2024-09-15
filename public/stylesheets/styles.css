@@ -102,7 +102,8 @@ html {
   --color-ra-pet--effarig: #ea8585;
   --color-ra-pet--enslaved: #f1aa7f;
   --color-ra-pet--v: #ead584;
-
+  --color-ra-pet--glitch: #B0FF60;
+  
   --color-laitela--base: white;
   --color-laitela--accent: black;
 
@@ -7095,9 +7096,9 @@ kbd {
   justify-content: center;
   align-items: center;
   font-family: Typewriter;
-  color: #9575cd;
+  color: var(--color-ra--base);
   background: black;
-  border: var(--var-border-width, 0.2rem) solid #9575cd;
+  border: var(--var-border-width, 0.2rem) solid var(--color-ra--base);
   border-radius: var(--var-border-radius, 2rem);
   margin: 2rem;
   padding: 1rem;
@@ -7110,12 +7111,12 @@ kbd {
   justify-content: center;
   align-items: center;
   font-size: 3rem;
-  color: #9575cd;
+  color: var(--color-ra--base);
   text-shadow: 0 0 1rem;
   background-color: black;
-  border: var(--var-border-width, 0.4rem) solid #9575cd;
+  border: var(--var-border-width, 0.4rem) solid var(--color-ra--base);
   border-radius: 50%;
-  box-shadow: 0 0 0.7rem #9575cd, 0 0 0.7rem #9575cd inset;
+  box-shadow: 0 0 0.7rem var(--color-ra--base), 0 0 0.7rem var(--color-ra--base) inset;
   margin: 1.5rem 0;
   transition-duration: 0.2s;
 }
@@ -7123,16 +7124,16 @@ kbd {
 .c-ra-run-button__icon:hover {
   font-size: 7.5rem;
   color: black;
-  background-color: #9575cd;
+  background-color: var(--color-ra--base);
   border-color: black;
 }
 
 .c-ra-run-button__icon--running {
   font-size: 7.5rem;
   color: black;
-  background-color: #9575cd;
+  background-color: var(--color-ra--base);
   border-color: black;
-  box-shadow: 0 0 1.5rem #9575cd, 0 0 1.5rem #9575cd inset;
+  box-shadow: 0 0 1.5rem var(--color-ra--base), 0 0 1.5rem var(--color-ra--base) inset;
 }
 
 .c-ra-run-button__icon--running .c-ra-run-button__icon__sigil {

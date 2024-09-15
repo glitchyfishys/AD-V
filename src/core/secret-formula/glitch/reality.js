@@ -70,7 +70,7 @@ export const realityUG = [
 {
     name: "External Dilation",
     id: 6,
-    requirement: () => `Reach ${format(1.79e308)} Antimater in Effarigs Reality (Infinity Layer) with three Glyphs maxium`,
+    requirement: () => `Reach ${format(Number.MAX_VALUE, 2)} Antimater in Effarigs Reality (Infinity Layer) with three Glyphs maxium`,
     hasFailed: () => Effarig.currentStage > 1 || player.reality.glyphs.active.length > 3,
     checkRequirement: () => player.antimatter.gte(1.79e308) && Effarig.isRunning && Effarig.currentStage == 1 && player.reality.glyphs.active.length <= 3,
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,

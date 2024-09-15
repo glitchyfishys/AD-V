@@ -18,6 +18,10 @@
   align-items: center;
 }
 
+.o-sidebar-currency--glitch{
+  color: var(--color-glitch--base);
+}
+
 .o-glitch-run-button {
   width: 24rem;
   height: 34rem;

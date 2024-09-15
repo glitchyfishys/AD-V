@@ -79,7 +79,7 @@ export default {
 .btn-big-crunch-s {
   font-size: 3rem;
   margin-top: 20px;
-  width: 22rem;
+  width: 23rem;
   position: absolute;
   transform: translateX(-50%);
 }

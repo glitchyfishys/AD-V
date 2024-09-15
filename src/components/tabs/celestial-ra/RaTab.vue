@@ -84,7 +84,7 @@ export default {
       return GameDatabase.celestials.descriptions[4].effects().replace(/^\w/u, c => c.toUpperCase()).split("\n");
     },
     memoryDescription() {
-      return `Within Ra's Reality, Memory Chunks for Celestial Memories
+      return `Within ${player.options.themeModern == "S13" ? "V-Ra's": "Ra's"} Reality, Memory Chunks for Celestial Memories
         will be generated based on certain resource amounts.`;
     },
     isDoomed: () => Pelle.isDoomed,
@@ -101,6 +101,10 @@ export default {
       this.petWithRemembrance = Ra.petWithRemembrance;
       this.isRunning = Ra.isRunning;
       this.memoryBoosts = Ra.memoryBoostResources;
+    },
+    sName(){
+      if(player.options.themeModern == "S13") return "V-Ra's";
+      return "Ra's";
     },
     startRun() {
       if (this.isDoomed) return;
@@ -148,7 +152,7 @@ export default {
         <h2 :class="{ 'o-pelle-disabled': isDoomed }">
           <span v-if="isRunning">You are in </span>
           <span v-else>Start </span>
-          Ra's Reality
+          {{sName()}} Reality
         </h2>
         <div
           :class="runButtonClassObject"

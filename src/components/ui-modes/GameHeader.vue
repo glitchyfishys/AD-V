@@ -15,6 +15,11 @@ export default {
     HeaderPrestigeGroup,
     GameSpeedDisplay,
   },
+  computed: {
+    classic() {
+      return this.$viewModel.newUI;
+    }
+  },
   data() {
     return {
       hasReality: false,
@@ -36,6 +41,13 @@ export default {
     <GameSpeedDisplay v-if="hasReality" />
     <br v-if="hasReality">
     <HeaderBlackHole />
+    <br>
+    <div v-if="this.classic">
+      Hello
+    </div>
+    <div v-else>
+      Hi
+    </div>
   </div>
 </template>
 

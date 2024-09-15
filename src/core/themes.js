@@ -22,12 +22,15 @@ export const Theme = function Theme(name, config) {
   this.isAvailable = function() {
     if (!this.isSecret) return true;
     // Note: match[0] gets the full string of a match, here the initial S and number in a theme name.
+    if(name === "S13") return player.secretUnlocks.themes.some(theme => theme.match(/^S[0-9]*/u)[0] === (name + "0"));
     return player.secretUnlocks.themes.some(theme => theme.match(/^S[0-9]*/u)[0] === name);
   };
 
   this.displayName = function() {
     if (!this.isSecret || !this.isAvailable()) return name;
     // Secret themes are stored as "S9Whatever", so we need to strip the SN part
+    if(name === "S13") return "V";
+    if(name === "S14") return "Ra";
     return player.secretUnlocks.themes.find(theme => theme.match(/^S[0-9]*/u)[0] === name).replace(/^S[0-9]*/u, "");
   };
 
@@ -89,6 +92,8 @@ Theme.secretThemeIndex = function(name) {
     "73de8a7f9efa1cbffc80a8effc9891a799127cd204b3a8b023bea8f513ed4753",
     "f3a71114261b4af6517a53f89bf0c6b56bb81b6f0e931d0e0d71249eb196628c",
     "1248689171faaa0abb68279199a8d2eb232dba10d2dacb79a705f680b6862c0e",
+    "c178c4ab2b9825cc543e7135b3cbe0782e97124873c1ebc073ca510aa315a258",
+    "c23af492b2c87bdb92800e1502b380cba44a93db0704ab53ad6e11c0b1d78003",
   ];
   const sha = sha512_256(name.toUpperCase());
   return secretThemes.indexOf(sha);
@@ -114,7 +119,7 @@ Theme.tryUnlock = function(name) {
   Theme.set(prefix);
   SecretAchievement(25).unlock();
   if (!isAlreadyUnlocked) {
-    GameUI.notify.success(`You have unlocked the ${name.capitalize()} theme!`, 5000);
+    GameUI.notify.success(`You have unlocked the ${Theme.celName(name).capitalize()} theme!`, 5000);
     if (Theme.current().isAnimated) {
       setTimeout(Modal.message.show(`This secret theme has animations. If they are giving you performance issues,
         you can turn them off in the Options/Visual tab to reduce lag.`), 100);
@@ -122,6 +127,15 @@ Theme.tryUnlock = function(name) {
   }
   return true;
 };
+
+Theme.celName = name => {
+  const i = Theme.secretThemeIndex(name);
+
+  if(i === 12) return "V";
+  if(i === 13) return "Ra";
+  return name;
+
+}
 
 Theme.create = function(name, settings) {
   const config = {
@@ -157,6 +171,8 @@ export const Themes = {
     Theme.create("S10",             { dark: true,  metro: true, animated: true, secret: true, }),
     Theme.create("S11",             { dark: true,               animated: true, secret: true, }),
     Theme.create("S12",             {                                           secret: true, }),
+    Theme.create("S13",             { dark: true,  metro: true,                 secret: true, }),
+    Theme.create("S14",             { dark: true,  metro: true,                 secret: true, }),
     /* eslint-enable no-multi-spaces */
   ],
 

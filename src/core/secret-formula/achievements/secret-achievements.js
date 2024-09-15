@@ -1,3 +1,4 @@
+
 export const secretAchievements = [
   {
     id: 11,
@@ -195,7 +196,9 @@ export const secretAchievements = [
   {
     id: 51,
     name: "Teresa",
-    description: "???"
+    get description() { return `Get a ${format("1e1000")} Sacrifce multiplier from Tersea's reality`; },
+    checkRequirement: () => Teresa.runRewardMultiplier.gte("1e1000"),
+    checkEvent: GAME_EVENT.REALITY_RESET_AFTER
   },
   {
     id: 52,
@@ -205,17 +208,17 @@ export const secretAchievements = [
   {
     id: 53,
     name: "nameless",
-    description: "get 1e1000 reality muchines in the nameless ones reality"
+    description: "???"
   },
   {
     id: 54,
     name: "V",
-    description: "get all of V's Achievements."
+    description: "???"
   },
   {
     id: 55,
     name: "Ra",
-    description: "get all of Ra's memorys back."
+    description: "???"
   },
   {
     id: 56,

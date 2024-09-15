@@ -67,7 +67,7 @@ export default {
     <div>
       <p>
         You have gained
-        <span class="c-time-dim-description__accent">{{ formatInt(totalUpgrades) }}</span> Tickspeed upgrades from
+        <span class="c-time-dim-description__accent">{{ format(totalUpgrades, 2, 2) }}</span> Tickspeed upgrades from
         <span class="c-time-dim-description__accent">{{ format(timeShards, 2, 1) }}</span> Time Shards.
       </p>
       <p>
@@ -101,7 +101,8 @@ export default {
       <div v-if="showLockedDimCostNote">
         Hold shift to see the Eternity Point cost for locked Time Dimensions.
       </div>
-      Any 8th Time Dimensions purchased above {{ format(1e8) }} will not further increase the multiplier.
+      Any 8th Time Dimensions purchased above {{ format(1e8) }} will not further increase the multiplier.<br>
+      You can not buy Time Dimensions past {{ format(1e15) }}.
     </div>
   </div>
 </template>

@@ -24,6 +24,7 @@ export default {
     return {
       isUnlocked: false,
       isCapped: false,
+      isoverloaded: false,
       multiplier: new Decimal(0),
       amount: new Decimal(0),
       bought: 0,
@@ -52,6 +53,7 @@ export default {
     },
     tooltipContents() {
       if (this.showTTCost) return `${this.formattedEPCost}<br>${this.timeEstimate}`;
+      if (this.isoverloaded) return `you can not purchase any more than ${format(1e15)} Time Dimensions`;
       if (this.isCapped) return `Nameless prevents the purchase of more than ${format(1)} Time Dimension`;
       return `Purchased ${quantifyInt("time", this.bought)}`;
     },
@@ -86,6 +88,7 @@ export default {
       const tier = this.tier;
       const dimension = TimeDimension(tier);
       this.isCapped = Enslaved.isRunning && dimension.bought > 0;
+      this.isoverloaded = dimension.bought >= 1e15;
       this.isUnlocked = dimension.isUnlocked;
       this.multiplier.copyFrom(dimension.multiplier);
       this.amount.copyFrom(dimension.amount);
@@ -135,7 +138,7 @@ export default {
     />
     <div class="l-dim-row-multi-button-container">
       <PrimaryButton
-        :enabled="isAvailableForPurchase && !isCapped"
+        :enabled="isAvailableForPurchase && !isCapped && !isoverloaded"
         class="o-primary-btn--buy-td o-primary-btn--buy-dim c-dim-tooltip-container"
         :class="{ 'l-dim-row-small-text': hasLongText }"
         @click="buyTimeDimension"
@@ -153,7 +156,7 @@ export default {
       />
       <PrimaryButton
         v-else
-        :enabled="isAvailableForPurchase && !isCapped"
+        :enabled="isAvailableForPurchase && !isCapped && !isoverloaded"
         class="o-primary-btn--buy-td-auto"
         @click="buyMaxTimeDimension"
       >

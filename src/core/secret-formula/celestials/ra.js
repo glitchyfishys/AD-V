@@ -3,7 +3,7 @@ export const ra = {
     teresa: {
       id: "teresa",
       name: "Teresa",
-      color: "#8596ea",
+      color: "var(--color-ra-pet--teresa)",
       chunkGain: "Eternity Points",
       memoryGain: "current RM",
       requiredUnlock: () => undefined,
@@ -13,7 +13,7 @@ export const ra = {
     effarig: {
       id: "effarig",
       name: "Effarig",
-      color: "#ea8585",
+      color: "var(--color-ra-pet--effarig)",
       chunkGain: "Relic Shards gained",
       memoryGain: "best Glyph level",
       requiredUnlock: () => Ra.unlocks.effarigUnlock,
@@ -23,7 +23,7 @@ export const ra = {
     enslaved: {
       id: "enslaved",
       name: "The Nameless Ones",
-      color: "#f1aa7f",
+      color: "var(--color-ra-pet--enslaved)",
       chunkGain: "Time Shards",
       memoryGain: "total time played",
       requiredUnlock: () => Ra.unlocks.enslavedUnlock,
@@ -33,7 +33,7 @@ export const ra = {
     v: {
       id: "v",
       name: "V",
-      color: "#ead584",
+      color: "var(--color-ra-pet--v)",
       chunkGain: "Infinity Power",
       memoryGain: "total Memory levels",
       requiredUnlock: () => Ra.unlocks.vUnlock,
@@ -41,9 +41,9 @@ export const ra = {
       memoryProductionMultiplier: () => Ra.unlocks.vXP.effectOrDefault(1)
     },
     glitchyfishys: {
-      id: "glitchyfishys",
+      id: "glitchyfishys",// i dont want to make a migration just to change this to glitch
       name: "Glitch",
-      color: "#B0FF60",
+      color: "var(--color-ra-pet--glitch)",
       chunkGain: "current RM",
       memoryGain: "reality machines and antimatter",
       requiredUnlock: () => undefined,

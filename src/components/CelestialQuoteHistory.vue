@@ -13,20 +13,27 @@ export default {
     };
   },
   computed: {
-    color() {
-      return this.celestial === "laitela" ? `var(--color-laitela--accent)` : `var(--color-${this.celestial}--base)`;
-    },
+    
     possessiveForm() {
-      
-      return this.celestial == "glitch" ? "Glitch" : Celestials[this.celestial].possessiveName;
-    }
+    if(player.options.themeModern == "S13") return `V's`;
+    if(player.options.themeModern == "S14") return `Ra's`;
+    return this.celestial == "glitch" ? "Glitch" : Celestials[this.celestial].possessiveName;
+    },
+    color() {
+      return `var(--color-${this.sCelestial()}--base)`;
+    },
   },
   methods: {
     update() {
-      this.isShown = this.celestial == "glitch" ? Glitch.quotes.all.some(x => x.isUnlocked) : Celestials[this.celestial].quotes.all.some(x => x.isUnlocked);
+      this.isShown = Celestials[this.celestial].quotes.all.some(x => x.isUnlocked);
+    },
+    sCelestial(){
+      if(player.options.themeModern == "S14") return `ra`;
+      if(player.options.themeModern == "S13") return `v`;
+      return this.celestial;
     },
     show() {
-      Quote.showHistory(this.celestial == "glitch" ? Glitch.quotes.all : Celestials[this.celestial].quotes.all);
+      Quote.showHistory(Celestials[this.celestial].quotes.all);
     },
   }
 };

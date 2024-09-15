@@ -18,7 +18,7 @@ some changes mainly based on the player comments and feedback from the Android v
 <br>
 <b><i>Once again, thank you so much for playing Antimatter Dimensions!</i></b>
 <br>
-<br> note: not all done in this branch yet
+<br> note: not all have been done in this branch
 <b>Major things:</b><br>
 <ul>
 <li>Added newly joined Android testers in credits</li>

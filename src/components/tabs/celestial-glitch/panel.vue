@@ -11,6 +11,16 @@ export default {
     };
   },
   computed: {
+    sName(){
+      if(player.options.themeModern == "S14") return "Ra-Glitch's";
+      if(player.options.themeModern == "S13") return "V-Glitch's";
+      return "Glitch's";
+    },
+    sCel(){
+      if(player.options.themeModern == "S14") return "Ra-Glitch";
+      if(player.options.themeModern == "S13") return "V-Glitch";
+      return "Glitch";
+    },
     runEffects() {
       return GameDatabase.celestials.descriptions[6].effects().split("\n");
     },
@@ -43,11 +53,11 @@ export default {
       this.time = player.records.thisReality.realTime;
     },
     decay(){
-      return Glitch.augmentEffectActive(9) ? " and a decay of 1 /" +  format(Glitch.decay,2,2) + " to glitch's reality nerfs": "";
+      return Glitch.augmentEffectActive(9) ? `and a decay of 1 / ${format(Glitch.decay,2,2)} to ${player.options.themeModern == "S13" ? "V-Glitch": "Glitch"} reality nerfs`: "";
     },
     startRun() {
       if (this.isDoomed) return;
-      Modal.celestials.show({ name: "glitch's", number: 6 });
+      Modal.celestials.show({ name: "Glitch's", number: 6 });
     },
     glitchStyle(x) {
       const xScale = 15 / 27;
@@ -70,7 +80,7 @@ export default {
 <template>
   <button class="o-glitch-run-button">
     <span :class="{ 'o-pelle-disabled': isDoomed }">
-      <b>Start Glitch's Reality</b>
+      <b>Start {{sName}} Reality</b>
     </span>
       <div
       :class="runButtonClassObject"
@@ -86,7 +96,7 @@ export default {
     
     <br>
     <p>
-      run tier {{tier}} of Glitch's Reality
+      run tier {{tier}} of {{sName}} Reality
     </p>
     <br><br>
     <div v-if="isRunning"> time in this reality {{realitytime + " " + decay()}}</div>

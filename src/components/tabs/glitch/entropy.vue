@@ -27,7 +27,7 @@ export default {
       <br>
       They will fill based on how many of my challenges you complete.
       <br>
-      Also some challenges can not be compleated later so do them before than, I will warn you when you are going to be unable to complete them
+      Also some challenges can not be completed later so do them before than, I will warn you when you are going to be unable to complete them
 
       <div>
       <GlitchRift

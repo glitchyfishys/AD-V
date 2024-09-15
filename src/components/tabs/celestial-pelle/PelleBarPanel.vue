@@ -13,6 +13,11 @@ export default {
     };
   },
   computed: {
+    sName(){
+      if(player.options.themeModern == "S14") return "Ra-Pelle";
+      if(player.options.themeModern == "S13") return "V-Pelle";
+      return "Pelle";
+    },
     collapseIcon() {
       return this.isCollapsed
         ? "fas fa-expand-arrows-alt"
@@ -42,7 +47,7 @@ export default {
         class="c-collapse-icon-clickable"
         @click="toggleCollapse"
       />
-      Pelle Strikes and Rifts
+      {{sName}} Strikes and Rifts
     </div>
     <div
       v-if="!isCollapsed"
@@ -54,7 +59,7 @@ export default {
       When active, Rifts consume {{ formatPercents(decayRate) }} of another resource per second.
       <br>
       Rift effects apply even when not activated, and are based on the total amount drained.
-      <b class="o-strike-warning">Pelle Strike penalties are permanent and remain active even after Armageddon!</b>
+      <b class="o-strike-warning">{{sName}} Strike penalties are permanent and remain active even after Armageddon!</b>
       <div class="c-pelle-bar-container">
         <PelleRift
           v-for="strike in strikes"

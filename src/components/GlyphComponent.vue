@@ -315,6 +315,12 @@ export default {
       // \uE019 = :blobheart:
       if (this.isBlobHeart) return "\uE019";
       if (symbol) return symbol;
+
+      if(!this.glyph.cosmetic){
+        if(this.glyph.type === "effarig" && player.options.themeModern == "S14") return "\uF185";
+        if(this.glyph.type === "effarig" && player.options.themeModern == "S13") return Celestials.v.symbol;
+      }
+
       return (this.$viewModel.theme === "S4" && !this.glyph.cosmetic)
         ? CANCER_GLYPH_SYMBOLS[this.glyph.type]
         : this.cosmeticConfig.currentSymbol.symbol;

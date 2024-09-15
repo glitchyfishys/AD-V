@@ -76,8 +76,8 @@ export const Glitch = {
         for(let i=0;i<cga;i++) {
           Glyphs.equip(player.reality.glyphs.inventory.filter(x=> x.type == "cursed")[0],Glyphs.active.indexOf(null));
         };
+        player.reality.glyphs.undo=[];
       }
-      player.reality.glyphs.undo=[];
       
       
       this.augmentEffectActive(0) ?  player.celestials.teresa.run = true : undefined;
