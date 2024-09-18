@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     update() {
-      this.isNegativeBHUnlocked = V.isFlipped && BlackHoles.arePermanent;
+      this.isNegativeBHUnlocked = V.isHard && BlackHoles.arePermanent;
       this.isInverted = BlackHoles.areNegative;
       this.isLaitela = Laitela.isRunning;
       this.negativeSlider = -Decimal.log10(player.blackHoleNegative);

@@ -1,4 +1,5 @@
 import { DC } from "./constants";
+import { V } from "./globals";
 
 export function effectiveBaseGalaxies() {
   // Note that this already includes the "50% more" active path effect
@@ -27,7 +28,8 @@ export function getTickSpeedMultiplier() {
 
   let CC = Math.max( Currency.chaosCores.value.pow(0.1).mul(Currency.chaosCores.value.log10()).toNumber() ** 0.25, 1);
   if(Pelle.isDoomed) CC = CC ** 0.1;
-
+  if(V.isRunningExtreme) CC = 1;
+  
   const effects = Effects.product(
     InfinityUpgrade.galaxyBoost,
     InfinityUpgrade.galaxyBoost.chargedEffect,
@@ -71,7 +73,7 @@ export function getTickSpeedMultiplier() {
 
   galaxies *= Pelle.specialGlyphEffect.power;
   const perGalaxy = DC.D0_965;
-  if(perGalaxy.pow(galaxies - 2).times(baseMultiplier).gte("1e1E150")) return new Decimal("1e1E150");
+
   return perGalaxy.pow(galaxies - 2).times(baseMultiplier);
 }
 
@@ -182,7 +184,12 @@ export const Tickspeed = {
     ).times(getTickSpeedMultiplier().pow(this.totalUpgrades));
 
     if(tickspeed.gt("1e1E20")) tickspeed = tickspeed.pow( 1 / ( (tickspeed.log10() / 1e20) ** 0.95) );
-
+    tickspeed = tickspeed.pow(V.rageTickPower);
+    
+    if (V.isRunningExtreme) {
+      tickspeed = tickspeed.pow(0.00025);
+    }
+    
     return tickspeed.min("1e1E300");
   },
 

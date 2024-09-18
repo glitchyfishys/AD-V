@@ -338,7 +338,7 @@ export function getGlyphLevelInputs() {
   };
   scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.instability, 500);
   scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.hyperInstability, 400);
-  if(!GlitchRealityUpgrades.all[13].isBought) scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.glitchInstability, 10000);
+  scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.glitchInstability, GlitchRealityUpgrades.all[13].isBought ? 1e5 : 1e4);
 
   const scalePenalty = scaledLevel > 0 ? baseLevel / scaledLevel : 1;
   const incAfterInstability = staticFactors.realityUpgrades + staticFactors.achievements;

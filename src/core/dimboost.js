@@ -156,7 +156,7 @@ export class DimBoost {
   }
 
   static get imaginaryBoosts() {
-    return (Ra.isRunning || Glitch.augmentEffectActive(6)) ? 0 : ImaginaryUpgrade(12).effectOrDefault(0) * ImaginaryUpgrade(23).effectOrDefault(1);
+    return (Ra.isRunning || Glitch.augmentEffectActive(6) || V.isRunningExtreme) ? 0 : ImaginaryUpgrade(12).effectOrDefault(0) * ImaginaryUpgrade(23).effectOrDefault(1);
   }
 
   static get totalBoosts() {

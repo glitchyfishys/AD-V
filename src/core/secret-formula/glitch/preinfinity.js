@@ -45,7 +45,7 @@ export const preInfinityUG = [
     formatEffect: value => formatX(value, 2, 2)
   },
   {
-    name: "Galatic Inforcement",
+    name: "galactic Inforcement",
     id: 4,
     requirement: () => `Have ${format(1e7)} Antimatter with no Dimension Boosts, one Galaxy, up to ten 2nd Dimentsions (pre-Infinity)`,
     hasFailed: () => player.dimensions.antimatter[1].amount.gt(10) || player.galaxies > 1 || player.dimensionBoosts > 0 || PlayerProgress.infinityUnlocked(),
@@ -56,7 +56,7 @@ export const preInfinityUG = [
     formatEffect: value => "+" + formatInt(value)
   },
   {
-    name: "Galatic Limitaion",
+    name: "galactic Limitaion",
     id: 5,
     requirement: () => `Have ${format(1e25)} Antimatter with no Dimension Boosts, one Galaxy, up to 20 4th Dimentsions (pre-Infinity)`,
     hasFailed: () => player.dimensions.antimatter[3].amount.gt(20) || player.galaxies > 1 || player.dimensionBoosts > 0 || PlayerProgress.infinityUnlocked(),
@@ -67,7 +67,7 @@ export const preInfinityUG = [
     formatEffect: value => "+" + formatInt(value)
   },
   {
-    name: "Galatic Capacity",
+    name: "galactic Capacity",
     id: 6,
     requirement: () => `reach ${format(Number.MAX_VALUE, 2)} Antimatter with only one Antimatter Galaxy (pre-Infinity)`,
     hasFailed: () => player.galaxies > 1 || PlayerProgress.infinityUnlocked(),
@@ -78,7 +78,7 @@ export const preInfinityUG = [
     formatEffect: value => formatX(value, 2, 2)
   },
   {
-    name: "galatic instance",
+    name: "galactic instance",
     id: 7,
     requirement: () => `have ${format(3)} Antimatter Galaxies without Infinity broken (pre-Break)`,
     hasFailed: () => PlayerProgress.hasBroken(),

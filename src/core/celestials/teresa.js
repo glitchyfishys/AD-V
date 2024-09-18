@@ -35,6 +35,21 @@ export const Teresa = {
     if (effect.gte(1e100)) return effect.mul(effect.div(1e100).pow(2));
     return GlitchRealityUpgrades.all[11].isBought ? Decimal.pow(effect, 1.5) : effect;
   },
+  get sacrificeAmount() {
+    const sac = player.reality.glyphs.sac;
+
+    return {
+      power: new Decimal(sac.power),
+      infinity: new Decimal(sac.infinity),
+      time: new Decimal(sac.time),
+      replication: new Decimal(sac.replication),
+      dilation: new Decimal(sac.dilation),
+      effarig: new Decimal(sac.effarig),
+      reality: new Decimal(sac.reality),
+      glitch: new Decimal(sac.glitch),
+
+    };
+  },
   get pouredAmount() {
     return player.celestials.teresa.pouredAmount;
   },

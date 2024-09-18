@@ -63,6 +63,23 @@ GameDatabase.celestials.descriptions = [
       return Ra.unlocks.unlockGlyphAlchemy.canBeApplied
         ? vEffect + vEffectAdditional
         : vEffect;
+    },
+    extremeEffectsShort() {
+      const vEffect = `All Dimension multipliers, Eternity points,Infinity Points,\
+      Dilated Time gained, Tachyon Particles, Replicanti interval and Tickspeed \
+      are Dilated
+      Chaos Cores, Rift Force, bonus Dimension Boosts and Exponential Glyph Alchemy are disabled.
+      `;
+      return vEffect;
+    },
+    extremeEffects() {
+      const vEffect = `All Dimension multipliers are ^0.001, Eternity and Infinity Points gained are ^0.01
+      Dilated Time gained is ^0.2 and Tachyon Particles gained are square-rooted. 
+      Replicanti interval is ^32.
+      And Tickspeed is ^0.00025.
+      Chaos Cores, Rift Force, bonus Dimension Boosts, and Exponential Glyph Alchemy are disabled.
+      `;
+      return vEffect;
     }
   },
   {

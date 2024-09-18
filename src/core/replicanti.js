@@ -120,6 +120,11 @@ export function getReplicantiInterval(overCapOverride, intervalIn) {
     // and handling it would make the replicanti code a lot more complicated.
     interval = interval.pow(2);
   }
+  if (V.isRunningExtreme) {
+    // This is a boost if interval < 1, but that only happens in EC12
+    // and handling it would make the replicanti code a lot more complicated.
+    interval = interval.pow(32);
+  }
   return interval;
 }
 

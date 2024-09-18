@@ -15,11 +15,6 @@ export default {
     HeaderPrestigeGroup,
     GameSpeedDisplay,
   },
-  computed: {
-    classic() {
-      return this.$viewModel.newUI;
-    }
-  },
   data() {
     return {
       hasReality: false,
@@ -42,12 +37,7 @@ export default {
     <br v-if="hasReality">
     <HeaderBlackHole />
     <br>
-    <div v-if="this.classic">
-      Hello
-    </div>
-    <div v-else>
-      Hi
-    </div>
+    Hi classic user, I would like to say that the classic UI gets updated last so some things don't display
   </div>
 </template>
 

@@ -196,8 +196,8 @@ export const secretAchievements = [
   {
     id: 51,
     name: "Teresa",
-    get description() { return `Get a ${format("1e1000")} Sacrifce multiplier from Tersea's reality`; },
-    checkRequirement: () => Teresa.runRewardMultiplier.gte("1e1000"),
+    get description() { return `Get a ${format("1e1000")} Sacrifce multiplier from Tersea's Reality within Glitch's Reality`; },
+    checkRequirement: () => Teresa.rewardMultiplier(player.antimatter).gte("1e1000"),
     checkEvent: GAME_EVENT.REALITY_RESET_AFTER
   },
   {

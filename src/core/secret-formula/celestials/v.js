@@ -7,7 +7,8 @@ function emphasizeEnd(fraction) {
 
 export const V_REDUCTION_MODE = {
   SUBTRACTION: 1,
-  DIVISION: 2
+  DIVISION: 2,
+  POWER: 3
 };
 
 export const v = {
@@ -201,18 +202,61 @@ export const v = {
     },
     {
       id: 9,
-      name: "glitched",
-      description: value => `Reach ${formatInt(value)} antimatter without time studies or dilation unlocked`,
+      name: "Corruption",
+      description: value => `Reach ${format(Decimal.pow10(value), 2)} Antimatter without time studies or dilation unlocked`,
       values: [1e9, 5e9, 1e10, 5e10, 1e11, 5e11, 1e12],
       condition: () => V.isRunning && player.timestudy.studies.length == 0 && !PlayerProgress.dilationUnlocked()  && Ra.unlocks.unlockHardV.isUnlocked,
       currentValue: () => Currency.antimatter.value.log10(),
-      formatRecord: x => formatInt(x),
-      shardReduction: tiers => Math.floor(500 * tiers),
-      maxShardReduction: () => 500,
+      formatRecord: x => format(Decimal.pow10(x), 2),
+      shardReduction: tiers => 5 * (tiers * 33),
+      maxShardReduction: goal => goal - (goal * 0.8),
       perReductionStep: 15,
       mode: V_REDUCTION_MODE.DIVISION,
       isHard: true
-    }
+    },
+    {
+      id: 10,
+      name: "Revengeance",
+      description: value => `Reach ${format(Decimal.pow10(value), 2)} Antimatter in Glitch's Reality with V's Reality Enabled <br> 
+      <span style="color: var(--color-bad)">completing this will have dire consequences</span>`,
+      values: [1e40, 1e70, 1e130],
+      condition: () => V.isRunning && Glitch.isRunning && V.isExtreme,
+      currentValue: () => Currency.antimatter.value.log10(),
+      formatRecord: x => format(Decimal.pow10(x), 2),
+      shardReduction: tiers => 5 ** (tiers * 33),
+      maxShardReduction: goal => goal - (goal * 0.8),
+      perReductionStep: 5,
+      mode: V_REDUCTION_MODE.DIVISION,
+      isExtreme: true
+    },
+    {
+      id: 11,
+      name: "Antimatter Outrage",
+      description: value => `Reach ${format(Decimal.pow10(value), 2)} Antimatter in V's Extreme Reality with more at lest one Revengeance Completion`,
+      values: [1.8e8, 3e10, 3.5e11, 9e15, 1.2e22, 6e32, 1e42],
+      condition: () => V.isRunningExtreme && V.isExtreme && player.celestials.v.runUnlocks[10] > 0,
+      currentValue: () => Currency.antimatter.value.log10(),
+      formatRecord: x => format(Decimal.pow10(x), 2),
+      shardReduction: tiers => 25 ** (tiers * 33),
+      maxShardReduction: goal => goal * 0.8,
+      perReductionStep: 25,
+      mode: V_REDUCTION_MODE.DIVISION,
+      isExtreme: true
+    },
+    {
+      id: 12,
+      name: "Infinity Enragement",
+      description: value => `Reach ${format(Decimal.pow10(value), 2)} Infinity Points in V's Extreme Reality with out unlocking Dilation more at lest one Revengeance Completion`,
+      values: [1e9, 1e10, 1e11, 9e15],
+      condition: () => V.isRunningExtreme && V.isExtreme && player.celestials.v.runUnlocks[10] > 0 && !PlayerProgress.dilationUnlocked(),
+      currentValue: () => Currency.infinityPoints.value.log10(),
+      formatRecord: x => format(Decimal.pow10(x), 2),
+      shardReduction: tiers => 25 ** (tiers * 33),
+      maxShardReduction: goal => goal - (goal * 0.8),
+      perReductionStep: 25,
+      mode: V_REDUCTION_MODE.DIVISION,
+      isExtreme: true
+    },
   ],
   unlocks: {
     vAchievementUnlock: {
@@ -269,6 +313,24 @@ export const v = {
       description: () => `Have ${formatInt(36)} V-Achievements`,
       effect: 2,
       requirement: () => V.spaceTheorems >= 36
-    }
+    },
+    gamespeedPower: {
+      id: 7,
+      reward() {
+        return `Gamespeed power based on total Space Theorems.`;
+      },
+      description: () => `Have ${formatInt(125)} V-Achievements`,
+      effect: () => 1 + (V.spaceTheorems ** 0.8) / 120,
+      format: x => formatPow(x, 2, 2),
+      requirement: () => V.spaceTheorems >= 125,
+    },
+    RMcap: {
+      id: 8,
+      reward: () => `Increase the RM cap based on total Space Theorems.`,
+      description: () => `Have ${formatInt(140)} V-Achievements`,
+      effect: () => Math.max(V.spaceTheorems,1),
+      format: x => formatPow(x, 2, 2),
+      requirement: () => V.spaceTheorems >= 140,
+    },
   }
 };

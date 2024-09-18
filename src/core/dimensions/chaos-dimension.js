@@ -88,7 +88,7 @@ class ChaosDimensionState extends DimensionState {
       baseCost: this._baseCost,
       baseIncrease: this._baseCostMultiplier,
       costScale: 10,
-      scalingCostThreshold: Number.MAX_VALUE
+      scalingCostThreshold: new Decimal("1e325")
     });
   }
 

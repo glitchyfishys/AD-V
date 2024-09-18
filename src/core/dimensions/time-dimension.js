@@ -246,6 +246,12 @@ class TimeDimensionState extends DimensionState {
       mult = dilatedValueOf(mult);
     }
 
+    if (V.isRunningExtreme) {
+      mult = mult.pow(0.001);
+    }
+    
+    mult = mult.pow(V.rageDimPower);
+
     if (Effarig.isRunning) mult = Effarig.multiplier(mult);
     
     if (V.isRunning) mult = mult.pow(0.5);

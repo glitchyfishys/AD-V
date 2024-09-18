@@ -535,7 +535,7 @@ export const tabs = [
       },
       {
         key: "preinfinity",
-        name: "antimater",
+        name: "Antimatter",
         symbol: "Ω",
         component: "preinfinity",
         id: 1,

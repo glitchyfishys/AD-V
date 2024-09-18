@@ -91,7 +91,7 @@ export const glitchQuotes = {
     id: 9,
     lines: [
       "Now \"Destroyer\" I reqiure you to go in this order, for the best outcome",
-      "Teresa, Effarig, Nameless one though I call them Vela, V (yes that is his name), Ra, Lai'tela",
+      "Teresa, Effarig, Nameless ones though I call them Vela, V, Ra, Lai'tela",
       { text: "Then you will show me your power before $1.", 1: Pelle },
       "Haha, the power might be enough, I will be back for my Reality"
     ],

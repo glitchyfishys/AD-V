@@ -15,7 +15,7 @@ dev.giveAllAchievements = function() {
   for (const achievement of allAchievements) achievement.unlock();
 };
 
-dev.completeuptoglitch = function() {
+dev.completeUpYoGlitch = function() {
   player.celestials.teresa.unlockBits = 255;
   player.celestials.effarig.unlockBits = 255;
   player.celestials.enslaved.completed = true;
@@ -116,7 +116,7 @@ dev.giveAllAchievementsButLast = function() {
   player.achievementBits[17]=127;
 }
 
-dev.giveLongAchevments = function() {
+dev.giveLongAchievements = function() {
   player.achievementBits[2] |= 16;
   player.achievementBits[3] |= 4;
   player.achievementBits[6] |= 32;

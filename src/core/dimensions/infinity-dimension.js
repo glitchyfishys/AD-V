@@ -169,11 +169,19 @@ class InfinityDimensionState extends DimensionState {
       mult = dilatedValueOf(mult);
     }
 
+    mult = mult.pow(V.rageDimPower);
+
     if (Effarig.isRunning) {
       mult = Effarig.multiplier(mult);
     }
     if (V.isRunning) {
       mult = mult.pow(0.5);
+    }
+
+
+
+    if (V.isRunningExtreme) {
+      mult = mult.pow(0.001);
     }
 
     if(Glitch.isRunning) mult = mult.pow(Glitch.IDnerf);

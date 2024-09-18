@@ -128,6 +128,9 @@ export function gainedInfinityPoints() {
   if (V.isRunning) {
     ip = ip.pow(0.5 * GlitchSpeedUpgrades.all[0].effectOrDefault(1));
   }
+  if (V.isRunningExtreme) {
+    ip = ip.pow(0.01);
+  }
   if (Laitela.isRunning) {
     ip = dilatedValueOf(ip, true);
   }
@@ -166,6 +169,9 @@ export function gainedEternityPoints() {
   }
   if (V.isRunning) {
     ep = ep.pow(0.5 * GlitchSpeedUpgrades.all[0].effectOrDefault(1));
+  }
+  if (V.isRunningExtreme) {
+    ep = ep.pow(0.01);
   }
   if (Laitela.isRunning) {
     ep = dilatedValueOf(ep, true);
@@ -372,7 +378,8 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
     factor = Decimal.pow(factor, getAdjustedGlyphEffect("effarigblackhole"));
   }
 
-  factor = factor.mul(GlitchRifts.alpha.milestones[2].effectOrDefault(1))
+  factor = factor.mul(GlitchRifts.alpha.milestones[2].effectOrDefault(1));
+  factor = factor.pow(VUnlocks.gamespeedPower.effectOrDefault(1));
   
   if (Enslaved.isStoringGameTime && effects.includes(GAME_SPEED_EFFECT.TIME_STORAGE)) {
     const storedTimeWeight = Ra.unlocks.autoPulseTime.canBeApplied ? 0.99 : 1;
@@ -1214,7 +1221,7 @@ animateTweens();
 
 function randomInt(min = 0, max = 10) {return Math.floor(min + (Math.random() * (max - min)))};
 
-var titles = ["Help me", "Now with upgrades", "The antimater update", "Uhhh, I think I broke something", "No don't do that", "Now with a 9th dimension",
+var titles = ["Help me", "Now with upgrades", "The Antimatter update", "Uhhh, I think I broke something", "No don't do that", "Now with a 9th dimension",
               "THERE'S NEW CONTENT?!?!?!", "Also try minecraft", "You know what that means FISHHHHH", "Now with dimensions", "THE NEWS IS NOT FAKE", "Now's you chance to make [ANTIMATTER]",
               "That's bananas", "update in 5 hours", "Hevipelle is good at using GitHub :)", "The update that makes the game bad", " I'm poor now :(", "Nerf the galaxies plz",
               "Get more antimatter", "Can give me more galaxies please?", "NG+infinite", "How do I cheat", "When do the memes get added?", "How much is infinity?",

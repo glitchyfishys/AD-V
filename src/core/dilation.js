@@ -148,6 +148,7 @@ export function getDilationGainPerSecond() {
   
   if (allowed && !dtRate.eq(0)) dtRate = Decimal.pow10(Math.pow(dtRate.plus(1).log10(), 0.85) - 1);
   if (V.isRunning) dtRate = dtRate.pow(0.5);
+  if (V.isRunningExtreme) dtRate = dtRate.pow(0.2);
   return dtRate;
 }
 
@@ -163,7 +164,7 @@ export function tachyonGainMultiplier() {
     RealityUpgrade(4),
     RealityUpgrade(8),
     RealityUpgrade(15),
-  ).mul(GlyphSacrifice.dilation.effectOrDefault(DC.D1)).times(realityUGs.all[1].effectOrDefault(1)).pow(pow);
+  ).mul(GlyphSacrifice.dilation.effectOrDefault(DC.D1)).times(realityUGs.all[1].effectOrDefault(1)).pow(pow).pow(V.isRunningExtreme ? 0.5 : 1);
 }
 
 export function rewardTP() {

@@ -1,4 +1,5 @@
 import { DC } from "../constants";
+import { V } from "../globals";
 
 import { DimensionState } from "./dimension";
 
@@ -98,10 +99,17 @@ export function getDimensionFinalMultiplierUncached(tier) {
 
   multiplier = multiplier.pow(1 + GlitchRealityUpgrades.all[15].effectOrDefault(0));
   
+  if (V.isRunningExtreme) {
+    multiplier = multiplier.pow(0.001);
+  }
+
   if(Pelle.isDoomed) mul = mul.pow((1 / ((1e60 / Math.min(Currency.realityShards.value.toNumber(),1e60)) ** .16)));
   
   if(player.dilation.active && Pelle.isDoomed) mul = dilatedValueOf(mul);
-  multiplier = multiplier.times(mul);
+
+  if(!V.isRunningExtreme) multiplier = multiplier.mul(mul);
+  
+  multiplier = multiplier.pow(V.rageDimPower);
   
   // This power effect goes intentionally after all the nerf effects and shouldn't be moved before them
   if (AlchemyResource.inflation.isUnlocked && multiplier.gte(AlchemyResource.inflation.effectValue)) {

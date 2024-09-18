@@ -70,7 +70,7 @@ export const realityUG = [
 {
     name: "External Dilation",
     id: 6,
-    requirement: () => `Reach ${format(Number.MAX_VALUE, 2)} Antimater in Effarigs Reality (Infinity Layer) with three Glyphs maxium`,
+    requirement: () => `Reach ${format(Number.MAX_VALUE, 2)} Antimatter in Effarigs Reality (Infinity Layer) with three Glyphs maxium`,
     hasFailed: () => Effarig.currentStage > 1 || player.reality.glyphs.active.length > 3,
     checkRequirement: () => player.antimatter.gte(1.79e308) && Effarig.isRunning && Effarig.currentStage == 1 && player.reality.glyphs.active.length <= 3,
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
@@ -123,7 +123,7 @@ export const realityUG = [
     formatEffect: () => "Active"
   },
   {
-    name: "Galatic Overload",
+    name: "galactic Overload",
     id: 11,
     requirement: () => `Have ${format(10000)} Singularities without desablizing once`,
     hasFailed: () => Laitela.difficultyTier != 0,
@@ -134,7 +134,7 @@ export const realityUG = [
     formatEffect: value => format(value, 2, 2)
   },
   {
-    name: "Pre Galatic ",
+    name: "Pre galactic ",
     id: 12,
     requirement: () => `Reach ${format("1e66.66E9")} Antimatter in Effarig's Reality with 5 Cursed Glyphs, before destablizing Latela's Reality thrice`,
     hasFailed: () => Laitela.difficultyTier > 2,

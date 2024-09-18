@@ -64,7 +64,7 @@ export const glitchRealityUpgrades = [
     description: "Rift Force multiplies ADs uneffected by Celestial Reality's or Dilation but nerfed while Doomed (comes back based on RS)",
     effect: () =>  {
       let effect = Currency.riftForce.value.pow(Currency.riftForce.value.log(1.5) ** 2).max(1);
-      if(effect.gt("1e12")) effect = effect.pow( 1 / ( (effect.log10() / 1e12) ** 0.7) );
+      if(effect.gt("1e1E12")) effect = effect.pow( 1 / ( (effect.log10() / 1e12) ** 0.7) );
 
       return effect;
     },
@@ -157,7 +157,7 @@ export const glitchRealityUpgrades = [
   {
     name: () => (GlitchRealityUpgrades.all[12].isAvailableForPurchase ? "The Darkness Arizes" : "Locked") ,
     id: 13,
-    cost: 1e25,
+    cost: 1e23,
     requirement: () => `Reach ${format("1e1E9")} Antimatter with all but Nameless One's Reality`,
     hasFailed: () => Glitch.augmentEffectBits != 507,
     checkRequirement: () =>  Currency.antimatter.gte("1e1E9") && Glitch.isRunning && Glitch.augmentEffectBits == 507,
@@ -169,7 +169,7 @@ export const glitchRealityUpgrades = [
   {
     name: () => (GlitchRealityUpgrades.all[13].isAvailableForPurchase ? "The Darkness Overcomes" : "Locked"),
     id: 14,
-    cost: 1e175,
+    cost: 1e145,
     requirement: () => `Reach ${format("1e2E15")} Antimatter with Effarig Reality, Nameless one's Dim limit and low tachyon gain, V's Reality and Lai'tela's Reality (also reqires ${GlitchRealityUpgrades.all[12].name})`,
     hasFailed: () => !GlitchRealityUpgrades.all[12].isBought || Glitch.augmentEffectBits != 314,
     checkRequirement: () =>  GlitchRealityUpgrades.all[12].isBought && Currency.antimatter.gte("1e2E15") && Glitch.isRunning && Glitch.augmentEffectBits == 314,

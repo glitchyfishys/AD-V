@@ -91,7 +91,7 @@ export default {
       this.quote = Effarig.quote;
       this.runUnlocked = EffarigUnlock.run.isUnlocked;
       this.isRunning = Effarig.isRunning;
-      this.vIsFlipped = V.isFlipped;
+      this.vIsFlipped = V.isHard;
       this.relicShardRarityAlwaysMax = Ra.unlocks.extraGlyphChoicesAndRelicShardRarityAlwaysMax.canBeApplied;
     },
     startRun() {

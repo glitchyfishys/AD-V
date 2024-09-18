@@ -43,6 +43,10 @@ class VRunUnlockState extends GameMechanicState {
       const modifiedStepCount = (Math.pow(1.15, stepCount) - 1) / 0.15;
       return modifiedStepCount * V.nextHardReductionCost(player.celestials.v.goalReductionSteps[this.id]);
     }
+    else if (this.config.isExtreme) {
+      const modifiedStepCount = (Math.pow(15, stepCount) - 1) / 14;
+      return modifiedStepCount * V.nextExtremeReductionCost(player.celestials.v.goalReductionSteps[this.id]);
+    }
     return stepCount * V.nextNormalReductionCost();
   }
 
@@ -70,6 +74,12 @@ class VRunUnlockState extends GameMechanicState {
     player.celestials.v.runUnlocks[this.id] = value;
   }
 
+  reset(){
+    const playerData = player.celestials.v;
+    playerData.runUnlocks[this.id] = 0;
+    playerData.runRecords[this.id] = this.id == 0 ? -10 : 0;
+  }
+
   tryComplete() {
     const playerData = player.celestials.v;
     const value = this.config.currentValue();
@@ -80,7 +90,8 @@ class VRunUnlockState extends GameMechanicState {
 
     while (this.completions < this.config.values.length &&
     Decimal.gte(playerData.runRecords[this.id], this.conditionValue)) {
-      if (!V.isFlipped && this.config.isHard) continue;
+      if (!V.isHard && this.config.isHard) continue;
+      if (!V.isExtreme && this.config.isExtreme) continue;
       this.completions++;
       GameUI.notify.success(`You have unlocked V-Achievement
         '${this.config.name}' tier ${formatInt(this.completions)}`);
@@ -162,7 +173,7 @@ export const V = {
       unl.unlock();
     }
 
-    if (this.isRunning) {
+    if (this.isRunning || this.isRunningExtreme) {
       for (const unlock of VRunUnlocks.all) {
         unlock.tryComplete();
       }
@@ -186,12 +197,17 @@ export const V = {
     player.celestials.v.run = true;
     this.quotes.realityEnter.show();
   },
+  initializeExtremeRun() {
+    clearCelestialRuns();
+    player.celestials.v.runExtreme = true;
+  },
   updateTotalRunUnlocks() {
     let sum = 0;
     if (realityUGs.all[8].isBought) sum += 10;
     for (let i = 0; i < player.celestials.v.runUnlocks.length; i++) {
       if (i < 6) sum += player.celestials.v.runUnlocks[i];
-      else sum += player.celestials.v.runUnlocks[i] * 2;
+      else if (i < 10) sum += player.celestials.v.runUnlocks[i] * 2;
+      else sum += player.celestials.v.runUnlocks[i] * 5;
     }
     this.spaceTheorems = sum;
   },
@@ -200,11 +216,11 @@ export const V = {
       unlockBits: 0,
       run: false,
       quotes: [],
-      runUnlocks: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      goalReductionSteps: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      runUnlocks: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      goalReductionSteps: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       STSpent: 0,
-      runGlyphs: [[], [], [], [], [], [], [], [], [], [] ],
-      runRecords: [-10, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      runGlyphs: [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []],
+      runRecords: [-10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     };
     this.spaceTheorems = 0;
   },
@@ -214,11 +230,24 @@ export const V = {
   get isRunning() {
     return player.celestials.v.run;
   },
-  get isFlipped() {
+  get isRunningExtreme() {
+    return player.celestials.v.runExtreme;
+  },
+  get isHard() {
     return Ra.unlocks.unlockHardV.isUnlocked;
   },
+  get isExtreme() {
+    return GlitchSpeedUpgrade(4).isBought;
+  },
   get isFullyCompleted() {
-    return this.spaceTheorems >= 66;
+    if(this.isExtreme) return this.spaceTheorems >= 150;
+    return this.spaceTheorems >= 110;
+  },
+  get rageDimPower() {
+    return Decimal.pow(1e-3, player.celestials.v.runUnlocks[10]);
+  },
+  get rageTickPower() {
+    return Decimal.pow(1e-3, player.celestials.v.runUnlocks[10]);
   },
   nextNormalReductionCost() {
     return 1000;
@@ -226,10 +255,14 @@ export const V = {
   nextHardReductionCost(currReductionSteps) {
     return 1000 * Math.pow(1.15, currReductionSteps);
   },
+  nextExtremeReductionCost(currReductionSteps) {
+    return 1e9 * Math.pow(15, currReductionSteps);
+  },
   quotes: Quotes.v,
   symbol: "⌬"
 };
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
   if (Tab.celestials.v.isOpen) V.quotes.initial.show();
+  if (Tab.celestials.v.isOpen && V.isExtreme) V.quotes.extremeUnlocked.show();
 });

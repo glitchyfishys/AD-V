@@ -1,7 +1,7 @@
 <script>
 import EnterCelestialsRaPet from "@/components/modals/prestige/EnterCelestialsRaPet";
 import ModalWrapperChoice from "@/components/modals/ModalWrapperChoice";
-import { Celestials } from "../../../core/globals";
+import { Celestials, V } from "../../../core/globals";
 
 export default {
   name: "EnterCelestialsModal",
@@ -17,6 +17,11 @@ export default {
     name: {
       type: String,
       required: true
+    },
+    isHarder: {
+      type: Boolean,
+      required: false,
+      default: false,
     }
   },
   data() {
@@ -32,6 +37,7 @@ export default {
   },
   computed: {
     effects() {
+      if(this.isHarder) return GameDatabase.celestials.descriptions[this.number].extremeEffects().split("\n");
       return GameDatabase.celestials.descriptions[this.number].effects().split("\n");
     },
     description() {
@@ -58,7 +64,9 @@ export default {
         case 2: return this.enslavedDone
           ? "Have... we... not helped enough..."
           : "We... can help... Let us... help...";
-        case 3: return "";
+        case 3: {
+          return this.isHarder ? "This Reality is Harder than normal" : "";
+        }
         case 4: return `Within ${this.sName()} Reality, some resources will generate Memory Chunks
           for Celestial Memories based on their amounts:`;
         case 5: return this.laitelaFastest.gte(300)
@@ -92,7 +100,7 @@ export default {
     sCel(){
       if(player.options.themeModern == "S14") return "Ra";
       if(player.options.themeModern == "S13") return "V";
-      return Celestials[this.name].name;
+      return this.name;
     },
     handleYesClick() {
 
@@ -102,7 +110,10 @@ export default {
         case 0: return Teresa.initializeRun();
         case 1: return Effarig.initializeRun();
         case 2: return Enslaved.initializeRun();
-        case 3: return V.initializeRun();
+        case 3: {
+          if(this.isHarder) return V.initializeExtremeRun();
+          return V.initializeRun();
+        }
         case 4: return Ra.initializeRun();
         case 5: return Laitela.initializeRun();
         case 6: return Glitch.initializeRun();

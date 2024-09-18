@@ -96,6 +96,7 @@ html {
   --color-enslaved--base: #f1aa7f;
 
   --color-v--base: #ead584;
+  --color-v--alt: #a6f574;
 
   --color-ra--base: #9575cd;
   --color-ra-pet--teresa: #8596ea;
@@ -6805,9 +6806,22 @@ kbd {
   transition-duration: 0.2s;
 }
 
+.c-v-run-button-extreme {
+  font-family: Typewriter;
+  font-size: 1.3rem;
+  color: black;
+  background: var(--color-v--alt);
+  padding: 0.5rem;
+  transition-duration: 0.2s;
+}
+
 .c-v-run-button:hover,
 .c-v-run-button--running {
   background: indianred;
+}
+
+.c-v-run-button-extreme:hover, .c-v-run-button--running-extreme {
+  background: #9397c6;
 }
 
 .c-v-run-button__line {
@@ -6815,13 +6829,27 @@ kbd {
   height: 2.4rem;
   position: absolute;
   z-index: -1;
-  background: #e3c759;
+  background-color: #e3c759;
+  transition-duration: 0.2s;
+}
+
+.c-v-run-button__line-extreme {
+  width: 12rem;
+  height: 2.4rem;
+  position: absolute;
+  z-index: -1;
+  background-color: #63c746;
   transition-duration: 0.2s;
 }
 
 .c-v-run-button:hover .c-v-run-button__line,
 .c-v-run-button--running .c-v-run-button__line {
   background: #bb3a3a;
+}
+
+.c-v-run-button-extreme:hover .c-v-run-button__line-extreme,
+.c-v-run-button--running-extreme .c-v-run-button__line-extreme {
+  background: #8baafa;
 }
 
 .c-v-run-button__line--1 {
@@ -6858,6 +6886,25 @@ kbd {
   animation:
     a-c-v-run-button__line--3--move 3s infinite cubic-bezier(0.9, 0, 0, 0.9),
     a-c-v-run-button__line--burst 3s infinite cubic-bezier(0.9, 0, 0, 0.9);
+}
+
+
+.c-v-run-button--running-extreme .c-v-run-button__line--1 {
+  animation:
+    a-c-v-run-button__line--1--move 2s infinite cubic-bezier(0.3, 1, 0, 0.9),
+    a-c-v-run-button__line--burst 1s infinite cubic-bezier(0.1, 0.5, 1, 0.2);
+}
+
+.c-v-run-button--running-extreme .c-v-run-button__line--2 {
+  animation:
+    a-c-v-run-button__line--2--move 2s infinite cubic-bezier(0.3, 1, 0, 0.9),
+    a-c-v-run-button__line--burst 1s infinite cubic-bezier(0.1, 0.5, 1, 0.2);
+}
+
+.c-v-run-button--running-extreme .c-v-run-button__line--3 {
+  animation:
+    a-c-v-run-button__line--3--move 2s infinite cubic-bezier(0.3, 1, 0, 0.9),
+    a-c-v-run-button__line--burst 1s infinite cubic-bezier(0.1, 0.5, 1, 0.2);
 }
 
 @keyframes a-c-v-run-button__line--1--move {

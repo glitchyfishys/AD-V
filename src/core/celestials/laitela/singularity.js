@@ -149,7 +149,7 @@ export const SingularityMilestones = {
         // Sorts infinite milestones as if they end at 50 steps; for any given number of completions, this
         // treats infinite milestones with larger steps as if they complete at a higher value
         sortFn = m => {
-          const limit = Decinal.lte(m.limit, Decimal.NUMBER_MAX_VALUE) ? m.limit : 50;
+          const limit = Decimal.lte(m.limit, Decimal.NUMBER_MAX_VALUE) ? m.limit : 50;
           return Decimal.log10(Decimal.pow(m.config.repeat, limit - 1).times(m.config.start)) / 100;
         };
         break;

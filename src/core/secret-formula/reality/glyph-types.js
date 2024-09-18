@@ -67,7 +67,7 @@ export const glyphTypes = {
     color: "#000000",
     fixedSymbolColor: true,
     isUnlocked: () => false,
-    canCustomize: () => V.isFlipped,
+    canCustomize: () => V.isHard,
   },
   companion: {
     id: "companion",

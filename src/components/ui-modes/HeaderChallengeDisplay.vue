@@ -24,9 +24,9 @@ export default {
       // won't trigger display update if we, say, switch from one challenge to another
       function celestialReality(celestial, name, tab) {
         return {
-          name: () => `${name} Reality`,
+          name: () => `${name} ${celestial.isRunningExtreme ? "EX" : ""} Reality`,
           isActive: token => token,
-          activityToken: () => celestial.isRunning,
+          activityToken: () => celestial.isRunning || celestial.isRunningExtreme,
           tabName: () => tab,
         };
       }

@@ -819,6 +819,8 @@ function restoreCelestialRuns(celestialRunState) {
   if (player.celestials.enslaved.run) Enslaved.initializeRun();
   player.celestials.v.run = celestialRunState.v;
   if (player.celestials.v.run) V.initializeRun();
+  player.celestials.v.runExtreme = celestialRunState.vEX;
+  if (player.celestials.v.runExtreme) V.initializeExtremeRun();
   player.celestials.ra.run = celestialRunState.ra;
   if (player.celestials.ra.run) Ra.initializeRun();
   player.celestials.laitela.run = celestialRunState.laitela;
@@ -870,6 +872,7 @@ export function clearCelestialRuns() {
     effarig: player.celestials.effarig.run,
     enslaved: player.celestials.enslaved.run,
     v: player.celestials.v.run,
+    vEX: player.celestials.v.runExtreme,
     ra: player.celestials.ra.run,
     laitela: player.celestials.laitela.run,
     glitch: player.celestials.glitch.run,
@@ -888,6 +891,7 @@ export function clearCelestialRuns() {
     AutomatorData.recalculateErrors();
   }
   player.celestials.v.run = false;
+  player.celestials.v.runExtreme = false;
   player.celestials.ra.run = false;
   player.celestials.laitela.run = false;
   
@@ -896,7 +900,7 @@ export function clearCelestialRuns() {
 }
 
 export function isInCelestialReality() {
-  return Object.values(player.celestials).some(x => x.run);
+  return Object.values(player.celestials).some(x => x.run || x.runExtreme);
 }
 
 function lockAchievementsOnReality() {

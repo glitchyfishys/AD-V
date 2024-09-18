@@ -53,8 +53,8 @@ export default {
       return Enslaved.storedTimeInsideEnslaved(this.storedBlackHole);
     },
     realityTitle() {
-      if (this.isRunning) return `You are inside The ${this.sName()} Reality`;
-      return `Start The ${this.sName()} Reality`;
+      if (this.isRunning) return `You are inside ${this.sName()} Reality`;
+      return `Start ${this.sName()} Reality`;
     },
     runButtonClassObject() {
       return {
@@ -147,7 +147,7 @@ export default {
     sName(){
       if(player.options.themeModern == "S14") return "The Nameless Ra's";
       if(player.options.themeModern == "S13") return "The Nameless V's";
-      return "TheNameless Ones'";
+      return "The Nameless Ones'";
     },
     toggleStoreBlackHole() {
       Enslaved.toggleStoreBlackHole();

@@ -90,5 +90,15 @@ export const vQuotes = {
       "No one is better than me...",
       "No one... no one... no on-",
     ],
-  }
+  },
+  extremeUnlocked: {
+    id: 11,
+    lines: [
+      "Destroyer, he wants me to be nice to you...",
+      "You ruined all of my Achievements",
+      "So... for each time you complete my Revengeance Achievement",
+      "I'm geting Glitch to Dilate your Dimensions",
+      "I will not let YOU be better than me",
+    ],
+  },
 };

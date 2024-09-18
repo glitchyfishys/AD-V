@@ -360,7 +360,7 @@ export const ra = {
     },
     gainoutside: {
       id: 35,
-      reward: () => `gain momorys outside Ra's reality.`,
+      reward: () => `gain Memory Chunks outside Ra's reality.`,
       effect: 1,
       pet: "glitchyfishys",
       level: 50,
