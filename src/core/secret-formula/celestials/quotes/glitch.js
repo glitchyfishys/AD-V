@@ -1,5 +1,5 @@
 
-const Pelle = ["Pelle", "Creater", "Master"];
+const Pelle = ["Pelle", "Creator", "Master"];
 const V = ["V", "Vulnor", "Vanquish"];
 const Glitch = ["Glitch", "Galinar", "Devastator"];
 const Power = ["Power", "Strength", "Frightment", "Fear"];
@@ -38,7 +38,7 @@ export const glitchQuotes = {
   galaxy: {
     id: 3,
     lines: [
-      "Ah yes Galaxies, Thier a bit strange",
+      "Ah yes Galaxies, Their a bit strange",
       "Let's just say that your Dimensions are not effected by them exactly",
       "They boost Tickspeed (I made that for you), the effect of mass",
       "Getting more is harder due to how big they are",
@@ -90,7 +90,7 @@ export const glitchQuotes = {
   celestials: {
     id: 9,
     lines: [
-      "Now \"Destroyer\" I reqiure you to go in this order, for the best outcome",
+      "Now \"Destroyer\" I require you to go in this order, for the best outcome",
       "Teresa, Effarig, Nameless ones though I call them Vela, V, Ra, Lai'tela",
       { text: "Then you will show me your power before $1.", 1: Pelle },
       "Haha, the power might be enough, I will be back for my Reality"

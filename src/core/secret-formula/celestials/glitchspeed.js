@@ -33,7 +33,7 @@ export const glitchSpeedUpgrades = [
     hasFailed: () => !(Glitch.augmentEffectBits == 1023) && !Laitela.continuumActive,
     checkRequirement: () => Glitch.isRunning && Glitch.augmentEffectBits == 1023 && Time.thisInfinityRealTime.totalSeconds.gte(5) && Laitela.continuumActive && Currency.antimatter.lt("1e1E9"),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    description: "The Rift Force fomula is changed (log10(value) ** 0.2), also you can charge one Infinity Upgrade in Glitch's Reality",
+    description: "The Rift Force formula is changed (log10(value) ** 0.2), also you can charge one Infinity Upgrade in Glitch's Reality",
     effect: () =>  1,
     formatEffect: value => "active"
   },
@@ -41,7 +41,7 @@ export const glitchSpeedUpgrades = [
     name: "Unlimited Dimensions",
     id: 4,
     cost: new Decimal("1e600"),
-    requirement: () => `Reach ${format("1e60000")} Eternity Points with a negitive Blackhole of ${format("1e1E10")} (first 9 effects)`,
+    requirement: () => `Reach ${format("1e60000")} Eternity Points with a negative Blackhole of ${format("1e1E10")} (first 9 effects)`,
     hasFailed: () => !(Glitch.augmentEffectBits == 511),
     checkRequirement: () => Glitch.isRunning && Glitch.augmentEffectBits == 511 && player.requirementChecks.reality.slowestBH.lte(1e-10) && Currency.eternityPoints.gte("1e60000"),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,

@@ -30,7 +30,7 @@ export const eternityUG = [
     hasFailed: () => false,
     checkRequirement: () => player.replicanti.galaxies == 15,
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
-    description: "Gain 3 additonal RG",
+    description: "Gain 3 additional RG",
     effect: () => 3,
     formatEffect: value => "+" + formatInt(value)
   },

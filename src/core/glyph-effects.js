@@ -184,7 +184,7 @@ class GlyphEffectConfig {
         return { value: cappedValue, capped: rawValue.capped || neqTest(rawValue.value, cappedValue) };
       };
     }
-    // The result's an object, so it already has a capped propery, so we don't need to do anything.
+    // The result's an object, so it already has a capped property, so we don't need to do anything.
     return combine;
   }
 }

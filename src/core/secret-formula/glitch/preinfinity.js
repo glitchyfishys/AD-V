@@ -34,7 +34,7 @@ export const preInfinityUG = [
     formatEffect: value => formatX(value, 2, 2)
   },
   {
-    name: "8th dimensional",
+    name: "8th Dimensional",
     id: 3,
     requirement: () => `Have ${format(1e50)} Antimatter with upto four Dimension Boosts, no Galaxies and only one of each Dimension tier (pre-Infinity)`,
     hasFailed: () => player.dimensionBoosts > 4 || player.galaxies > 0 || PlayerProgress.infinityUnlocked() || AntimatterDimensions.all.some(ad => ad.bought > 1),
@@ -45,47 +45,47 @@ export const preInfinityUG = [
     formatEffect: value => formatX(value, 2, 2)
   },
   {
-    name: "galactic Inforcement",
+    name: "Galactic Inforcement",
     id: 4,
     requirement: () => `Have ${format(1e7)} Antimatter with no Dimension Boosts, one Galaxy, up to ten 2nd Dimentsions (pre-Infinity)`,
     hasFailed: () => player.dimensions.antimatter[1].amount.gt(10) || player.galaxies > 1 || player.dimensionBoosts > 0 || PlayerProgress.infinityUnlocked(),
     checkRequirement: () => player.antimatter.e >= 7 && !player.dimensions.antimatter[1].amount.gt(20) && player.galaxies <= 1 && !player.dimensionBoosts > 0 && !PlayerProgress.infinityUnlocked(),
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
-    description: "additonal Tickspeed purchases by their amount",
+    description: "Additional Tickspeed purchases by their amount",
     effect: () => Math.floor(Math.log2(Tickspeed.totalForEffect + 2) ** 2) - 1,
     formatEffect: value => "+" + formatInt(value)
   },
   {
-    name: "galactic Limitaion",
+    name: "Galactic Limitation",
     id: 5,
     requirement: () => `Have ${format(1e25)} Antimatter with no Dimension Boosts, one Galaxy, up to 20 4th Dimentsions (pre-Infinity)`,
     hasFailed: () => player.dimensions.antimatter[3].amount.gt(20) || player.galaxies > 1 || player.dimensionBoosts > 0 || PlayerProgress.infinityUnlocked(),
     checkRequirement: () => player.antimatter.e >= 25 && !player.dimensions.antimatter[3].amount.gt(20) && player.galaxies <= 1 && !player.dimensionBoosts > 0 && !PlayerProgress.infinityUnlocked(),
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
-    description: "additonal Tickspeed purchases based on Dimension Boosts and Galaxies",
+    description: "Additional Tickspeed purchases based on Dimension Boosts and Galaxies",
     effect: () => Math.floor(Math.log2(player.dimensionBoosts * player.galaxies + 1) ** 1.75),
     formatEffect: value => "+" + formatInt(value)
   },
   {
-    name: "galactic Capacity",
+    name: "Galactic Capacity",
     id: 6,
-    requirement: () => `reach ${format(Number.MAX_VALUE, 2)} Antimatter with only one Antimatter Galaxy (pre-Infinity)`,
+    requirement: () => `Reach ${format(Number.MAX_VALUE, 2)} Antimatter with only one Antimatter Galaxy (pre-Infinity)`,
     hasFailed: () => player.galaxies > 1 || PlayerProgress.infinityUnlocked(),
     checkRequirement: () => player.antimatter.gt(1.79e308) && player.galaxies <= 1 && !PlayerProgress.infinityUnlocked(),
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
-    description: "double infinity point gain",
+    description: "Double infinity point gain",
     effect: () => 2,
     formatEffect: value => formatX(value, 2, 2)
   },
   {
-    name: "galactic instance",
+    name: "Galactic Instance",
     id: 7,
-    requirement: () => `have ${format(3)} Antimatter Galaxies without Infinity broken (pre-Break)`,
+    requirement: () => `Have ${format(3)} Antimatter Galaxies without Infinity broken (pre-Break)`,
     hasFailed: () => PlayerProgress.hasBroken(),
     checkRequirement: () => player.galaxies >= 3 && !PlayerProgress.hasBroken(),
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
-    description: "double infinity point gain",
-    effect: () => 2,
+    description: "Triple infinity point gain",
+    effect: () => 3,
     formatEffect: value => formatX(value, 2, 2)
   },
   

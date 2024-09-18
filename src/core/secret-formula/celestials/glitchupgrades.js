@@ -34,15 +34,15 @@ export const glitchRealityUpgrades = [
     id: 2,
     initialCost: 5,
     costMult: 40,
-    textTemplate: "Glyph Sacrifice is {value} times higher, also some effects are incresed past 1e300",
+    textTemplate: "Glyph Sacrifice is {value} times higher, also some effects are increased past 1e300",
     effect: 1e10
   }),
   rebuyable({
-    name: "Rifting refinment",
+    name: "Rifting refinement",
     id: 3,
     initialCost: 100,
     costMult: 50,
-    textTemplate: "Glyph Refinment cap is {value} higher",
+    textTemplate: "Glyph Refinement cap is {value} higher",
     effect: 250
   }),
   rebuyable({
@@ -170,7 +170,7 @@ export const glitchRealityUpgrades = [
     name: () => (GlitchRealityUpgrades.all[13].isAvailableForPurchase ? "The Darkness Overcomes" : "Locked"),
     id: 14,
     cost: 1e145,
-    requirement: () => `Reach ${format("1e2E15")} Antimatter with Effarig Reality, Nameless one's Dim limit and low tachyon gain, V's Reality and Lai'tela's Reality (also reqires ${GlitchRealityUpgrades.all[12].name})`,
+    requirement: () => `Reach ${format("1e2E15")} Antimatter with Effarig Reality, Nameless one's Dim limit and low tachyon gain, V's Reality and Lai'tela's Reality (also requires ${GlitchRealityUpgrades.all[12].name})`,
     hasFailed: () => !GlitchRealityUpgrades.all[12].isBought || Glitch.augmentEffectBits != 314,
     checkRequirement: () =>  GlitchRealityUpgrades.all[12].isBought && Currency.antimatter.gte("1e2E15") && Glitch.isRunning && Glitch.augmentEffectBits == 314,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
@@ -182,7 +182,7 @@ export const glitchRealityUpgrades = [
     name: () => (GlitchRealityUpgrades.all[14].isAvailableForPurchase ? "The Darkness Is Coming" : "Locked"),
     id: 15,
     cost: new Decimal("1e400"),
-    requirement: () => `Reach ${format("1e500E15")} Antimatter (also reqires ${GlitchRealityUpgrades.all[13].name})`,
+    requirement: () => `Reach ${format("1e500E15")} Antimatter (also requires ${GlitchRealityUpgrades.all[13].name})`,
     hasFailed: () => !GlitchRealityUpgrades.all[13].isBought || Glitch.augmentEffectBits != 0,
     checkRequirement: () =>  GlitchRealityUpgrades.all[13].isBought && Currency.antimatter.gte("1e500E15") && Glitch.isRunning && Glitch.augmentEffectBits == 0,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
@@ -191,14 +191,14 @@ export const glitchRealityUpgrades = [
     formatEffect: value => "-2"
   },
   {
-    name: () => (GlitchRealityUpgrades.all[15].isAvailableForPurchase ? "The Darkness Has Arived" : "Locked"),
+    name: () => (GlitchRealityUpgrades.all[15].isAvailableForPurchase ? "The Darkness Has Arrived" : "Locked"),
     id: 16,
     cost: new Decimal("4.44e444"),
-    requirement: () => `Reach ${format("1.8e308")} Projected RM all effects excluding Ra's and Nameless One's Reality (also reqires ${GlitchRealityUpgrades.all[14].name})`,
+    requirement: () => `Reach ${format("1.8e308")} Projected RM all effects excluding Ra's and Nameless One's Reality (also requires ${GlitchRealityUpgrades.all[14].name})`,
     hasFailed: () => !GlitchRealityUpgrades.all[14].isBought || Glitch.augmentEffectBits != 315,
     checkRequirement: () =>  GlitchRealityUpgrades.all[14].isBought && MachineHandler.gainedRealityMachines.times(simulatedRealityCount()).gte("1.8e308") && Glitch.isRunning && Glitch.augmentEffectBits == 315,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    description: "Glitch stays complete past Pelle and unlock Glitch's second layer affter beating Pelle, also ADs are powered by 2.5",
+    description: "Glitch stays complete past Pelle and unlock Glitch's second layer after beating Pelle, also ADs are powered by 2.5",
     effect: () =>  1.5,
     formatEffect: value => (GlitchRealityUpgrades.all[15].isBought ? "Unlocked" : "Locked, ^2.5 AD")
   },

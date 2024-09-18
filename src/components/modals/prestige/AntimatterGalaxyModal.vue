@@ -26,12 +26,12 @@ export default {
       return `You are about to purchase an Antimatter Galaxy`;
     },
     message() {
-      const resetResouces = [];
-      if (Pelle.isDoomed) resetResouces.push("Antimatter", "Antimatter Dimensions", "Tickspeed");
-      if (!this.perkANRBought) resetResouces.push("Antimatter Dimensions", "Tickspeed");
-      if (!this.keepDimBoost) resetResouces.push("Dimension Boosts");
-      if (!this.keepAntimatter && !this.perkANRBought) resetResouces.push("Antimatter");
-      const resetList = makeEnumeration(resetResouces);
+      const resetResources = [];
+      if (Pelle.isDoomed) resetResources.push("Antimatter", "Antimatter Dimensions", "Tickspeed");
+      if (!this.perkANRBought) resetResources.push("Antimatter Dimensions", "Tickspeed");
+      if (!this.keepDimBoost) resetResources.push("Dimension Boosts");
+      if (!this.keepAntimatter && !this.perkANRBought) resetResources.push("Antimatter");
+      const resetList = makeEnumeration(resetResources);
       let tickspeedFixed = "";
       if (InfinityChallenge(3).isRunning) {
         tickspeedFixed = `Infinity Challenge ${InfinityChallenge(3).id}`;

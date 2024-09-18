@@ -67,7 +67,7 @@ export default {
       
     <PrimaryButton
     @click="riftToCore">
-    convet all of Rift Force to {{gain}} Chaos Cores
+    convert all of Rift Force to {{gain}} Chaos Cores
     </PrimaryButton>
 
 

@@ -2,7 +2,7 @@
 import { DC } from "@/core/constants";
 
 import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
-import CustomizeableTooltip from "@/components/CustomizeableTooltip";
+import CustomizableTooltip from "@/components/CustomizeableTooltip";
 import GlyphSetPreview from "@/components/GlyphSetPreview";
 import PerkShopUpgradeButton from "./PerkShopUpgradeButton";
 
@@ -12,7 +12,7 @@ export default {
     GlyphSetPreview,
     PerkShopUpgradeButton,
     CelestialQuoteHistory,
-    CustomizeableTooltip
+    CustomizableTooltip
   },
   data() {
     return {
@@ -239,7 +239,7 @@ export default {
               {{ format(pouredAmount, 2, 2) }}/{{ format(pouredAmountCap, 2, 2) }}
             </div>
           </div>
-          <CustomizeableTooltip
+          <CustomizableTooltip
             v-for="unlockInfo in unlockInfos"
             :key="unlockInfo.id"
             content-class="c-teresa-unlock-description--hover-area"
@@ -261,7 +261,7 @@ export default {
                 {{ format(unlockInfo.price, 2, 2) }}: {{ unlockInfo.description }}
               </b>
             </template>
-          </CustomizeableTooltip>
+          </CustomizableTooltip>
         </div>
       </div>
       <div

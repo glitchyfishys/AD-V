@@ -402,7 +402,7 @@ button:focus {
   outline: none;
 }
 
-/* #region CustomizeableTooltip */
+/* #region CustomizableTooltip */
 
 .c-tooltip-content,
 .c-tooltip-arrow {
@@ -491,7 +491,7 @@ button:focus {
   opacity: 1;
 }
 
-/* #endregion CustomizeableTooltip */
+/* #endregion CustomizableTooltip */
 
 /* #region TT shop */
 
@@ -4235,7 +4235,7 @@ br {
   filter: grayscale(0.1);
 }
 
-.o-autobuyer-toggle-checkbox__label--deactive-paused {
+.o-autobuyer-toggle-checkbox__label--deactivate-paused {
   background: var(--color-bad);
 }
 

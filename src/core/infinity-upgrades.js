@@ -136,7 +136,7 @@ export function disChargeAll() {
 
 // The repeatable 2xIP upgrade has an odd cost structure - it follows a shallow exponential (step *10) up to e3M, at
 // which point it follows a steeper one (step *1e10) up to e6M before finally hardcapping. At the hardcap, there's
-// an extra bump that increases the multipler itself from e993k to e1M. All these numbers are specified in
+// an extra bump that increases the multiplier itself from e993k to e1M. All these numbers are specified in
 // GameDatabase.infinity.upgrades.ipMult
 class InfinityIPMultUpgrade extends GameMechanicState {
   get cost() {

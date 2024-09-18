@@ -199,7 +199,7 @@ export const Glitch = {
     return (this.augmentEffectActive(9) ? (0.3 / this.decay) : 0.3);
   },
   
-  get discription() {
+  get description() {
     return GameDatabase.celestials.descriptions[6].effects()
   },
   get tier(){

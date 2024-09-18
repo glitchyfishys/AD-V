@@ -80,8 +80,8 @@ TimeStudy.allConnections = (function() {
     [TS(122), TS(132)],
     [TS(123), TS(133)],
 
-    [TS(111), EC(6), () => !TeresaUnlocks.EC6ReqireActive.canBeApplied],
-    [TS(121), EC(6), () => TeresaUnlocks.EC6ReqireActive.canBeApplied],
+    [TS(111), EC(6), () => !TeresaUnlocks.EC6RequireActive.canBeApplied],
+    [TS(121), EC(6), () => TeresaUnlocks.EC6RequireActive.canBeApplied],
     
     [TS(123), EC(8)],
 

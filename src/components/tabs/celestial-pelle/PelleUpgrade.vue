@@ -1,6 +1,6 @@
 <script>
 import CostDisplay from "@/components/CostDisplay";
-import CustomizeableTooltip from "@/components/CustomizeableTooltip";
+import CustomizableTooltip from "@/components/CustomizeableTooltip";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 
 export default {
@@ -8,7 +8,7 @@ export default {
   components: {
     DescriptionDisplay,
     CostDisplay,
-    CustomizeableTooltip
+    CustomizableTooltip
   },
   props: {
     upgrade: {
@@ -119,7 +119,7 @@ export default {
     @mouseover="hovering = true"
     @mouseleave="hovering = false"
   >
-    <CustomizeableTooltip
+    <CustomizableTooltip
       :show="shouldEstimateImprovement"
       left="50%"
       top="0"
@@ -127,8 +127,8 @@ export default {
       <template #tooltipContent>
         {{ estimateImprovement }}
       </template>
-    </CustomizeableTooltip>
-    <CustomizeableTooltip
+    </CustomizableTooltip>
+    <CustomizableTooltip
       v-if="timeEstimate"
       left="50%"
       top="0"
@@ -137,7 +137,7 @@ export default {
       <template #tooltipContent>
         {{ timeEstimate }}
       </template>
-    </CustomizeableTooltip>
+    </CustomizableTooltip>
     <DescriptionDisplay :config="config" />
     <div class="l-pelle-upgrade-gap" />
     <div v-if="effectText">

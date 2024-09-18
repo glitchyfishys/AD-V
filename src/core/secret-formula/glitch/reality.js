@@ -70,7 +70,7 @@ export const realityUG = [
 {
     name: "External Dilation",
     id: 6,
-    requirement: () => `Reach ${format(Number.MAX_VALUE, 2)} Antimatter in Effarigs Reality (Infinity Layer) with three Glyphs maxium`,
+    requirement: () => `Reach ${format(Number.MAX_VALUE, 2)} Antimatter in Effarigs Reality (Infinity Layer) with three Glyphs maximum`,
     hasFailed: () => Effarig.currentStage > 1 || player.reality.glyphs.active.length > 3,
     checkRequirement: () => player.antimatter.gte(1.79e308) && Effarig.isRunning && Effarig.currentStage == 1 && player.reality.glyphs.active.length <= 3,
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
@@ -147,7 +147,7 @@ export const realityUG = [
   {
     name: "Overlight Powerforce",
     id: 13,
-    requirement: "Complete all other glitch challanges",
+    requirement: "Complete all other Glitch Challenges",
     hasFailed: () => player.glitch.preinfinity.upgradebits != 255 || player.glitch.breakinfinity.upgradebits != 63 || player.glitch.eternity.upgradebits != 63 || player.glitch.reality.upgradebits != 8191,
     checkRequirement: () =>  player.glitch.preinfinity.upgradebits >= 255 && player.glitch.breakinfinity.upgradebits >= 63 && player.glitch.eternity.upgradebits >= 63 && player.glitch.reality.upgradebits >= 8191,
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,

@@ -392,7 +392,7 @@ window.ExponentialCostScaling = class ExponentialCostScaling {
    * This returns the maximum new number of this thing; If you have 51 and can
    * afford to buy 10 more, this will return 61. NOTE! this assumes you only
    * have to pay for the most expensive thing you get when you buy in bulk. This
-   * means it's not suitable for accurate caclulation of cumulative prices if the
+   * means it's not suitable for accurate calculation of cumulative prices if the
    * multiplier is small.
    * @param {number} currentPurchases amount already possessed
    * @param {Decimal} money

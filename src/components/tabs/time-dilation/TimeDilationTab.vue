@@ -129,7 +129,7 @@ export default {
         DilationUpgrade.galaxyMultiplier.purchase(1e8);
         DilationUpgrade.tickspeedPower.purchase(1e8);
       }
-      // reseting one last
+      // do resetting one last
       DilationUpgrades.rebuyable[1].purchase(1e8);
     }
   }

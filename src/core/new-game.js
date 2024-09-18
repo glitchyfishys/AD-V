@@ -49,7 +49,7 @@ export const NG = {
   // any stats which are updated due to completion happen in startNewGame() instead of in here
   restartWithCarryover() {
     const backUpOptions = JSON.stringify(player.options);
-    // This can't be JSONed as it contains sets
+    // This can't be JSON-ed as it contains sets
     const secretUnlocks = player.secretUnlocks;
     const secretAchievements = JSON.stringify(player.secretAchievementBits);
     // We don't backup the whole player.reality.automator object because it contains "state",

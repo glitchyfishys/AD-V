@@ -22,7 +22,7 @@ export default {
     completed: false,
     storedBlackHole: 0,
     storedReal: 0,
-    storedRealEffiency: 0,
+    storedRealEfficiency: 0,
     storedRealCap: 0,
     autoRelease: false,
     autoReleaseSpeed: 0,
@@ -41,7 +41,7 @@ export default {
   }),
   computed: {
     storedRealEfficiencyDesc() {
-      return formatPercents(this.storedRealEffiency);
+      return formatPercents(this.storedRealEfficiency);
     },
     storedRealCapDesc() {
       return timeDisplayShort(this.storedRealCap);
@@ -127,7 +127,7 @@ export default {
       this.isRunning = Enslaved.isRunning;
       this.completed = Enslaved.isCompleted && !this.isDoomed;
       this.storedReal = player.celestials.enslaved.storedReal;
-      this.storedRealEffiency = Enslaved.storedRealTimeEfficiency;
+      this.storedRealEfficiency = Enslaved.storedRealTimeEfficiency;
       this.storedRealCap = Enslaved.storedRealTimeCap;
       this.unlocks = Array.from(player.celestials.enslaved.unlocks);
       this.buyableUnlocks = Object.values(ENSLAVED_UNLOCKS).map(x => Enslaved.canBuy(x));

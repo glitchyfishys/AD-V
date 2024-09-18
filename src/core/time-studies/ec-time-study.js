@@ -19,7 +19,7 @@ export class ECTimeStudyState extends TimeStudyState {
     if (this.isBought && player.challenge.eternity.current === 0 && !auto) {
       // If it is bought and you aren't in a Eternity Challenge, check
       if (clickTime - ui.lastClickTime < 750) {
-        // If you last clicked on it within 3/4ths of a second, enter them in or ask confirmation if they have that on
+        // If you last clicked on it within 3/4th of a second, enter them in or ask confirmation if they have that on
         ui.lastClickTime = 0;
         EternityChallenge(this.id).requestStart();
       } else {

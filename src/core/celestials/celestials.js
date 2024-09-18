@@ -138,7 +138,7 @@ GameDatabase.celestials.descriptions = [
         TD's ^0.33
         you only start with break/infinity upgrades and you can not charge them
         some reality/celestials effects don't work
-        you are forced to have ${Glitch.forceglyphs} cursed glyphs equiped
+        you are forced to have ${Glitch.forceglyphs} cursed glyphs equipped
         plus the effects you have chosen`;
       }
       

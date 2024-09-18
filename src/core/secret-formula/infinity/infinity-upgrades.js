@@ -158,7 +158,7 @@ export const infinityUpgrades = {
     cost: 10,
     checkRequirement: () => InfinityUpgrade.dimboostMult.isBought,
     description: () => `Passively generate Infinity Points ${formatInt(10)} times slower than your fastest Infinity`,
-    // Cutting corners: this is not actual effect, but it is totalIPMult that is displyed on upgrade
+    // Cutting corners: this is not actual effect, but it is totalIPMult that is displayed on upgrade
     effect: () => (Teresa.isRunning || V.isRunning || Pelle.isDoomed ? DC.D0 : GameCache.totalIPMult.value),
     formatEffect: value => {
       if (Teresa.isRunning || V.isRunning) return "Disabled in this reality";

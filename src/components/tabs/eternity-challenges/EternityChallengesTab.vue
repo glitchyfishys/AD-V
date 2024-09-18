@@ -79,8 +79,8 @@ export default {
         (this.showAllChallenges && PlayerProgress.realityUnlocked());
     },
     ECc(){
-      if(this.isEnslaved) return GameUI.notify.error("can't be used in the Namelessones' reality",3000)
-      if(Effarig.isRunning && Effarig.currentStage < 4) return GameUI.notify.error("can't be used in the Effarig's reality, untill reality layer is complete",3000)
+      if(this.isEnslaved) return GameUI.notify.error("Can't be used in the Namelessones' reality",3000)
+      if(Effarig.isRunning && Effarig.currentStage < 4) return GameUI.notify.error("Can't be used in the Effarig's Reality, until the Reality layer is complete",3000)
       let h=0;
       for(let i=1; i <= 12; i++){
         if(!Currency.eternityPoints.gte(this.ECreq[i])) break;
@@ -89,7 +89,7 @@ export default {
         }
           h = i;
       }
-       if(!Currency.eternityPoints.gte("1e4000")) h == 12 ?  GameUI.notify.eternity("All EC's are completed",3000) : GameUI.notify.eternity("fully completed EC's up to " + (h) + ", next ec" + (h+1) + " at " + format( new Decimal(this.ECreq[h+1])) + " EP",3000);
+       if(!Currency.eternityPoints.gte("1e4000")) h == 12 ?  GameUI.notify.eternity("All EC's are completed",3000) : GameUI.notify.eternity("Fully completed EC's up to " + (h) + ", next ec" + (h+1) + " at " + format( new Decimal(this.ECreq[h+1])) + " EP",3000);
     }
   }
 };

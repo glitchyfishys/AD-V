@@ -12,7 +12,7 @@ export const breakInfinityUG = [
     formatEffect: value => formatX(value, 2, 2)
   },
   {
-  name: "Infinitly Limiting",
+  name: "Infinitely Limiting",
     id: 1,
     requirement: () => `Reach ${format(2000)} (pending) Infinity Points with up to four Dimension Boosts and one Antimatter galaxy (pre-Eternity)`,
     hasFailed: () => player.dimensionBoosts > 4 || player.galaxies > 1 && !PlayerProgress.eternityUnlocked(),

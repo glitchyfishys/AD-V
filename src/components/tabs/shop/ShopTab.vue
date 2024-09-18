@@ -87,7 +87,7 @@ export default {
   <div class="tab shop">
     <div class="c-shop-disclaimer">
       Disclaimer: These are not required to progress in the game.
-      The game is even less balanced with theese.
+      The game is even less balanced with these.
     </div>
     <div class="c-subtab-option-container">
       <PrimaryButton

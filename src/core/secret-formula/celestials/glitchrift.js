@@ -20,9 +20,9 @@ export const GlitchRifts = {
       {
         resource: "alpha",
         requirement: 0.5,
-        description: "Eigth AD gains x30 multiplier",
+        description: "Eighth AD gains x30 multiplier",
         effect: () => 30,
-        format: effect => `${formatX(effect)} Eigth Antimatter Dimension`,
+        format: effect => `${formatX(effect)} Eighth Antimatter Dimension`,
         base: 1,
       },
       {
@@ -167,7 +167,7 @@ export const GlitchRifts = {
       {
         resource: "gamma",
         requirement: 0.9,
-        description: "an aditional 50 higher cap for Ra memory levels",
+        description: "an additional 50 higher cap for Ra memory levels",
         effect: () => 50,
         format: effect => `+${format(effect)} Ra memory level cap`,
         base: 0,
@@ -175,7 +175,7 @@ export const GlitchRifts = {
       {
         resource: "gamma",
         requirement: 1,
-        description: "Unlock Glitch the celestial of Programing, having unque Goals and Upgrades",
+        description: "Unlock Glitch the celestial of Programing, having unique Goals and Upgrades",
         effect: () => 1,
         format: effect => effect == 0 ? "Locked" : "Unlocked, Glitch",
         base: 0,

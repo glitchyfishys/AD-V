@@ -580,7 +580,7 @@ Options and Accessibility:
 <li>Added a display showing you what type of Infinity/Eternity/Reality you are in, such as Dilation or Challenges</li>
 <li>You can now press other hotkeys while holding down a hotkey without interrupting the held hotkey.</li>
 <li>Info displays are now visible by default. (can be turned off in options)</li>
-<li>Improved import save modal by adding resouce information and offline progress mode selection.</li>
+<li>Improved import save modal by adding resource information and offline progress mode selection.</li>
 <li>Number input fields may now have input assistance depending on your browser. (such as up and down arrows
   on the side)</li>
 <li>Resetting the game now requires inputting a specific phrase in order to prevent accidental resets.</li>
@@ -1010,7 +1010,7 @@ and 7 respectively.</li>
 <li>Reworked the display of the buy time theorem buttons.</li>
 <li>The milestones page now has 2 columns.</li>
 <li>Extended support for standard notation to e3e18, and letter/cancer notation (almost) infinitely.</li>
-<li>Added support for standard, letter and logrithm notation in autobuyer inputs.</li>
+<li>Added support for standard, letter and logarithm notation in autobuyer inputs.</li>
 <li>Added "in a challenge" to the description of "Zero Deaths".</li>
 <li>Made most large numbers in achievements be listed in your chosen notation.</li>
 <li>Nerfed "Gift From The Gods"'s achievement reward.</li>

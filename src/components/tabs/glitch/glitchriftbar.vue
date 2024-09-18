@@ -1,10 +1,10 @@
 <script>
-import CustomizeableTooltip from "@/components/CustomizeableTooltip";
+import CustomizableTooltip from "@/components/CustomizeableTooltip";
 
 export default {
   name: "GlitchRiftBar",
   components: {
-    CustomizeableTooltip
+    CustomizableTooltip
   },
   props: {
     rift: {
@@ -141,7 +141,7 @@ export default {
     <div class="o-pelle-rift-bar-percentage">
       {{ formatPercents(percentage, 3) }}
     </div>
-    <CustomizeableTooltip
+    <CustomizableTooltip
       class="o-pelle-rift-bar-milestone-hover-container"
       :tooltip-class="tooltipContentClass()"
       :tooltip-arrow-style="tooltipArrowStyle"
@@ -154,7 +154,7 @@ export default {
         <br>
         {{ selectedMilestoneDescriptionText }}
       </template>
-    </CustomizeableTooltip>
+    </CustomizableTooltip>
   </div>
 </template>
 

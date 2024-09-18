@@ -70,7 +70,7 @@ export default {
           "o-autobuyer-toggle-checkbox__label": true,
           "o-autobuyer-toggle-checkbox__label-modal": this.isModal,
           "o-autobuyer-toggle-checkbox__label--active-paused": this.isActive,
-          "o-autobuyer-toggle-checkbox__label--deactive-paused": !this.isActive,
+          "o-autobuyer-toggle-checkbox__label--deactivate-paused": !this.isActive,
           "o-autobuyer-toggle-checkbox__label--disabled": !this.globalToggle
         };
       }

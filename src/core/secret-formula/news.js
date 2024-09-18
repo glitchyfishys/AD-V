@@ -1654,7 +1654,7 @@ export const news = [
   {
     id: "a274",
     text:
-      `A large number of mathematicans walk into a bar. They each order 10 times as many beers as the previous.
+      `A large number of mathematicians walk into a bar. They each order 10 times as many beers as the previous.
       The bartender says "My my, that's an order of magnitude!".`
   },
   {
@@ -2769,7 +2769,7 @@ export const news = [
   {
     id: "l26",
     text:
-      `Thanos is gonna be super dissapointed when he shows up with a fully powered Infinity gauntlet, and Hevi
+      `Thanos is gonna be super disappointed when he shows up with a fully powered Infinity gauntlet, and Hevi
       has a fully powered Eternity gauntlet.`,
     get unlocked() { return PlayerProgress.eternityUnlocked(); }
   },
@@ -2838,7 +2838,7 @@ export const news = [
   },
   {
     id: "l39",
-    text: "Asian man trys to steal the trophy of fastest infinity of -1 seconds, AND HE DOES IT!",
+    text: "Asian man tries to steal the trophy of fastest infinity of -1 seconds, AND HE DOES IT!",
     get unlocked() { return NewsHandler.hasSeenNews("l1"); }
   },
   {
@@ -3016,7 +3016,7 @@ export const news = [
   {
     id: "l61",
     text:
-      `Millenials are killing the challenge industry, say antimatter experts; "Nowadays they start with
+      `Millennials are killing the challenge industry, say antimatter experts; "Nowadays they start with
       challenges completed and infinity broken; it's just not how it used to be".`,
     get unlocked() { return PlayerProgress.infinityUnlocked(); }
   },
@@ -3125,7 +3125,7 @@ export const news = [
         `<span style='font-family: Barrio'>send 10,000 Support The Developer
         coins or you will never see RealiTV again.</span>`,
         "we break down exactly what went wrong in the black hole powering our city yesterday.",
-        "we go over our 10-day weather forcasts.",
+        "we go over our 10-day weather forecasts.",
         `YOU MUST PAY ${format(player.reality.realityMachines.times(10).max(10))}
         REALITY MACHINES TO CONTINUE VIEWING THIS PROGRAM.`,
         "we witness the release of the hypnodrones.",
@@ -3905,7 +3905,7 @@ export const news = [
   },
   {
     id: "ai150",
-    text: "Hello everyone, my name is Anti-Dio. I produce antimatter through a process you all know as \"antimatter decomposition\" you may recall this from my test report earlier this month I tested wether or not my ranch produces antimatter or not... everything was fine until that point, when I added a dash of lag to the equation, and it became a vicious cycle accelerating the rate at which antimatter is produced, which in turn accelerates the rate at which you all die. I've saved this by using a unique combination of genetic engineering and big data mining, I'm hoping to one day pull the trigger on a mechanimatter device that creates dimensions behind closed doors, but for now, this has all been a race to the bottom of which system producethiks, and in the end, we'll take a bite out of your (read error: allowed) pie. Goodbye."
+    text: "Hello everyone, my name is Anti-Dio. I produce antimatter through a process you all know as \"antimatter decomposition\" you may recall this from my test report earlier this month I tested whether or not my ranch produces antimatter or not... everything was fine until that point, when I added a dash of lag to the equation, and it became a vicious cycle accelerating the rate at which antimatter is produced, which in turn accelerates the rate at which you all die. I've saved this by using a unique combination of genetic engineering and big data mining, I'm hoping to one day pull the trigger on a mechanimatter device that creates dimensions behind closed doors, but for now, this has all been a race to the bottom of which system producethiks, and in the end, we'll take a bite out of your (read error: allowed) pie. Goodbye."
   },
   {
     id: "ai151",
@@ -5060,11 +5060,11 @@ export const news = [
   },
   {
     id: "ai437",
-    text: "Gee, all this antimatter is clogging up my kitchen and now I can't cook myself a meal! What to do: cook myself a meal that will last me until the next big antimatter event, when I can get my infinity point back? My infinty point is running out, and I can't get it to finish running, so I'm starving!"
+    text: "Gee, all this antimatter is clogging up my kitchen and now I can't cook myself a meal! What to do: cook myself a meal that will last me until the next big antimatter event, when I can get my infinity point back? My infinity point is running out, and I can't get it to finish running, so I'm starving!"
   },
   {
     id: "ai438",
-    text: "Brought to you by AAAD-Brand Repli-candy! Infinite candy for an infinty drool-worthy cold! Contains no milk, cookies or butter. One second to midnight."
+    text: "Brought to you by AAAD-Brand Repli-candy! Infinite candy for an infinity drool-worthy cold! Contains no milk, cookies or butter. One second to midnight."
   },
   {
     id: "ai439",
@@ -6212,7 +6212,7 @@ export const news = [
   },
   {
     id: "ai723",
-    text: "The number of dimensions in a 6th dimension is the sum of all the dimensions in a 7th dimension, so 6ths of a 7th dimension are 6ths of a 6th dimension."
+    text: "The number of dimensions in a 6th dimension is the sum of all the dimensions in a 7th dimension, so 6th of a 7th dimension are 6th of a 6th dimension."
   },
   {
     id: "ai724",

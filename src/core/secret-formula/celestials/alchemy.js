@@ -178,7 +178,7 @@ export const alchemyResources = {
     ]
   },
 
-  // T3 resources (Effarig and conbinations of T1/T2 with Effarig)
+  // T3 resources (Effarig and combinations of T1/T2 with Effarig)
   "effarig": {
     id: ALCHEMY_RESOURCE.EFFARIG,
     name: "Effarig",
@@ -465,12 +465,12 @@ export const alchemyResources = {
     name: "Sifter",
     symbol: "∬",
     isBaseResource: false,
-    effect: amount => Math.floor(amount * 0.8),
+    effect: amount => Math.floor(amount * 0.9),
     tier: 5,
     uiOrder: 2,
     unlockedAt: 30,
-    description: "boost all basic alchemy resources amounts to a mininum amount",
-    formatEffect: value => `boost all basic resources to a mininum of ${formatInt(value)} `,
+    description: "boost all Basic Alchemy Resources amounts to a minimum amount",
+    formatEffect: value => `boost all basic resources to a minimum of ${formatInt(value)} `,
     reagents: [
       {
         resource: ALCHEMY_RESOURCE.CARDINALITY,
@@ -504,7 +504,7 @@ export const alchemyResources = {
     tier: 5,
     uiOrder: 3,
     unlockedAt: 35,
-    description: "gain more singularities",
+    description: "gain more Dark Energy",
     formatEffect: value => `${formatX(value)} Dark Energy gain`,
     reagents: [
       {
@@ -532,8 +532,8 @@ export const alchemyResources = {
     tier: 6,
     uiOrder: 1,
     unlockedAt: 45,
-    description: "unkown",
-    formatEffect: value => `unkown ${formatInt(value)} GLITCHED Glyph`,
+    description: "create a glitched Glyph (NYI)",
+    formatEffect: value => `unknown ${formatInt(value)} glitched Glyph (NYI)`,
     reagents: [
       {
         resource: ALCHEMY_RESOURCE.POWER,

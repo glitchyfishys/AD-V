@@ -40,7 +40,7 @@ export class ScriptTemplate {
   /**
    * Special formatting for numbers in templates; we can't use format() here because that will change based on the
    * player's current notation. This is generally desirable in the rest of the game, but in most notations will
-   * result in unparseable garbage here. Numbers are formatted assuming they're integers, and Decimals are formatted
+   * result in unparsable garbage here. Numbers are formatted assuming they're integers, and Decimals are formatted
    * with 2 decimal places (in scientific notation if above 1000)
    * @param {Number | Decimal} num  Number to format, disregarding current notation settings
    * @returns {String}  The properly-formatted number, in a reasonable-looking format valid for the automator

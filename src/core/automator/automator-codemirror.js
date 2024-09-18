@@ -57,7 +57,7 @@ const commentRule = { regex: /(\/\/|#).*/u, token: "comment", next: "start" };
 // Matches to the regexes will color the matched text according to the specified color of cm-[token] in liquibyte.css
 // Note: This has no bearing on the actual functionality and behavior of the automator itself and is purely visual.
 CodeMirror.defineSimpleMode("automato", {
-  // The start state contains the rules that are intially used
+  // The start state contains the rules that are initially used
   start: [
     commentRule,
     { regex: /studies\s+/ui, token: "keyword", next: "studiesArgs" },

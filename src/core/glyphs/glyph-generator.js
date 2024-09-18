@@ -170,7 +170,7 @@ export const GlyphGenerator = {
   },
 
   // These Glyphs are given on entering Doomed to prevent the player
-  // from having none of each basic glyphs which are requied to beat pelle
+  // from having none of each basic glyphs which are required to beat pelle
   doomedGlyph(type) {
     const effectList = GlyphEffects.all.filter(e => e.id.startsWith(type));
     effectList.push(GlyphEffects.timespeed);
@@ -365,11 +365,11 @@ export const GlyphGenerator = {
       if (countValuesFromBitmask(newMask) > maxEffects) {
         // Turn the old effect bitmask into an array of removable effects and then deterministically remove one
         // of the non-power effects based on seed and reality count
-        const replacable = getGlyphEffectsFromBitmask(newGlyph.effects, newGlyph.type)
+        const replaceable = getGlyphEffectsFromBitmask(newGlyph.effects, newGlyph.type)
           .filter(eff => eff.isGenerated)
           .map(eff => eff.bitmaskIndex)
           .filter(eff => ![0, 12, 16].includes(eff));
-        const toRemove = replacable[Math.abs(initSeed + realityCount) % replacable.length];
+        const toRemove = replaceable[Math.abs(initSeed + realityCount) % replaceable.length];
         newGlyph.effects = newMask & ~(1 << toRemove);
       } else {
         newGlyph.effects = newMask;

@@ -1,6 +1,6 @@
 <script>
 import CostDisplay from "@/components/CostDisplay";
-import CustomizeableTooltip from "@/components/CustomizeableTooltip";
+import CustomizableTooltip from "@/components/CustomizeableTooltip";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
@@ -12,7 +12,7 @@ export default {
     DescriptionDisplay,
     EffectDisplay,
     CostDisplay,
-    CustomizeableTooltip
+    CustomizableTooltip
   },
   props: {
     upgrade: {
@@ -109,7 +109,7 @@ export default {
       @mouseover="isHovering = true"
       @mouseleave="isHovering = false"
     >
-      <CustomizeableTooltip
+      <CustomizableTooltip
         v-if="timeEstimate"
         :show="showTooltip && !isHovering && !hideEstimate"
         left="50%"
@@ -118,7 +118,7 @@ export default {
         <template #tooltipContent>
           {{ timeEstimate }}
         </template>
-      </CustomizeableTooltip>
+      </CustomizableTooltip>
       <span>
         <DescriptionDisplay
           :config="upgrade.config"
