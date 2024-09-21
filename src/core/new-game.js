@@ -65,6 +65,7 @@ export const NG = {
     const hasSpeedrun = player.speedrun.isUnlocked;
     const presets = JSON.stringify(player.timestudy.presets);
     const companions = JSON.stringify(Glyphs.allGlyphs.filter(g => g.type === "companion"));
+
     const celglitch = JSON.stringify(player.celestials.glitch);
     const glitch = JSON.stringify(player.glitch);
     const ach = JSON.stringify(player.achievementBits);
@@ -75,6 +76,7 @@ export const NG = {
     const v = JSON.stringify(player.celestials.v);
     const ra = JSON.stringify(player.celestials.ra);
     const laitela = JSON.stringify(player.celestials.laitela);
+    const STDs = JSON.stringify(player.IAP);
     
     const glitchsave = GlitchRealityUpgrades.all[15].isBought;
     
@@ -139,6 +141,7 @@ export const NG = {
         Currency.eternityPoints.reset()
         Currency.eternities.reset();
       }
+      player.IAP = JSON.parse(STDs);
       
       GameStorage.save();
       GameStorage.load();

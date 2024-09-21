@@ -200,7 +200,7 @@ Currency.antimatter = new class extends DecimalCurrency {
   get value() { return new Decimal(player.antimatter); }
 
   set value(value) {
-    value = value.clampMax("1e1E50");
+    value = value.clampMax( Pelle.isDoomed ? "1e1E300" : "1e1E50");
     if (InfinityChallenges.nextIC) InfinityChallenges.notifyICUnlock(value);
     if (GameCache.cheapestAntimatterAutobuyer.value && value.gte(GameCache.cheapestAntimatterAutobuyer.value)) {
       // Clicking into the automation tab clears the trigger and prevents it from retriggering as long as the player

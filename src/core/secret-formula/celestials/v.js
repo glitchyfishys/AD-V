@@ -12,6 +12,8 @@ export const V_REDUCTION_MODE = {
   POWER: 3
 };
 
+const STreq = [110,145,190,225];
+
 export const v = {
   // Note: mainUnlock IDs here are one-indexed to match with navigation indices
   mainUnlock: {
@@ -218,10 +220,10 @@ export const v = {
     {
       id: 10,
       name: "Revengeance",
-      description: value => `Reach ${format(Decimal.pow10(value), 2)} Antimatter in Glitch's Reality with V's Reality Enabled, you also need  ${ 110 + (VRunUnlock(10).completions == 3 ? 115 :  (VRunUnlock(10).completions == 2 ? 80 : (VRunUnlock(10).completions == 1 ? 35 : 0 ) ))} ST<br> 
+      description: value => `Reach ${format(Decimal.pow10(value), 2)} Antimatter in Glitch's Reality with V's Reality Enabled, you also need  ${STreq[VRunUnlock(10).completions]} ST<br> 
       <span style="color: var(--color-bad)">completing this will have dire consequences</span>`,
-      values: [1e40, 1e42, 5e42, 6e41],
-      condition: value => V.isRunning && Glitch.isRunning && V.isExtreme && V.spaceTheorems >= 110 + (VRunUnlock(10).completions == 3 ? 115 :  (VRunUnlock(10).completions == 2 ? 80 : (VRunUnlock(10).completions == 1 ? 35 : 0 ) )) && Currency.antimatter.value.log10() > value,
+      values: [1e40, 1e42, 5e42, 2.5e40],
+      condition: value => V.isRunning && Glitch.isRunning && V.isExtreme && V.spaceTheorems >= STreq[VRunUnlock(10).completions] && Currency.antimatter.value.log10() > value,
       currentValue: () => Currency.antimatter.value.log10(),
       formatRecord: x => format(Decimal.pow10(x), 2),
       shardReduction: tiers => 5 ** (tiers * 33),
@@ -289,9 +291,9 @@ export const v = {
     {
       id: 15,
       name: "Glitch's Reinforcement",
-      description: value => `Reach ${format(Decimal.pow10(value), 2)} Antimatter in V's Extreme Reality with a ${format(1e10)} negitive black hole and ${VRunUnlock(10).completions > 1 ? 3 : 4} Cursed Glyphs, with three Revengeance Completions`,
-      values: [3e2, 9e3, 24e3, 46e3],
-      condition: () => V.isRunningExtreme && V.isExtreme && VRunUnlock(10).completions > 2 && -Decimal.log10(player.requirementChecks.reality.slowestBH) >= 10 && player.requirementChecks.reality.maxGlyphs < (VRunUnlock(10).completions > 1 ? -6 : -10),
+      description: value => `Reach ${format(Decimal.pow10(value), 2)} Antimatter in V's Extreme Reality with a ${format(1e10)} negitive black hole and ${(VRunUnlock(15).completions > 0) ? 3 : 4} Cursed Glyphs, with three Revengeance Completions`,
+      values: [3e2, 9e3, 24e3, 4e3],
+      condition: () => V.isRunningExtreme && V.isExtreme && VRunUnlock(10).completions > 2 && -Decimal.log10(player.requirementChecks.reality.slowestBH) >= 10 && player.requirementChecks.reality.maxGlyphs < ((VRunUnlock(15).completions > 0) ? -6 : -10),
       currentValue: () => Currency.antimatter.value.log10(),
       formatRecord: x => format(x, 2),
       shardReduction: tiers => 250 * (tiers * 10),
