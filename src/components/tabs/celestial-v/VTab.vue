@@ -206,7 +206,7 @@ export default {
         VRunUnlocks.all[i].reset();
       }
       V.updateTotalRunUnlocks();
-      Quotes.v.thankYou.show();
+      if(VUnlocks.prestigious.isUnlocked) Quotes.v.thankYou.show();
     },
     createCursedGlyph() {
       Glyphs.giveCursedGlyph();
