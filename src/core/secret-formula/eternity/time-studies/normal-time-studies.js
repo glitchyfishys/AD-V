@@ -726,7 +726,7 @@ export const normalTimeStudies = [
     requirement: [() =>  VUnlocks.newStudies.isUnlocked],
     reqType: TS_REQUIREMENT_TYPE.ALL,
     requiresST: [() => true],
-    description: () => `Tickseed Power based on TSs`,
+    description: () => `Tickspeed Power based on TSs`,
     effect: () => V.isRunningExtreme ? Math.max(V.spaceTheorems ** 0.92 / 18, 1) : Math.max(V.spaceTheorems ** 0.85 / 3, 1),
     formatEffect: value => formatPow(value, 2, 1),
     unlocked: () =>  VUnlocks.newStudies.isUnlocked

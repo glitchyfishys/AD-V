@@ -218,10 +218,10 @@ export const v = {
     {
       id: 10,
       name: "Revengeance",
-      description: value => `Reach ${format(Decimal.pow10(value), 2)} Antimatter in Glitch's Reality with V's Reality Enabled, you also need  ${110 + (VRunUnlock(10).completions == 3 ? 115 : 40 * VRunUnlock(10).completions)} ST<br> 
+      description: value => `Reach ${format(Decimal.pow10(value), 2)} Antimatter in Glitch's Reality with V's Reality Enabled, you also need  ${ 110 + (VRunUnlock(10).completions == 3 ? 115 :  (VRunUnlock(10).completions == 2 ? 80 : (VRunUnlock(10).completions == 1 ? 35 : 0 ) ))} ST<br> 
       <span style="color: var(--color-bad)">completing this will have dire consequences</span>`,
       values: [1e40, 1e42, 5e42, 6e41],
-      condition: value => V.isRunning && Glitch.isRunning && V.isExtreme && V.spaceTheorems >= 110 + (VRunUnlock(10).completions == 3 ? 115 : 40 * VRunUnlock(10).completions) && Currency.antimatter.value.log10() > value,
+      condition: value => V.isRunning && Glitch.isRunning && V.isExtreme && V.spaceTheorems >= 110 + (VRunUnlock(10).completions == 3 ? 115 :  (VRunUnlock(10).completions == 2 ? 80 : (VRunUnlock(10).completions == 1 ? 35 : 0 ) )) && Currency.antimatter.value.log10() > value,
       currentValue: () => Currency.antimatter.value.log10(),
       formatRecord: x => format(Decimal.pow10(x), 2),
       shardReduction: tiers => 5 ** (tiers * 33),

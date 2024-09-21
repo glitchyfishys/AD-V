@@ -994,7 +994,8 @@ window.player = {
     reality:{
       upgradebits: 0
     }
-  }
+  },
+  
 };
 
 export const Player = {

@@ -110,7 +110,7 @@ export const vQuotes = {
       {text: "S-S-So... Glitch isn't able to stop you", tremble: true},
       {text: "Not even With y-your Dimensions and Tickspeed being Dilated", tremble: true},
       "I was never able to beat you...",
-      "Please at least give me back my Achevments before you go...",
+      "Please at least give me back my Achievements before you go...",
       {text: "Please give V back his Achievements, I don't want to ask again", name: "Glitch", background: [["glitch", 0]]},
       {text: "You all ready made him sad the first time", name: "Glitch", background: [["glitch", 0]]},
     ],
