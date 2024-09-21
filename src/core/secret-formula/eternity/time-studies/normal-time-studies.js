@@ -705,5 +705,42 @@ export const normalTimeStudies = [
     description: "Dimensional Sacrifice multiplier is squared",
     effect: 2,
     unlocked: () => Ra.unlocks.unlockHardV.effectOrDefault(0) >= 4
-  }
+  },
+
+  {
+    id: 401,
+    cost: 0,
+    STCost: 100,
+    requirement: [() =>  VUnlocks.newStudies.isUnlocked],
+    reqType: TS_REQUIREMENT_TYPE.ALL,
+    requiresST: [() => true],
+    description: "Antimatter Dimension Power based on STs",
+    effect: () => V.isRunningExtreme ? Math.max(V.spaceTheorems ** 0.8 / 20, 1) : Math.max(V.spaceTheorems ** 0.8 / 3, 1),
+    formatEffect: value => formatPow(value, 2, 1),
+    unlocked: () => VUnlocks.newStudies.isUnlocked
+  },
+  {
+    id: 402,
+    cost: 0,
+    STCost: 100,
+    requirement: [() =>  VUnlocks.newStudies.isUnlocked],
+    reqType: TS_REQUIREMENT_TYPE.ALL,
+    requiresST: [() => true],
+    description: () => `Tickseed Power based on TSs`,
+    effect: () => V.isRunningExtreme ? Math.max(V.spaceTheorems ** 0.92 / 18, 1) : Math.max(V.spaceTheorems ** 0.85 / 3, 1),
+    formatEffect: value => formatPow(value, 2, 1),
+    unlocked: () =>  VUnlocks.newStudies.isUnlocked
+  },
+  {
+    id: 403,
+    cost: 0,
+    STCost: 100,
+    requirement: [() =>  VUnlocks.newStudies.isUnlocked],
+    reqType: TS_REQUIREMENT_TYPE.ALL,
+    requiresST: [() => true],
+    description: () => `8th ID purchase cap is higher based on STs`,
+    effect: () => (V.spaceTheorems ** 0.2),
+    formatEffect: value => formatPow(value, 2, 1),
+    unlocked: () => VUnlocks.newStudies.isUnlocked
+  },
 ];

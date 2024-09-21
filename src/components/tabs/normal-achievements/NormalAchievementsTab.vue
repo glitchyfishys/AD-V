@@ -91,7 +91,7 @@ export default {
       const unlockedRows = [];
       const lockedRows = [];
       for (let i = 0; i < this.rows.length; i++) {
-        const targetArray = this.rows[i].every(a => a.isUnlocked) ? unlockedRows : lockedRows;
+        const targetArray = this.rows[i].every(a => a ? a.isUnlocked : true) ? unlockedRows : lockedRows;
         targetArray.push(i);
       }
       const renderedLockedRows = lockedRows.filter(row => this.renderedRowIndices.includes(row));
@@ -120,6 +120,7 @@ export default {
       return this.renderedRowIndices.includes(row);
     },
     isObscured(row) {
+      if(GlitchSpeedUpgrade(4).isBought) return row >= 21;
       if(this.isDoomed) return row >= 18;
       if(PlayerProgress.realityUnlocked()) return row >= 17;
       if(PlayerProgress.eternityUnlocked()) return row >= 13;

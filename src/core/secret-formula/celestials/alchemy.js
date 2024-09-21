@@ -325,7 +325,11 @@ export const alchemyResources = {
     name: "Uncountability",
     symbol: "Θ",
     isBaseResource: false,
-    effect: amount => 160 * Math.sqrt(amount / 25000) * GlitchRealityUpgrades.all[2].effectOrDefault(1),
+    effect: amount => {
+      let eff = 160 * Math.sqrt(amount / 25000) * GlitchRealityUpgrades.all[2].effectOrDefault(1)
+      if(amount > 1e5) eff *= (amount / 1e5) * (amount ** 0.7);
+      return eff;
+    },
     tier: 4,
     uiOrder: 3,
     unlockedAt: 19,
@@ -532,8 +536,8 @@ export const alchemyResources = {
     tier: 6,
     uiOrder: 1,
     unlockedAt: 45,
-    description: "create a glitched Glyph (NYI)",
-    formatEffect: value => `unknown ${formatInt(value)} glitched Glyph (NYI)`,
+    description: "You can create a Glitch Glyph (unlocked later)",
+    formatEffect: value => `Create a ${formatInt(value)} level Glitch Glyph`,
     reagents: [
       {
         resource: ALCHEMY_RESOURCE.POWER,

@@ -97,8 +97,28 @@ export const vQuotes = {
       "Destroyer, he wants me to be nice to you...",
       "You ruined all of my Achievements",
       "So... for each time you complete my Revengeance Achievement",
-      "I'm getting Glitch to Dilate your Dimensions",
+      "I'm getting Glitch to Dilate your Dimensions and Tickspeed",
       "I will not let YOU be better than me",
+    ],
+  },
+  extremeFinished: {
+    id: 12,
+    requirement: () => V.spaceTheorems >= 230,
+    lines: [
+      {text: "Y-Y-You finished", tremble: true},
+      {text: "oh no", tremble: true},
+      {text: "S-S-So... Glitch isn't able to stop you", tremble: true},
+      {text: "Not even With y-your Dimensions and Tickspeed being Dilated", tremble: true},
+      "I was never able to beat you...",
+      "Please at least give me back my Achevments before you go...",
+      {text: "Please give V back his Achievements, I don't want to ask again", name: "Glitch", background: [["glitch", 0]]},
+      {text: "You all ready made him sad the first time", name: "Glitch", background: [["glitch", 0]]},
+    ],
+  },
+  thankYou: {
+    id: 13,
+    lines: [
+      "Thank you Destroyer, please don't complete them again",
     ],
   },
 };

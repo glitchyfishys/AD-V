@@ -247,11 +247,11 @@ window.GLYPH_MIME_TYPE = "text/x-ivark-glyph";
 window.GlyphRarities = [
    {
     minStrength: 3.6,
-    name: "Antaloni",
-    darkColor: "#170275",
-    lightColor: "#6346e8",
-    darkHighContrast: "#2700db",
-    lightHighContrast: "#8a70ff"
+    name: "Overwhelming",
+    darkColor: "#c70295",
+    lightColor: "#c70295",
+    darkHighContrast: "#ea70ff",
+    lightHighContrast: "#ea70ff"
   }, {
     minStrength: 3.5,
     name: "Celestial",
@@ -357,7 +357,7 @@ window.GLYPH_SYMBOLS = {
   reality: "Ϟ",
   cursed: "⸸",
   companion: "♥",
-  glitch: "G"
+  glitch: "ὣ"
 };
 
 window.CANCER_GLYPH_SYMBOLS = {
@@ -370,7 +370,7 @@ window.CANCER_GLYPH_SYMBOLS = {
   reality: "⛧",
   cursed: "☠",
   companion: "³",
-  glitch: "GG"
+  glitch: "$"
 };
 
 window.ALTERATION_TYPE = {

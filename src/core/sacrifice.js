@@ -70,21 +70,21 @@ export class Sacrifice {
   }
 
   static get nextBoost() {
-    const nd1Amount = AntimatterDimension(1).amount;
-    if (nd1Amount.eq(0)) return DC.D1;
+    const ad1Amount = AntimatterDimension(1).amount;
+    if (ad1Amount.eq(0)) return DC.D1;
     const sacrificed = player.sacrificed.clampMin(1);
     let prePowerSacrificeMult;
     // Pre-reality update C8 works really weirdly - every sacrifice, the current sacrifice multiplier gets applied to
-    // ND8, then sacrificed amount is updated, and then the updated sacrifice multiplier then gets applied to a
-    // different variable that is only applied during C8. However since sacrifice only depends on sacrificed ND1, this
+    // AD8, then sacrificed amount is updated, and then the updated sacrifice multiplier then gets applied to a
+    // different variable that is only applied during C8. However since sacrifice only depends on sacrificed AD1, this
     // can actually be done in a single calculation in order to handle C8 in a less hacky way.
     if (NormalChallenge(8).isRunning) {
-      prePowerSacrificeMult = nd1Amount.pow(0.05).dividedBy(sacrificed.pow(0.04)).clampMin(1)
-        .times(nd1Amount.pow(0.05).dividedBy(sacrificed.plus(nd1Amount).pow(0.04)));
+      prePowerSacrificeMult = ad1Amount.pow(0.05).dividedBy(sacrificed.pow(0.04)).clampMin(1)
+        .times(ad1Amount.pow(0.05).dividedBy(sacrificed.plus(ad1Amount).pow(0.04)));
     } else if (InfinityChallenge(2).isCompleted) {
-      prePowerSacrificeMult = nd1Amount.dividedBy(sacrificed);
+      prePowerSacrificeMult = ad1Amount.dividedBy(sacrificed);
     } else {
-      prePowerSacrificeMult = new Decimal((nd1Amount.log10() / 10) / Math.max(sacrificed.log10() / 10, 1));
+      prePowerSacrificeMult = new Decimal((ad1Amount.log10() / 10) / Math.max(sacrificed.log10() / 10, 1));
     }
 
     let postPowerSacrificeMult = prePowerSacrificeMult.clampMin(1).pow(this.sacrificeExponent);

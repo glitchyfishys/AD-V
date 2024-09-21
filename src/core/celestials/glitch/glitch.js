@@ -48,7 +48,7 @@ export const Glitch = {
       return effect;
   },
 
-  get totalaugmentsactive(){
+  get totalAugmentsActive(){
     return activeAugments().length;
   },
   
@@ -167,7 +167,9 @@ export const Glitch = {
 
   get chaosCoresBoost(){
     if(Currency.chaosCores.eq(0)) return 1;
-     return Math.max(Currency.chaosCores.value.log10() ** 0.25, 1);
+    let eff = Math.max( Currency.chaosCores.value.pow(0.1).mul(Currency.chaosCores.value.log10()).toNumber() ** 0.25, 1);
+    if(eff > 1e15) eff = eff / ((eff / 1e15) ** 0.9)
+    return Math.min(eff,1e50);
   },
 
   riftToCore(){

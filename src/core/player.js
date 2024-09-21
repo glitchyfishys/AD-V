@@ -35,7 +35,7 @@ window.player = {
   },
   buyUntil10: true,
   sacrificed: DC.D0,
-  achievementBits: Array.repeat(0, 17),
+  achievementBits: Array.repeat(0, 18),
   secretAchievementBits: Array.repeat(0, 5),
   infinityUpgrades: new Set(),
   infinityRebuyables: [0, 0, 0],
@@ -641,7 +641,7 @@ window.player = {
           memoryUpgrades: 0,
           chunkUpgrades: 0
         },
-        glitchyfishys: {
+        glitchyfishys: {// i don't want to change this to glitch
           level: 1,
           memories: 0,
           memoryChunks: 0,
@@ -982,10 +982,6 @@ window.player = {
     },
   },
   glitch: {
-    entropy: {
-      entropy: 0,
-      upgradebits: 0
-    },
     preinfinity: {
       upgradebits: 0
     },
@@ -996,9 +992,6 @@ window.player = {
       upgradebits: 0
     },
     reality:{
-      upgradebits: 0
-    },
-    pelle: {
       upgradebits: 0
     }
   }

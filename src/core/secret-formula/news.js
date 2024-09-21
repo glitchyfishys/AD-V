@@ -3188,7 +3188,7 @@ export const news = [
       it can save you money in the long run - if you are forced to switch realities due to a celestial decision you
       can gain a portion of the tax you paid back from the IARS as a tax deduction, as well as make a deduction to
       pay for the arbiters who represent you. Of course, any [PLAYER REFERENCE NOT FOUND] worth their RM knows that
-      the real way to hide illegal profits of crime is  in personalised pocket dimensions, hyperspliced waveform
+      the real way to hide illegal profits of crime is in personalised pocket dimensions, hyperspliced waveform
       banks and nanoshells, which requires extensive R&D to implement. As such, reporting illegal AM gain is only
       recommended if you're too rich to hide your gains, but too poor to hide your gains.`,
     get unlocked() { return PlayerProgress.realityUnlocked(); }

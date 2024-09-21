@@ -255,6 +255,7 @@ export const GameStorage = {
     this.lastSaveTime = Date.now();
     GameIntervals.save.restart();
     if (manual && ++this.saved > 99) SecretAchievement(12).unlock();
+    if (manual && ++this.saved > 4999) SecretAchievement(48).unlock();
     const root = {
       current: this.currentSlot,
       saves: this.saves

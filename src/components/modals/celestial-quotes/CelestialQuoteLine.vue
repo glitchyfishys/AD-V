@@ -41,7 +41,8 @@ export default {
       message: "",
       celestialSymbols: [],
       celestials: [],
-      celestialName: ""
+      celestialName: "",
+      tremble: false
     };
   },
   computed: {
@@ -74,6 +75,21 @@ export default {
       this.message = line.line;
       this.celestials = line.celestials;
       this.celestialName = line.celestialName;
+      this.tremble = line.tremble;
+    },
+    trembling(){
+      if(!this.tremble) return {};
+
+      const rand1 = (Math.random() - 0.5) *2;
+      const rand2 = (Math.random() - 0.5) *2;
+
+      return {
+        left: `calc(50% + ${5 * rand1}px)`,
+        top: `${5 * rand2}px`,
+        transitionDuration: player.options.updateRate + "ms",
+        transform: "translateX(-50%)",
+        position: "absolute"
+      };
     }
   },
 };
@@ -97,7 +113,7 @@ export default {
       @click="$emit('progress-in', 'left')"
     />
 
-    <span class="l-modal-celestial-quote__text">
+    <span class="l-modal-celestial-quote__text" :style="trembling()">
       {{ message }}
     </span>
 
@@ -149,6 +165,7 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100%;
+  width: 75%;
   justify-content: center;
 }
 

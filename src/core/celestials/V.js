@@ -83,13 +83,13 @@ class VRunUnlockState extends GameMechanicState {
   tryComplete() {
     const playerData = player.celestials.v;
     const value = this.config.currentValue();
-    if (this.config.condition() && Decimal.gte(value, playerData.runRecords[this.id])) {
+    if (this.config.condition(this.conditionValue) && Decimal.gte(value, playerData.runRecords[this.id])) {
       playerData.runRecords[this.id] = value;
       playerData.runGlyphs[this.id] = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
     }
 
     while (this.completions < this.config.values.length &&
-    Decimal.gte(playerData.runRecords[this.id], this.conditionValue)) {
+    Decimal.gte(playerData.runRecords[this.id], this.conditionValue) && this.config.condition(this.conditionValue)) {
       if (!V.isHard && this.config.isHard) continue;
       if (!V.isExtreme && this.config.isExtreme) continue;
       this.completions++;
@@ -244,10 +244,10 @@ export const V = {
     return this.spaceTheorems >= 110;
   },
   get rageDimPower() {
-    return Decimal.pow(1e-3, player.celestials.v.runUnlocks[10]);
+    return Decimal.pow(1e-3, VRunUnlock(10).completions);
   },
   get rageTickPower() {
-    return Decimal.pow(1e-3, player.celestials.v.runUnlocks[10]);
+    return Decimal.pow(1e-3, VRunUnlock(10).completions);
   },
   nextNormalReductionCost() {
     return 1000;

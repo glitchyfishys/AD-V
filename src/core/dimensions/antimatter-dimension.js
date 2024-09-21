@@ -13,7 +13,7 @@ export function antimatterDimensionCommonMultiplier() {
   multiplier = multiplier.times(ShopPurchase.allDimPurchases.currentMult);
 
   if (!EternityChallenge(9).isRunning) {
-    multiplier = multiplier.times(Currency.infinityPower.value.pow(InfinityDimensions.powerConversionRate).clamp(1, "1e2E25"));
+    multiplier = multiplier.times(Currency.infinityPower.value.pow(InfinityDimensions.powerConversionRate).clamp(1, "1e1E300"));
   }
   multiplier = multiplier.timesEffectsOf(
     BreakInfinityUpgrade.totalAMMult,
@@ -60,15 +60,22 @@ export function getDimensionFinalMultiplierUncached(tier) {
   if (tier < 1 || tier > 8) throw new Error(`Invalid Antimatter Dimension tier ${tier}`);
   if (NormalChallenge(10).isRunning && tier > 6) return DC.D1;
   if (EternityChallenge(11).isRunning) {
-    return Currency.infinityPower.value.pow(
+    let multiplier = Currency.infinityPower.value.pow(
       InfinityDimensions.powerConversionRate
-    ).max(1).times(DimBoost.multiplierToNDTier(tier));
+    ).max(1).times(DimBoost.multiplierToADTier(tier));
+
+    if (V.isRunningExtreme) {
+      multiplier = multiplier.pow(0.001);
+    }
+    
+    multiplier = multiplier.pow(V.rageDimPower);
+    return multiplier;
   }
 
   let multiplier = DC.D1;
 
-  multiplier = applyNDMultipliers(multiplier, tier);
-  multiplier = applyNDPowers(multiplier, tier);
+  multiplier = applyADMultipliers(multiplier, tier);
+  multiplier = applyADPowers(multiplier, tier);
 
   const glyphDilationPowMultiplier = getAdjustedGlyphEffect("dilationpow");
   
@@ -77,7 +84,7 @@ export function getDimensionFinalMultiplierUncached(tier) {
   } else if (Enslaved.isRunning) {
     multiplier = dilatedValueOf(multiplier);
   }
-  multiplier = multiplier.timesEffectOf(DilationUpgrade.ndMultDT);
+  multiplier = multiplier.timesEffectOf(DilationUpgrade.adMultDT);
 
   if (Effarig.isRunning) {
     multiplier = Effarig.multiplier(multiplier);
@@ -117,11 +124,12 @@ export function getDimensionFinalMultiplierUncached(tier) {
   }
 
   if(multiplier.gt("1e1E26")) multiplier = multiplier.pow( 1 / Math.sqrt(multiplier.log10() / 1e26) );
+  if(multiplier.gt("1e1E30")) multiplier = multiplier.pow( 1 / ((multiplier.log10() / 1e30) ** 0.85) );
   
-  return multiplier.min("1e1E30");
+  return multiplier;
 }
 
-function applyNDMultipliers(mult, tier) {
+function applyADMultipliers(mult, tier) {
   let multiplier = mult.times(GameCache.antimatterDimensionCommonMultiplier.value);
 
   let buy10Value;
@@ -132,7 +140,7 @@ function applyNDMultipliers(mult, tier) {
   }
 
   multiplier = multiplier.times(Decimal.pow(AntimatterDimensions.buyTenMultiplier, buy10Value));
-  multiplier = multiplier.times(DimBoost.multiplierToNDTier(tier));
+  multiplier = multiplier.times(DimBoost.multiplierToADTier(tier));
 
   let infinitiedMult = DC.D1.timesEffectsOf(
     AntimatterDimension(tier).infinityUpgrade,
@@ -177,7 +185,7 @@ function applyNDMultipliers(mult, tier) {
   return multiplier;
 }
 
-function applyNDPowers(mult, tier) {
+function applyADPowers(mult, tier) {
   let multiplier = mult;
   const glyphPowMultiplier = getAdjustedGlyphEffect("powerpow");
   const glyphEffarigPowMultiplier = getAdjustedGlyphEffect("effarigdimensions");
@@ -203,6 +211,10 @@ function applyNDPowers(mult, tier) {
     );
 
   multiplier = multiplier.pow(getAdjustedGlyphEffect("curseddimensions"));
+
+  if(isInCelestialReality()) multiplier = multiplier.pow(getAdjustedGlyphEffect("glitchADCelPow"));
+
+  multiplier = multiplier.pow(TimeStudy(401).effectOrDefault(1));
 
   multiplier = multiplier.pow(VUnlocks.adPow.effectOrDefault(1));
 
@@ -670,9 +682,9 @@ class AntimatterDimensionState extends DimensionState {
   }
 
   get isAvailableForPurchase() {
-    if (!EternityMilestone.unlockAllND.isReached && this.tier > DimBoost.totalBoosts + 4) return false;
+    if (!EternityMilestone.unlockAllAD.isReached && this.tier > DimBoost.totalBoosts + 4) return false;
     const hasPrevTier = this.tier === 1 || AntimatterDimension(this.tier - 1).totalAmount.gt(0);
-    if (!EternityMilestone.unlockAllND.isReached && !hasPrevTier) return false;
+    if (!EternityMilestone.unlockAllAD.isReached && !hasPrevTier) return false;
     return this.tier < 7 || !NormalChallenge(10).isRunning;
   }
 

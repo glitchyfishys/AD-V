@@ -15,6 +15,7 @@ export default {
   computed: {
     
     possessiveForm() {
+    if(player.options.themeModern == "S15") return `Teresa's`;
     if(player.options.themeModern == "S13") return `V's`;
     if(player.options.themeModern == "S14") return `Ra's`;
     return this.celestial == "glitch" ? "Glitch" : Celestials[this.celestial].possessiveName;
@@ -28,6 +29,7 @@ export default {
       this.isShown = Celestials[this.celestial].quotes.all.some(x => x.isUnlocked);
     },
     sCelestial(){
+      if(player.options.themeModern == "S15") return `teresa`;
       if(player.options.themeModern == "S14") return `ra`;
       if(player.options.themeModern == "S13") return `v`;
       return this.celestial;

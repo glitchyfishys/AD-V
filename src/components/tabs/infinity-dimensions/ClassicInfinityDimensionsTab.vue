@@ -29,6 +29,7 @@ export default {
       extraTesseracts: 0,
       creditsClosed: false,
       showLockedDimCostNote: true,
+      ID8cap: 1e12,
     };
   },
   computed: {
@@ -64,6 +65,7 @@ export default {
       this.boughtTesseracts = Tesseracts.bought;
       this.extraTesseracts = Tesseracts.extra;
       this.creditsClosed = GameEnd.creditsEverClosed;
+      this.ID8cap = 1e12 ** TimeStudy(403).effectOrDefault(1);
     },
     maxAll() {
       InfinityDimensions.buyMax();
@@ -141,9 +143,11 @@ export default {
     <div v-else>
       All Infinity Dimensions except for the 8th are limited to a maximum of {{ format(totalDimCap, 2) }}
       purchases each.<br>
-      But 8th Dimensions do not give a multiplier past {{ format(1e12, 2) }} times brought
+      But 8th Dimensions do not give a multiplier past {{ format(ID8cap, 2) }} times brought
     </div>
-    Any Infinity Power above {{ format("1e2E25") }} does not have any effect.
+    <div v-if="powerPerSecond.gte('1e1E25')">
+      Infinity Power is softcaped above {{ format("1e1E25") }}.
+    </div>
     <div>You are getting {{ format(powerPerSecond, 2, 0) }} {{ incomeType }} per second.</div>
     <b
       v-if="isEC8Running"

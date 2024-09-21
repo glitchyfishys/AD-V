@@ -97,6 +97,7 @@ export const secretAchievements = [
   },
   {
     id: 28,
+    displayId: 69,
     name: "Nice.",
     description: "Don't act like you don't know what you did."
   },
@@ -195,44 +196,42 @@ export const secretAchievements = [
   },
   {
     id: 51,
-    name: "Teresa",
-    get description() { return `Get a ${format("1e1000")} Sacrifce multiplier from Tersea's Reality within Glitch's Reality`; },
-    checkRequirement: () => Teresa.rewardMultiplier(player.antimatter).gte("1e1000"),
-    checkEvent: GAME_EVENT.REALITY_RESET_AFTER
+    name: "I hate this Theme",
+    description: "Import one of the Celestial Themes",
   },
   {
     id: 52,
-    name: "Effarig",
+    name: "what",
     description: "???"
   },
   {
     id: 53,
-    name: "nameless",
+    name: "do",
     description: "???"
   },
   {
     id: 54,
-    name: "V",
+    name: "i",
     description: "???"
   },
   {
     id: 55,
-    name: "Ra",
+    name: "name",
     description: "???"
   },
   {
     id: 56,
-    name: "Laitela",
+    name: "this",
     description: "???"
   },
   {
     id: 57,
-    name: "Pelle",
+    name: "one",
     description: "???"
   },
   {
     id: 58,
-    name: "glitch",
-    description: "???"
+    name: "I am a Developer",
+    get description() { return `Save the game ${formatInt(50000)} times without refreshing.`; }
   },
 ];

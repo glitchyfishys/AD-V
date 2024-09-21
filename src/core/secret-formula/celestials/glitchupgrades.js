@@ -155,7 +155,7 @@ export const glitchRealityUpgrades = [
     formatEffect: value => "^1.5, ^2.5, ^1.25"
   },
   {
-    name: () => (GlitchRealityUpgrades.all[12].isAvailableForPurchase ? "The Darkness Arizes" : "Locked") ,
+    name: () => (GlitchRealityUpgrades.all[12].isAvailableForPurchase ? "The Darkness Arizes" : "Unknown") ,
     id: 13,
     cost: 1e23,
     requirement: () => `Reach ${format("1e1E9")} Antimatter with all but Nameless One's Reality`,
@@ -167,19 +167,19 @@ export const glitchRealityUpgrades = [
     formatEffect: value => "^2, +0.5, ^3"
   },
   {
-    name: () => (GlitchRealityUpgrades.all[13].isAvailableForPurchase ? "The Darkness Overcomes" : "Locked"),
+    name: () => (GlitchRealityUpgrades.all[13].isAvailableForPurchase ? "The Darkness Overcomes" : "Unknown"),
     id: 14,
     cost: 1e145,
     requirement: () => `Reach ${format("1e2E15")} Antimatter with Effarig Reality, Nameless one's Dim limit and low tachyon gain, V's Reality and Lai'tela's Reality (also requires ${GlitchRealityUpgrades.all[12].name})`,
     hasFailed: () => !GlitchRealityUpgrades.all[12].isBought || Glitch.augmentEffectBits != 314,
     checkRequirement: () =>  GlitchRealityUpgrades.all[12].isBought && Currency.antimatter.gte("1e2E15") && Glitch.isRunning && Glitch.augmentEffectBits == 314,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    description: "Riftoverdrive effect is doubled, glyphs softcap 3 (at 100k)is disabled",
+    description: "Riftoverdrive effect is doubled, glyphs softcap 3 is at 1M",
     effect: () =>  2,
-    formatEffect: value => "x2, Glyph softcap 3 is disabled"
+    formatEffect: value => "x2, Glyph softcap 3 is now at 1M"
   },
   {
-    name: () => (GlitchRealityUpgrades.all[14].isAvailableForPurchase ? "The Darkness Is Coming" : "Locked"),
+    name: () => (GlitchRealityUpgrades.all[14].isAvailableForPurchase ? "The Darkness Is Coming" : "Unknown"),
     id: 15,
     cost: new Decimal("1e400"),
     requirement: () => `Reach ${format("1e500E15")} Antimatter (also requires ${GlitchRealityUpgrades.all[13].name})`,
@@ -191,7 +191,7 @@ export const glitchRealityUpgrades = [
     formatEffect: value => "-2"
   },
   {
-    name: () => (GlitchRealityUpgrades.all[15].isAvailableForPurchase ? "The Darkness Has Arrived" : "Locked"),
+    name: () => (GlitchRealityUpgrades.all[15].isAvailableForPurchase ? "The Darkness Has Arrived" : "Unknown"),
     id: 16,
     cost: new Decimal("4.44e444"),
     requirement: () => `Reach ${format("1.8e308")} Projected RM all effects excluding Ra's and Nameless One's Reality (also requires ${GlitchRealityUpgrades.all[14].name})`,

@@ -67,7 +67,7 @@ export default {
     <div>
       <p>
         You have gained
-        <span class="c-time-dim-description__accent">{{ format(totalUpgrades, 2, 2) }}</span> Tickspeed upgrades from
+        <span class="c-time-dim-description__accent">{{ format(totalUpgrades, 2, 0) }}</span> Tickspeed upgrades from
         <span class="c-time-dim-description__accent">{{ format(timeShards, 2, 1) }}</span> Time Shards.
       </p>
       <p>
@@ -79,7 +79,7 @@ export default {
     </div>
     <div>
       The amount each additional upgrade requires will start
-      increasing above {{ formatInt(tickspeedSoftcap) }} Tickspeed upgrades.
+      increasing above {{ format(tickspeedSoftcap, 2, 0) }} Tickspeed upgrades.
     </div>
     <div>
       You are getting {{ format(shardsPerSecond, 2, 0) }} {{ incomeType }} per second.

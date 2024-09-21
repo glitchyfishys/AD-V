@@ -111,6 +111,7 @@ export default {
   },
   methods: {
     update() {
+      if(!this.achievement) return;
       this.isDisabled = Pelle.disabledAchievements.includes(this.id) && Pelle.isDoomed;
       this.isUnlocked = this.achievement.isUnlocked && !this.isDisabled;
       this.isCancer = Theme.current().name === "S4" || player.secretUnlocks.cancerAchievements;
@@ -179,6 +180,7 @@ export default {
     :style="styleObject"
     @mouseenter="onMouseEnter"
     @mouseleave="onMouseLeave"
+    v-if="this.achievement"
   >
     <HintText
       :key="garbleKey"

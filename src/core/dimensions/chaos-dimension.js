@@ -17,6 +17,9 @@ export function getChaosDimensionFinalMultiplierUncached(tier) {
   let multiplier = DC.D1;
 
   multiplier = multiplier.mul(Decimal.pow(dimension.perPurchase, dimension.bought));
+  multiplier = multiplier.mul(GlyphSacrifice.glitch.effectOrDefault(1));
+
+  multiplier = applyCDPowers(multiplier, tier);
 
   if(multiplier.gt("1e1E15")) multiplier = multiplier.pow( 1 / Math.sqrt(multiplier.log10() / 1e15) );
   
@@ -31,6 +34,8 @@ function applyCDMultipliers(mult, tier) {
 
 function applyCDPowers(mult, tier) {
   let multiplier = mult;
+
+  multiplier = multiplier.pow(getAdjustedGlyphEffect("glitchChaosPow"));
 
   return multiplier;
 }

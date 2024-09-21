@@ -131,6 +131,12 @@ class InfinityDimensionState extends DimensionState {
     }
     let production = this.amount;
     if (EternityChallenge(11).isRunning) {
+
+      if (V.isRunningExtreme) {
+        production = production.pow(0.001);
+      }
+      
+      production = production.pow(V.rageDimPower);
       return production;
     }
     if (EternityChallenge(7).isRunning) {
@@ -148,7 +154,7 @@ class InfinityDimensionState extends DimensionState {
         tier === 4 ? TimeStudy(72) : null,
         tier === 1 ? EternityChallenge(2).reward : null
       );
-    const bought = tier === 8 ? Math.clampMax(this.baseAmount / 10, 1e12) : this.baseAmount / 10;
+    const bought = tier === 8 ? Math.clampMax(this.baseAmount / 10, 1e12 ** TimeStudy(403).effectOrDefault(1)) : this.baseAmount / 10;
     mult = mult.times(Decimal.pow(this.powerMultiplier, Math.floor(bought)));
 
 

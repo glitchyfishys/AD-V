@@ -221,7 +221,15 @@ class TimeDimensionState extends DimensionState {
   get multiplier() {
     const tier = this._tier;
 
-    if (EternityChallenge(11).isRunning) return DC.D1;
+    if (EternityChallenge(11).isRunning) {
+      let production = DC.D1;
+      if (V.isRunningExtreme) {
+        production = production.pow(0.001);
+      }
+      
+      production = production.pow(V.rageDimPower);
+      return production;
+    }
     let mult = GameCache.timeDimensionCommonMultiplier.value
       .timesEffectsOf(
         tier === 1 ? TimeStudy(11) : null,

@@ -17,6 +17,7 @@ export default {
       focusedResourceId: -1,
       reactionsAvailable: false,
       realityCreationVisible: false,
+      glitchCreationVisible: false,
       animationTimer: 0,
       alchemyCap: 0,
       capFactor: 0,
@@ -24,6 +25,7 @@ export default {
       allReactionsDisabled: false,
       // Used to force a re-render of reaction lines when reality glyphs are created
       realityAmount: 0,
+      glitchAmount: 0,
       alc: false,
     };
   },
@@ -65,12 +67,14 @@ export default {
     update() {
       this.reactionsAvailable = AlchemyResources.all.filter(res => !res.isBaseResource && res.isUnlocked).length !== 0;
       this.realityCreationVisible = Ra.pets.effarig.level >= 25;
+      this.glitchCreationVisible = VUnlocks.RMcap.isUnlocked;
       this.animationTimer += 35;
       this.alchemyCap = Ra.alchemyResourceCap;
       this.capFactor = 1 / GlyphSacrificeHandler.glyphRefinementEfficiency;
       this.createdRealityGlyph = player.reality.glyphs.createdRealityGlyph;
       this.allReactionsDisabled = this.reactions.every(reaction => !reaction.isActive);
       this.realityAmount = AlchemyResource.reality.amount;
+      this.glitchAmount = AlchemyResource.glitch.amount;
       this.alc = player.options.animations.background;
     },
     orbitSize(orbit) {
@@ -216,6 +220,13 @@ export default {
         onclick="Modal.realityGlyph.show()"
       >
         View Reality Glyph creation
+      </PrimaryButton>
+      <PrimaryButton
+        v-if="glitchCreationVisible"
+        :class="realityGlyphCreationClass"
+        onclick="Modal.glitchGlyph.show()"
+      >
+        View Glitch Glyph creation
       </PrimaryButton>
     </div>
     <AlchemyResourceInfo

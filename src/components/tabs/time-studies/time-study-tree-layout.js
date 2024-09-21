@@ -149,6 +149,13 @@ export class TimeStudyTreeLayout {
       normalRow(          TimeStudy.timeDimension(7), TimeStudy.timeDimension(8)      ),
       normalRow(                          TimeStudy.reality                           )
     );
+
+    if (VUnlocks.newStudies.isUnlocked) {
+      this.rows.push(
+        normalRow(                     TS(401), TS(402), TS(403),                     )
+      );
+    }
+
     /* eslint-enable no-multi-spaces, space-in-parens, func-call-spacing */
 
     /**

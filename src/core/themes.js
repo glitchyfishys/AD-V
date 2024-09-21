@@ -29,8 +29,15 @@ export const Theme = function Theme(name, config) {
   this.displayName = function() {
     if (!this.isSecret || !this.isAvailable()) return name;
     // Secret themes are stored as "S9Whatever", so we need to strip the SN part
+
+    if(name === "S15") return "Teresa";
+    if(name === "S16") return "Effarig";
+    if(name === "S16") return "The Nameless Ones'";
     if(name === "S13") return "V";
     if(name === "S14") return "Ra";
+    if(name === "S17") return "Lai'tela";
+    if(name === "S18") return "Pelle";
+
     return player.secretUnlocks.themes.find(theme => theme.match(/^S[0-9]*/u)[0] === name).replace(/^S[0-9]*/u, "");
   };
 
@@ -94,8 +101,10 @@ Theme.secretThemeIndex = function(name) {
     "1248689171faaa0abb68279199a8d2eb232dba10d2dacb79a705f680b6862c0e",
     "c178c4ab2b9825cc543e7135b3cbe0782e97124873c1ebc073ca510aa315a258",
     "c23af492b2c87bdb92800e1502b380cba44a93db0704ab53ad6e11c0b1d78003",
+    "27093b35f2f86c1515dce76550a10b130059413d354364f1ef53772ab768d66e",// Add Effarig, Nameless, Lai'tela, Pelle
   ];
   const sha = sha512_256(name.toUpperCase());
+  console.log(sha)
   return secretThemes.indexOf(sha);
 };
 
@@ -118,6 +127,15 @@ Theme.tryUnlock = function(name) {
   player.secretUnlocks.themes.add(fullName);
   Theme.set(prefix);
   SecretAchievement(25).unlock();
+
+  if(name === "S13") SecretAchievement(41).unlock();
+  if(name === "S14") SecretAchievement(41).unlock();
+  if(name === "S15") SecretAchievement(41).unlock();
+  if(name === "S16") SecretAchievement(41).unlock();
+  if(name === "S17") SecretAchievement(41).unlock();
+  if(name === "S18") SecretAchievement(41).unlock();
+  if(name === "S19") SecretAchievement(41).unlock();
+
   if (!isAlreadyUnlocked) {
     GameUI.notify.success(`You have unlocked the ${Theme.celName(name).capitalize()} theme!`, 5000);
     if (Theme.current().isAnimated) {
@@ -131,8 +149,14 @@ Theme.tryUnlock = function(name) {
 Theme.celName = name => {
   const i = Theme.secretThemeIndex(name);
 
+  if(i === 14) return "Teresa";
+  if(i === 15) return "Effarig";
+  if(i === 16) return "The Nameless Ones'";
   if(i === 12) return "V";
   if(i === 13) return "Ra";
+  if(i === 17) return "Lai'tela";
+  if(i === 18) return "Pelle";
+
   return name;
 
 }
@@ -171,8 +195,13 @@ export const Themes = {
     Theme.create("S10",             { dark: true,  metro: true, animated: true, secret: true, }),
     Theme.create("S11",             { dark: true,               animated: true, secret: true, }),
     Theme.create("S12",             {                                           secret: true, }),
-    Theme.create("S13",             { dark: true,  metro: true,                 secret: true, }),
-    Theme.create("S14",             { dark: true,  metro: true,                 secret: true, }),
+    Theme.create("S13",             { dark: true,                               secret: true, }),
+    Theme.create("S14",             { dark: true,                               secret: true, }),
+    Theme.create("S15",             { dark: true,                               secret: true, }),
+    Theme.create("S16",             { dark: true,                               secret: true, }),
+    Theme.create("S17",             { dark: true,                               secret: true, }),
+    Theme.create("S18",             { dark: true,                               secret: true, }),
+    Theme.create("S19",             { dark: true,                               secret: true, }),
     /* eslint-enable no-multi-spaces */
   ],
 

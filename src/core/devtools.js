@@ -15,12 +15,12 @@ dev.giveAllAchievements = function() {
   for (const achievement of allAchievements) achievement.unlock();
 };
 
-dev.completeUpYoGlitch = function() {
+dev.completeUpToGlitch = function() {
   player.celestials.teresa.unlockBits = 255;
   player.celestials.effarig.unlockBits = 255;
   player.celestials.enslaved.completed = true;
   player.celestials.enslaved.unlocks = [0,1];
-  player.celestials.v.unlockBits = 255;
+  player.celestials.v.unlockBits = 127;
   player.celestials.v.runUnlocks = [6,8,8,8,9,9,5,6,8,7];
   player.celestials.ra.unlockBits = (2**36)-1;
   player.celestials.ra.pets.teresa.level = 100;
@@ -66,8 +66,9 @@ dev.disableComformations = function() {
       player.options.confirmations.switchAutomatorMode = false;
       player.options.confirmations.respecIAP = false;
   };
+
 dev.completeECs = function() {
-  player.eternityChalls.eterc1=5;
+  player.eternityChalls.eterc1= Enslaved.isRunning ? 1000 : 5;
   player.eternityChalls.eterc2=5;
   player.eternityChalls.eterc3=5;
   player.eternityChalls.eterc4=5;

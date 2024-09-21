@@ -81,6 +81,9 @@ import UpgradeMechanicLockModal from "@/components/modals/UpgradeMechanicLockMod
 
 import S12GamesModal from "@/components/modals/secret-themes/S12GamesModal";
 
+import GlitchGlyphCreationModal from "@/components/modals/GlitchGlyphCreationModal";
+
+
 let nextModalID = 0;
 export class Modal {
   constructor(component, priority = 0, closeEvent) {
@@ -246,6 +249,7 @@ Modal.glyphUndo = new Modal(UndoGlyphModal, 1, GAME_EVENT.REALITY_RESET_AFTER);
 Modal.glyphReplace = new Modal(ReplaceGlyphModal, 1, GAME_EVENT.REALITY_RESET_AFTER);
 Modal.enslavedHints = new Modal(EnslavedHintsModal);
 Modal.realityGlyph = new Modal(RealityGlyphCreationModal);
+Modal.glitchGlyph = new Modal(GlitchGlyphCreationModal);// Glitch Glyph
 Modal.glyphSetSaveDelete = new Modal(GlyphSetSaveDeleteModal);
 Modal.uiChoice = new Modal(UiChoiceModal);
 Modal.h2p = new Modal(H2PModal);

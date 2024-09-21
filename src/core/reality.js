@@ -442,12 +442,12 @@ export function beginProcessReality(realityProps) {
     
     if(Perk.autoGlyph.canBeApplied){
     for (let i=0; i < player.reality.glyphs.inventory.length; i++){
-      if(!(player.reality.glyphs.inventory[i].type == "reality" || player.reality.glyphs.inventory[i].type == "cursed") ){
+      if(!(player.reality.glyphs.inventory[i].type == "reality" || player.reality.glyphs.inventory[i].type == "cursed" || player.reality.glyphs.inventory[i].type == "glitch") ){
         player.reality.glyphs.inventory[i].level = Math.max(gl, Math.min(player.reality.glyphs.inventory[i].level, Glyphs.levelCap) );
       }
     }
     for (let i=0; i < player.reality.glyphs.active.length; i++){
-      if(!(player.reality.glyphs.active[i].type == "reality" || player.reality.glyphs.active[i].type == "cursed") ){
+      if(!(player.reality.glyphs.active[i].type == "reality" || player.reality.glyphs.active[i].type == "cursed" || player.reality.glyphs.active[i].type == "glitch") ){
         player.reality.glyphs.active[i].level = Math.max(gl, Math.min(player.reality.glyphs.active[i].level, Glyphs.levelCap) );
       }
     }

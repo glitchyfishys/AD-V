@@ -68,7 +68,8 @@ GameDatabase.celestials.descriptions = [
       const vEffect = `All Dimension multipliers, Eternity points,Infinity Points,\
       Dilated Time gained, Tachyon Particles, Replicanti interval and Tickspeed \
       are Dilated
-      Chaos Cores, Rift Force, bonus Dimension Boosts and Exponential Glyph Alchemy are disabled.
+      Chaos Cores, Rift Force, bonus Dimension Boosts are disabled.
+      Exponential Glyph Alchemy is not disabled.
       `;
       return vEffect;
     },
@@ -77,7 +78,9 @@ GameDatabase.celestials.descriptions = [
       Dilated Time gained is ^0.2 and Tachyon Particles gained are square-rooted. 
       Replicanti interval is ^32.
       And Tickspeed is ^0.00025.
-      Chaos Cores, Rift Force, bonus Dimension Boosts, and Exponential Glyph Alchemy are disabled.
+      Chaos Cores, Rift Force, bonus Dimension Boosts are disabled.
+      Exponential Glyph Alchemy is not disabled.
+      Glitch upgrade augmented Infinity is disabled.
       `;
       return vEffect;
     }

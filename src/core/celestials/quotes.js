@@ -76,6 +76,7 @@ class QuoteLine {
   constructor(line, parent) {
     this._parent = parent;
     this._showCelestialName = line.showCelestialName ?? true;
+    this._trembling = line.tremble ?? false;
 
     this.name = line.name ?? undefined;
 
@@ -97,6 +98,7 @@ class QuoteLine {
   }
 
   sName(){
+    if(player.options.themeModern == "S15") return "Teresa";
     if(player.options.themeModern == "S14") return "Ra";
     if(player.options.themeModern == "S13") return "V";
     if(this.name != undefined) return this.name;
@@ -104,12 +106,14 @@ class QuoteLine {
   }
 
   sIcon(){
+    if(player.options.themeModern == "S15") return [[Celestials.teresa.symbol, 1]];
     if(player.options.themeModern == "S14") return [[Celestials.ra.symbol, 1]];
     if(player.options.themeModern == "S13") return [[Celestials.v.symbol, 1]];
     return typeof this._celestialArray === "function" ? this._celestialArray() : this._celestialArray;
   }
 
   sSingleIcon(){
+    if(player.options.themeModern == "S15") return [Celestials.teresa.symbol];
     if(player.options.themeModern == "S14") return [Celestials.ra.symbol];
     if(player.options.themeModern == "S13") return [Celestials.v.symbol];
     return this.celestials.map(c => Celestials[c[0]].symbol);
@@ -125,6 +129,10 @@ class QuoteLine {
 
   get showCelestialName() {
     return this._showCelestialName;
+  }
+
+  get tremble() {
+    return this._trembling;
   }
 
   get celestialName() {

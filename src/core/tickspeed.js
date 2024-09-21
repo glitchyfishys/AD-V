@@ -26,7 +26,7 @@ export function getTickSpeedMultiplier() {
   if (Ra.isRunning || Glitch.augmentEffectActive(7)) return DC.C1D1_1245.div(GlitchSpeedUpgrades.all[1].effectOrDefault(1));
   let galaxies = effectiveBaseGalaxies();
 
-  let CC = Math.max( Currency.chaosCores.value.pow(0.1).mul(Currency.chaosCores.value.log10()).toNumber() ** 0.25, 1);
+  let CC = Glitch.chaosCoresBoost;
   if(Pelle.isDoomed) CC = CC ** 0.1;
   if(V.isRunningExtreme) CC = 1;
   
@@ -132,7 +132,7 @@ export function resetTickspeed() {
 export const Tickspeed = {
 
   get isUnlocked() {
-    return AntimatterDimension(2).bought > 0 || EternityMilestone.unlockAllND.isReached ||
+    return AntimatterDimension(2).bought > 0 || EternityMilestone.unlockAllAD.isReached ||
       PlayerProgress.realityUnlocked();
   },
 
@@ -183,12 +183,14 @@ export const Tickspeed = {
       Achievement(83)
     ).times(getTickSpeedMultiplier().pow(this.totalUpgrades));
 
-    if(tickspeed.gt("1e1E20")) tickspeed = tickspeed.pow( 1 / ( (tickspeed.log10() / 1e20) ** 0.95) );
+    tickspeed = tickspeed.pow(TimeStudy(402).effectOrDefault(1));
+
     tickspeed = tickspeed.pow(V.rageTickPower);
-    
     if (V.isRunningExtreme) {
       tickspeed = tickspeed.pow(0.00025);
     }
+
+    if(tickspeed.gt("1e1E20")) tickspeed = tickspeed.pow( 1 / ( (tickspeed.log10() / 1e20) ** 0.95) );
     
     return tickspeed.min("1e1E300");
   },
@@ -254,6 +256,7 @@ export const FreeTickspeed = {
     if (Enslaved.has(ENSLAVED_UNLOCKS.FREE_TICKSPEED_SOFTCAP)) {
       softcap += 100000;
     }
+    softcap *= VUnlocks.TScap.effectOrDefault(DC.D1).toNumber();
     return softcap;
   },
 
@@ -293,7 +296,7 @@ export const FreeTickspeed = {
     );
     let counter = 0;
     // The bought formula is concave upwards. We start with an over-estimate; when using newton's method,
-    // this means that successive iterations are also over-etimates. Thus, we can just check for continued
+    // this means that successive iterations are also over-estimates. Thus, we can just check for continued
     // progress with the approximation < oldApproximation check. The counter is a fallback.
     do {
       oldApproximation = approximation;

@@ -1,4 +1,5 @@
 import { DC } from "../../constants";
+import { Currency } from "../../currency";
 
 // This is supposed to be in ./navigation.js but importing doesn't work for some stupid reason
 function emphasizeEnd(fraction) {
@@ -217,10 +218,10 @@ export const v = {
     {
       id: 10,
       name: "Revengeance",
-      description: value => `Reach ${format(Decimal.pow10(value), 2)} Antimatter in Glitch's Reality with V's Reality Enabled <br> 
+      description: value => `Reach ${format(Decimal.pow10(value), 2)} Antimatter in Glitch's Reality with V's Reality Enabled, you also need  ${110 + (VRunUnlock(10).completions == 3 ? 115 : 40 * VRunUnlock(10).completions)} ST<br> 
       <span style="color: var(--color-bad)">completing this will have dire consequences</span>`,
-      values: [1e40, 1e70, 1e130],
-      condition: () => V.isRunning && Glitch.isRunning && V.isExtreme,
+      values: [1e40, 1e42, 5e42, 6e41],
+      condition: value => V.isRunning && Glitch.isRunning && V.isExtreme && V.spaceTheorems >= 110 + (VRunUnlock(10).completions == 3 ? 115 : 40 * VRunUnlock(10).completions) && Currency.antimatter.value.log10() > value,
       currentValue: () => Currency.antimatter.value.log10(),
       formatRecord: x => format(Decimal.pow10(x), 2),
       shardReduction: tiers => 5 ** (tiers * 33),
@@ -232,9 +233,9 @@ export const v = {
     {
       id: 11,
       name: "Antimatter Outrage",
-      description: value => `Reach ${format(Decimal.pow10(value), 2)} Antimatter in V's Extreme Reality with more at lest one Revengeance Completion`,
-      values: [1.8e8, 3e10, 3.5e11, 9e15, 1.2e22, 6e32, 1e42],
-      condition: () => V.isRunningExtreme && V.isExtreme && player.celestials.v.runUnlocks[10] > 0,
+      description: value => `Reach ${format(Decimal.pow10(value), 2)} Antimatter in V's Extreme Reality with more at least one Revengeance Completion`,
+      values: [1.8e8, 3e9, 1e10, 36e13],
+      condition: () => V.isRunningExtreme && V.isExtreme && VRunUnlock(10).completions > 0,
       currentValue: () => Currency.antimatter.value.log10(),
       formatRecord: x => format(Decimal.pow10(x), 2),
       shardReduction: tiers => 25 ** (tiers * 33),
@@ -246,13 +247,55 @@ export const v = {
     {
       id: 12,
       name: "Infinity Enragement",
-      description: value => `Reach ${format(Decimal.pow10(value), 2)} Infinity Points in V's Extreme Reality with out unlocking Dilation more at lest one Revengeance Completion`,
-      values: [1e9, 1e10, 1e11, 9e15],
-      condition: () => V.isRunningExtreme && V.isExtreme && player.celestials.v.runUnlocks[10] > 0 && !PlayerProgress.dilationUnlocked(),
+      description: value => `Reach ${format(Decimal.pow10(value), 2)} Infinity Points in V's Extreme Reality without unlocking Dilation, with more at least one Revengeance Completion`,
+      values: [1e8, 1e9, 1e10, 1e12],
+      condition: () => V.isRunningExtreme && V.isExtreme && VRunUnlock(10).completions > 0 && !PlayerProgress.dilationUnlocked(),
       currentValue: () => Currency.infinityPoints.value.log10(),
       formatRecord: x => format(Decimal.pow10(x), 2),
       shardReduction: tiers => 25 ** (tiers * 33),
       maxShardReduction: goal => goal - (goal * 0.8),
+      perReductionStep: 25,
+      mode: V_REDUCTION_MODE.DIVISION,
+      isExtreme: true
+    },
+    {
+      id: 13,
+      name: "Eternity Dred",
+      description: value => `Reach ${format(Decimal.pow10(value), 2)} Eternity Points in V's Extreme Reality without buying Any TimeStudies, with more at least two Revengeance Completions`,
+      values: [3900, 6000, 10000, 38e4],
+      condition: () => V.isRunningExtreme && V.isExtreme && VRunUnlock(10).completions > 1 && player.requirementChecks.reality.maxStudies == 0,
+      currentValue: () => Currency.eternityPoints.value.log10(),
+      formatRecord: x => format(Decimal.pow10(x), 2),
+      shardReduction: tiers => 25 ** (tiers * 33),
+      maxShardReduction: goal => goal - (goal * 0.85),
+      perReductionStep: 25,
+      mode: V_REDUCTION_MODE.DIVISION,
+      isExtreme: true
+    },
+    {
+      id: 14,
+      name: "Dilated Escape",
+      description: value => `Reach ${format(Decimal.pow10(value), 2)} Antimatter in V's Extreme Reality in Dilation in EC11, with more at least two Revengeance Completions`,
+      values: [3e3, 7e3, 12e4, 31e4],
+      condition: () => V.isRunningExtreme && V.isExtreme && VRunUnlock(10).completions > 1 && player.dilation.active && EternityChallenge(11).isRunning,
+      currentValue: () => Currency.antimatter.value.log10(),
+      formatRecord: x => format(Decimal.pow10(x), 2),
+      shardReduction: tiers => 25 ** (tiers * 33),
+      maxShardReduction: goal => goal - (goal * 0.85),
+      perReductionStep: 25,
+      mode: V_REDUCTION_MODE.DIVISION,
+      isExtreme: true
+    },
+    {
+      id: 15,
+      name: "Glitch's Reinforcement",
+      description: value => `Reach ${format(Decimal.pow10(value), 2)} Antimatter in V's Extreme Reality with a ${format(1e10)} negitive black hole and ${VRunUnlock(10).completions > 1 ? 3 : 4} Cursed Glyphs, with three Revengeance Completions`,
+      values: [3e2, 9e3, 24e3, 46e3],
+      condition: () => V.isRunningExtreme && V.isExtreme && VRunUnlock(10).completions > 2 && -Decimal.log10(player.requirementChecks.reality.slowestBH) >= 10 && player.requirementChecks.reality.maxGlyphs < (VRunUnlock(10).completions > 1 ? -6 : -10),
+      currentValue: () => Currency.antimatter.value.log10(),
+      formatRecord: x => format(x, 2),
+      shardReduction: tiers => 250 * (tiers * 10),
+      maxShardReduction: goal => goal - (goal * 0.2),
       perReductionStep: 25,
       mode: V_REDUCTION_MODE.DIVISION,
       isExtreme: true
@@ -317,7 +360,7 @@ export const v = {
     gamespeedPower: {
       id: 7,
       reward() {
-        return `Gamespeed power based on total Space Theorems.`;
+        return `Gamespeed power based on total STs.`;
       },
       description: () => `Have ${formatInt(125)} V-Achievements`,
       effect: () => 1 + (V.spaceTheorems ** 0.8) / 120,
@@ -326,11 +369,43 @@ export const v = {
     },
     RMcap: {
       id: 8,
-      reward: () => `Increase the RM cap based on total Space Theorems.`,
+      reward: () => `Increase the RM cap based on total STs. you can make a Glitch glyph`,
       description: () => `Have ${formatInt(140)} V-Achievements`,
       effect: () => Math.max(V.spaceTheorems,1),
       format: x => formatPow(x, 2, 2),
       requirement: () => V.spaceTheorems >= 140,
+    },
+    TScap: {
+      id: 9,
+      reward: () => `Increase the Free Tickspeed softcap by STs.`,
+      description: () => `Have ${formatInt(150)} V-Achievements and ${format("1e1E40")} antimatter`,
+      effect: () => Decimal.max(Decimal.pow(2, V.spaceTheorems - 130),1),
+      format: x => formatX(x, 2, 2),
+      requirement: () => V.spaceTheorems >= 150 && Currency.antimatter.gte("1e1E40"),
+    },
+    glyphCap: {
+      id: 10,
+      reward: () => `Increase the Teresa Glyph Level cap to 15% per upgrade and triple Glyph Refinement`,
+      description: () => `Have ${formatInt(165)} V-Achievements`,
+      effect: 3,
+      format: x => formatX(x, 2, 2) + ", 15%",
+      requirement: () => V.spaceTheorems >= 165,
+    },
+    newStudies: {
+      id: 11,
+      reward: () => `New Triad Studies that scale based on TS`,
+      description: () => `Have ${formatInt(200)} V-Achievements`,
+      effect: 3,
+      format: x => "3 New Studies",
+      requirement: () => V.spaceTheorems >= 200,
+    },
+    prestigious: {
+      id: 12,
+      reward: () => `Unlock a new Layer (NYI)`,
+      description: () => `Have ${formatInt(230)} V-Achievements`,
+      effect: 3,
+      format: x => "New Prestige",
+      requirement: () => V.spaceTheorems >= 230,
     },
   }
 };

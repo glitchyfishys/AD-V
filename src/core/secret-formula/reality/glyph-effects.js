@@ -69,10 +69,10 @@ export const glyphEffects = {
     totalDesc: "Eternity gain ×{value}",
     genericDesc: "Eternity gain multiplier",
     shortDesc: "Eternities ×{value}",
-    effect: (level, strength) => Math.pow((strength + 3) * level, 0.9) *
-      Math.pow(3, GlyphAlteration.sacrificeBoost("time")),
+    effect: (level, strength) => Decimal.pow(new Decimal(strength + 3).mul(level), 0.9).mul(
+      Decimal.pow(3, GlyphAlteration.sacrificeBoost("time"))),
     formatEffect: x => format(x, 2, 2),
-    combine: GlyphCombiner.multiply,
+    combine: GlyphCombiner.multiplyDecimal,
     alteredColor: () => GlyphAlteration.getBoostColor("time"),
     alterationType: ALTERATION_TYPE.BOOST
   },
@@ -689,28 +689,32 @@ export const glyphEffects = {
     combine: GlyphCombiner.multiplyDecimal,
     enabledInDoomed: true,
   },
-  glitchshift: {
-    id: "glitchshift",
+  glitchChaosPow: {
+    id: "glitchChaosPow",
     bitmaskIndex: 0,
-    isGenerated: true,
+    isGenerated: false,
     glyphTypes: ["glitch"],
-    singleDesc: "my Dimension multipliers ^{value}",
-    shortDesc: "dim ^{value}",
-    genericDesc: "dim ^x",
-    effect: (level, strength) => (level * strength),
+    singleDesc: "Chaos Dimension multipliers ^{value}",
+    shortDesc: "C Dim ^{value}",
+    genericDesc: "C Dim ^x",
+    effect: (level, strength) => {
+      let eff = 1.015 + Math.pow(level / 70000, 0.6) * 0.4;
+      if(eff > 1.5) eff = eff / ((eff / 1.5) ** 0.4);
+      return eff;
+    },
     formatEffect: x => format(x, 2, 2),
     combine: GlyphCombiner.multiplyDecimal,
     enabledInDoomed: true,
   },
-  glitchglitchy: {
-    id: "glitchglitchy",
+  glitchADCelPow: {
+    id: "glitchADCelPow",
     bitmaskIndex: 1,
-    isGenerated: true,
+    isGenerated: false,
     glyphTypes: ["glitch"],
-    singleDesc: "galaxies ×{value}",
-    shortDesc: "galaxies ×{value}",
-    genericDesc: "galaxies ×x",
-    effect: (level, strength) => (level * strength),
+    singleDesc: "ADs ^{value} in Celestial Realitys",
+    shortDesc: "AD in Cel ^{value}",
+    genericDesc: "AD in Cel ^x",
+    effect: (level, strength) => 1.2 + Math.max(((level / 1e5) ** 0.8) ** ((level / 25) ** 0.05), 0),
     formatEffect: x => format(x, 2, 2),
     combine: GlyphCombiner.multiplyDecimal,
     enabledInDoomed: true,

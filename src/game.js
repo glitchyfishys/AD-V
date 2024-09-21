@@ -817,24 +817,24 @@ function laitelaRealityTick(realDiff) {
       ➜ ${formatX(Laitela.realityReward, 2, 2)}`;
       if (oldInfo.fastestCompletion.eq(3600) || oldInfo.fastestCompletion.eq(300) && oldInfo.difficultyTier > 0) {
         if (Time.thisRealityRealTime.totalSeconds.lt(30)) {
-          // First attempt - destabilising
+          // First attempt - destabilizing
           completionText += `<br>Best Completion Time: None ➜ Destabilized
           <br>Highest Active Dimension: ${formatInt(8 - oldInfo.difficultyTier)} ➜
           ${formatInt(8 - laitelaInfo.difficultyTier)}`;
         } else {
-          // First attempt - not destabilising
+          // First attempt - not destabilizing
           completionText += `<br>Best Completion Time: None ➜
             ${TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()}
             <br>Highest Active Dimension: ${formatInt(8 - laitelaInfo.difficultyTier)}`;
         }
       } else if (Time.thisRealityRealTime.totalSeconds.lt(30)) {
-        // Second+ attempt - destabilising
+        // Second+ attempt - destabilizing
         completionText += `<br>Best Completion Time: ${TimeSpan.fromSeconds(oldInfo.fastestCompletion).toStringShort()}
           ➜ Destabilized
           <br>Highest Active Dimension: ${formatInt(8 - oldInfo.difficultyTier)} ➜
           ${formatInt(8 - laitelaInfo.difficultyTier)}`;
       } else {
-        // Second+ attempt - not destabilising
+        // Second+ attempt - not destabilizing
         completionText += `<br>Best Completion Time: ${TimeSpan.fromSeconds(oldInfo.fastestCompletion).toStringShort()}
         ➜ ${TimeSpan.fromSeconds(laitelaInfo.fastestCompletion).toStringShort()}
         <br>Highest Active Dimension: ${formatInt(8 - oldInfo.difficultyTier)}`;
@@ -899,20 +899,19 @@ function updateTachyonGalaxies() {
   const tachyonGalaxyThreshold = 1000;
   const thresholdMult = getTachyonGalaxyMult();
 
-  let a = Math.max(player.dilation.baseTachyonGalaxies,
+  player.dilation.baseTachyonGalaxies = Math.max(player.dilation.baseTachyonGalaxies,
     1 + Math.floor(Decimal.log(Currency.dilatedTime.value.dividedBy(1000), thresholdMult)));
   player.dilation.nextThreshold = DC.E3.times(new Decimal(thresholdMult)
     .pow(player.dilation.baseTachyonGalaxies));
-
-  if(a > 500000) a = a / ((a/500000) ** 0.8);
-
-  player.dilation.baseTachyonGalaxies = a;
-
-  player.dilation.totalTachyonGalaxies =
+    
+    player.dilation.totalTachyonGalaxies =
     Math.min(player.dilation.baseTachyonGalaxies * tachyonGalaxyMult, tachyonGalaxyThreshold) +
     Math.max(player.dilation.baseTachyonGalaxies * tachyonGalaxyMult - tachyonGalaxyThreshold, 0) / tachyonGalaxyMult;
 
-  player.dilation.totalTachyonGalaxies *= DilationUpgrade.galaxyMultiplier.effectValue;
+    let a = player.dilation.baseTachyonGalaxies * DilationUpgrade.galaxyMultiplier.effectValue;
+    if(a > 500000) a = a / ((a/500000) ** 0.8);
+
+  player.dilation.totalTachyonGalaxies = a;
 }
 
 export function getTTPerSecond() {

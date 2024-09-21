@@ -24,17 +24,6 @@ class AchievementState extends GameMechanicState {
     return this._column;
   }
   
-  get isPreInfinity() {
-    return this.row < 3;
-  }
-  
-  get isPreBreakInfinity() {
-    return this.row < 8;
-  }
-  
-  get isPreEternity() {
-    return this.row < 10;
-  }
   
   get isPreReality() {
     return this.row < 14;
@@ -86,7 +75,7 @@ class AchievementState extends GameMechanicState {
       GameUI.notify.success(`Achievement: ${this.name}`);
     }
     if (player.speedrun.isActive && !player.speedrun.achievementTimes[this.id]) {
-      // This stores a lot of data in the savefile and seems particularly suceptible to floating-point rounding issues
+      // This stores a lot of data in the savefile and seems particularly susceptible to floating-point rounding issues
       // for some reason, so we floor to get rid of fractions of milliseconds and reduce what filesize impact we can
       player.speedrun.achievementTimes[this.id] = Math.floor(player.records.realTimePlayed);
     }
@@ -177,7 +166,7 @@ export const Achievements = {
 
   _power: new Lazy(() => {
     const unlockedRows = Achievements.allRows
-      .countWhere(row => row.every(ach => ach.isUnlocked));
+      .countWhere(row => row.every(ach => ach ? ach.isUnlocked : true ));
     const basePower = Math.pow(1.25, unlockedRows) * Math.pow(1.03, Achievements.effectiveCount);
     const exponent = getAdjustedGlyphEffect("effarigachievement") * Ra.unlocks.achievementPower.effectOrDefault(1);
     return Math.min(Math.pow(basePower, exponent),1e308);

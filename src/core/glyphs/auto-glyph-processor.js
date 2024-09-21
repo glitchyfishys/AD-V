@@ -113,7 +113,7 @@ export const AutoGlyphProcessor = {
       case AUTO_GLYPH_SCORE.LOWEST_SACRIFICE:
       case AUTO_GLYPH_SCORE.LOWEST_ALCHEMY:
       case AUTO_GLYPH_SCORE.ALCHEMY_VALUE:
-        // These modes never keep glyphs and always refine/sacrfice
+        // These modes never keep glyphs and always refine/sacrifice
         return Number.MAX_VALUE;
       default:
         throw new Error("Unknown glyph score mode in threshold check");
@@ -338,7 +338,8 @@ export function getGlyphLevelInputs() {
   };
   scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.instability, 500);
   scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.hyperInstability, 400);
-  scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.glitchInstability, GlitchRealityUpgrades.all[13].isBought ? 1e5 : 1e4);
+  scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.glitchInstability, 1e4);
+  scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.chaosInstability, 250);
 
   const scalePenalty = scaledLevel > 0 ? baseLevel / scaledLevel : 1;
   const incAfterInstability = staticFactors.realityUpgrades + staticFactors.achievements;
@@ -367,16 +368,20 @@ export function staticGlyphWeights() {
   const instability = Glyphs.instabilityThreshold;
   const hyperInstability = Glyphs.hyperInstabilityThreshold;
   const glitchInstability = Glyphs.glitchInstabilityThreshold;
+  const chaosInstability = Glyphs.chaosInstabilityThreshold;
+
   const realityUpgrades = [Array.range(1, 5).every(x => RealityUpgrade(x).boughtAmount > 0)]
     .concat(Array.range(1, 4).map(x => Array.range(1, 5).every(y => RealityUpgrade(5 * x + y).isBought)))
     .filter(x => x)
     .length;
+
   const achievements = Effects.sum(Achievement(148), Achievement(166));
   return {
     perkShop,
     instability,
     hyperInstability,
     glitchInstability,
+    chaosInstability,
     realityUpgrades,
     achievements
   };

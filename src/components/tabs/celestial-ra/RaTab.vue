@@ -84,7 +84,10 @@ export default {
       return GameDatabase.celestials.descriptions[4].effects().replace(/^\w/u, c => c.toUpperCase()).split("\n");
     },
     memoryDescription() {
-      return `Within ${player.options.themeModern == "S13" ? "V-Ra's": "Ra's"} Reality, Memory Chunks for Celestial Memories
+      let n = "Ra's";
+      if(player.options.themeModern == "S15") n = "Teresa-Ra's";
+      if(player.options.themeModern == "S13") n = "V-Ra's";
+      return `Within ${n} Reality, Memory Chunks for Celestial Memories
         will be generated based on certain resource amounts.`;
     },
     isDoomed: () => Pelle.isDoomed,
@@ -103,6 +106,7 @@ export default {
       this.memoryBoosts = Ra.memoryBoostResources;
     },
     sName(){
+      if(player.options.themeModern == "S15") return "Teresa-Ra's";
       if(player.options.themeModern == "S13") return "V-Ra's";
       return "Ra's";
     },

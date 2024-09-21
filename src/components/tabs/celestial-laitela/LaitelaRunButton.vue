@@ -19,11 +19,13 @@ export default {
   },
   computed: {
     sName(){
+      if(player.options.themeModern == "S15") return "Teresa-Lai'tela's";
       if(player.options.themeModern == "S14") return "Ra-Lai'tela's";
       if(player.options.themeModern == "S13") return "V-Lai'tela's";
       return "Lai'tela's";
     },
     sCel(){
+      if(player.options.themeModern == "S15") return "Teresa-Lai'tela";
       if(player.options.themeModern == "S14") return "Ra-Lai'tela";
       if(player.options.themeModern == "S13") return "V-Lai'tela";
       return "Lai'tela";

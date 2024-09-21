@@ -121,8 +121,6 @@ export function getReplicantiInterval(overCapOverride, intervalIn) {
     interval = interval.pow(2);
   }
   if (V.isRunningExtreme) {
-    // This is a boost if interval < 1, but that only happens in EC12
-    // and handling it would make the replicanti code a lot more complicated.
     interval = interval.pow(32);
   }
   return interval;
@@ -204,7 +202,9 @@ export function replicantiLoop(diff) {
     if (V.isRunning) {
       postScale *= 2;
     }
-
+    if (V.isRunningExtreme) {
+      postScale *= 32;
+    }
     // Note that remainingGain is in log10 terms.
     let remainingGain = tickCount.times(Math.log(player.replicanti.chance + 1)).times(LOG10_E);
     // It is intended to be possible for both of the below conditionals to trigger.

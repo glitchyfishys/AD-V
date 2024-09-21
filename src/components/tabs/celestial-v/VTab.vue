@@ -48,9 +48,9 @@ export default {
         {},
         VRunUnlocks.all[12],
         { isRunButtonExtreme: true },
-        {},
-        {},
-        {},
+        VRunUnlocks.all[13],
+        VRunUnlocks.all[14],
+        VRunUnlocks.all[15],
         {}];
 
       return this.isHard && this.hasHardUnlocked
@@ -91,7 +91,7 @@ export default {
           VUnlocks.raUnlock
         ],
       ];
-      if(this.hasExtremeUnlocked) list.push([VUnlocks.gamespeedPower, VUnlocks.RMcap]);
+      if(this.hasExtremeUnlocked) list.push([VUnlocks.gamespeedPower, VUnlocks.RMcap, VUnlocks.TScap], [VUnlocks.glyphCap, VUnlocks.newStudies, VUnlocks.prestigious]);
       return list;
     },
     runButtonClassObject() {
@@ -136,10 +136,12 @@ export default {
       this.hasAlchemy = Ra.unlocks.unlockGlyphAlchemy.canBeApplied;
     },
     sName(){
+      if(player.options.themeModern == "S15") return "Teresa-V's";
       if(player.options.themeModern == "S14") return "Ra-V's";
       return "V's";
     },
     sCel(){
+      if(player.options.themeModern == "S15") return "Teresa-V";
       if(player.options.themeModern == "S14") return "Ra-V";
       return "V";
     },
@@ -204,10 +206,22 @@ export default {
         VRunUnlocks.all[i].reset();
       }
       V.updateTotalRunUnlocks();
+      Quotes.v.thankYou.show();
     },
     createCursedGlyph() {
       Glyphs.giveCursedGlyph();
-    }
+    },
+    fear(){
+      const a = VRunUnlock(10).completions;
+      if(a == 0 || a == 4) return;
+      const rand1 = (Math.random() - 0.5) *2;
+      const rand2 = (Math.random() - 0.5) *2;
+      return {
+        left: ((3 * a) * rand1) + "px",
+        top: ((3 * a) * rand2) + "px",
+        transitionDuration: player.options.updateRate + "ms"
+      };
+    },
   }
 };
 </script>
@@ -304,7 +318,7 @@ export default {
         <li
           v-for="(hex, hexId) in hexGrid"
           :key="hexId + '-v-hex'"
-          :style="[(hex.isRunButton || hex.isRunButtonExtreme) ? {zIndex: 1} : {zIndex: 0}]"
+          :style="[(hex.isRunButton || hex.isRunButtonExtreme) ? {zIndex: 1} : {zIndex: 0}, hex.isRunButtonExtreme ? fear() : undefined ]"
         >
           <div
             v-if="hex.config"

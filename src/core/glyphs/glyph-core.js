@@ -10,7 +10,7 @@ export const orderedEffectList = [ "powerpow", "powermult", "powerdimboost", "po
                                   "cursedgalaxies", "cursedtickspeed", "curseddimensions", "cursedEP",
                                   "realityglyphlevel", "realitygalaxies", "realityrow1pow", "realityDTglyph",
                                   "companiondescription", "companionEP",
-                                  "glitchglitchy", "glitchshift"];
+                                  "glitchChaosPow", "glitchADCelPow"];
 
 export const generatedTypes = ["power", "infinity", "replication", "time", "dilation", "effarig"];
 
@@ -293,7 +293,7 @@ export const Glyphs = {
       throw new Error("Inconsistent inventory indexing");
     }
     let sameSpecialTypeIndex = -1;
-    if (["effarig", "reality"].includes(glyph.type)) {
+    if (["effarig", "reality", "glitch"].includes(glyph.type)) {
       sameSpecialTypeIndex = this.active.findIndex(x => x && x.type === glyph.type);
     }
     if (this.active[targetSlot] === null) {
@@ -313,7 +313,7 @@ export const Glyphs = {
       EventHub.dispatch(GAME_EVENT.GLYPHS_CHANGED);
       this.validate();
     } else {
-      // We can only replace effarig/reality glyph
+      // We can only replace effarig/reality/glitch glyph
       if (sameSpecialTypeIndex >= 0 && sameSpecialTypeIndex !== targetSlot) {
         Modal.message.show(`You may only have one ${glyph.type.capitalize()} Glyph equipped!`,
           { closeEvent: GAME_EVENT.GLYPHS_CHANGED });
@@ -482,7 +482,7 @@ export const Glyphs = {
     const glyphsToSort = player.reality.glyphs.inventory.filter(g => g.idx >= this.protectedSlots);
     const freeSpace = GameCache.glyphInventorySpace.value;
     const sortOrder = ["power", "infinity", "replication", "time", "dilation", "effarig",
-      "reality", "cursed", "companion"];
+      "reality", "glitch", "cursed", "companion"];
     const byType = sortOrder.mapToObject(g => g, () => ({ glyphs: [], padding: 0 }));
     for (const g of glyphsToSort) byType[g.type].glyphs.push(g);
     let totalDesiredPadding = 0;
@@ -550,7 +550,7 @@ export const Glyphs = {
         g.id !== glyph.id &&
         (g.level >= glyph.level || g.strength >= glyph.strength) &&
         ((g.effects & glyph.effects) === glyph.effects));
-    let compareThreshold = glyph.type === "effarig" || glyph.type === "reality" ? 1 : 5;
+    let compareThreshold = glyph.type === "effarig" || glyph.type === "reality" || glyph.type === "glitch" ? 1 : 5;
     compareThreshold = Math.clampMax(compareThreshold, threshold);
     if (toCompare.length < compareThreshold) return false;
     const comparedEffects = getGlyphEffectsFromBitmask(glyph.effects, glyph.type).filter(x => x.id.startsWith(glyph.type));
@@ -657,7 +657,10 @@ export const Glyphs = {
     return 4000 + this.instabilityThreshold;
   },
   get glitchInstabilityThreshold() {
-    return 100000;
+    return GlitchRealityUpgrades.all[13].isAvailableForPurchase ? 1e6 : 1e5;
+  },
+  get chaosInstabilityThreshold() {
+    return 5e7;
   },
   
   clearUndo() {
@@ -846,7 +849,7 @@ export function calculateGlyph(glyph) {
 
     // Used to randomly generate strength in this case; I don't think we actually care.
     if (glyph.strength === 1) glyph.strength = 1.5;
-    glyph.strength = Math.min(rarityToStrength(100), glyph.strength);
+    glyph.strength = Math.min(Achievement(191).isUnlocked ? rarityToStrength(1e5) : rarityToStrength(100), glyph.strength);
   }
 }
 

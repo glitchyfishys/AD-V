@@ -112,7 +112,7 @@ export const dilationUpgrades = {
     },
     formatEffect: value => formatX(value, 2, 1)
   },
-  ndMultDT: {
+  adMultDT: {
     id: 6,
     cost: 5e7,
     description: "Antimatter Dimension multiplier based on Dilated Time, unaffected by Time Dilation",

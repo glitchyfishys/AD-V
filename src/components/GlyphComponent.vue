@@ -67,7 +67,7 @@ const rarityBorderStyles = {
       colorSplit: [65, 85],
     },
   ],
-  antaloni: [
+  overwhelming: [
     {
       lineType: "spike",
       center: [40, 40],
@@ -317,6 +317,7 @@ export default {
       if (symbol) return symbol;
 
       if(!this.glyph.cosmetic){
+        if(this.glyph.type === "effarig" && player.options.themeModern == "S15") return Celestials.teresa.symbol;
         if(this.glyph.type === "effarig" && player.options.themeModern == "S14") return "\uF185";
         if(this.glyph.type === "effarig" && player.options.themeModern == "S13") return Celestials.v.symbol;
       }

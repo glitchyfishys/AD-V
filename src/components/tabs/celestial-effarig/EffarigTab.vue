@@ -29,11 +29,13 @@ export default {
   },
   computed: {
     sName(){
+      if(player.options.themeModern == "S15") return "Teresa-Effarig";
       if(player.options.themeModern == "S14") return "Ra-Effarig";
       if(player.options.themeModern == "S13") return "V-Effarig";
       return "Effarig";
     },
     sCel(){
+      if(player.options.themeModern == "S15") return "Teresa-Effarig";
       if(player.options.themeModern == "S14") return "Ra-Effarig";
       if(player.options.themeModern == "S13") return "V-Effarig";
       return "Effarig";

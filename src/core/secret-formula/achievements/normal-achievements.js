@@ -1335,7 +1335,7 @@ export const normalAchievements = [
     checkRequirement: () => Pelle.isDoomed && InfinityChallenge(5).isCompleted,
     checkEvent: GAME_EVENT.INFINITY_CHALLENGE_COMPLETED,
     // Weirdly specific reward? Yes, its V's ST bonus because we forgot to disable it
-    // when balancing Pelle and only realised too late.
+    // when balancing Pelle and only realized too late.
     get reward() { return `All Antimatter Dimensions are raised to ${formatPow(1.0812403840463596, 0, 3)}`; },
     effect: 1.0812403840463596
   },
@@ -1379,5 +1379,21 @@ export const normalAchievements = [
     description: "Beat the game.",
     checkRequirement: () => GameEnd.endState > END_STATE_MARKERS.GAME_END && !GameEnd.removeAdditionalEnd,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
+  },
+  {
+    id: 191,
+    name: "A blessing from the lord",
+    displayId: 777,
+    get description() {return `Get a ${format("1e1000")} Sacrifice multiplier from Teresa's Reality`},
+    checkRequirement: () => Teresa.runRewardMultiplier.gte("1e1000"),
+    checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
+    get reward() {
+      return `Uncap Glyph Sacrifice and Glyph Rarity`;
+    },
+  },
+  {
+    id: 192,
+    name: "Finally, I can get the Glitch Glyph",
+    get description() {return `Create A Glitch Glyph`},
   },
 ];

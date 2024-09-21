@@ -14,7 +14,7 @@ export const eternityUG = [
   {
   name: "Eternity Power",
     id: 1,
-    requirement: () => `Reach ${format(Number.MAX_VALUE, 2)} on your second Eternity without Time Dimensions (pre-Reality)`,
+    requirement: () => `Reach ${format(Number.MAX_VALUE, 2)} Infinity Points on your second Eternity without Time Dimensions (pre-Reality)`,
     hasFailed: () => !player.dimensions.time[0].amount.equals(0) || PlayerProgress.realityUnlocked() || !player.eternities.equals(1),
     checkRequirement: () => player.dimensions.time[0].amount.equals(0) && player.eternities.equals(1) && !PlayerProgress.realityUnlocked() && player.infinityPoints.gte(1.79e308),
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,

@@ -28,13 +28,16 @@ export default {
         "l-achievement-grid__row": true,
         "c-achievement-grid__row--completed": this.isCompleted
       };
-    }
+    },
+    inRow(){
+      return this.row.filter(x => x);
+    },
   },
   methods: {
     update() {
-      this.isCompleted = this.row.every(a => a.isUnlocked);
+      this.isCompleted = this.row.every(a => a ? a.isUnlocked : true );
       this.isHidden = this.isCompleted && player.options.hideCompletedAchievementRows;
-    }
+    },
   }
 };
 </script>
@@ -45,7 +48,7 @@ export default {
     :class="classObject"
   >
     <normal-achievement
-      v-for="(achievement, i) in row"
+      v-for="(achievement, i) in inRow"
       :key="i"
       :achievement="achievement"
       :is-obscured="isObscured"

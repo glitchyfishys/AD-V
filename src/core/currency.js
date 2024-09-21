@@ -200,6 +200,7 @@ Currency.antimatter = new class extends DecimalCurrency {
   get value() { return new Decimal(player.antimatter); }
 
   set value(value) {
+    value = value.clampMax("1e1E50");
     if (InfinityChallenges.nextIC) InfinityChallenges.notifyICUnlock(value);
     if (GameCache.cheapestAntimatterAutobuyer.value && value.gte(GameCache.cheapestAntimatterAutobuyer.value)) {
       // Clicking into the automation tab clears the trigger and prevents it from retriggering as long as the player
@@ -298,7 +299,10 @@ Currency.infinityPoints = new class extends DecimalCurrency {
 
 Currency.infinityPower = new class extends DecimalCurrency {
   get value() { return player.infinityPower; }
-  set value(value) { player.infinityPower = value.clampMax("1e2E25"); }
+  set value(value) {
+    if(value.gt("1e1E25")) value = value.pow( 1 / ((value.log10() / 1e25) ** 0.9) );
+
+     player.infinityPower = value; }
 }();
 
 Currency.eternities = new class extends DecimalCurrency {

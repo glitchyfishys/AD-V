@@ -43,7 +43,7 @@ const GLYPH_NAMES = {
     noun: "Dilation"
   },
   glitch: {
-    adjective: { high: "Atuned", mid: "Altered", low: "Shifted" },
+    adjective: { high: "Attuned", mid: "Altered", low: "Shifted" },
     noun: "Glitch"
   },
 };
@@ -74,9 +74,9 @@ export default {
         { type: "effarig", perc: 0, adjOrder: 2 },
         { type: "music", perc: 0, adjOrder: 3 },
         { type: "reality", perc: 0, adjOrder: 4 },
-        { type: "companion", perc: 0, adjOrder: 7 },
-        { type: "cursed", perc: 0, adjOrder: 6 },
         { type: "glitch", perc: 0, adjOrder: 5 },
+        { type: "cursed", perc: 0, adjOrder: 6 },
+        { type: "companion", perc: 0, adjOrder: 7 },
       ],
       sortedGlyphs: [],
       slotCount: 0
@@ -152,7 +152,7 @@ export default {
     // Check for single-type sets and give them a special name based on how much of the full equipped slots they take up
     singletonName() {
       if (this.sortedGlyphs[0].type === "effarig") return GLYPH_NAMES.effarig.noun[this.getEffarigProp()];
-      const singleGlyphTypes = ["reality", "companion"];
+      const singleGlyphTypes = ["reality", "glitch", "companion"];
       for (const key of singleGlyphTypes) {
         if (this.sortedGlyphs[0].type === key) return GLYPH_NAMES[key].noun;
       }
@@ -173,6 +173,7 @@ export default {
       if (this.calculateGlyphPercent("cursed")) return CosmeticGlyphTypes.cursed;
       if (this.calculateGlyphPercent("companion")) return CosmeticGlyphTypes.companion;
       if (this.calculateGlyphPercent("reality")) return CosmeticGlyphTypes.reality;
+      if (this.calculateGlyphPercent("glitch")) return CosmeticGlyphTypes.glitch;
       if (this.calculateGlyphPercent("music") >= 50) return CosmeticGlyphTypes.music;
       const primaryType = this.sortedGlyphs.filter(t => t.adjOrder === 1)[0];
       if (primaryType?.perc >= 50) return CosmeticGlyphTypes[primaryType.type];

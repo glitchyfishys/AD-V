@@ -39,7 +39,7 @@ export default {
         [
           DilationUpgrade.doubleGalaxies,
           DilationUpgrade.tdMultReplicanti,
-          DilationUpgrade.ndMultDT
+          DilationUpgrade.adMultDT
         ],
         [
           DilationUpgrade.ipMultDT,

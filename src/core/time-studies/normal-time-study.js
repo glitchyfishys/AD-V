@@ -38,7 +38,7 @@ export class NormalTimeStudyState extends TimeStudyState {
   // The requiresST prop is an array containing IDs indicating other studies which, if ANY in the array are purchased,
   // will cause the study to also cost space theorems. This array is effectively assumed to be empty if not present.
   costsST() {
-    return this.config.requiresST && this.config.requiresST.some(s => TimeStudy(s).isBought);
+    return this.config.requiresST && this.config.requiresST.some(s => typeof s == "function" ? s() : TimeStudy(s).isBought);
   }
 
   checkRequirement() {

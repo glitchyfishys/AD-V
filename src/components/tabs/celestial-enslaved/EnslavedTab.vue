@@ -145,6 +145,7 @@ export default {
       this.hasReachedCurrentCap = this.storedReal === this.storedRealCap;
     },
     sName(){
+      if(player.options.themeModern == "S15") return "The Nameless Teresa's'";
       if(player.options.themeModern == "S14") return "The Nameless Ra's";
       if(player.options.themeModern == "S13") return "The Nameless V's";
       return "The Nameless Ones'";

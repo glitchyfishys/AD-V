@@ -115,7 +115,7 @@ export const eternityMilestones = {
     eternities: 25,
     reward: "You automatically unlock Infinity Dimensions upon reaching them"
   },
-  unlockAllND: {
+  unlockAllAD: {
     eternities: 30,
     reward: "Start with all Antimatter Dimensions available for purchase"
   },

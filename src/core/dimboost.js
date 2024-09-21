@@ -37,7 +37,7 @@ export class DimBoost {
     return boost;
   }
 
-  static multiplierToNDTier(tier) {
+  static multiplierToADTier(tier) {
     const normalBoostMult = DimBoost.power.pow(this.purchasedBoosts + 1 - tier).clampMin(1);
     const imaginaryBoostMult = DimBoost.power.times(ImaginaryUpgrade(24).effectOrDefault(1))
       .pow(this.imaginaryBoosts).clampMin(1);
@@ -125,10 +125,10 @@ export class DimBoost {
   static get unlockedByBoost() {
     if (DimBoost.lockText !== null) return DimBoost.lockText;
     const boosts = DimBoost.purchasedBoosts;
-    const allNDUnlocked = EternityMilestone.unlockAllND.isReached;
+    const allADUnlocked = EternityMilestone.unlockAllAD.isReached;
 
     let newUnlock = "";
-    if (!allNDUnlocked && boosts < DimBoost.maxDimensionsUnlockable - 4) {
+    if (!allADUnlocked && boosts < DimBoost.maxDimensionsUnlockable - 4) {
       newUnlock = `unlock the ${boosts + 5}th Dimension`;
     } else if (boosts === 4 && !NormalChallenge(10).isRunning && !EternityChallenge(3).isRunning) {
       newUnlock = "unlock Sacrifice";

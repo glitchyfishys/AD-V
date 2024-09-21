@@ -182,6 +182,19 @@
   }
 }
 
+.t-s14 .o-v-milestone{
+  background-color: var(--color-ra--base);
+}
+
+.t-s14 .o-v-milestone--unlocked{
+  background-color: var(--color-ra--light);
+  border-color: var(--color-ra--base);
+}
+
+.t-s14 .c-enslaved-run-button{
+  border-color: var(--color-ra--base);
+}
+
 .c-v-run-button__line {
   background: var(--color-ra--accent);
 }

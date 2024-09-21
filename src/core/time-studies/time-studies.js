@@ -166,6 +166,7 @@ export class TimeStudyState extends GameMechanicState {
 
   get STCost() {
     const base = this.config.STCost;
+    if(this.id > 400) return base;
     return VUnlocks.raUnlock.canBeApplied
       ? base - 2
       : base;

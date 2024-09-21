@@ -190,6 +190,7 @@ class GlyphEffectConfig {
 }
 
 export const realityGlyphEffectLevelThresholds = [0, 9000, 15000, 25000];
+export const glitchGlyphEffectLevelThresholds = [70000, 1e5, 2.5e5, 5e5];
 
 export const GlyphEffects = mapGameDataToObject(
   GameDatabase.reality.glyphEffects,

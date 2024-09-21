@@ -181,6 +181,10 @@
   }
 }
 
+.t-s13 .c-enslaved-run-button{
+  border-color: var(--color-v--base);
+}
+
 .t-s13 .l-cursed-glyph-creation{
   background-color: var(--color-base);
 }
