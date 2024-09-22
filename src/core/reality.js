@@ -36,7 +36,7 @@ export const GlyphSelection = {
     glyphList[Math.floor(random * glyphList.length)].strength = newStrength;
   },
 
-  glyphList(countIn, level, config) {
+  glyphList(countIn, level, config = {rng: new GlyphGenerator.RealGlyphRNG() }) {
     // Always generate at least 4 choices so that the RNG never diverges based on
     // the 4-choice perk.
     const count = Math.clampMin(countIn, 4);
