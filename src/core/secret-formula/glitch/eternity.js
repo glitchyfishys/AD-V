@@ -59,7 +59,7 @@ export const eternityUG = [
   {
     name: "Logical Tictonics",
     id: 5,
-    requirement: "get time study 181 without compleing EC1, EC2 or E3 5 times (pre-Reality)",
+    requirement: "get time study 181 without compleing EC1, EC2 or EC3 5 times (pre-Reality)",
     hasFailed: () => EternityChallenges.all[0].completions == 5 || EternityChallenges.all[1].completions == 5 || EternityChallenges.all[2].completions == 5 || PlayerProgress.realityUnlocked(),
     checkRequirement: () => player.timestudy.studies.includes(181) && !(EternityChallenges.all[0].completions == 5) && !(EternityChallenges.all[1].completions == 5) && !(EternityChallenges.all[2].completions == 5) && !PlayerProgress.realityUnlocked(),
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
