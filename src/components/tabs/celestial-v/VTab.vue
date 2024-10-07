@@ -137,11 +137,15 @@ export default {
     },
     sName(){
       if(player.options.themeModern == "S15") return "Teresa-V's";
+      if(player.options.themeModern == "S16") return "Effarig-V's";
+      if(player.options.themeModern == "S17") return `The Nameless V's`;
       if(player.options.themeModern == "S14") return "Ra-V's";
       return "V's";
     },
     sCel(){
       if(player.options.themeModern == "S15") return "Teresa-V";
+      if(player.options.themeModern == "S16") return "Effarig-V";
+      if(player.options.themeModern == "S17") return `The Nameless V`;
       if(player.options.themeModern == "S14") return "Ra-V";
       return "V";
     },

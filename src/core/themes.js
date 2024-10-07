@@ -32,11 +32,11 @@ export const Theme = function Theme(name, config) {
 
     if(name === "S15") return "Teresa";
     if(name === "S16") return "Effarig";
-    if(name === "S16") return "The Nameless Ones'";
+    if(name === "S17") return "The Nameless Ones'";
     if(name === "S13") return "V";
     if(name === "S14") return "Ra";
-    if(name === "S17") return "Lai'tela";
-    if(name === "S18") return "Pelle";
+    if(name === "S18") return "Lai'tela";
+    if(name === "S19") return "Pelle";
 
     return player.secretUnlocks.themes.find(theme => theme.match(/^S[0-9]*/u)[0] === name).replace(/^S[0-9]*/u, "");
   };
@@ -101,7 +101,9 @@ Theme.secretThemeIndex = function(name) {
     "1248689171faaa0abb68279199a8d2eb232dba10d2dacb79a705f680b6862c0e",
     "c178c4ab2b9825cc543e7135b3cbe0782e97124873c1ebc073ca510aa315a258",
     "c23af492b2c87bdb92800e1502b380cba44a93db0704ab53ad6e11c0b1d78003",
-    "27093b35f2f86c1515dce76550a10b130059413d354364f1ef53772ab768d66e",// Add Effarig, Nameless, Lai'tela, Pelle
+    "27093b35f2f86c1515dce76550a10b130059413d354364f1ef53772ab768d66e",
+    "6b3b19a152b562f9e8cf69c9564bd7e8c17eab618f81f9ded18413e771b8e896",
+    "8720280d40abb3d0cea8f5d9925e4b3b099bdfba03389ad424029cfe2d55a7b5",// need to add Lai'tela and Pelle
   ];
   const sha = sha512_256(name.toUpperCase());
   console.log(sha)

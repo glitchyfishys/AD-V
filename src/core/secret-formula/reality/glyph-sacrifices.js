@@ -86,7 +86,7 @@ export const glyphSacrifice = {
       return 2 * Decimal.log10(capped.div(1e20).add(1));
     },
     description: amount => `+${formatPercents(amount / 100, 2)} additional Glyph rarity`,
-    cap: () => Achievement(191).isUnlocked ? 1e300 : 1e70
+    cap: () => Achievement(191).isUnlocked ? undefined : 1e70
   },
   "reality": {
     id: "reality",

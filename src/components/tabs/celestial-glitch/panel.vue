@@ -13,12 +13,16 @@ export default {
   computed: {
     sName(){
       if(player.options.themeModern == "S15") return "Teresa-Glitch's";
+      if(player.options.themeModern == "S16") return "Effarig-Glitch's";
+      if(player.options.themeModern == "S17") return `The Nameless Glitch's`;
       if(player.options.themeModern == "S14") return "Ra-Glitch's";
       if(player.options.themeModern == "S13") return "V-Glitch's";
       return "Glitch's";
     },
     sCel(){
       if(player.options.themeModern == "S15") return "Teresa-Glitch";
+      if(player.options.themeModern == "S16") return "Effarig-Glitch";
+      if(player.options.themeModern == "S17") return `The Nameless Glitch`;
       if(player.options.themeModern == "S14") return "Ra-Glitch";
       if(player.options.themeModern == "S13") return "V-Glitch";
       return "Glitch";

@@ -31,12 +31,14 @@ export default {
     sName(){
       if(player.options.themeModern == "S15") return "Teresa-Effarig";
       if(player.options.themeModern == "S14") return "Ra-Effarig";
+      if(player.options.themeModern == "S17") return `The Nameless Effarig's`;
       if(player.options.themeModern == "S13") return "V-Effarig";
       return "Effarig";
     },
     sCel(){
       if(player.options.themeModern == "S15") return "Teresa-Effarig";
       if(player.options.themeModern == "S14") return "Ra-Effarig";
+      if(player.options.themeModern == "S17") return `The Nameless Effarig`;
       if(player.options.themeModern == "S13") return "V-Effarig";
       return "Effarig";
     },

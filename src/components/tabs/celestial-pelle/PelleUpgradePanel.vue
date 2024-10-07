@@ -25,6 +25,8 @@ export default {
   computed: {
     sName(){
       if(player.options.themeModern == "S15") return "Teresa-Pelle";
+      if(player.options.themeModern == "S16") return "Effarig-Pelle";
+      if(player.options.themeModern == "S17") return `The Nameless Pelle`;
       if(player.options.themeModern == "S14") return "Ra-Pelle";
       if(player.options.themeModern == "S13") return "V-Pelle";
       return "Pelle";

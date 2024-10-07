@@ -44,9 +44,11 @@ export default {
       
       this.maxed = true;
       let m = 0;
+
       this.ADs.forEach(ad => {
+        if(m === 0 && Autobuyer.tickspeed.interval <= 100) m++;
         if(ad.bulk >= 512 && ad.interval <= 100) m++;
-        if(m == 8) this.maxed = false;
+        if(m == 9) this.maxed = false;
       })
     },
     bulk() {
@@ -58,13 +60,13 @@ export default {
       }
     },
     upmax() {
-      if(this.admaxed) return;
-      for (const ab of this.ADs) {
-        if(ab.isUnlocked) {
-          if(!ab.interval <= 100) ab.upgradeInterval();
-          if(ab.interval <= 100 && ab.bulk < 512) ab.upgradeBulk();
+      for (const adb of this.ADs) {
+        if(adb.isUnlocked && adb.canBeUpgraded) {
+          if(adb.interval > 100) adb.upgradeInterval();
+          if(adb.interval <= 100 && adb.bulk < 512) adb.upgradeBulk();
         }
       }
+      if(Autobuyer.tickspeed.canBeBought && Autobuyer.tickspeed.interval > 100) Autobuyer.tickspeed.upgradeInterval();
     },
     toggleAllAutobuyers() {
       for (const autobuyer of Autobuyers.unlocked) {

@@ -41,6 +41,8 @@ import TimeDilationTab from "./time-dilation/TimeDilationTab";
 import TimeDimensionsTab from "./time-dimensions/TimeDimensionsTab";
 import TimeStudiesTab from "./time-studies/TimeStudiesTab";
 import VTab from "./celestial-v/VTab";
+
+// mod
 import entropy from "./glitch/entropy";
 import preinfinity from "./glitch/preinfinitytab";
 import glitchbreak from "./glitch/breakinfinitytab";

@@ -8,8 +8,7 @@ function emphasizeEnd(fraction) {
 
 export const V_REDUCTION_MODE = {
   SUBTRACTION: 1,
-  DIVISION: 2,
-  POWER: 3
+  DIVISION: 2
 };
 
 const STreq = [110,145,190,225];

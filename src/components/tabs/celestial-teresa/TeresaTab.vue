@@ -40,11 +40,15 @@ export default {
   computed: {
     sName(){
       if(player.options.themeModern == "S14") return "Ra-Teresa's";
+      if(player.options.themeModern == "S16") return "Effarig-Teresa's";
+      if(player.options.themeModern == "S17") return `The Nameless Teresa's`;
       if(player.options.themeModern == "S13") return "V-Teresa's";
       return "Teresa's";
     },
     sCel(){
       if(player.options.themeModern == "S14") return "Ra-Teresa";
+      if(player.options.themeModern == "S16") return "Effarig-Teresa";
+      if(player.options.themeModern == "S17") return `The Nameless Teresa'`;
       if(player.options.themeModern == "S13") return "V-Teresa";
       return "Teresa";
     },

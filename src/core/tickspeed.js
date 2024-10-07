@@ -1,5 +1,4 @@
 import { DC } from "./constants";
-import { V } from "./globals";
 
 export function effectiveBaseGalaxies() {
   // Note that this already includes the "50% more" active path effect

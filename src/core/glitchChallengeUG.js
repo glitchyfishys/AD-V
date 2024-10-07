@@ -74,7 +74,7 @@ export const preInfinityUG = id => preInfinityUGState.index[id];
 export const preInfinityUGs = {
   all: preInfinityUGState.index.compact(),
   get allBought() {
-    return (player.glitch.preinfinity.upgradeBits >> 1) + 1 === 1 << (GameDatabase.glitch.preInfinityUG.length);
+    return (player.glitch.preinfinity.upgradebits >> 1) + 1 === 1 << (GameDatabase.glitch.preInfinityUG.length - 1);
   }
 };
 
@@ -152,7 +152,7 @@ export const breakInfinityUG = id => breakInfinityUGState.index[id];
 export const breakInfinityUGs = {
   all: breakInfinityUGState.index.compact(),
   get allBought() {
-    return (player.glitch.breakinfinity.upgradeBits >> 1) + 1 === 1 << (GameDatabase.glitch.breakInfinityUG.length);
+    return (player.glitch.breakinfinity.upgradebits >> 1) + 1 === 1 << (GameDatabase.glitch.breakInfinityUG.length - 1);
   }
 };
 
@@ -230,7 +230,7 @@ export const eternityUG = id => eternityUGState.index[id];
 export const eternityUGs = {
   all: eternityUGState.index.compact(),
   get allBought() {
-    return (player.glitch.eternity.upgradeBits >> 1) + 1 === 1 << (GameDatabase.glitch.eternityUG.length);
+    return (player.glitch.eternity.upgradebits >> 1) + 1 === 1 << (GameDatabase.glitch.eternityUG.length - 1);
   }
 };
 
@@ -308,6 +308,6 @@ export const realityUG = id => realityUGState.index[id];
 export const realityUGs = {
   all: realityUGState.index.compact(),
   get allBought() {
-    return (player.glitch.reality.upgradeBits >> 1) + 1 === 1 << (GameDatabase.glitch.realityUG.length);
+    return (player.glitch.reality.upgradebits >> 1) + 1 === 1 << (GameDatabase.glitch.realityUG.length - 1);
   }
 };

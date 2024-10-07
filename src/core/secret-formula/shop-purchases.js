@@ -121,4 +121,68 @@ export const shopPurchases = {
     isUnlocked: () => PlayerProgress.realityUnlocked(),
     lockText: "Reality",
   },
+  glitchChall: {
+    key: "glitchChall",
+    cost: () => {
+      if(eternityUGs.allBought) return 95;
+      if(breakInfinityUGs.allBought) return 35;
+      if(preInfinityUGs.allBought) return 10;
+      return 5;
+    },
+    description: "Unlock the earliest Glitch Challenge",
+    instantPurchase: true,
+    onPurchase: () => {
+      let unlocked = false;
+      preInfinityUGs.all.forEach(x => {
+
+        if(!x.isBought && !unlocked) {
+          player.glitch.preinfinity.upgradebits |= 1 << x.id;
+          GameUI.notify.success("unlocked " + x.name);
+          unlocked = true;
+        } 
+      });
+
+      breakInfinityUGs.all.forEach(x => {
+
+        if(!player.break) return;
+
+        if(!x.isBought && !unlocked) {
+          player.glitch.breakinfinity.upgradebits |= 1 << x.id;
+          GameUI.notify.success("unlocked " + x.name);
+          unlocked = true;
+        } 
+      });
+
+      eternityUGs.all.forEach(x => {
+
+        if(player.eternities.eq(0)) return;
+
+        if(!x.isBought && !unlocked) {
+          player.glitch.eternity.upgradebits |= 1 << x.id;
+          GameUI.notify.success("unlocked " + x.name);
+          unlocked = true;
+        }
+
+      });
+
+      realityUGs.all.forEach(x => {
+
+        if(player.realities === 0) return;
+
+        if(!x.isBought && !unlocked) {
+          player.glitch.reality.upgradebits |= 1 << x.id;
+          GameUI.notify.success("unlocked " + x.name);
+          unlocked = true;
+        } 
+      });
+
+      if(!unlocked){
+        GameUI.notify.error("could not unlock anything (STDs are returned)");
+        if(realityUGs.allBought) player.IAP.STDcoins += 70;
+        if(eternityUGs.allBought) player.IAP.STDcoins += 15;
+        if(breakInfinityUGs.allBought) player.IAP.STDcoins += 5;
+        if(preInfinityUGs.allBought) player.IAP.STDcoins += 5;
+      }
+    }
+  },
 };

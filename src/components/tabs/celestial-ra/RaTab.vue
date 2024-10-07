@@ -86,6 +86,7 @@ export default {
     memoryDescription() {
       let n = "Ra's";
       if(player.options.themeModern == "S15") n = "Teresa-Ra's";
+      if(player.options.themeModern == "S16") return "Effarig-Ra's";
       if(player.options.themeModern == "S13") n = "V-Ra's";
       return `Within ${n} Reality, Memory Chunks for Celestial Memories
         will be generated based on certain resource amounts.`;
@@ -107,6 +108,8 @@ export default {
     },
     sName(){
       if(player.options.themeModern == "S15") return "Teresa-Ra's";
+      if(player.options.themeModern == "S16") return "Effarig-Ra's";
+      if(player.options.themeModern == "S17") return `The Nameless Ra's`;
       if(player.options.themeModern == "S13") return "V-Ra's";
       return "Ra's";
     },
