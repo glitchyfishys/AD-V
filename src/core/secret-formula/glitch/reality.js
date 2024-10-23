@@ -13,9 +13,9 @@ export const realityUG = [
     isUseless: () => Pelle.isDoomed
   },
   {
-  name: "Dialated",
+  name: "Dilated",
     id: 1,
-    requirement: () => `Reach ${format("1e1250")} (pending) Eternity Points while Dialated before your first Reality (check multiplier breakdown)`,
+    requirement: () => `Reach ${format("1e1250")} (pending) Eternity Points while Dilated before your first Reality (check multiplier breakdown)`,
     hasFailed: () => player.realities != 0,
     checkRequirement: () => gainedEternityPoints().gte("1e1250") && player.dilation.active && player.realities == 0,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
@@ -46,13 +46,13 @@ export const realityUG = [
     formatEffect: value => formatX(value, 2, 2)
   },
   {
-    name: "Sacrifisal Power",
+    name: "Sacrificial Power",
     id: 4,
-    requirement: () => `reach ${format("1e5000")} eternity points in teresa's Reality the first time`,
+    requirement: () => `reach ${format("1e5000")} eternity points in Teresa's Reality the first time`,
     hasFailed: () => player.celestials.teresa.bestRunAM.e >= 10000,
     checkRequirement: () => player.eternityPoints.e >= 5000 && Teresa.isRunning && player.celestials.teresa.bestRunAM.e < 10000,
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
-    description: "EC4 and EC8 have no path reqierment (unlock other paths at the same row)",
+    description: "EC4 and EC8 have no path requirement (unlock other paths at the same row)",
     effect: 1,
     formatEffect: value => formatX(value, 2, 2),
   },
@@ -79,7 +79,7 @@ export const realityUG = [
     formatEffect: value => formatX(value, 2, 2)
   },
   {
-    name: "Alternitve Realitive",
+    name: "Alternative Realitive",
     id: 7,
     requirement: "Fill the Nameless ones Real time storage",
     hasFailed: () =>false,
@@ -112,7 +112,7 @@ export const realityUG = [
     formatEffect: value => format(value, 2, 2)
   },
   {
-    name: "Astral Confrontment",
+    name: "Astral Confrontment", //"confrontation"?
     id: 10,
     requirement: "Unlock Lai'tela",
     hasFailed: () => false,
@@ -123,9 +123,9 @@ export const realityUG = [
     formatEffect: () => "Active"
   },
   {
-    name: "galactic Overload",
+    name: "Galactic Overload",
     id: 11,
-    requirement: () => `Have ${format(10000)} Singularities without desablizing once`,
+    requirement: () => `Have ${format(10000)} Singularities without destablizing once`,
     hasFailed: () => Laitela.difficultyTier != 0,
     checkRequirement: () =>  player.celestials.laitela.singularities.gte(10000) && Laitela.difficultyTier == 0,
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
@@ -134,13 +134,13 @@ export const realityUG = [
     formatEffect: value => format(value, 2, 2)
   },
   {
-    name: "Pre galactic ",
+    name: "Pre galactic",
     id: 12,
     requirement: () => `Reach ${format("1e66.66E9")} Antimatter in Effarig's Reality with 5 Cursed Glyphs, before destablizing Latela's Reality thrice`,
     hasFailed: () => Laitela.difficultyTier > 2,
     checkRequirement: () =>  player.requirementChecks.reality.maxGlyphs <= -15 && Effarig.isRunning && Laitela.difficultyTier <= 2 && Currency.antimatter.gt("1e6.666E10"),
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
-    description: "Unlock two new treasa shop items",
+    description: "Unlock two new Teresa shop items",
     effect: () => 1,
     formatEffect: () => "Active"
   },
