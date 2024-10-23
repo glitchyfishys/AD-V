@@ -3,11 +3,11 @@ export const breakInfinityUG = [
   {
     name: "Limited Space",
     id: 0,
-    requirement: () => `Reach ${format("1e450")} Antimatter up to 4 Dimension Boosts, one galaxy (pre-Eternity)`,
+    requirement: () => `Reach ${format("1e450")} Antimatter with up to 4 Dimension Boosts, one galaxy (pre-Eternity)`,
     hasFailed: () => player.dimensionBoosts > 4 || player.galaxies > 1 && !PlayerProgress.eternityUnlocked(),
     checkRequirement: () => player.antimatter.e >= 450 && player.dimensionBoosts <= 4 && player.galaxies <= 1,
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
-    description: "IP multiplier from Antimatter galaxies",
+    description: "IP multiplier based on Antimatter galaxies",
     effect: () => 1 + Math.pow(player.galaxies, 1.25),
     formatEffect: value => formatX(value, 2, 2)
   },
@@ -41,7 +41,7 @@ export const breakInfinityUG = [
     hasFailed: () => false,
     checkRequirement: () => player.infinityPoints.e >= 150,
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
-    description: "IP multiplier from Antimatter Galaxies",
+    description: "IP multiplier based on Antimatter Galaxies",
     effect: () => 1 + Math.pow(player.galaxies, 3),
     formatEffect: value => formatX(value, 2, 2)
   },
@@ -52,7 +52,7 @@ export const breakInfinityUG = [
     hasFailed: () => player.replicanti.chance > 0.01 || player.replicanti.interval < 1000 || PlayerProgress.eternityUnlocked(),
     checkRequirement: () => player.replicanti.amount.gte(10) && player.replicanti.chance == 0.01 && player.replicanti.interval >= 1000 && !PlayerProgress.eternityUnlocked(),
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
-    description: "Replicanti speed by it's amount",
+    description: "Replicanti are faster based on their amount",
     effect: () => 1 + Math.sqrt(player.replicanti.amount.log10()),
     formatEffect: value => formatX(value, 2, 2),
     isUseless: () => Pelle.isDoomed
@@ -64,7 +64,7 @@ export const breakInfinityUG = [
     hasFailed: () => player.replicanti.chance > 0.01 || player.replicanti.interval < 1000 || PlayerProgress.eternityUnlocked(),
     checkRequirement: () => player.replicanti.amount.gte(1e100) && player.replicanti.chance == 0.01 && player.replicanti.interval >= 1000 && !PlayerProgress.eternityUnlocked(),
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
-    description: "Increase Replcanti speed by their Galxies",
+    description: "Increase Replicanti speed by their Galaxies",
     effect: () => 1 + (Math.pow(player.replicanti.galaxies, 1.2) / 38),
     formatEffect: value => formatX(value, 2, 2)
   },
