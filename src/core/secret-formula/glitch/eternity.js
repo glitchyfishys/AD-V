@@ -26,7 +26,7 @@ export const eternityUG = [
   {
   name: "Rifted",
     id: 2,
-    requirement: () => `Have exactly ${format(15)} Replacnti Galaxies`,
+    requirement: () => `Have exactly ${format(15)} Replicanti Galaxies`,
     hasFailed: () => false,
     checkRequirement: () => player.replicanti.galaxies == 15,
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
@@ -59,7 +59,7 @@ export const eternityUG = [
   {
     name: "Logical Tictonics",
     id: 5,
-    requirement: "get time study 181 without compleing EC1, EC2 or EC3 5 times (pre-Reality)",
+    requirement: "Get time study 181 without completing EC1, EC2 or EC3 5 times (pre-Reality)",
     hasFailed: () => EternityChallenges.all[0].completions == 5 || EternityChallenges.all[1].completions == 5 || EternityChallenges.all[2].completions == 5 || PlayerProgress.realityUnlocked(),
     checkRequirement: () => player.timestudy.studies.includes(181) && !(EternityChallenges.all[0].completions == 5) && !(EternityChallenges.all[1].completions == 5) && !(EternityChallenges.all[2].completions == 5) && !PlayerProgress.realityUnlocked(),
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
