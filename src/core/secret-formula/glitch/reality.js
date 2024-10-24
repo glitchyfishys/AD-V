@@ -136,7 +136,7 @@ export const realityUG = [
   {
     name: "Pre galactic",
     id: 12,
-    requirement: () => `Reach ${format("1e66.66E9")} Antimatter in Effarig's Reality with 5 Cursed Glyphs, before destablizing Latela's Reality thrice`,
+    requirement: () => `Reach ${format("1e66.66E9")} Antimatter in Effarig's Reality with 5 Cursed Glyphs, before destablizing Lai'tela's Reality thrice`,
     hasFailed: () => Laitela.difficultyTier > 2,
     checkRequirement: () =>  player.requirementChecks.reality.maxGlyphs <= -15 && Effarig.isRunning && Laitela.difficultyTier <= 2 && Currency.antimatter.gt("1e6.666E10"),
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
