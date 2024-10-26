@@ -196,7 +196,7 @@ export const tabNotifications = {
       },
     ],
     // Always externally triggered
-    condition: () => true,
+    condition: () => true && !PlayerProgress.metaUnlocked(),
   },
   pelleUnlock: {
     id: 15,

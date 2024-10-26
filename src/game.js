@@ -122,6 +122,8 @@ export function gainedInfinityPoints() {
   ip = ip.times(breakInfinityUGs.all[2].effectOrDefault(1));
   ip = ip.times(breakInfinityUGs.all[3].effectOrDefault(1));
   
+  ip = ip.pow(MetaMilestone.metaProgress.effectOrDefault(1));
+
   if (Teresa.isRunning) {
     ip = ip.pow(0.55 * GlitchSpeedUpgrades.all[0].effectOrDefault(1));
   }
@@ -164,6 +166,8 @@ export function gainedEternityPoints() {
     ep = ep.times(eternityUGs.all[4].effectOrDefault(1));
     ep = ep.times(realityUGs.all[0].effectOrDefault(1));
   
+  ep = ep.pow(MetaMilestone.metaProgress.effectOrDefault(1));
+
   if (Teresa.isRunning) {
     ep = ep.pow(0.55 * GlitchSpeedUpgrades.all[0].effectOrDefault(1));
   }
@@ -199,6 +203,23 @@ export function gainedGlyphLevel() {
     actualLevel
   };
 }
+
+export function gainedMetas() {
+  let Metas = DC.D1;
+
+  Metas = Metas.mul(MetaFabricatorUpgrade(21).effectOrDefault(1));
+
+  return Metas;
+}
+
+export function gainedMetaRelays() {
+  let mr =  MetaFabricatorUpgrade(23).isBought ? Decimal.pow10(Math.log10(player.records.thisMeta.maxAM.log10()) / 15).add(1) : DC.D1;
+  mr = mr.add(Currency.metas.value);
+  mr = mr.mul(MetaMilestone.metaSpeed.effectOrDefault(1));
+  mr = mr.mul(MetaFabricatorUpgrade(13).effectOrDefault(1));
+  return mr.floor();
+}
+
 
 export function resetChallengeStuff() {
   player.chall2Pow = 1;
@@ -284,16 +305,17 @@ export function getOfflineEPGain(ms) {
 // reality count and none of the other things
 // eslint-disable-next-line max-params
 export function addRealityTime(time, realTime, rm, level, realities, ampFactor, projIM) {
-  let reality = "";
+  let reality = [];
   const celestials = [Teresa, Effarig, Enslaved, V, Ra, Laitela, Glitch];
   for (const cel of celestials) {
-    if (cel.isRunning) reality = cel.displayName;
+    if (cel.isRunning) reality.push(cel.displayName);
   }
   const shards = Effarig.shardsGained;
   player.records.recentRealities.pop();
   player.records.recentRealities.unshift([time, realTime, rm.times(ampFactor),
-    realities, reality, level, shards.mul(ampFactor), projIM]);
+    realities, makeEnumeration(reality), level, shards.mul(ampFactor), projIM]);
 }
+
 
 export function gainedInfinities() {
   if (EternityChallenge(4).isRunning || Pelle.isDisabled("InfinitiedMults")) {
@@ -363,7 +385,7 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
           ? blackHole.isActive
           : blackHole.id <= blackHolesActiveOverride;
         if (!isActive) break;
-        factor = factor.mul(Math.pow(blackHole.power, BlackHoles.unpauseAccelerationFactor));
+        factor = factor.mul(Decimal.pow(blackHole.power, BlackHoles.unpauseAccelerationFactor));
         factor = factor.mul(VUnlocks.achievementBH.effectOrDefault(1));
       }
     }
@@ -380,6 +402,8 @@ export function getGameSpeedupFactor(effectsToConsider, blackHolesActiveOverride
 
   factor = factor.mul(GlitchRifts.alpha.milestones[2].effectOrDefault(1));
   factor = factor.pow(VUnlocks.gamespeedPower.effectOrDefault(1));
+  factor = factor.pow(MetaFabricatorUpgrades.all[2].effectOrDefault(1)); 
+
   
   if (Enslaved.isStoringGameTime && effects.includes(GAME_SPEED_EFFECT.TIME_STORAGE)) {
     const storedTimeWeight = Ra.unlocks.autoPulseTime.canBeApplied ? 0.99 : 1;
@@ -427,14 +451,23 @@ export function realTimeMechanics(realDiff) {
   player.IAP.STDcoins += realDiff / (1000 * 900);
 
   Currency.riftForce.add(Glitch.riftForceGain.div(1000 / realDiff));
+
+  if(MetaFabricatorUpgrade(8).isBought && !Pelle.isDoomed) player.celestials.teresa.bestRunAM = player.celestials.teresa.bestRunAM.max(Currency.antimatter.value);
   
+  player.celestials.v.metaTheorems += MetaFabricatorUpgrade(20).effectOrDefault(DC.D0).div(1000 / realDiff).toNumber();
+  V.updateTotalRunUnlocks();
+
   // Ra memory generation bypasses stored real time, but memory chunk generation is disabled when storing real time.
   // This is in order to prevent players from using time inside of Ra's reality for amplification as well
   Ra.memoryTick(realDiff, !Enslaved.isStoringRealTime);
   if (AlchemyResource.momentum.isUnlocked) {
     player.celestials.ra.momentumTime += realDiff * Achievement(175).effectOrDefault(1);
   }
-  if(Ra.unlocks.PassiveAlc.isEffectActive)
+
+  if (MetaFabricatorUpgrade(17).isBought){
+    AlchemyResource.all.forEach(a => a.amount = Ra.alchemyResourceCap);
+  }
+  else if(Ra.unlocks.PassiveAlc.isEffectActive)
   {
     Ra.applyAlchemyReactions(realDiff);
   }
@@ -448,6 +481,7 @@ export function realTimeMechanics(realDiff) {
     player.records.thisInfinity.realTime += realDiff;
     player.records.thisEternity.realTime += realDiff;
     player.records.thisReality.realTime += realDiff;
+    player.records.thisMeta.realTime += realDiff;
     }
     Enslaved.storeRealTime();
     // Most autobuyers will only tick usefully on the very first tick, but this needs to be here in order to allow
@@ -469,19 +503,6 @@ export function gameLoop(passDiff, options = {}) {
   PerformanceStats.start("Game Update");
 
   EventHub.dispatch(GAME_EVENT.GAME_TICK_BEFORE);
-
-  // for (let i = 0; i < preInfinityUGs.all.length; i++) {
-  //   if(!preInfinityUGs.all[i].isBought) preInfinityUGs.all[i].tryUnlock()
-  // }
-  // for (let i = 0; i < breakInfinityUGs.all.length; i++) {
-  //   if(!breakInfinityUGs.all[i].isBought) breakInfinityUGs.all[i].tryUnlock()
-  // }
-  // for (let i = 0; i < eternityUGs.all.length; i++) {
-  //   if(!eternityUGs.all[i].isBought) eternityUGs.all[i].tryUnlock()
-  // }
-  // for (let i = 0; i < realityUGs.all.length; i++) {
-  //   if(!realityUGs.all[i].isBought) realityUGs.all[i].tryUnlock()
-  // }
   
   // In certain cases we want to allow the player to interact with the game's settings and tabs, but prevent any actual
   // resource generation from happening - in these cases, we have to make sure this all comes before the hibernation
@@ -594,6 +615,9 @@ export function gameLoop(passDiff, options = {}) {
     }
     player.records.thisReality.realTime += realDiff;
     player.records.thisReality.time = player.records.thisReality.time.add(diff);
+
+    player.records.thisMeta.realTime += realDiff;
+    player.records.thisMeta.time = player.records.thisMeta.time.add(diff);
   }
 
   DeltaTimeState.update(realDiff, diff);
@@ -604,7 +628,7 @@ export function gameLoop(passDiff, options = {}) {
   // behavior of eternity farming.
   preProductionGenerateIP(diff);
 
-  if (!Pelle.isDoomed) {
+  if (!Pelle.isDoomed || MetaFabricatorUpgrade(7)) {
     passivePrestigeGen();
   }
 
@@ -728,7 +752,7 @@ function updatePrestigeRates() {
 
 function passivePrestigeGen() {
   let eternitiedGain = 0;
-  if ((RealityUpgrade(14).isBought && !Glitch.isRunning) || (EffarigUnlock.eternity.isUnlocked && !Glitch.isRunning)) {
+  if (MetaFabricatorUpgrade(7).isBought || (RealityUpgrade(14).isBought && !Glitch.isRunning) || (EffarigUnlock.eternity.isUnlocked && !Glitch.isRunning)) {
     eternitiedGain = DC.D1.timesEffectsOf(
       Achievement(113),
       RealityUpgrade(3),
@@ -737,12 +761,13 @@ function passivePrestigeGen() {
     eternitiedGain = Decimal.times(eternitiedGain, getAdjustedGlyphEffect("timeetermult"));
     eternitiedGain = new Decimal(Time.deltaTime).times(
       Decimal.pow(eternitiedGain, AlchemyResource.eternity.effectValue));
+    if(Pelle.isDoomed) eternitiedGain = DC.D1;
     player.reality.partEternitied = player.reality.partEternitied.plus(eternitiedGain);
     Currency.eternities.add(player.reality.partEternitied.floor());
     player.reality.partEternitied = player.reality.partEternitied.sub(player.reality.partEternitied.floor());
   }
 
-  if (!EternityChallenge(4).isRunning && !Glitch.isRunning) {
+  if (!EternityChallenge(4).isRunning && (!Glitch.isRunning || MetaFabricatorUpgrade(7).isBought)) {
     let infGen = DC.D0;
     if (BreakInfinityUpgrade.infinitiedGen.isBought) {
       // Multipliers are done this way to explicitly exclude ach87 and TS32
@@ -754,10 +779,10 @@ function passivePrestigeGen() {
       );
       infGen = infGen.times(getAdjustedGlyphEffect("infinityinfmult"));
     }
-    if (RealityUpgrade(11).isBought && !Glitch.isRunning) {
+    if (RealityUpgrade(11).isBought && (!Glitch.isRunning || MetaFabricatorUpgrade(7).isBought)) {
       infGen = infGen.plus(RealityUpgrade(11).effectValue.times(Time.deltaTime));
     }
-    if (EffarigUnlock.eternity.isUnlocked && !Glitch.isRunning) {
+    if (EffarigUnlock.eternity.isUnlocked && (!Glitch.isRunning || MetaFabricatorUpgrade(7).isBought)) {
       // We consider half of the eternities we gained above this tick
       // to have been gained before the infinities, and thus not to
       // count here. This gives us the desirable behavior that
@@ -766,6 +791,8 @@ function passivePrestigeGen() {
       infGen = infGen.plus(gainedInfinities().times(
         Currency.eternities.value.minus(eternitiedGain.div(2).floor())).add(1).times(Time.deltaTime));
     }
+    if(Pelle.isDoomed && MetaFabricatorUpgrade(7).isBought) infGen = DC.D1;
+
     infGen = infGen.plus(player.partInfinitied);
     Currency.infinities.add(infGen.floor());
     player.partInfinitied = infGen.minus(infGen.floor()).toNumber();
@@ -870,14 +897,14 @@ function laitelaBeatText(disabledDim) {
 
 // This gives IP/EP/RM from the respective upgrades that reward the prestige currencies continuously
 function applyAutoprestige(diff) {
-  Currency.infinityPoints.add(TimeStudy(181).effectOrDefault(0));
+  Currency.infinityPoints.add(MetaFabricatorUpgrade(7).isBought ? TimeStudy(181).effectValue : TimeStudy(181).effectOrDefault(0));
 
-  if (TeresaUnlocks.epGen.canBeApplied) {
-    Currency.eternityPoints.add(player.records.thisEternity.bestEPmin.times(DC.D0_01)
+  if (TeresaUnlocks.epGen.canBeApplied || MetaFabricatorUpgrade(7).isBought) {
+    Currency.eternityPoints.add(player.records.thisEternity.bestEPmin.times(MetaFabricatorUpgrade(7).isBought ? 1 : DC.D0_01)
       .times(getGameSpeedupFactor().mul(Decimal.div(diff, 1000))).timesEffectOf(Ra.unlocks.continuousTTBoost.effects.autoPrestige));
   }
 
-  if (InfinityUpgrade.ipGen.isCharged) {
+  if (InfinityUpgrade.ipGen.isCharged || MetaFabricatorUpgrade(7).isBought) {
     const addedRM = MachineHandler.gainedRealityMachines
       .timesEffectsOf(InfinityUpgrade.ipGen.chargedEffect)
       .times(diff / 1000);
@@ -899,19 +926,19 @@ function updateTachyonGalaxies() {
   const tachyonGalaxyThreshold = 1000;
   const thresholdMult = getTachyonGalaxyMult();
 
-  player.dilation.baseTachyonGalaxies = Math.max(player.dilation.baseTachyonGalaxies,
-    1 + Math.floor(Decimal.log(Currency.dilatedTime.value.dividedBy(1000), thresholdMult)));
-  player.dilation.nextThreshold = DC.E3.times(new Decimal(thresholdMult)
-    .pow(player.dilation.baseTachyonGalaxies));
+    player.dilation.baseTachyonGalaxies = Math.max(player.dilation.baseTachyonGalaxies,
+      1 + Math.floor(Decimal.log(Currency.dilatedTime.value.dividedBy(1000), thresholdMult)));
+    player.dilation.nextThreshold = DC.E3.times(new Decimal(thresholdMult)
+      .pow(player.dilation.baseTachyonGalaxies));
     
     player.dilation.totalTachyonGalaxies =
-    Math.min(player.dilation.baseTachyonGalaxies * tachyonGalaxyMult, tachyonGalaxyThreshold) +
-    Math.max(player.dilation.baseTachyonGalaxies * tachyonGalaxyMult - tachyonGalaxyThreshold, 0) / tachyonGalaxyMult;
+    (Math.min(player.dilation.baseTachyonGalaxies * tachyonGalaxyMult, tachyonGalaxyThreshold) +
+    Math.max(player.dilation.baseTachyonGalaxies * tachyonGalaxyMult - tachyonGalaxyThreshold, 0) / tachyonGalaxyMult);
 
-    let a = player.dilation.baseTachyonGalaxies * DilationUpgrade.galaxyMultiplier.effectValue;
+    let a = player.dilation.totalTachyonGalaxies * DilationUpgrade.galaxyMultiplier.effectValue;
     if(a > 500000) a = a / ((a/500000) ** 0.8);
 
-  player.dilation.totalTachyonGalaxies = a;
+    player.dilation.totalTachyonGalaxies = a;
 }
 
 export function getTTPerSecond() {
@@ -1164,16 +1191,8 @@ export function init() {
   GameStorage.load();
   Tabs.all.find(t => t.config.id === player.options.lastOpenTab).show(true);
   Payments.init();
-  ShopPurchaseData.totalSTD = player.IAP.STDcoins;
-  player.IAP.STDcoins = ShopPurchaseData.totalSTD;
-  ShopPurchaseData.allDimPurchases = player.IAP.allDimPurchases;
-  ShopPurchaseData.dimPurchases = player.IAP.dimPurchases;
-  ShopPurchaseData.replicantiPurchases = player.IAP.replicantiPurchases;
-  ShopPurchaseData.dilatedTimePurchases = player.IAP.dilatedTimePurchases;
-  ShopPurchaseData.IPPurchases = player.IAP.IPPurchases;
-  ShopPurchaseData.EPPurchases = player.IAP.EPPurchases;
-  ShopPurchaseData.RMPurchases = player.IAP.RMPurchases;
 
+  // funny title
   document.title = "Antimatter Dimensions: " + titles[randomInt(0,titles.length++)];
 }
 

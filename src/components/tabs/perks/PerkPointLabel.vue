@@ -12,6 +12,7 @@ export default {
       treeLayout: 0,
       physicsEnabled: false,
       physicsOverride: false,
+      metaUnlocked: false
     };
   },
   computed: {
@@ -31,6 +32,7 @@ export default {
     update() {
       this.pp = Math.floor(Currency.perkPoints.value);
       this.physicsEnabled = player.options.perkPhysicsEnabled;
+      this.metaUnlocked = PlayerProgress.metaUnlocked();
     },
     togglePhysics() {
       if (this.physicsOverride !== undefined) return;
@@ -63,6 +65,9 @@ export default {
       PerkNetwork.currentLayout = PerkLayouts[this.treeLayout];
       PerkNetwork.setPhysics(player.options.perkPhysicsEnabled);
       PerkNetwork.moveToDefaultLayoutPositions(this.treeLayout);
+    },
+    buyall(){
+      dev.buyAllPerks()
     }
   }
 };
@@ -75,6 +80,14 @@ export default {
     Perk choices are permanent and cannot be respecced.
     <br>
     Diamond-shaped perks also give Automator Points.
+    <br>
+    <PrimaryButton
+    v-if="metaUnlocked"
+        class="o-primary-btn c-button-perk-layout"
+        @click="buyall"
+      >
+        Try buy all Perks
+      </PrimaryButton>
     <br>
     <div class="perk-settings">
       <PrimaryButton

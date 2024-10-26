@@ -75,9 +75,9 @@ class VRunUnlockState extends GameMechanicState {
   }
 
   reset(){
-    const playerData = player.celestials.v;
-    playerData.runUnlocks[this.id] = 0;
-    playerData.runRecords[this.id] = this.id == 0 ? -10 : 0;
+    const V = player.celestials.v;
+    V.runUnlocks[this.id] = 0;
+    V.runRecords[this.id] = this.id == 0 ? -10 : 0;
   }
 
   tryComplete() {
@@ -209,19 +209,21 @@ export const V = {
       else if (i < 10) sum += player.celestials.v.runUnlocks[i] * 2;
       else sum += player.celestials.v.runUnlocks[i] * 5;
     }
-    this.spaceTheorems = sum;
+    this.spaceTheorems = sum + player.celestials.v.metaTheorems;
   },
   reset() {
-    player.celestials.v = {
-      unlockBits: 0,
-      run: false,
-      quotes: [],
-      runUnlocks: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      goalReductionSteps: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      STSpent: 0,
-      runGlyphs: [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []],
-      runRecords: [-10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    };
+    const v = player.celestials.v;
+    
+    if (!MetaFabricatorUpgrade(14).isBought) {
+      v.unlockBits = 0;
+      v.run = false;
+      v.runUnlocks = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      v.goalReductionSteps = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      v.runGlyphs = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []];
+      v.runRecords = [-10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    }
+    v.metaTheorems = 0;
+    v.STSpent = 0;
     this.spaceTheorems = 0;
   },
   get availableST() {
@@ -244,10 +246,10 @@ export const V = {
     return this.spaceTheorems >= 110;
   },
   get rageDimPower() {
-    return Decimal.pow(1e-3, VRunUnlock(10).completions);
+    return Decimal.pow(1e-3 * MetaFabricatorUpgrades.all[4].effectOrDefault(new Decimal(1)).toNumber() , VRunUnlock(10).completions);
   },
   get rageTickPower() {
-    return Decimal.pow(1e-3, VRunUnlock(10).completions);
+    return Decimal.pow(1e-3 * MetaFabricatorUpgrades.all[4].effectOrDefault(new Decimal(1)).toNumber() , VRunUnlock(10).completions);
   },
   nextNormalReductionCost() {
     return 1000;

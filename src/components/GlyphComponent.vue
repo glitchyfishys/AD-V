@@ -319,6 +319,8 @@ export default {
       if(!this.glyph.cosmetic){
         if(this.glyph.type === "effarig" && player.options.themeModern == "S15") return Celestials.teresa.symbol;
         if(this.glyph.type === "effarig" && player.options.themeModern == "S16") return Celestials.effarig.symbol;
+        if(this.glyph.type === "effarig" && player.options.themeModern == "S17") return Celestials.enslaved.symbol;
+        if(this.glyph.type === "effarig" && player.options.themeModern == "S18") return Celestials.laitela.symbol;
         if(this.glyph.type === "effarig" && player.options.themeModern == "S14") return "\uF185";
         if(this.glyph.type === "effarig" && player.options.themeModern == "S13") return Celestials.v.symbol;
       }

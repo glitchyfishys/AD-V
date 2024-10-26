@@ -91,8 +91,7 @@ class RaPetState extends GameMechanicState {
 
   get isUnlocked() {
     if(this.name == "Glitch") return realityUGs.all[9].isBought;
-    
-    return this.requiredUnlock === undefined || this.requiredUnlock.isUnlocked;
+    return this.requiredUnlock === undefined || this.requiredUnlock.isUnlocked ||  this.requiredUnlock === true;
   }
 
   get isCapped() {
@@ -112,7 +111,7 @@ class RaPetState extends GameMechanicState {
   }
 
   set memories(value) {
-    this.data.memories = Math.min(value, 1e150);
+    this.data.memories = (isNaN(value) || value == Infinity) ? 1e250 : Decimal.min(value, 1e250).toNumber();
   }
 
   get memoryChunks() {
@@ -120,7 +119,7 @@ class RaPetState extends GameMechanicState {
   }
 
   set memoryChunks(value) {
-    this.data.memoryChunks = Math.min(value, 1e150);
+    this.data.memoryChunks = Math.min(value, 1e250);
   }
 
   get requiredMemories() {
@@ -194,7 +193,7 @@ class RaPetState extends GameMechanicState {
   }
 
   levelUp() {
-    if (this.memories < this.requiredMemories) return;
+    if (this.memories < this.requiredMemories || this.level >= Ra.levelCap) return;
 
     this.memories -= this.requiredMemories;
     this.level++;
@@ -215,7 +214,7 @@ class RaPetState extends GameMechanicState {
     // Adding memories from half of the gained chunks this tick results in the best mathematical behavior
     // for very long simulated ticks
     const newMemories = Math.min(seconds * (this.memoryChunks + newMemoryChunks / 2) * Ra.productionPerMemoryChunk *
-      this.memoryUpgradeCurrentMult, 1e150);
+      this.memoryUpgradeCurrentMult, 1e250);
     this.memoryChunks += newMemoryChunks;
     this.memories += newMemories;
     if(this.memories > this.maxmemories) this.memories = this.maxmemories
@@ -249,26 +248,30 @@ export const Ra = {
       return Ra.totalPetLevel >= this.requiredLevels;
     }
   },
-  // Dev/debug function for easier testing
   reset() {
     const data = player.celestials.ra;
-    data.unlockBits = 0;
+    data.petWithRemembrance = "";
     data.run = false;
-    data.charged = new Set();
     data.disCharge = false;
-    data.peakGamespeed = 1;
-    for (const pet of Ra.pets.all) pet.reset();
+    data.peakGamespeed = new Decimal(1);
+    if(MetaFabricatorUpgrade(24).isBought) return;
+    data.charged = new Set();
+    data.unlockBits = 0;
+      for (const pet of Ra.pets.all) {
+      if(pet.name == "Glitch" && MetaMilestone.metaRaAndLai.isReached) continue;
+      pet.reset();
+    }
   },
   memoryTick(realDiff, generateChunks) {
     if (!this.isUnlocked) return;
     for (const pet of Ra.pets.all) pet.tick(realDiff, generateChunks);
   },
   get productionPerMemoryChunk() {
-    let res = Effects.product(Ra.unlocks.continuousTTBoost.effects.memories, Achievement(168));
+    let res = Effects.product(Ra.unlocks.continuousTTBoost.effects.memories, Achievement(168) );
     for (const pet of Ra.pets.all) {
-      if (pet.isUnlocked) res *= Math.max(pet.memoryProductionMultiplier,1);
+      if (pet.isUnlocked) res *= Decimal.max(pet.memoryProductionMultiplier,1).toNumber();
     }
-    return res;
+    return Math.min(res ** MetaMilestone.metaProgress.effectOrDefault(new Decimal(1)).toNumber(), 1e250);
   },
   get memoryBoostResources() {
     const boostList = [];
@@ -276,6 +279,7 @@ export const Ra = {
       if (pet.memoryProductionMultiplier !== 1) boostList.push(pet.memoryGain);
     }
     if (Achievement(168).isUnlocked) boostList.push("Achievement 168");
+    if (MetaMilestone.metaProgress.isReached) boostList.push("Meta milestone 1");
     if (Ra.unlocks.continuousTTBoost.canBeApplied) boostList.push("current TT");
 
     if (boostList.length === 1) return `${boostList[0]}`;
@@ -287,7 +291,12 @@ export const Ra = {
     if (level > Ra.levelCap) return Infinity;
     const adjustedLevel = level + Math.pow(level, 2) / 10;
     const post15Scaling = Math.pow(1.4, Math.max(0, level - 15));
-    return Math.floor(Math.pow(adjustedLevel, 5.52) * post15Scaling * 1e6);
+    
+    const post100Scaling = Math.pow(3.5, Math.max(0, level - 100));
+    const post150Scaling = Math.pow(36, Math.max(0, level - 150));
+    const post175Scaling = Math.pow(120, Math.max(0, level - 175));
+
+    return Math.floor(Math.pow(adjustedLevel, 5.52) * post15Scaling * post100Scaling * post150Scaling * post175Scaling * 1e6);
   },
   // Returns a string containing a time estimate for gaining a specific amount of exp (UI only)
   timeToGoalString(pet, expToGain) {
@@ -309,11 +318,11 @@ export const Ra = {
     return this.pets.all.map(pet => (pet.isUnlocked ? pet.level : 0)).sum();
   },
   get levelCap() {
-    return 50 + GlitchRifts.gamma.milestones[4].effectOrDefault(0);
+    return 50 + GlitchRifts.gamma.milestones[4].effectOrDefault(0) + MetaFabricatorUpgrade(9).effectOrDefault(0);
   },
   get maxTotalPetLevel() {
-    return (this.levelCap / 2) * (this.pets.all.length);
-  },
+    return (this.levelCap) * (this.pets.all.filter(pet => pet.isUnlocked).length);
+  }, 
   checkForUnlocks() {
     if (!VUnlocks.raUnlock.canBeApplied) return;
     for (const unl of Ra.unlocks.all) {

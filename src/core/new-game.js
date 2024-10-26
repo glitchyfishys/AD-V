@@ -76,6 +76,11 @@ export const NG = {
     const v = JSON.stringify(player.celestials.v);
     const ra = JSON.stringify(player.celestials.ra);
     const laitela = JSON.stringify(player.celestials.laitela);
+
+    const pelle = JSON.stringify(player.celestials.pelle);
+    
+    const CD = JSON.stringify(player.dimensions.chaos);
+
     const STDs = JSON.stringify(player.IAP);
     
     const glitchsave = GlitchRealityUpgrades.all[15].isBought;
@@ -136,16 +141,28 @@ export const NG = {
                     55,104,56,60,54,204,15,17,51, 102,42,53,52,107,105,61,72,205,16,80,43,106,62,73,302,81,44,303,82,103,45,83,46,301]);
         player.blackHole.forEach( i => {i.intervalUpgrades=160; i.intervalUpgrades=160; i.unlocked=true});
         player.reality.upgReqs = 67108800;
-        Currency.antimatter.reset()
-        Currency.infinityPoints.reset()
-        Currency.eternityPoints.reset()
+        Currency.antimatter.reset();
+        Currency.infinityPoints.reset();
+        Currency.eternityPoints.reset();
         Currency.eternities.reset();
+
+        player.celestials.pelle.quoteBits = JSON.parse(pelle).quoteBits;
+        player.celestials.pelle.showBought = JSON.parse(pelle).showBought;
+        player.celestials.pelle.collapsed = JSON.parse(pelle).collapsed;
+
+        player.dimensions.chaos = JSON.parse(CD);
       }
+
+
       player.IAP = JSON.parse(STDs);
       
       GameStorage.save();
       GameStorage.load();
     }
     
+  },
+
+  leavePelle(){
+    Pelle.reset();
   }
 };

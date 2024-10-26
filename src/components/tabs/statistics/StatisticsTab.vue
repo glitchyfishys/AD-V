@@ -37,9 +37,18 @@ export default {
         bestReal: TimeSpan.zero,
         this: TimeSpan.zero,
         thisReal: TimeSpan.zero,
-        totalTimePlayed: "",
         bestRate: new Decimal(0),
         bestRarity: 0,
+      },
+      meta: {
+        isUnlocked: false,
+        count: new Decimal(0),
+        best: TimeSpan.zero,
+        bestReal: TimeSpan.zero,
+        this: TimeSpan.zero,
+        thisReal: TimeSpan.zero,
+        totalTimePlayed: "",
+        bestRate: new Decimal(0),
       },
       isDoomed: false,
       realTimeDoomed: TimeSpan.zero,
@@ -134,7 +143,6 @@ export default {
         reality.best.copyFrom(Time.bestReality);
         reality.bestReal.copyFrom(Time.bestRealityRealTime);
         reality.this.copyFrom(Time.thisReality);
-        reality.totalTimePlayed = Time.totalTimePlayed.toStringShort();
         // Real time tracking is only a thing once reality is unlocked:
         infinity.thisReal.copyFrom(Time.bestInfinityRealTime);
         infinity.bankRate = infinity.projectedBanked.div(Decimal.clampMin(33, Time.thisEternityRealTime.totalMilliseconds)).times(60000);
@@ -143,6 +151,23 @@ export default {
         reality.bestRate.copyFrom(bestReality.RMmin);
         reality.bestRarity = Math.max(strengthToRarity(bestReality.glyphStrength), 0);
       }
+
+      const isMetaUnlocked = progress.isMetaUnlocked;
+      const meta = this.meta;
+      const bestMeta = records.bestMeta;
+      meta.isUnlocked = isMetaUnlocked;
+
+      if (isMetaUnlocked) {
+        meta.count.copyFrom(Currency.metas);
+        meta.best.copyFrom(Time.bestMetaTime);
+        meta.bestReal.copyFrom(Time.bestMetaRealTime);
+        meta.hasBest = bestMeta.realTime < 999999999999;
+        meta.this.copyFrom(Time.thisMetaTime);
+        meta.totalTimePlayed = Time.totalTimePlayed.toStringShort();
+        meta.thisReal.copyFrom(Time.thisMetaRealTime);
+        meta.bestRate.copyFrom(bestMeta.MRmin);
+      }
+
       this.updateMatterScale();
 
       this.isDoomed = Pelle.isDoomed;
@@ -322,6 +347,31 @@ export default {
       <div>Your best Glyph rarity is {{ formatRarity(reality.bestRarity) }}.</div>
       <br>
     </div>
+    
+    <div
+      v-if="meta.isUnlocked"
+      class="c-stats-tab-subheader c-stats-tab-general"
+    >
+      <div class="c-stats-tab-title c-stats-tab-meta">
+        Meta
+      </div>
+      <div>
+        You have {{ meta.count.toString() }} Metas
+      </div>
+      <div v-if="meta.hasBest">
+        Your fastest Meta was {{ meta.best.toStringShort() }}.
+          ({{ meta.bestReal.toStringShort() }} real time)
+    </div>
+      <div>
+        You have spent {{ meta.this.toStringShort() }} in this Meta.
+          ({{ meta.thisReal.toStringShort() }} real time)
+      </div>
+      <div>
+        Your best Meta Relays per minute
+        is {{ format(meta.bestRate, 2, 2) }}.
+      </div>
+      <br>
+    </div>
   </div>
 </template>
 
@@ -357,5 +407,9 @@ export default {
 
 .c-stats-tab-doomed {
   color: var(--color-pelle--base);
+}
+
+.c-stats-tab-meta {
+  color: var(--color-meta);
 }
 </style>

@@ -92,6 +92,10 @@ class AlchemyResourceState extends GameMechanicState {
   get capped() {
     return this.amount >= this.cap;
   }
+
+  reset() {
+    this.amount = 0;
+  }
 }
 
 class BasicAlchemyResourceState extends AlchemyResourceState {
@@ -233,7 +237,10 @@ export const AlchemyResource = mapGameDataToObject(
 
 export const AlchemyResources = {
   all: AlchemyResource.all,
-  base: AlchemyResource.all.filter(r => r.isBaseResource)
+  base: AlchemyResource.all.filter(r => r.isBaseResource),
+  reset(){
+    AlchemyResources.all.forEach(x => x.amount = 0);
+  }
 };
 
 export const AlchemyReactions = (function() {

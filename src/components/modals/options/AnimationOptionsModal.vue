@@ -17,12 +17,14 @@ export default {
       dilationUnlocked: false,
       tachyonsUnlocked: false,
       realityUnlocked: false,
+      metaUnlocked: false,
       animatedThemeUnlocked: false,
       bigCrunch: false,
       eternity: false,
       dilation: false,
       tachyonParticles: false,
       reality: false,
+      meta: false,
       background: false,
       blobSnowflakes: 16,
       isS11Active: false
@@ -58,6 +60,9 @@ export default {
     reality(newValue) {
       player.options.animations.reality = newValue;
     },
+    meta(newValue) {
+      player.options.animations.meta = newValue;
+    },
     background(newValue) {
       player.options.animations.background = newValue;
     },
@@ -71,6 +76,7 @@ export default {
       this.infinityUnlocked = this.fullCompletion || progress.isInfinityUnlocked;
       this.eternityUnlocked = this.fullCompletion || progress.isEternityUnlocked;
       this.realityUnlocked = this.fullCompletion || progress.isRealityUnlocked;
+      this.metaUnlocked = progress.isMetaUnlocked;
       // 136 is given upon dilating
       this.dilationUnlocked = this.realityUnlocked || Achievement(136).canBeApplied;
       this.tachyonsUnlocked = this.realityUnlocked || Currency.tachyonParticles.gt(0);
@@ -124,6 +130,11 @@ export default {
         v-if="realityUnlocked"
         v-model="reality"
         text="Reality:"
+      />
+      <ModalOptionsToggleButton
+        v-if="metaUnlocked"
+        v-model="meta"
+        text="Meta:"
       />
       <div v-if="!isS11Active">
         <ModalOptionsToggleButton

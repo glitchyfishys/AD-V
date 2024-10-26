@@ -120,7 +120,7 @@ export default {
       return this.renderedRowIndices.includes(row);
     },
     isObscured(row) {
-      if(GlitchSpeedUpgrade(4).isBought) return row >= 21;
+      if(GlitchSpeedUpgrade(4).isBought || PlayerProgress.metaUnlocked()) return row >= 21;
       if(this.isDoomed) return row >= 18;
       if(PlayerProgress.realityUnlocked()) return row >= 17;
       if(PlayerProgress.eternityUnlocked()) return row >= 13;

@@ -18,6 +18,7 @@ export function getChaosDimensionFinalMultiplierUncached(tier) {
 
   multiplier = multiplier.mul(Decimal.pow(dimension.perPurchase, dimension.bought));
   multiplier = multiplier.mul(GlyphSacrifice.glitch.effectOrDefault(1));
+  multiplier = multiplier.mul(MetaFabricatorUpgrade(17).effectOrDefault(1));
 
   multiplier = applyCDPowers(multiplier, tier);
 
@@ -244,4 +245,9 @@ export const ChaosDimensions = {
 
     ChaosDimension(1).produceCurrency(Currency.chaosCores, diff);
   }
+  
 };
+
+export function resetChaosDimensionsAmount() {
+  for (const dim of ChaosDimensions.all) dim.amount = new Decimal(dim.bought);
+}

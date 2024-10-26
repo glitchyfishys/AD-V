@@ -21,6 +21,7 @@ import { speedrunMilestones } from "./speedrun-milestones";
 import { tabNotifications } from "./tab-notifications";
 import { tabs } from "./tabs";
 import { glitch } from "./glitch";
+import { meta } from "./meta";
 
 export const GameDatabase = {
   achievements,
@@ -45,7 +46,8 @@ export const GameDatabase = {
   speedrunMilestones,
   tabNotifications,
   tabs,
-  glitch
+  glitch,
+  meta
 };
 
 window.GameDatabase = GameDatabase;

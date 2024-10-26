@@ -220,7 +220,7 @@ export const v = {
       id: 10,
       name: "Revengeance",
       description: value => `Reach ${format(Decimal.pow10(value), 2)} Antimatter in Glitch's Reality with V's Reality Enabled, you also need  ${STreq[VRunUnlock(10).completions]} ST<br> 
-      <span style="color: var(--color-bad)">completing this will have dire consequences</span>`,
+      <span style="color: var(--color-bad)">completing this will have dire consequences</span> ${VRunUnlock(10).completions > 0 ? `you have a ^${format(Decimal.div(1, V.rageDimPower), 2, 2)} nerf to AD,Id,TD and tickspeed` : "" }`,
       values: [1e40, 1e42, 5e42, 2.5e40],
       condition: value => V.isRunning && Glitch.isRunning && V.isExtreme && V.spaceTheorems >= STreq[VRunUnlock(10).completions] && Currency.antimatter.value.log10() > value,
       currentValue: () => Currency.antimatter.value.log10(),
@@ -394,18 +394,18 @@ export const v = {
     },
     newStudies: {
       id: 11,
-      reward: () => `New Triad Studies that scale based on TS`,
+      reward: () => `New Triad Studies that scale based on ST`,
       description: () => `Have ${formatInt(200)} V-Achievements`,
       effect: 3,
       format: x => "3 New Studies",
       requirement: () => V.spaceTheorems >= 200,
     },
-    prestigious: {
+    metaReset: {
       id: 12,
-      reward: () => `Unlock a new Layer (NYI)`,
+      reward: () => `You can now Escape this multiverse by going Meta`,
       description: () => `Have ${formatInt(230)} V-Achievements`,
       effect: 3,
-      format: x => "New Prestige",
+      format: x => "Meta unlocked",
       requirement: () => V.spaceTheorems >= 230,
     },
   }

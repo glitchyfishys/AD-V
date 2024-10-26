@@ -89,7 +89,7 @@ export class Sacrifice {
 
     let postPowerSacrificeMult = prePowerSacrificeMult.clampMin(1).pow(this.sacrificeExponent);
 
-    let softcap = (postPowerSacrificeMult).div("1e1E16").pow(0.9);
+    let softcap = (postPowerSacrificeMult).div("1e1E16").pow(MetaFabricatorUpgrade(15).isBought ? 0.5 : 0.9);
     return postPowerSacrificeMult.gte("1e1E16") ? postPowerSacrificeMult.div(softcap) : postPowerSacrificeMult;
   }
 
@@ -112,7 +112,7 @@ export class Sacrifice {
     let postPowerSacrifice = prePowerBoost.clampMin(1).pow(this.sacrificeExponent);
 
     let softcap = postPowerSacrifice.div("1e1E16").pow(0.9);
-    player.sacrificed = player.sacrificed.min("1e1E27");
+    player.sacrificed = player.sacrificed.min(MetaFabricatorUpgrade(15).isBought ? "1e1E50" : "1e1E27");
     return postPowerSacrifice.gte("1e1E16") ? postPowerSacrifice.div(softcap) : postPowerSacrifice;
   }
 }

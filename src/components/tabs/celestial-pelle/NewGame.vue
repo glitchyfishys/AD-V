@@ -7,6 +7,7 @@ export default {
       visible: false,
       hasMoreCosmetics: false,
       selectedSetName: "",
+      isMeta: false,
     };
   },
   computed: {
@@ -15,7 +16,10 @@ export default {
         opacity: this.opacity,
         visibility: this.visible ? "visible" : "hidden",
       };
-    }
+    },
+    glitchresettext(){
+      return GlitchRealityUpgrade(16).isBought ? "but keep some Celestrel stuff" : "";
+    },
   },
   methods: {
     update() {
@@ -23,9 +27,13 @@ export default {
       this.opacity = (GameEnd.endState - END_STATE_MARKERS.SHOW_NEW_GAME) * 2;
       this.hasMoreCosmetics = GlyphAppearanceHandler.lockedSets.length > 0;
       this.selectedSetName = GlyphAppearanceHandler.chosenFromModal?.name ?? "None (will choose randomly)";
+      this.isMeta = PlayerProgress.metaUnlocked();
     },
     startNewGame() {
       NG.startNewGame();
+    },
+    escape() {
+      NG.leavePelle();
     },
     openSelectionModal() {
       Modal.cosmeticSetChoice.show();
@@ -44,12 +52,24 @@ export default {
       and Companion Glyph.
     </h2>
     <h3>You can use the button in the top-right to view the game as it is right now.</h3>
-    <div class="c-new-game-button-container">
+    <div class="c-new-game-button-container"
+    v-if="!isMeta"
+    >
       <button
         class="c-new-game-button"
         @click="startNewGame"
       >
-        Start over?
+        Start over? {{ glitchresettext }}
+      </button>
+    </div>
+    <div class="c-new-game-button-container"
+      v-else
+    >
+      <button
+        class="c-new-game-button"
+        @click="escape"
+      >
+        Leave Your Doomed Reality
       </button>
     </div>
     <br>

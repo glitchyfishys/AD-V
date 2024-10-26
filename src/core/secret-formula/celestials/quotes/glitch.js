@@ -118,7 +118,7 @@ export const glitchQuotes = {
   glitchBuySpeed4: {
     id: 12,
     lines: [
-      { text: "Hello $1", name: "Glitch", 1: V},
+      { text: "Hello $1", 1: V},
       "I have a request",
       { text: "What? Why?", name: "V", background: celBackground("v")},
       { text: "Who are you?", name: "V", background: celBackground("v")},
@@ -131,6 +131,17 @@ export const glitchQuotes = {
       { text: "Very well, you better be watching them", name: "V", background: celBackground("v")},
       "Ok, Destroyer as long as you don't ruin his Achievements you don't have anything to worry about",
       "I will see you soon very soon... or after you finish with him",
+    ],
+  },
+  goMeta: {
+    id: 13,
+    lines: [
+      "Well done, we are almost there",
+      "Soon you will met Zegary, the Celestials of Machanics",
+      "Before then we need more help to get into the Meta Realm",
+      "So far Teresa, Effarig and V have help me. Next would be Vela and Ra",
+      "Lai'tela might not help and Pelle... wait Pelle is from the Meta Realm?, is it HeviPelle?, did something happen?",
+      "Don't worry about that right now, focus on fixing the Meta Fabricator it will be our best chance to stop _____",
     ],
   },
 };

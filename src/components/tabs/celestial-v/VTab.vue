@@ -91,7 +91,7 @@ export default {
           VUnlocks.raUnlock
         ],
       ];
-      if(this.hasExtremeUnlocked) list.push([VUnlocks.gamespeedPower, VUnlocks.RMcap, VUnlocks.TScap], [VUnlocks.glyphCap, VUnlocks.newStudies, VUnlocks.prestigious]);
+      if(this.hasExtremeUnlocked) list.push([VUnlocks.gamespeedPower, VUnlocks.RMcap, VUnlocks.TScap], [VUnlocks.glyphCap, VUnlocks.newStudies, VUnlocks.metaReset]);
       return list;
     },
     runButtonClassObject() {
@@ -139,6 +139,7 @@ export default {
       if(player.options.themeModern == "S15") return "Teresa-V's";
       if(player.options.themeModern == "S16") return "Effarig-V's";
       if(player.options.themeModern == "S17") return `The Nameless V's`;
+      if(player.options.themeModern == "S18") return `Lai'tela-V's`;
       if(player.options.themeModern == "S14") return "Ra-V's";
       return "V's";
     },
@@ -146,6 +147,7 @@ export default {
       if(player.options.themeModern == "S15") return "Teresa-V";
       if(player.options.themeModern == "S16") return "Effarig-V";
       if(player.options.themeModern == "S17") return `The Nameless V`;
+      if(player.options.themeModern == "S18") return `Lai'tela-V`;
       if(player.options.themeModern == "S14") return "Ra-V";
       return "V";
     },
@@ -209,8 +211,9 @@ export default {
       for (let i = 10; i < VRunUnlocks.all.length; i++) {
         VRunUnlocks.all[i].reset();
       }
+      Achievement(197).unlock();
       V.updateTotalRunUnlocks();
-      if(VUnlocks.prestigious.isUnlocked) Quotes.v.thankYou.show();
+      if(VUnlocks.metaReset.isUnlocked) Quotes.v.thankYou.show();
     },
     createCursedGlyph() {
       Glyphs.giveCursedGlyph();
@@ -254,12 +257,13 @@ export default {
     </div>
     <div v-else>
       <div
-        v-if="hasHardUnlocked"
+        v-if="hasHardUnlocked || hasExtremeUnlocked "
         class="c-v-info-text"
       >
         <PrimaryButton
           class="o-primary-btn--subtab-option"
           @click="toggleHard"
+          v-if="hasHardUnlocked"
         >
           <span v-if="isHard">Hide</span>
           <span v-else>Show</span>

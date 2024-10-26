@@ -48,8 +48,31 @@ export const ra = {
       memoryGain: "reality machines and antimatter",
       requiredUnlock: () => undefined,
       rawMemoryChunksPerSecond: () => 5 * Math.pow(Currency.realityMachines.value.pLog10() / 10, 1.8),
-      memoryProductionMultiplier: () => Ra.unlocks.glitchyfishysXP.effectOrDefault(1) * Ra.unlocks.memroygain1.effectOrDefault(1) * Ra.unlocks.memroygain2.effectOrDefault(1) * Ra.unlocks.memroygain3.effectOrDefault(1) * Ra.unlocks.memroygain4.effectOrDefault(1) * Ra.unlocks.memroygain5.effectOrDefault(1)
-    }
+      memoryProductionMultiplier: () => Ra.unlocks.glitchyfishysXP.effectOrDefault(1) *
+      Ra.unlocks.memroygain1.effectOrDefault(1) * Ra.unlocks.memroygain2.effectOrDefault(1) *
+      Ra.unlocks.memroygain3.effectOrDefault(1) * Ra.unlocks.memroygain4.effectOrDefault(1) *
+      Ra.unlocks.memroygain5.effectOrDefault(1)
+    },
+    cante: {
+      id: "cante",
+      name: "Cante",
+      color: "#71c6f3",
+      chunkGain: "Replicanti",
+      memoryGain: "Replicanti Muliplier",
+      requiredUnlock: () => MetaFabricatorUpgrade(25).isBought,
+      rawMemoryChunksPerSecond: () => 4 * Math.pow(Currency.replicanti.value.pLog10() / 5e14, 0.8),
+      memoryProductionMultiplier: () => Ra.unlocks.canteXP.effectOrDefault(1)
+    },
+    null: {
+      id: "null",
+      name: "Null",
+      color: "#000000",
+      chunkGain: "Metas",
+      memoryGain: "Null",
+      requiredUnlock: () => MetaFabricatorUpgrade(25).isBought,
+      rawMemoryChunksPerSecond: () => 26 * Math.pow(Currency.metas.value.pLog10() / 10, 1.5),
+      memoryProductionMultiplier: () => Ra.unlocks.nullXP.effectOrDefault(1)
+    },
   },
   unlocks: {
     autoTP: {
@@ -308,7 +331,7 @@ export const ra = {
       effect: 10,
       pet: "glitchyfishys",
       level: 1,
-      displayIcon: `<i class="far fa-dot-circle"></i>`,
+      displayIcon: `<i class="far fa-brain"></i>`,
     },
     memroygain2: {
       id: 29,
@@ -365,6 +388,88 @@ export const ra = {
       pet: "glitchyfishys",
       level: 50,
       displayIcon: `<span class="fas fa-bolt"></span>`,
+    },
+    canteXP: {
+      id: 37,
+      reward: () => `Gain more memorys based on`,
+      effect: () => Decimal.pow(Ra.pets.cante.level, 4).toNumber(),
+      pet: "cante",
+      level: 2,
+      displayIcon: `Ξ`,
+    },
+    repMul: {
+      id: 37,
+      reward: () => `Gain a multiplier to Replicanti based on Cante's memory level`,
+      effect: () => Decimal.pow(Ra.pets.cante.level, 4),
+      pet: "cante",
+      level: 5,
+      displayIcon: `Ξ`,
+    },
+    repEffect: {
+      id: 38,
+      reward: () => `Increse the effectiveness of RGs`,
+      effect: () => Decimal.pow(Ra.pets.cante.level, 4),
+      pet: "cante",
+      level: 15,
+      displayIcon: `Ξ`,
+    },
+    repCap: {
+      id: 39,
+      reward: () => `Increse the cap of RGs`,
+      effect: () => Decimal.pow(Ra.pets.cante.level, 2),
+      pet: "cante",
+      level: 50,
+      displayIcon: `Ξ`,
+    },
+    canteUnlock: {
+      id: 40,
+      reward: () => `Unlock Cante, the Celestial of Replicanti`,
+      pet: "cante",
+      level: 150,
+      displayIcon: `Ξ`,
+    },
+    nullXP: {
+      id: 41,
+      reward: () => `NYI`,
+      effect: () => Decimal.pow(Ra.pets.null.level, 2).toNumber(),
+      pet: "null",
+      level: 5,
+      displayIcon: `<span class="fas fa-droplet"></span>`,
+    },
+    nullCharge: {
+      id: 41,
+      reward: () => `NYI`,
+      pet: "null",
+      level: 15,
+      displayIcon: `<span class="fas fa-droplet"></span>`,
+    },
+    nullUpgrade1: {
+      id: 42,
+      reward: () => `NYI`,
+      pet: "null",
+      level: 35,
+      displayIcon: `<span class="fas fa-droplet"></span>`,
+    },
+    nullUpgrade2: {
+      id: 43,
+      reward: () => `NYI`,
+      pet: "null",
+      level: 75,
+      displayIcon: `<span class="fas fa-droplet"></span>`,
+    },
+    nullUpgrade3: {
+      id: 44,
+      reward: () => `NYI`,
+      pet: "null",
+      level: 125,
+      displayIcon: `<span class="fas fa-droplet"></span>`,
+    },
+    nullUpgrade1: {
+      id: 45,
+      reward: () => `Nnlock Null, the Celestial of void`,
+      pet: "null",
+      level: 150,
+      displayIcon: `<span class="fas fa-droplet"></span>`,
     },
   }
 };

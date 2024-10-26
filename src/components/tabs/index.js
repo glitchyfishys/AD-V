@@ -53,6 +53,12 @@ import GlitchTab from "./celestial-glitch/GlitchTab";
 
 import ChaosDimensionsTab from "./chaos-dimensions/ChaosDimensionsTab";
 
+// meta
+
+import MetaFabricatorTab from "./meta/MetaFabricatorTab";
+import MetaMilestonesTab from "./meta/MetaMilestonesTab";
+
+
 const TabComponents = {
   AntimatterDimensionsTab,
   InfinityDimensionsTab,
@@ -102,7 +108,9 @@ const TabComponents = {
   glitcheternity,
   glitchreality,
   GlitchTab,
-  ChaosDimensionsTab
+  ChaosDimensionsTab, // meta
+  MetaFabricatorTab,
+  MetaMilestonesTab
 };
 
 export default TabComponents;

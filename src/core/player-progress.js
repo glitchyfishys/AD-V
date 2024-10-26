@@ -17,7 +17,11 @@ export class PlayerProgress {
   }
 
   get isRealityUnlocked() {
-    return this._player.realities > 0;
+    return this._player.realities > 0 || this.isMetaUnlocked;
+  }
+
+  get isMetaUnlocked() {
+    return this._player.meta.metas.gt(0);
   }
 
   get hasFullCompletion() {
@@ -54,6 +58,10 @@ export class PlayerProgress {
 
   static realityUnlocked() {
     return PlayerProgress.current.isRealityUnlocked;
+  }
+
+  static metaUnlocked() {
+    return PlayerProgress.current.isMetaUnlocked;
   }
 
   static seenAlteredSpeed() {

@@ -87,5 +87,9 @@ export const confirmationTypes = [
     name: "Glitch Challenges",
     option: "glitchCL",
     isUnlocked: () => true
-  }
+  }, {
+    name: "Meta",
+    option: "meta",
+    isUnlocked: () => PlayerProgress.metaUnlocked()
+  },
 ];

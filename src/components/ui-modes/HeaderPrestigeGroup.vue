@@ -26,7 +26,7 @@ export default {
   background-color: rgba(0, 0, 0, 0.75);
   display: flex;
   flex-direction: row;
-  height: 14rem;
+  height: 21rem;
   width: 100%;
   color: var(--color-text);
   position: sticky;

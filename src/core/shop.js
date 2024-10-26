@@ -91,7 +91,7 @@ class ShopPurchaseState extends RebuyableMechanicState {
   // ShopPurchaseData for any particular key is undefined in between page load and STD load,
   // so we need to guard against that causing NaNs to propagate through the save
   get purchases() {
-    return ShopPurchaseData[this.config.key] ?? 0;
+    return player.IAP[this.config.key] ?? 0;
   }
   get playerpurchases() {
     return player.IAP[this.config.key] ?? 0;
@@ -179,7 +179,7 @@ shop.purchaseTimeSkip = function() {
  
   if(Enslaved.isStoringRealTime){
     player.celestials.enslaved.storedReal += time * 1000;
-    time = player.celestials.enslaved.storedReal % Enslaved.storedRealTimeCap
+    time = (player.celestials.enslaved.storedReal - Enslaved.storedRealTimeCap) / 1000
     player.celestials.enslaved.storedReal = Math.min(player.celestials.enslaved.storedReal, Enslaved.storedRealTimeCap);
   }
 
@@ -194,7 +194,7 @@ shop.purchaseLongerTimeSkip = function() {
   
   if(Enslaved.isStoringRealTime){
     player.celestials.enslaved.storedReal += time * 1000;
-    time = player.celestials.enslaved.storedReal % Enslaved.storedRealTimeCap
+    time = (player.celestials.enslaved.storedReal - Enslaved.storedRealTimeCap) / 1000
     player.celestials.enslaved.storedReal = Math.min(player.celestials.enslaved.storedReal, Enslaved.storedRealTimeCap);
   }
 

@@ -122,7 +122,7 @@ export function getDimensionFinalMultiplierUncached(tier) {
     multiplier = multiplier.pow(1.05);
   }
 
-  if(multiplier.gt("1e1E26")) multiplier = multiplier.pow( 1 / Math.sqrt(multiplier.log10() / 1e26) );
+  if(multiplier.gt("1e1E26") && !MetaFabricatorUpgrade(15).isBought) multiplier = multiplier.pow( 1 / Math.sqrt(multiplier.log10() / 1e26) );
   if(multiplier.gt("1e1E30")) multiplier = multiplier.pow( 1 / ((multiplier.log10() / 1e30) ** 0.85) );
   
   return multiplier;
@@ -195,6 +195,8 @@ function applyADPowers(mult, tier) {
   if (InfinityChallenge(4).isCompleted) {
     multiplier = multiplier.pow(InfinityChallenge(4).reward.effectValue);
   }
+
+  multiplier = multiplier.pow(MetaFabricatorUpgrades.all[1].effectOrDefault(1));
 
   multiplier = multiplier.pow(glyphPowMultiplier * glyphEffarigPowMultiplier * Ra.momentumValue);
 

@@ -47,7 +47,6 @@ export const Teresa = {
       effarig: new Decimal(sac.effarig),
       reality: new Decimal(sac.reality),
       glitch: new Decimal(sac.glitch),
-
     };
   },
   get pouredAmount() {
@@ -75,7 +74,18 @@ export const Teresa = {
     return player.celestials.teresa.bestRunAM.gt(1);
   },
   quotes: Quotes.teresa,
-  symbol: "Ϟ"
+  symbol: "Ϟ",
+
+  reset(){
+    player.celestials.teresa.bestRunAM = new Decimal();
+    player.celestials.teresa.lastRepeatedMachines = new Decimal();
+    player.celestials.teresa.bestAMSet = [];
+    if(MetaFabricatorUpgrade(8).isBought) return;
+    this.pouredAmount = 0;
+    player.celestials.teresa.unlockBits = 0;
+    player.celestials.teresa.perkShop = [0,0,0,0,0,0,0,0];
+  }
+
 };
 
 class PerkShopUpgradeState extends RebuyableMechanicState {

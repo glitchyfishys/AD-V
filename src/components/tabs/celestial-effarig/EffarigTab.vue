@@ -32,6 +32,7 @@ export default {
       if(player.options.themeModern == "S15") return "Teresa-Effarig";
       if(player.options.themeModern == "S14") return "Ra-Effarig";
       if(player.options.themeModern == "S17") return `The Nameless Effarig's`;
+      if(player.options.themeModern == "S18") return `Lai'tela-Effarig's`;
       if(player.options.themeModern == "S13") return "V-Effarig";
       return "Effarig";
     },
@@ -39,6 +40,7 @@ export default {
       if(player.options.themeModern == "S15") return "Teresa-Effarig";
       if(player.options.themeModern == "S14") return "Ra-Effarig";
       if(player.options.themeModern == "S17") return `The Nameless Effarig`;
+      if(player.options.themeModern == "S18") return `Lai'tela-Effarig`;
       if(player.options.themeModern == "S13") return "V-Effarig";
       return "Effarig";
     },

@@ -26,8 +26,8 @@ export function getTickSpeedMultiplier() {
   let galaxies = effectiveBaseGalaxies();
 
   let CC = Glitch.chaosCoresBoost;
-  if(Pelle.isDoomed) CC = CC ** 0.1;
-  if(V.isRunningExtreme) CC = 1;
+  if(Pelle.isDoomed) CC = CC.pow(0.1);
+  if(V.isRunningExtreme) CC = DC.D1;
   
   const effects = Effects.product(
     InfinityUpgrade.galaxyBoost,
@@ -40,7 +40,7 @@ export function getTickSpeedMultiplier() {
     InfinityChallenge(5).reward,
     PelleUpgrade.galaxyPower,
     PelleRifts.decay.milestones[1]
-  ) * CC;
+  ) * CC.toNumber();
 
 
   if (galaxies < 3) {

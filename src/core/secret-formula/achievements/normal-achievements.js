@@ -505,11 +505,11 @@ export const normalAchievements = [
   {
     id: 76,
     name: "An hour for each dimension",
-    get description() { return `Play for ${formatInt(8)} Hours.`; },
-    checkRequirement: () => Time.totalTimePlayed.totalHours.gte(8),
+    get description() { return `Play for ${formatInt(8)} Hours. ${ PlayerProgress.metaUnlocked() ? "(in this Meta)" : ""}`; },
+    checkRequirement: () => Time.thisMetaTime.totalHours.gte(8),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    reward: "Extremely small multiplier to Antimatter Dimensions based on time played.",
-    effect: () => Decimal.max(Decimal.pow(Time.totalTimePlayed.totalHours.div(2), 0.05), 1),
+    reward: () => `Extremely small multiplier to Antimatter Dimensions based on ${ PlayerProgress.metaUnlocked() ? "time played in this Meta" : "time played"} .`,
+    effect: () => Decimal.max(Decimal.pow(Time.thisMetaTime.totalHours.div(2), 0.05), 1),
     formatEffect: value => `${formatX(value, 2, 2)}`
   },
   {
@@ -1141,8 +1141,8 @@ export const normalAchievements = [
   {
     id: 155,
     name: "NOW THATS AN ETERNITY",
-    get description() { return `Play for ${formatFloat(5, 1)} billion years.`; },
-    checkRequirement: () => Time.totalTimePlayed.totalYears.gt(5e9),
+    get description() { return `Play for ${formatFloat(5, 1)} billion years. ${ PlayerProgress.metaUnlocked() ? "in this Meta" : ""}`},
+    checkRequirement: () => Time.thisMetaTime.totalYears.gt(5e9),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     get reward() { return `Black Hole durations are ${formatPercents(0.1)} longer.`; },
     effect: 1.1
@@ -1220,8 +1220,8 @@ export const normalAchievements = [
   {
     id: 166,
     name: "Nicenice.",
-    get description() { return `Get a Glyph with level exactly ${formatInt(6969)}.`; },
-    checkRequirement: () => gainedGlyphLevel().actualLevel === 6969,
+    get description() { return `Get a Glyph with level exactly ${formatInt(6969)}.${ PlayerProgress.metaUnlocked() ? ` or over ${format(1e6)}` : ""}`; },
+    checkRequirement: () => gainedGlyphLevel().actualLevel === 6969 || (gainedGlyphLevel().actualLevel > 1e6 && PlayerProgress.metaUnlocked()),
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     get reward() { return `+${formatInt(69)} to Glyph level.`; },
     effect: 69
@@ -1378,10 +1378,20 @@ export const normalAchievements = [
     name: "The End",
     description: "Beat the game.",
     checkRequirement: () => GameEnd.endState > END_STATE_MARKERS.GAME_END && !GameEnd.removeAdditionalEnd,
-    checkEvent: GAME_EVENT.GAME_TICK_AFTER
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+    get reward() {
+      return `Unlock Glitch's speedy Reality`;
+    },
   },
   {
     id: 191,
+    name: "I think something is broken",
+    get description() {return `Start producing Chaos Cores`},
+    checkRequirement: () => Currency.chaosCores.gt(0),
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+  },
+  {
+    id: 192,
     name: "A blessing from the lord",
     displayId: 777,
     get description() {return `Get a ${format("1e1000")} Sacrifice multiplier from Teresa's Reality`},
@@ -1392,8 +1402,41 @@ export const normalAchievements = [
     },
   },
   {
-    id: 192,
+    id: 193,
+    name: "Geting Extreme",
+    get description() {return `Start V's Extreme reality`},
+    checkRequirement: () => V.isRunningExtreme,
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+  },
+  {
+    id: 194,
     name: "Finally, I can get the Glitch Glyph",
     get description() {return `Create A Glitch Glyph`},
+  },
+  {
+    id: 195,
+    name: "I guess that was expected",
+    get description() {return `Reach the Antimatter hard cap`},
+    checkRequirement: () => Currency.antimatter.gte("1e1E50"),
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+  },
+  {
+    id: 196,
+    name: "Oh-oh, livin' on a prayer",
+    get description() {return `Complete Revengeance twice`},
+    checkRequirement: () => player.celestials.v.runUnlocks[10] > 1,
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+  },
+  {
+    id: 197,
+    name: "I think I'm softlocked",
+    get description() {return `Reset your EX-V Achievements`},
+  },
+  {
+    id: 198,
+    name: "This is geting Meta",
+    get description() {return `Escape the confinements of the multiverse`},
+    checkRequirement: () => true,
+    checkEvent: GAME_EVENT.META_RESET_AFTER,
   },
 ];

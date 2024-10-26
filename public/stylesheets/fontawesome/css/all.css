@@ -7775,8 +7775,7 @@ readers do not read off random characters that represent icons */
 
 .far,
 .fa-regular {
-  font-family: 'Font Awesome 6 Free';
-  font-weight: 400; }
+  font-family: 'Font Awesome 6 Free'; }
 :root, :host {
   --fa-font-solid: normal 900 1em/1 "Font Awesome 6 Free"; }
 

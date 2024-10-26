@@ -26,7 +26,7 @@ export default {
       Glitch.riftToCore();
     },
     STEffect(){
-      return formatPercents(Glitch.chaosCoresBoost - 1);
+      return formatPercents(Glitch.chaosCoresBoost.toNumber() - 1);
     },
     maxAll() {
       maxAllChaos();

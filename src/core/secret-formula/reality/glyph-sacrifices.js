@@ -82,11 +82,11 @@ export const glyphSacrifice = {
       if (Pelle.isDisabled("glyphsac")) return 0;
       const sac = player.reality.glyphs.sac.effarig.add(added ?? 0);
       // This doesn't use the GlyphSacrificeHandler cap because it hits its cap (+100%) earlier
-      const capped = Decimal.clampMax(sac, Achievement(191).isUnlocked ? "1e1E10" : 1e70);
+      const capped = Decimal.clampMax(sac, Achievement(192).isUnlocked ? "1e1E10" : 1e70);
       return 2 * Decimal.log10(capped.div(1e20).add(1));
     },
     description: amount => `+${formatPercents(amount / 100, 2)} additional Glyph rarity`,
-    cap: () => Achievement(191).isUnlocked ? undefined : 1e70
+    cap: () => Achievement(192).isUnlocked ? undefined : 1e70
   },
   "reality": {
     id: "reality",

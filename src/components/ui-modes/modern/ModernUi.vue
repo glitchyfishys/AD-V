@@ -40,6 +40,7 @@ export default {
       const crunchButtonVisible = !player.break && Player.canCrunch;
       this.bigCrunch = crunchButtonVisible && Time.bestInfinityRealTime.totalMinutes.gt(1);
       this.hasReality = PlayerProgress.realityUnlocked();
+
       // This only exists to force a key-swap after pressing the button to start a new game; the news ticker can break
       // if it isn't redrawn
       this.newGameKey = Pelle.isDoomed;
@@ -72,6 +73,7 @@ export default {
         v-if="!bigCrunch"
         class="tab-container"
       >
+
         <HeaderPrestigeGroup />
         <div class="information-header">
           <HeaderChallengeDisplay />

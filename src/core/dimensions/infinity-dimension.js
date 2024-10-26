@@ -170,6 +170,7 @@ class InfinityDimensionState extends DimensionState {
     mult = mult.pow(Ra.momentumValue);
     mult = mult.powEffectOf(PelleRifts.paradox);
     mult = mult.pow(PerkShopUpgrade.infinityPow.effectOrDefault(1));
+    mult = mult.pow(MetaFabricatorUpgrades.all[1].effectOrDefault(1));
 
     if (player.dilation.active || PelleStrikes.dilation.hasStrike) {
       mult = dilatedValueOf(mult);
@@ -196,7 +197,7 @@ class InfinityDimensionState extends DimensionState {
       mult = mult.pow(0.5);
     }
 
-    if(mult.gte("1e1E21")) mult = mult.div(mult.div("1e1E21").pow(0.99));
+    if(mult.gte("1e1E21")) mult = mult.div(mult.div("1e1E21").pow( MetaFabricatorUpgrade(15).isBought ? 0.95 : 0.99));
 
     return mult;
   }

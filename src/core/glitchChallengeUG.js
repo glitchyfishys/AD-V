@@ -40,7 +40,8 @@ class preInfinityUGState extends BitPurchasableMechanicState {
   }
 
   get isPossible() {
-    return this.config.hasFailed ? !this.config.hasFailed() : true;
+    if(PlayerProgress.metaUnlocked()) return (this.config.hasFailed ? !this.config.hasFailed() : true);
+    return (this.config.hasFailed ? !this.config.hasFailed() : true) && !this.config.progLock();
   }
   
   get isAvailableForPurchase() {
@@ -52,8 +53,12 @@ class preInfinityUGState extends BitPurchasableMechanicState {
     return false;
   }
   
+  get islocked(){
+    return this.config.progLock() && !PlayerProgress.metaUnlocked();
+  }
+
   tryUnlock() {
-    if (this.isAvailableForPurchase || !this.config.checkRequirement()) return;
+    if (this.isAvailableForPurchase || !this.config.checkRequirement() || this.islocked) return;
     player.glitch.preinfinity.upgradebits |= (1 << this.id);
     GameUI.notify.error(`You've unlocked glitched Upgrade: ${this.config.name}`);
   }
@@ -118,7 +123,12 @@ class breakInfinityUGState extends BitPurchasableMechanicState {
   }
 
   get isPossible() {
-    return this.config.hasFailed ? !this.config.hasFailed() : true;
+    if(PlayerProgress.metaUnlocked()) return (this.config.hasFailed ? !this.config.hasFailed() : true);
+    return (this.config.hasFailed ? !this.config.hasFailed() : true) && !this.config.progLock();
+  }
+
+  get islocked(){
+    return this.config.progLock() && !PlayerProgress.metaUnlocked();
   }
   
   get isAvailableForPurchase() {
@@ -129,9 +139,9 @@ class breakInfinityUGState extends BitPurchasableMechanicState {
     if(typeof this.config.isUseless != "undefined") return (this.config.isUseless() && Pelle.isDoomed)
     return false;
   }
-  
+
   tryUnlock() {
-    if (this.isAvailableForPurchase || !this.config.checkRequirement()) return;
+    if (this.isAvailableForPurchase || !this.config.checkRequirement() || this.isLocked) return;
     player.glitch.breakinfinity.upgradebits |= (1 << this.id);
     GameUI.notify.error(`You've unlocked glitched Upgrade: ${this.config.name}`);
   }
@@ -196,7 +206,12 @@ class eternityUGState extends BitPurchasableMechanicState {
   }
 
   get isPossible() {
-    return this.config.hasFailed ? !this.config.hasFailed() : true;
+    if(PlayerProgress.metaUnlocked()) return (this.config.hasFailed ? !this.config.hasFailed() : true);
+    return (this.config.hasFailed ? !this.config.hasFailed() : true) && !this.config.progLock();
+  }
+
+  get islocked(){
+    return this.config.progLock() && !PlayerProgress.metaUnlocked();
   }
   
   get isAvailableForPurchase() {
@@ -209,7 +224,7 @@ class eternityUGState extends BitPurchasableMechanicState {
   }
   
   tryUnlock() {
-    if (this.isAvailableForPurchase || !this.config.checkRequirement()) return;
+    if (this.isAvailableForPurchase || !this.config.checkRequirement() || this.isLocked) return;
     player.glitch.eternity.upgradebits |= (1 << this.id);
     GameUI.notify.error(`You've unlocked glitched eternity Upgrade: ${this.config.name}`);
   }
@@ -273,7 +288,12 @@ class realityUGState extends BitPurchasableMechanicState {
   }
 
   get isPossible() {
-    return this.config.hasFailed ? !this.config.hasFailed() : true;
+    if(PlayerProgress.metaUnlocked()) return (this.config.hasFailed ? !this.config.hasFailed() : true);
+    return (this.config.hasFailed ? !this.config.hasFailed() : true) && !this.config.progLock();
+  }
+
+  get islocked(){
+    return this.config.progLock() && !PlayerProgress.metaUnlocked();
   }
   
   get isAvailableForPurchase() {
@@ -286,7 +306,7 @@ class realityUGState extends BitPurchasableMechanicState {
   }
   
   tryUnlock() {
-    if (this.isAvailableForPurchase || !this.config.checkRequirement()) return;
+    if (this.isAvailableForPurchase || !this.config.checkRequirement() || this.islocked) return;
     player.glitch.reality.upgradebits |= (1 << this.id);
     GameUI.notify.error(`You've unlocked glitched reality Upgrade: ${this.config.name}`);
   }

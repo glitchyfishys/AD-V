@@ -22,7 +22,7 @@ import { GameKeyboard } from "./keyboard";
 // for the other modifier keys (#3093).
 
 // Free keys:
-// i, j, k, l, n, o, p, q, v, w, x
+// i, j, k, n, o, p, q, v, w, x
 
 
 export const shortcuts = [
@@ -183,6 +183,12 @@ export const shortcuts = [
       GameUI.notify.info(`Glyph respec is now ${player.reality.respec ? "active" : "inactive"}`);
     },
     visible: () => Pelle.isDoomed
+  },  {
+    name: "Meta",
+    keys: ["v"],
+    type: "bindHotkey",
+    function: () => requestManualMeta(),
+    visible: () => PlayerProgress.metaUnlocked()
   }, {
     name: "Save game",
     keys: ["mod", "s"],

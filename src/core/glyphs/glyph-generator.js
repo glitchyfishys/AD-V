@@ -231,7 +231,7 @@ export const GlyphGenerator = {
   randomStrength(rng) {
     // Technically getting this upgrade really changes glyph gen but at this point almost all
     // the RNG is gone anyway.
-    if (Ra.unlocks.maxGlyphRarityAndShardSacrificeBoost.canBeApplied) return rarityToStrength(100 + ( Achievement(191).isUnlocked ? Effarig.maxRarityBoost + Effects.sum(Achievement(146), GlyphSacrifice.effarig, GlitchRifts.gamma.milestones[2]) : 0));
+    if (Ra.unlocks.maxGlyphRarityAndShardSacrificeBoost.canBeApplied) return rarityToStrength(100 + ( Achievement(192).isUnlocked ? Effarig.maxRarityBoost + Effects.sum(Achievement(146), GlyphSacrifice.effarig, GlitchRifts.gamma.milestones[2]) : 0));
     let result = GlyphGenerator.gaussianBellCurve(rng) * GlyphGenerator.strengthMultiplier;
     const relicShardFactor = Ra.unlocks.extraGlyphChoicesAndRelicShardRarityAlwaysMax.canBeApplied ? 1 : rng.uniform();
     const increasedRarity = relicShardFactor * Effarig.maxRarityBoost +
@@ -240,7 +240,7 @@ export const GlyphGenerator = {
     result += increasedRarity / 40;
     // Raise the result to the next-highest 0.1% rarity.
     result = Math.ceil(result * 400) / 400;
-    return Math.min(result, Achievement(191).isUnlocked ? rarityToStrength(10000) : rarityToStrength(100));
+    return Math.min(result, Achievement(192).isUnlocked ? rarityToStrength(10000) : rarityToStrength(100));
   },
 
   // eslint-disable-next-line max-params

@@ -32,7 +32,7 @@ export default {
         return;
       }
       Glyphs.addToInventory(GlyphGenerator.glitchGlyph(this.glitchGlyphLevel));
-      Achievement(192).unlock();
+      Achievement(194).unlock();
       this.emitClose();
     },
     formatGlyphEffect(effect) {

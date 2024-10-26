@@ -1,4 +1,3 @@
-import { Currency } from "../../currency";
 import { GameDatabase } from "../../secret-formula/game-database";
 import { Quotes } from "../quotes";
 import { GlitchRifts } from "./glitchrift";
@@ -143,7 +142,7 @@ export const Glitch = {
   },
 
   get riftForceGain(){
-    if(!this.isRunning || this.activeAugments.length < 9) return new Decimal(0);
+    if((!this.isRunning || this.activeAugments.length < 9) && (!MetaFabricatorUpgrade(6).isBought && !Pelle.isDoomed) ) return new Decimal(0);
 
     function form (value) {return (GlitchSpeedUpgrades.all[2].isBought ? (value.log10() ** 0.2) : Decimal.log10(Decimal.log10(value)))};
     
@@ -162,14 +161,16 @@ export const Glitch = {
 
     value = value.mul(CC);
 
+    if(value.gt("1e1E6")) value = value.pow( 1 / (((value.log10() / 1e6) ** 0.8)));
+
     return value
   },
 
   get chaosCoresBoost(){
-    if(Currency.chaosCores.eq(0)) return 1;
-    let eff = Math.max( Currency.chaosCores.value.pow(0.1).mul(Currency.chaosCores.value.log10()).toNumber() ** 0.25, 1);
-    if(eff > 1e15) eff = eff / ((eff / 1e15) ** 0.9)
-    return Math.min(eff,1e50);
+    if(Currency.chaosCores.eq(0)) return new Decimal(1);
+    let eff = Decimal.max( Currency.chaosCores.value.pow(0.1).mul(Currency.chaosCores.value.log10()).pow(0.25), 1);
+    if(eff.gt(1e15)) eff = eff.div(eff.div(1e15).pow(0.9))
+    return eff.min(1e50);
   },
 
   riftToCore(){
@@ -180,7 +181,7 @@ export const Glitch = {
 
   get riftToCoreGain(){
     if(this.riftForce.lt(10)) return "0";
-    return format(Currency.riftForce.value.log(5) ** 0.2, 2);
+    return format(Currency.riftForce.value.log(5) ** 0.3, 2);
   },
 
   get laitelamaxdim(){
@@ -212,6 +213,31 @@ export const Glitch = {
   },
   quotes: Quotes.glitch,
   symbol: "ὼ",
+
+  reset(){
+    const G = player.celestials.glitch;
+
+    G.augment.effectbits = 0;
+    G.upgrades
+    Currency.chaosCores.reset()
+    Currency.riftForce.reset()
+
+    if(!MetaFabricatorUpgrade(12).isBought){
+      G.upgrades.unlockbits = 0;
+      G.upgrades.speedunlockbits = 0;
+    }
+
+    G.upgrades.broughtbits = 0;
+    G.upgrades.speedbroughtbits = 0;
+    G.upgrades.rebuyable = [0,0,0,0,0];
+
+    if(MetaMilestone.glyphKeep.isReached) return;
+    player.glitch.preinfinity.upgradebits = 0;
+    player.glitch.breakinfinity.upgradebits = 0;
+    player.glitch.eternity.upgradebits = 0;
+    player.glitch.reality.upgradebits = 0;
+  },
+
 };
 
 EventHub.logic.on(GAME_EVENT.GAME_LOAD, () => {
@@ -251,4 +277,8 @@ EventHub.logic.on(GAME_EVENT.ACHIEVEMENT_UNLOCKED, () => {
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
   if(Tab.celestials.glitch.isOpen) Glitch.quotes.glitchReality.show();
+});
+
+EventHub.logic.on(GAME_EVENT.META_RESET_AFTER, () => {
+  Glitch.quotes.goMeta.show();
 });

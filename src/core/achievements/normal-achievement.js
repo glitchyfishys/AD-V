@@ -33,6 +33,10 @@ class AchievementState extends GameMechanicState {
     return this.row < 18;
   }
 
+  get isPreMeta() {
+    return this.row < 19 ;
+  }
+
   get isUnlocked() {
     return (player.achievementBits[this.row - 1] & this._bitmask) !== 0;
   }
@@ -101,6 +105,10 @@ export const Achievements = {
    */
   get preReality() {
     return Achievements.all.filter(ach => ach.isPreReality);
+  },
+
+  get preMeta() {
+    return Achievements.all.filter(ach => ach.isPreMeta);
   },
 
   /**

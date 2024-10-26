@@ -184,6 +184,10 @@ body.t-s12 {
   border-left-color: var(--color-glitch);
 }
 
+.o-tab-btn--meta::after {
+  border-left-color: var(--color-meta);
+}
+
 .tab-button.shop {
   background-color: #d9bb26;
 }

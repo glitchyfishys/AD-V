@@ -82,6 +82,7 @@ import UpgradeMechanicLockModal from "@/components/modals/UpgradeMechanicLockMod
 import S12GamesModal from "@/components/modals/secret-themes/S12GamesModal";
 
 import GlitchGlyphCreationModal from "@/components/modals/GlitchGlyphCreationModal";
+import MetaResetModal from "@/components/modals/prestige/MetaResetModal";
 
 
 let nextModalID = 0;
@@ -100,7 +101,7 @@ export class Modal {
     // Most of the time the close event will be a prestige event, in which case we want it to trigger on all higher
     // prestiges as well
     const prestigeOrder = [GAME_EVENT.DIMBOOST_AFTER, GAME_EVENT.GALAXY_RESET_AFTER, GAME_EVENT.BIG_CRUNCH_AFTER,
-      GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.REALITY_RESET_AFTER];
+      GAME_EVENT.ETERNITY_RESET_AFTER, GAME_EVENT.REALITY_RESET_AFTER, GAME_EVENT.META_RESET_AFTER];
     let shouldClose = false;
     for (const prestige of prestigeOrder) {
       if (prestige === closeEvent) shouldClose = true;
@@ -221,6 +222,7 @@ Modal.enterSpeedrun = new Modal(SpeedrunModeModal);
 Modal.modifySeed = new Modal(ModifySeedModal);
 Modal.changeName = new Modal(ChangeNameModal);
 Modal.armageddon = new Modal(ArmageddonModal, 1);
+Modal.meta = new Modal(MetaResetModal, 1, GAME_EVENT.META_RESET_AFTER)
 
 Modal.confirmationOptions = new Modal(ConfirmationOptionsModal);
 Modal.infoDisplayOptions = new Modal(InfoDisplayOptionsModal);

@@ -412,7 +412,7 @@ export const tabs = [
     name: "Celestials",
     hideAt: 2.4,
     UIClass: "o-tab-btn--celestial",
-    condition: () => (Teresa.isUnlocked || GlitchRifts.gamma.milestones[5].effectOrDefault(0)),
+    condition: () => (Teresa.isUnlocked || GlitchRifts.gamma.milestones[5].effectOrDefault(0)) || PlayerProgress.metaUnlocked(),
     id: 9,
     hidable: true,
     subtabs: [
@@ -569,5 +569,32 @@ export const tabs = [
         hidable: true
       }
     ],
-  }
+  },
+  {
+    key: "meta",
+    name: "Meta",
+    hideAt: 2.3,
+    UIClass: "o-tab-btn--meta",
+    condition: () => PlayerProgress.metaUnlocked(),
+    id: 12,
+    hidable: true,
+    subtabs: [
+      {
+        key: "metaRewwards",
+        name: "Meta Rewards",
+        symbol: "※",
+        component: "metaMilestonesTab",
+        id: 0,
+        hidable: true
+      },
+      {
+        key: "metaFabricator",
+        name: "Meta Fabricator",
+        symbol: "φ",
+        component: "metaFabricatorTab",
+        id: 1,
+        hidable: true
+      },
+    ],
+  },
 ];

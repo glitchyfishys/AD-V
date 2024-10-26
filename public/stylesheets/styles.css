@@ -792,16 +792,6 @@ button:focus {
   background: var(--color-celestials);
 }
 
-.o-tab-btn--glitch {
-  color: var(--color-glitch);
-  background-color: var(--color-prestige--accent);
-  border-color: var(--color-glitch);
-}
-
-.o-tab-btn--glitch:hover {
-  background: var(--color-glitch);
-}
-
 /* #endregion tab buttons */
 
 #loading {

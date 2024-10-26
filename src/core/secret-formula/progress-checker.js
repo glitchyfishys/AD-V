@@ -163,7 +163,7 @@ export const progressStages = [
     id: 18,
     name: "Glitch (8th Celestial)",
     hasReached: save => save.celestials?.glitch?.rifts?.epsilon?.reducedTo == 1,
-    suggestedResource: "RiftForce and upgrades",
+    suggestedResource: "RiftForce and Glitch's Upgrades",
     subProgressValue: save => Decimal.log10(1 + save.celestials.glitch.riftForce) / 444,
   },
 ];

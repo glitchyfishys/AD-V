@@ -249,6 +249,7 @@ class TimeDimensionState extends DimensionState {
     mult = mult.pow(ImaginaryUpgrade(11).effectOrDefault(1));
     mult = mult.powEffectOf(PelleRifts.paradox);
     mult = mult.pow(GlitchRifts.gamma.milestones[0].effectOrDefault(1));
+    mult = mult.pow(MetaFabricatorUpgrades.all[1].effectOrDefault(1));
 
     if (player.dilation.active || PelleStrikes.dilation.hasStrike) {
       mult = dilatedValueOf(mult);

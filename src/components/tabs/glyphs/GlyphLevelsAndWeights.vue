@@ -156,13 +156,13 @@ export default {
     formatFactor(x) {
       // Not applied to + perks since it's always whole; for factors < 1, the slice makes the
       // factor be fixed point.
-      return Notations.current.isPainful || x > 1000
+      return Notations.current.isPainful || Decimal.gt(x, 1000)
         ? format(x, 2, 2)
         : x.toPrecision(5).slice(0, 6);
     },
     formatLevel(x) {
-      return x > 1000
-        ? formatInt(Math.floor(x))
+      return Decimal.gt(x, 1000)
+        ? format(Math.floor(x), 0, 0)
         : format(x, 2, 4);
     },
     makeRowStyle(r) {

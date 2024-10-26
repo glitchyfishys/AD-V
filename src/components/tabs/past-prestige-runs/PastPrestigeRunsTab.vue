@@ -9,6 +9,13 @@ export default {
   data() {
     return {
       layers: {
+        meta: {
+          name: "Meta",
+          plural: "Metas",
+          currency: "MR",
+          condition: () => PlayerProgress.metaUnlocked(),
+          getRuns: () => player.records.recentMetas,
+        },
         reality: {
           name: "Reality",
           plural: "Realities",

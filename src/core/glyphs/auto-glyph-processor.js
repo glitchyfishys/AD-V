@@ -38,7 +38,7 @@ export const AutoGlyphProcessor = {
   // on only the glyph itself and not external factors.
   filterValue(glyph) {
     const typeCfg = this.types[glyph.type];
-    if (["companion", "reality"].includes(glyph.type)) return Infinity;
+    if (["companion", "reality", "glitch"].includes(glyph.type)) return Infinity;
     if (glyph.type === "cursed") return -Infinity;
     switch (this.scoreMode) {
       case AUTO_GLYPH_SCORE.LOWEST_SACRIFICE:
@@ -320,8 +320,8 @@ export function getGlyphLevelInputs() {
   let baseLevel = sources.ep.value * sources.repl.value * sources.dt.value * sources.eternities.value *
     staticFactors.perkShop + shardFactor;
 
-  const singularityEffect = SingularityMilestone.glyphLevelFromSingularities.effectOrDefault(1);
-  baseLevel *= singularityEffect;
+  const singularityEffect = SingularityMilestone.glyphLevelFromSingularities.effectOrDefault(new Decimal(1));
+  baseLevel *= singularityEffect.toNumber();
 
   let scaledLevel = baseLevel;
   // The softcap starts at begin and rate determines how quickly level scales after the cap, turning a linear pre-cap
@@ -336,8 +336,8 @@ export function getGlyphLevelInputs() {
     const excess = (level - begin) / rate;
     return begin + 0.5 * rate * (Math.sqrt(1 + 4 * excess) - 1);
   };
-  scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.instability, 500);
-  scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.hyperInstability, 400);
+  scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.instability, MetaFabricatorUpgrade(15).isBought ? 1.5e5 : 500);
+  scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.hyperInstability, MetaFabricatorUpgrade(15).isBought ? 1e8 : 400);
   scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.glitchInstability, 1e4);
   scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.chaosInstability, 250);
 

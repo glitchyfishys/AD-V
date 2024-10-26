@@ -64,6 +64,22 @@ export default {
           return `x${format(memory,2,2)} memory gain.`;
         },
       },
+      {
+        pet: Ra.pets.cante,
+        scalingUpgradeVisible: () => Ra.unlocks.repMul.isUnlocked,
+        scalingUpgradeText: () => {
+          const  memory = Ra.unlocks.canteXP.effectOrDefault(1);
+          return `x${format(memory,2,2)} memory gain.`;
+        },
+      },
+      {
+        pet: Ra.pets.null,
+        scalingUpgradeVisible: () => Ra.unlocks.nullCharge.isUnlocked,
+        scalingUpgradeText: () => {
+          const  memory = Ra.unlocks.nullXP.effectOrDefault(1);
+          return `x${format(memory,2,2)} memory gain.`;
+        },
+      },
     ],
     petStyle() {
       return {
@@ -88,6 +104,7 @@ export default {
       if(player.options.themeModern == "S15") n = "Teresa-Ra's";
       if(player.options.themeModern == "S16") return "Effarig-Ra's";
       if(player.options.themeModern == "S13") n = "V-Ra's";
+      if(player.options.themeModern == "S18") return `Lai'tela-Ra's`;
       return `Within ${n} Reality, Memory Chunks for Celestial Memories
         will be generated based on certain resource amounts.`;
     },
@@ -96,7 +113,7 @@ export default {
   methods: {
     update() {
       this.memoriesPerChunk = Ra.productionPerMemoryChunk;
-      this.isRaCapped = Ra.totalPetLevel === 300;
+      this.isRaCapped = Ra.totalPetLevel === Ra.maxTotalPetLevel;
       this.totalLevels = Ra.totalPetLevel;
       this.hasRemembrance = Ra.remembrance.isUnlocked;
       this.remembranceReq = Ra.remembrance.requiredLevels;
@@ -110,6 +127,7 @@ export default {
       if(player.options.themeModern == "S15") return "Teresa-Ra's";
       if(player.options.themeModern == "S16") return "Effarig-Ra's";
       if(player.options.themeModern == "S17") return `The Nameless Ra's`;
+      if(player.options.themeModern == "S18") return `Lai'tela-Ra's`;
       if(player.options.themeModern == "S13") return "V-Ra's";
       return "Ra's";
     },

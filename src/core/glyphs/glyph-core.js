@@ -745,6 +745,7 @@ export const Glyphs = {
     const currCount = activeGlyphList.length - 4 * activeGlyphList.filter(x => x && x.type === "cursed").length;
     if (startingReality) player.requirementChecks.reality.maxGlyphs = currCount;
     player.requirementChecks.reality.maxGlyphs = Math.max(player.requirementChecks.reality.maxGlyphs, currCount);
+    if(currCount != 0) player.requirementChecks.meta.noGlyphs = true;
   },
   // Modifies a basic glyph to have timespeed, and adds the new effect to time glyphs
   applyGamespeed(glyph) {
@@ -849,7 +850,7 @@ export function calculateGlyph(glyph) {
 
     // Used to randomly generate strength in this case; I don't think we actually care.
     if (glyph.strength === 1) glyph.strength = 1.5;
-    glyph.strength = Math.min(Achievement(191).isUnlocked ? rarityToStrength(1e5) : rarityToStrength(100), glyph.strength);
+    glyph.strength = Math.min(Achievement(192).isUnlocked ? rarityToStrength(1e5) : rarityToStrength(100), glyph.strength);
   }
 }
 

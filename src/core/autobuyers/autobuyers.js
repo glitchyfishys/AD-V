@@ -21,6 +21,23 @@ import { TickspeedAutobuyerState } from "./tickspeed-autobuyer";
 import { TimeDimensionAutobuyerState } from "./time-dimension-autobuyer";
 import { TimeTheoremAutobuyerState } from "./time-theorem-autobuyer";
 
+
+import { TeresaMemoryAutobuyerState } from "./memory-autobuyer";
+import { EffarigMemoryAutobuyerState } from "./memory-autobuyer";
+import { EnslavedMemoryAutobuyerState } from "./memory-autobuyer";
+import { VMemoryAutobuyerState } from "./memory-autobuyer";
+import { GlitchMemoryAutobuyerState } from "./memory-autobuyer";
+import { CanteMemoryAutobuyerState } from "./memory-autobuyer";
+import { NullMemoryAutobuyerState } from "./memory-autobuyer";
+
+import { NonRepeatableRealityUpgradeAutobuyerState } from "./reality-single-upgrades-autobuyer";
+import { NonRepeatableImaginaryUpgradeAutobuyerState } from "./reality-single-upgrades-autobuyer";
+
+import { GlitchUpgradeAutobuyerState } from "./glitch-upgrade-autobuyer";
+import { NonRepeatableGlitchUpgradeAutobuyerState } from "./glitch-upgrade-autobuyer";
+
+import { SingularityCapAutobuyerState } from "./singularity-cap-autobuyer";
+
 export const Autobuyer = {
   annihilation: new AnnihilationAutobuyerState(),
   antimatterDimension: AntimatterDimensionAutobuyerState.createAccessor(),
@@ -44,7 +61,24 @@ export const Autobuyer = {
   singularity: new SingularityAutobuyerState(),
   tickspeed: new TickspeedAutobuyerState(),
   timeDimension: TimeDimensionAutobuyerState.createAccessor(),
-  timeTheorem: new TimeTheoremAutobuyerState()
+  timeTheorem: new TimeTheoremAutobuyerState(),
+
+  
+  teresaMem: TeresaMemoryAutobuyerState.createAccessor(),
+  effarigMem: EffarigMemoryAutobuyerState.createAccessor(),
+  enslavedMem: EnslavedMemoryAutobuyerState.createAccessor(),
+  vMem: VMemoryAutobuyerState.createAccessor(),
+  glitchMem: GlitchMemoryAutobuyerState.createAccessor(),
+  canteMem: CanteMemoryAutobuyerState.createAccessor(),
+  nullMem: NullMemoryAutobuyerState.createAccessor(),
+
+  singleReal: new NonRepeatableRealityUpgradeAutobuyerState(),
+  singleImag: new NonRepeatableImaginaryUpgradeAutobuyerState(),
+
+  singleGlitchUpgrades: new NonRepeatableGlitchUpgradeAutobuyerState(),
+  glitchUpgrades: GlitchUpgradeAutobuyerState.createAccessor(),
+
+  singCap: new SingularityCapAutobuyerState(),
 };
 
 export const Autobuyers = (function() {
@@ -70,6 +104,11 @@ export const Autobuyers = (function() {
     Autobuyer.darkMatterDimsAscension,
     Autobuyer.singularity,
     Autobuyer.annihilation,
+
+    Autobuyer.singleReal,
+    Autobuyer.singleImag,
+    Autobuyer.singleGlitchUpgrades,
+    Autobuyer.singCap,
   ];
 
   const singleComplex = [
@@ -84,6 +123,15 @@ export const Autobuyers = (function() {
     Autobuyer.blackHolePower.zeroIndexed,
     Autobuyer.realityUpgrade.zeroIndexed,
     Autobuyer.imaginaryUpgrade.zeroIndexed,
+
+    Autobuyer.teresaMem.zeroIndexed,
+    Autobuyer.effarigMem.zeroIndexed,
+    Autobuyer.enslavedMem.zeroIndexed,
+    Autobuyer.vMem.zeroIndexed,
+    Autobuyer.glitchMem.zeroIndexed,
+    Autobuyer.canteMem.zeroIndexed,
+    Autobuyer.nullMem.zeroIndexed,
+    Autobuyer.glitchUpgrades.zeroIndexed,
   ];
   const all = dimensions.concat(prestige, singleComplex, arrays);
   const multiple = [
@@ -95,6 +143,16 @@ export const Autobuyers = (function() {
     Autobuyer.blackHolePower,
     Autobuyer.realityUpgrade,
     Autobuyer.imaginaryUpgrade,
+
+    Autobuyer.teresaMem,
+    Autobuyer.effarigMem,
+    Autobuyer.enslavedMem,
+    Autobuyer.vMem,
+    Autobuyer.glitchMem,
+    Autobuyer.canteMem,
+    Autobuyer.nullMem,
+    Autobuyer.glitchUpgrades,
+
   ];
 
   return {
@@ -153,9 +211,11 @@ export const Autobuyers = (function() {
 
 EventHub.logic.on(GAME_EVENT.ETERNITY_RESET_AFTER, () => Autobuyers.reset());
 EventHub.logic.on(GAME_EVENT.REALITY_RESET_AFTER, () => Autobuyers.reset());
+EventHub.logic.on(GAME_EVENT.META_RESET_AFTER, () => Autobuyers.reset());
 
 EventHub.logic.on(GAME_EVENT.DIMBOOST_AFTER, () => Autobuyers.resetTick(PRESTIGE_EVENT.DIMENSION_BOOST));
 EventHub.logic.on(GAME_EVENT.GALAXY_RESET_AFTER, () => Autobuyers.resetTick(PRESTIGE_EVENT.ANTIMATTER_GALAXY));
 EventHub.logic.on(GAME_EVENT.BIG_CRUNCH_AFTER, () => Autobuyers.resetTick(PRESTIGE_EVENT.INFINITY));
 EventHub.logic.on(GAME_EVENT.ETERNITY_RESET_AFTER, () => Autobuyers.resetTick(PRESTIGE_EVENT.ETERNITY));
 EventHub.logic.on(GAME_EVENT.REALITY_RESET_AFTER, () => Autobuyers.resetTick(PRESTIGE_EVENT.REALITY));
+EventHub.logic.on(GAME_EVENT.META_RESET_AFTER, () => Autobuyers.resetTick(PRESTIGE_EVENT.META));

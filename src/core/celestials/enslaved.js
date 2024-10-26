@@ -227,7 +227,17 @@ export const Enslaved = {
   },
   quotes: Quotes.enslaved,
   // Unicode f0c1.
-  symbol: "\uf0c1"
+  symbol: "\uf0c1",
+
+  reset() {
+    if(MetaFabricatorUpgrade(11)) return;
+    player.celestials.enslaved.completed = false;
+    player.celestials.enslaved.unlocks = [];
+    player.celestials.enslaved.tesseracts = 0;
+    player.celestials.enslaved.stored = new Decimal();
+    player.celestials.enslaved.storedReal = 0;
+    player.celestials.enslaved.isAutoReleasing = false;
+  }
 };
 
 class EnslavedProgressState extends BitUpgradeState {
@@ -271,7 +281,7 @@ export const Tesseracts = {
   },
 
   get extra() {
-    const ex = this.bought * (SingularityMilestone.tesseractMultFromSingularities.effectOrDefault(1) - 1);
+    const ex = this.bought * (SingularityMilestone.tesseractMultFromSingularities.effectOrDefault(1) - 1) + MetaFabricatorUpgrade(11).effectOrDefault(new Decimal()).toNumber();
     if(ex > 20) return Math.min(ex - ((ex - 20) / 1.05), 35);
     return ex;
   },

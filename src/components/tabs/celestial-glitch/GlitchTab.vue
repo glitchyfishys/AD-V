@@ -144,7 +144,7 @@ export default {
       <div class="l-glitch-panel-container">
         <div class="c-glitch-panel-title">
           <i
-            :class="collapseIcon"
+            :class="collapsedPower ? 'fas fa-expand-arrows-alt' : 'fas fa-compress-arrows-alt'"
             class="c-collapse-icon-clickable"
             @click="toggleCollapsePower"
           />
@@ -181,7 +181,7 @@ export default {
       class="l-glitch-panel-container">
         <div class="c-glitch-panel-title">
           <i
-            :class="collapseIcon"
+            :class="collapsedSpeed ? 'fas fa-expand-arrows-alt' : 'fas fa-compress-arrows-alt'"
             class="c-collapse-icon-clickable"
             @click="toggleCollapseSpeed"
           />

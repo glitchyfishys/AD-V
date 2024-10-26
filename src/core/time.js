@@ -80,7 +80,7 @@ export const Time = {
    */
   get timeSinceBlackHole() {
     return this.fromMilliseconds(() => {
-      const diff = player.records.totalTimePlayed.sub(player.records.timePlayedAtBHUnlock);
+      const diff = player.records.thisMeta.time.sub(player.records.timePlayedAtBHUnlock);
       return Decimal.max(0, diff);
     });
   },
@@ -297,4 +297,36 @@ export const Time = {
   return this.fromMilliseconds(() => player.celestials.laitela.fastestCompletion);
   },
   
+  get bestMetaRealTime() {
+    return this.fromMilliseconds(() => player.records.bestMeta.realTime);
+  },
+
+  set bestMetaRealTime(timespan) {
+    this.toMilliseconds(timespan, value => player.records.bestMeta.realTime = value);
+  },
+
+  get bestMetaTime() {
+    return this.fromMilliseconds(() => player.records.bestMeta.time);
+  },
+
+  set bestMetaTime(timespan) {
+    this.toMilliseconds(timespan, value => player.records.bestMeta.time = value);
+  },
+
+  get thisMetaRealTime() {
+    return this.fromMilliseconds(() => player.records.thisMeta.realTime);
+  },
+
+  set thisMetaRealTime(timespan) {
+    this.toMilliseconds(timespan, value => player.records.bestMeta.realTime = value);
+  },
+
+  get thisMetaTime() {
+    return this.fromMilliseconds(() => player.records.thisMeta.time);
+  },
+
+  set thisMetaTime(timespan) {
+    this.toMilliseconds(timespan, value => player.records.bestMeta.time = value);
+  },
+
 };

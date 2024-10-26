@@ -13,7 +13,8 @@ export const MachineHandler = {
 
   get realityMachineMultiplier() {
     return ShopPurchase.RMPurchases.currentMult * Teresa.rmMultiplier * Effects.max(1, PerkShopUpgrade.rmMult) *
-      getAdjustedGlyphEffect("effarigrm") * Achievement(167).effectOrDefault(1);
+    getAdjustedGlyphEffect("effarigrm") * Achievement(167).effectOrDefault(1);
+
   },
 
   get uncappedRM() {
@@ -25,7 +26,7 @@ export const MachineHandler = {
     let rmGain = DC.E3.pow(log10FinalEP / 4000 - 1);
     // Increase base RM gain if <10 RM
     if (rmGain.gte(1) && rmGain.lt(10)) rmGain = new Decimal(27 / 4000 * log10FinalEP - 26);
-    rmGain = rmGain.times(this.realityMachineMultiplier);
+    rmGain = rmGain.times(this.realityMachineMultiplier).pow(MetaMilestone.metaProgress.effectOrDefault(1));
     return rmGain.floor();
   },
 

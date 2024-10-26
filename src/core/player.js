@@ -188,6 +188,21 @@ window.player = {
       })),
       isActive: true,
     },
+    nrru: {
+      isActive: true,
+    },
+    nriu: {
+      isActive: true,
+    },
+    nrgu: {
+      isActive: true,
+    },
+    gup: {
+      all: Array.range(0, 4).map(() => ({
+        isActive: true,
+      })),
+      isActive: true,
+    },
     darkMatterDims: {
       isActive: true,
       lastTick: 0,
@@ -200,7 +215,59 @@ window.player = {
       isActive: false,
       multiplier: 1.05,
     },
+    pets: {
+      teresa: {
+        isActive: true,
+        lastTick: 0,
+        upgrades: Array.range(0, 3).map(() => ({
+          isActive: true,
+        })),
+      },
+      effarig: {
+        isActive: true,
+        lastTick: 0,
+        upgrades: Array.range(0, 3).map(() => ({
+          isActive: true,
+        })),
+      },
+      enslaved: {
+        isActive: true,
+        lastTick: 0,
+        upgrades: Array.range(0, 3).map(() => ({
+          isActive: true,
+        })),
+      },
+      v: {
+        isActive: true,
+        lastTick: 0,
+        upgrades: Array.range(0, 3).map(() => ({
+          isActive: true,
+        })),
+      },
+      glitchyfishys: {
+        isActive: true,
+        lastTick: 0,
+        upgrades: Array.range(0, 3).map(() => ({
+          isActive: true,
+        })),
+      },
+      cante: {
+        isActive: true,
+        lastTick: 0,
+        upgrades: Array.range(0, 3).map(() => ({
+          isActive: true,
+        })),
+      },
+      null: {
+        isActive: true,
+        lastTick: 0,
+        upgrades: Array.range(0, 3).map(() => ({
+          isActive: true,
+        })),
+      },
+    },
     singularity: { isActive: true },
+    singCap: { isActive: true },
     ipMultBuyer: { isActive: true, },
     epMultBuyer: { isActive: true, },
   },
@@ -265,6 +332,11 @@ window.player = {
       maxGlyphs: 0,
       slowestBH: DC.D1,
     },
+    meta: {
+      noGlyphs: false,
+      maxStudies: 0,
+      noTriads: true,
+    },
     permanent: {
       emojiGalaxies: 0,
       singleTickspeed: 0,
@@ -283,6 +355,7 @@ window.player = {
     recentInfinities: Array.range(0, 10).map(() => [Decimal.NUMBER_MAX_VALUE, Decimal.NUMBER_MAX_VALUE, DC.D1, DC.D1, ""]),
     recentEternities: Array.range(0, 10).map(() => [Decimal.NUMBER_MAX_VALUE, Decimal.NUMBER_MAX_VALUE, DC.D1, DC.D1, "", DC.D0]),
     recentRealities: Array.range(0, 10).map(() => [Decimal.NUMBER_MAX_VALUE, Decimal.NUMBER_MAX_VALUE, DC.D1, 1, "", 0, 0]),
+    recentMetas: Array.range(0, 10).map(() => [Decimal.NUMBER_MAX_VALUE, Decimal.NUMBER_MAX_VALUE, DC.D1, 1, ""]),
     thisInfinity: {
       time: DC.D0,
       realTime: 0,
@@ -339,6 +412,20 @@ window.player = {
       speedSet: [],
       iMCapSet: [],
       laitelaSet: [],
+    },
+    thisMeta: {
+      time: DC.D0,
+      realTime: 0,
+      maxAM: DC.D0,
+      MR: DC.D0,
+      bestMRmin: DC.D0,
+      bestMRminVal: DC.D0,
+    },
+    bestMeta: {
+      time: Decimal.NUMBER_MAX_VALUE,
+      realTime: Number.MAX_VALUE,
+      MR: DC.D0,
+      MRmin: DC.D0,
     },
   },
   speedrun: {
@@ -605,6 +692,7 @@ window.player = {
       runUnlocks: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       goalReductionSteps: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       STSpent: 0,
+      metaTheorems: 0,
       runGlyphs: [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []],
       // The -10 is for glyph count, as glyph count for V is stored internally as a negative number
       runRecords: [-10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -647,7 +735,21 @@ window.player = {
           memoryChunks: 0,
           memoryUpgrades: 0,
           chunkUpgrades: 0
-        }
+        },
+        cante: {
+          level: 1,
+          memories: 0,
+          memoryChunks: 0,
+          memoryUpgrades: 0,
+          chunkUpgrades: 0
+        },
+        null: {
+          level: 1,
+          memories: 0,
+          memoryChunks: 0,
+          memoryUpgrades: 0,
+          chunkUpgrades: 0
+        },
       },
       alchemy: Array.repeat(0, 24)
         .map(() => ({
@@ -898,6 +1000,7 @@ window.player = {
       dilation: true,
       tachyonParticles: true,
       reality: true,
+      meta: true,
       background: true,
       blobSnowflakes: 16
     },
@@ -909,6 +1012,7 @@ window.player = {
       eternity: true,
       dilation: true,
       resetReality: true,
+      meta: true,
       glyphReplace: true,
       glyphSacrifice: true,
       autoClean: true,
@@ -952,9 +1056,9 @@ window.player = {
       realityShards: true
     },
     hiddenTabBits: 0,
-    hiddenSubtabBits: Array.repeat(0, 11),
+    hiddenSubtabBits: Array.repeat(0, 12),
     lastOpenTab: 0,
-    lastOpenSubtab: Array.repeat(0, 11),
+    lastOpenSubtab: Array.repeat(0, 12),
     perkLayout: 0,
     perkPhysicsEnabled: true,
     automatorEvents: {
@@ -995,7 +1099,14 @@ window.player = {
       upgradebits: 0
     }
   },
-  
+  meta: {
+    metaRelays: DC.D0,
+    metas: DC.D0,
+    upgrades: {
+      rebuyable: [0,0,0,0,0,0],
+      metaBits: 0,
+    },
+  },
 };
 
 export const Player = {
@@ -1030,6 +1141,14 @@ export const Player = {
 
   get canEternity() {
     return player.records.thisEternity.maxIP.gte(Player.eternityGoal);
+  },
+
+  get canMeta() {
+    return Currency.antimatter.gte(Player.metaGoal) && VUnlocks.metaReset.isUnlocked;
+  },
+
+  get metaGoal() {
+    return new Decimal("1e1E50");
   },
 
   get bestRunIPPM() {
@@ -1072,6 +1191,13 @@ export const Player = {
     const glyphCount = player.requirementChecks.reality.maxGlyphs;
     // This switch case intentionally falls through because every lower layer should be reset as well
     switch (key) {
+      case "meta":
+      player.requirementChecks.meta = {
+        noGlyphs: false,
+        maxStudies: 1000,
+        noTriads: false,
+      };
+      break;
       case "reality":
         player.requirementChecks.reality = {
           noAM: true,

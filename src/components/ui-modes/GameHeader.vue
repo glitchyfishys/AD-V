@@ -30,9 +30,11 @@ export default {
 
 <template>
   <div>
+    
     <HeaderChallengeDisplay />
     <HeaderChallengeEffects />
     <HeaderPrestigeGroup />
+    
     <GameSpeedDisplay v-if="hasReality" />
     <br v-if="hasReality">
     <HeaderBlackHole />

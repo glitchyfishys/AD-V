@@ -6,6 +6,10 @@ import HeaderTickspeedInfo from "../HeaderTickspeedInfo";
 
 import RealityButton from "./RealityButton";
 
+import MetaButton from "./MetaButton";
+import MetaCurrencyHeader from "./MetaCurrencyHeader";
+
+
 // This component contains antimatter and antimatter rate at the start of the game, as well as some additional
 // information depending on the UI (tickspeed for Classic, game speed for Modern). Everything but antimatter is
 // removed once Reality is unlocked, to make room for the reality button
@@ -15,6 +19,8 @@ export default {
     HeaderTickspeedInfo,
     RealityCurrencyHeader,
     RealityButton,
+    MetaButton,
+    MetaCurrencyHeader,
     ArmageddonButton,
   },
   data() {
@@ -22,6 +28,7 @@ export default {
       shouldDisplay: true,
       isModern: false,
       hasRealityButton: false,
+      metaUnlocked: false,
       isDoomed: false,
       antimatter: new Decimal(0),
       antimatterPerSec: new Decimal(0),
@@ -36,6 +43,7 @@ export default {
       this.isDoomed = Pelle.isDoomed;
       this.antimatter.copyFrom(Currency.antimatter);
       this.hasRealityButton = PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought;
+      this.metaUnlocked = VUnlocks.metaReset.isUnlocked || PlayerProgress.metaUnlocked();
       if (!this.hasRealityButton) this.antimatterPerSec.copyFrom(Currency.antimatter.productionPerSecond);
     },
   },
@@ -53,11 +61,17 @@ export default {
       class="c-reality-container"
     >
       <RealityCurrencyHeader />
+
       <ArmageddonButton
         v-if="isDoomed"
         :is-header="true"
       />
       <RealityButton v-else />
+      <br>
+      <div v-if="metaUnlocked">
+        <MetaButton />
+        <MetaCurrencyHeader />
+      </div>
     </div>
     <div v-else>
       You are getting {{ format(antimatterPerSec, 2) }} antimatter per second.
@@ -69,6 +83,13 @@ export default {
 
 <style scoped>
 .c-reality-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.c-meta-container {
   display: flex;
   flex-direction: column;
   justify-content: space-between;

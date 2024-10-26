@@ -113,7 +113,7 @@ export const Pelle = {
 
     // Force unhide MOST subtabs, although some of the tabs get ignored since they don't contain any
     // meaningful interactable gameplay elements in Doomed
-    const tabsToIgnore = ["statistics", "achievements", "reality", "celestials"];
+    const tabsToIgnore = ["statistics", "achievements", "reality", "celestials", "glitch", "meta"];
     const ignoredIDs = GameDatabase.tabs.filter(t => tabsToIgnore.includes(t.key)).map(t => t.id);
     for (let tabIndex = 0; tabIndex < GameDatabase.tabs.length; tabIndex++) {
       player.options.hiddenSubtabBits[tabIndex] &= ignoredIDs.includes(tabIndex) ? -1 : 0;
@@ -357,9 +357,82 @@ export const Pelle = {
     return zalgo(str, Math.floor(stage ** 2 * 7));
   },
 
-  endTabNames: "Can You Blow My Whistle Baby Whistle Baby Let Me Know :) :)".split(" "),
+  endTabNames: "Can You Blow My Whistle Baby Whistle Baby Let Me Know :) :) :) :) :)".split(" "),
 
   quotes: Quotes.pelle,
+  reset() {
+    const P = player.celestials.pelle;
+
+    P.rebuyables = {
+      antimatterDimensionMult: 0,
+      timeSpeedMult: 0,
+      glyphLevels: 0,
+      infConversion: 0,
+      galaxyPower: 0,
+      galaxyGeneratorAdditive: 0,
+      galaxyGeneratorMultiplicative: 0,
+      galaxyGeneratorAntimatterMult: 0,
+      galaxyGeneratorIPMult: 0,
+      galaxyGeneratorEPMult: 0
+    }
+    P.doomed = false;
+    P.upgrades = new Set();
+    Currency.remnants.reset();
+    Currency.realityShards.reset();
+
+    P.records.totalAntimatter = DC.D0;
+    P.records.totalInfinityPoints = DC.D0;
+    P.records.totalEternityPoints = DC.D0;
+    player.records.thisMeta.maxAM= DC.D1;
+
+    P.rifts = {
+        vacuum: {
+            fill: DC.D0,
+            active: false,
+            reducedTo: 1
+        },
+        decay: {
+            fill: DC.D0,
+            active: false,
+            percentageSpent: 0,
+            reducedTo: 1
+        },
+        chaos: {
+            fill: 0,
+            active: false,
+            reducedTo: 1
+        },
+        recursion: {
+            fill: DC.D0,
+            active: false,
+            reducedTo: 1
+        },
+        paradox: {
+            fill: DC.D0,
+            active: false,
+            reducedTo: 1
+        },
+        glitch: {
+            fill: 0,
+            active: false,
+            reducedTo: 1
+        }
+    }
+
+    P.progressBits = 0;
+
+    P.galaxyGenerator =  {
+          unlocked: false,
+          spentGalaxies: 0,
+          generatedGalaxies: 0,
+          phase: 0,
+          sacrificeActive: false
+    }
+
+    GameEnd._additionalEnd = 0;
+    GameEnd.additionalEnd = 0;
+    player.isGameEnd = false;
+  }
 };
 
 EventHub.logic.on(GAME_EVENT.ARMAGEDDON_AFTER, () => {

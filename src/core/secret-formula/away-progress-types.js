@@ -111,6 +111,12 @@ export const awayProgressTypes = [
     isUnlocked: () => Ra.pets.v.isUnlocked && !Ra.pets.v.isCapped,
     showOption: false,
   }, {
+    name: "glitchMemories",
+    awayOption: "celestialMemories",
+    reference: ["celestials", "ra", "pets", "glitchyfishys", "memories"],
+    isUnlocked: () => Ra.pets.glitchyfishys.isUnlocked && !Ra.pets.glitchyfishys.isCapped,
+    showOption: false,
+  }, {
     name: "imaginaryMachines",
     reference: ["reality", "imaginaryMachines"],
     isUnlocked: () => MachineHandler.isIMUnlocked,

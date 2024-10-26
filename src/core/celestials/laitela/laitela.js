@@ -106,19 +106,19 @@ export const Laitela = {
       const purchases = Math.clamp(Math.floor(darkMatter.times(0.02).div(upgrade[0]).log(upgrade[1].toNumber())), 0, upgrade[2]);
       buy(upgrade, purchases);
     }
-    while (upgradeInfo.some(upgrade => upgrade[0].lte(darkMatter) && upgrade[2] > 0)) {
+
       const cheapestUpgrade = upgradeInfo.filter(upgrade => upgrade[2] > 0).sort((a, b) => a[0].minus(b[0]).sign())[0];
       buy(cheapestUpgrade, 1);
-    }
+    
   },
   reset() {
-    this.annihilate(true);
+    DarkMatterDimensions.reset();
     this.celestial.darkMatterMult = DC.D1;
     Currency.darkMatter.max = DC.D1;
     Currency.darkMatter.reset();
     Currency.singularities.reset();
-    this.celestial.fastestCompletion = 3600;
-    this.celestial.difficultyTier = 0;
+    if(!MetaFabricatorUpgrade(10).isBought) this.celestial.fastestCompletion = new Decimal(3600);
+    if(!MetaFabricatorUpgrade(10).isBought) this.celestial.difficultyTier = 0;
     this.celestial.singularityCapIncreases = 0;
   },
   quotes: Quotes.laitela,

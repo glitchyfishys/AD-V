@@ -85,7 +85,7 @@ class BlackHoleState {
       id: this.id,
       getAmount: () => this._data.powerUpgrades,
       setAmount: amount => this._data.powerUpgrades = amount,
-      calculateValue: amount => (180 / Math.pow(2, id)) * Math.pow(1.35, amount),
+      calculateValue: amount => Decimal.pow(1.35, amount).mul((180 / Math.pow(2, id))),
       initialCost: 20 * blackHoleCostMultipliers[id],
       costMult: 2,
       hasAutobuyer: true
@@ -131,7 +131,7 @@ class BlackHoleState {
    * Multiplier to time the black hole gives when active.
    */
   get power() {
-    return this.powerUpgrade.value * Achievement(158).effectOrDefault(1);
+    return this.powerUpgrade.value.mul(Achievement(158).effectOrDefault(1));
   }
 
   /**

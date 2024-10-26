@@ -94,9 +94,12 @@ export * from "./automator/script-templates";
 // mod
 export * from "./glitchChallengeUG";
 export * from "./celestials/glitch/glitchrift";
-
 export * from "./celestials/glitch/glitch";
 
 export * from "./glitchRealityUpgrades";
 
 export * from "./dimensions/chaos-dimension";
+
+export * from "./meta";
+
+export * from "./meta-fabricator-upgrades";

@@ -148,7 +148,7 @@ export function totalReplicantiSpeedMult(overCap) {
     breakInfinityUGs.all[4]
   );
   
-  totalMult = totalMult.times(preCelestialEffects).mul(RealityUpgrade(2).effectOrDefault(DC.D1)).mul(RealityUpgrade(23).effectOrDefault(1));
+  totalMult = totalMult.times(preCelestialEffects).mul(RealityUpgrade(2).effectOrDefault(DC.D1)).mul(RealityUpgrade(23).effectOrDefault(DC.D1).max(1));
   if (TimeStudy(132).isBought) totalMult = totalMult.times(Perk.studyPassive.isBought ? 3 : 1.5);
 
   if (!overCap && Achievement(134).isUnlocked) totalMult = totalMult.times(2);
@@ -160,6 +160,8 @@ export function totalReplicantiSpeedMult(overCap) {
   }
   totalMult = totalMult.timesEffectsOf(AlchemyResource.replication, Ra.unlocks.continuousTTBoost.effects.replicanti);
 
+  totalMult = totalMult.pow(MetaMilestone.metaProgress.effectOrDefault(DC.D1));
+  
   return totalMult;
 }
 

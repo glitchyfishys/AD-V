@@ -42,6 +42,7 @@ export default {
       if(player.options.themeModern == "S14") return "Ra-Teresa's";
       if(player.options.themeModern == "S16") return "Effarig-Teresa's";
       if(player.options.themeModern == "S17") return `The Nameless Teresa's`;
+      if(player.options.themeModern == "S18") return `Lai'tela-Teresa's`;
       if(player.options.themeModern == "S13") return "V-Teresa's";
       return "Teresa's";
     },
@@ -49,6 +50,7 @@ export default {
       if(player.options.themeModern == "S14") return "Ra-Teresa";
       if(player.options.themeModern == "S16") return "Effarig-Teresa";
       if(player.options.themeModern == "S17") return `The Nameless Teresa'`;
+      if(player.options.themeModern == "S18") return `Lai'tela-Teresa`;
       if(player.options.themeModern == "S13") return "V-Teresa";
       return "Teresa";
     },
@@ -269,10 +271,6 @@ export default {
         </div>
       </div>
       <div
-        v-if="pouredAmount < pouredAmountCap"
-        class="l-rm-container-labels l-teresa-mechanic-container"
-      />
-      <div
         v-if="hasPerkShop"
         class="c-teresa-shop"
       >
@@ -286,6 +284,10 @@ export default {
         />
         You can now modify the appearance of your Glyphs to look like Music Glyphs.
       </div>
+      <div
+        v-else
+        class="l-rm-container-labels l-teresa-mechanic-container"
+      />
     </div>
   </div>
 </template>

@@ -50,6 +50,7 @@ function giveEternityRewards(auto) {
 
   if (Effarig.isRunning && !EffarigUnlock.eternity.isUnlocked) {
     EffarigUnlock.eternity.unlock();
+    EffarigUnlock.infinity.unlock();
     beginProcessReality(getRealityProps(true));
   }
 }

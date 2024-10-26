@@ -133,7 +133,13 @@ export const Effarig = {
     return Math.floor(replicantiCap().pLog10() / LOG10_MAX_VALUE - 1);
   },
   quotes: Quotes.effarig,
-  symbol: "Ϙ"
+  symbol: "Ϙ",
+
+  reset() {
+    if(MetaMilestone.metaKeepEff.isReached) return;
+    Currency.relicShards.reset();
+    player.celestials.effarig.unlockBits = 0;
+  }
 };
 
 class EffarigUnlockState extends BitUpgradeState {

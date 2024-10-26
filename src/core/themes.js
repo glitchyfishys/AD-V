@@ -103,7 +103,8 @@ Theme.secretThemeIndex = function(name) {
     "c23af492b2c87bdb92800e1502b380cba44a93db0704ab53ad6e11c0b1d78003",
     "27093b35f2f86c1515dce76550a10b130059413d354364f1ef53772ab768d66e",
     "6b3b19a152b562f9e8cf69c9564bd7e8c17eab618f81f9ded18413e771b8e896",
-    "8720280d40abb3d0cea8f5d9925e4b3b099bdfba03389ad424029cfe2d55a7b5",// need to add Lai'tela and Pelle
+    "8720280d40abb3d0cea8f5d9925e4b3b099bdfba03389ad424029cfe2d55a7b5",
+    "510d823fcb88b9973284e9347347a90c1e2ea4713957f7eab75ec45f5511e9ff",// need to add Pelle
   ];
   const sha = sha512_256(name.toUpperCase());
   console.log(sha)
@@ -130,13 +131,14 @@ Theme.tryUnlock = function(name) {
   Theme.set(prefix);
   SecretAchievement(25).unlock();
 
-  if(name === "S13") SecretAchievement(41).unlock();
-  if(name === "S14") SecretAchievement(41).unlock();
-  if(name === "S15") SecretAchievement(41).unlock();
-  if(name === "S16") SecretAchievement(41).unlock();
-  if(name === "S17") SecretAchievement(41).unlock();
-  if(name === "S18") SecretAchievement(41).unlock();
-  if(name === "S19") SecretAchievement(41).unlock();
+  const c = Theme.celName(name);
+  if(c == "Teresa") SecretAchievement(51).unlock();
+  if(c == "Effarig") SecretAchievement(51).unlock();
+  if(c == "The Nameless Ones'") SecretAchievement(51).unlock();
+  if(c == "V") SecretAchievement(51).unlock();
+  if(c == "Ra") SecretAchievement(51).unlock();
+  if(c == "Lai'tela") SecretAchievement(51).unlock();
+  if(c == "Pelle") SecretAchievement(51).unlock();
 
   if (!isAlreadyUnlocked) {
     GameUI.notify.success(`You have unlocked the ${Theme.celName(name).capitalize()} theme!`, 5000);

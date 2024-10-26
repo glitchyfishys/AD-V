@@ -32,7 +32,7 @@ export const perkShop = {
   maxGlyphLevel: rebuyable({
     id: 7,
     initialCost: 10000,
-    increment: 1.25,
+    increment: 1.22,
     description: () => `Increase max level of Glyphs by ${formatPercents((VUnlocks.glyphCap.isUnlocked ? 0.15 : 0.05), 2, 2)}`,
     effect: bought =>  Math.pow(VUnlocks.glyphCap.isUnlocked ? 1.15 : 1.05, bought),
     formatEffect: value => formatX(value, 2, 2),
