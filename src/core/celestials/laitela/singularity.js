@@ -250,7 +250,7 @@ export const Singularity = {
   },
 
   increaseCap(t = false) {
-  const cap = MetaFabricatorUpgrades.all[3].effectOrDefault(1).mul(1000).toNumber();
+  const cap = MetaFabricatorUpgrades.all[3].effectOrDefault(new Decimal(1)).mul(1000).toNumber();
   if (player.celestials.laitela.singularityCapIncreases >= cap ) return;
     if(t){
       player.celestials.laitela.singularityCapIncreases = Math.min(Math.floor(Currency.darkEnergy.productionPerSecond.div(200).log10()), cap);
