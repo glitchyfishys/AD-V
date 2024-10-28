@@ -213,7 +213,7 @@ export function gainedMetas() {
 }
 
 export function gainedMetaRelays() {
-  let mr =  MetaFabricatorUpgrade(23).isBought ? Decimal.pow10(Math.log10(player.records.thisMeta.maxAM.log10()) / 15).add(1) : DC.D1;
+  let mr = (MetaFabricatorUpgrade(23).isBought && !Pelle.isDoomed) ? Decimal.pow10(Math.log10(player.records.thisMeta.maxAM.log10()) / 15).add(1) : DC.D1;
   mr = mr.add(Currency.metas.value);
   mr = mr.mul(MetaMilestone.metaSpeed.effectOrDefault(1));
   mr = mr.mul(MetaFabricatorUpgrade(13).effectOrDefault(1));

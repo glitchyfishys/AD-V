@@ -237,6 +237,8 @@ export const Enslaved = {
     player.celestials.enslaved.stored = new Decimal();
     player.celestials.enslaved.storedReal = 0;
     player.celestials.enslaved.isAutoReleasing = false;
+    player.celestials.enslaved.isStoring = false;
+    player.celestials.enslaved.isStoringReal = false;
   }
 };
 

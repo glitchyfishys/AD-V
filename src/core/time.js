@@ -290,7 +290,7 @@ export const Time = {
   },
 
   get lastAutoEC(){
-  return this.fromMilliseconds(() => player.reality.lastAutoEC);
+  return this.fromMilliseconds(() => new Decimal(player.reality.lastAutoEC));
   },
   
   get laitelaFastestCompletion(){

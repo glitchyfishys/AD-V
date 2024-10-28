@@ -110,7 +110,7 @@ export const metaFabricatorUpgrades = [
     name: "Memory Overflow",
     id: 9,
     cost: 2,
-    description: "Increase the caps by 100 (cost scales more) and get autobuyers for them",
+    description: "Increase Ra memory caps by 100 (cost scales more) and get autobuyers for them",
     effect: () => 100,
     formatEffect: value => "",
     noLabel: true

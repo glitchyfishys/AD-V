@@ -202,15 +202,19 @@ export default {
         >
           <i class="fas fa-question-circle l-margin-left" />
         </span>)
+        <br>
+        <span
+        v-if="lowermax">
+        the input is exponential and 10 would be 1e10
+        </span>
       </b>
-      
+
       <SliderComponent
         v-if="!isDisabled && !lowermax"
         v-bind="sliderProps(true)"
         :value="negativeSlider"
         @input="adjustSliderNegative($event)"
       />
-
       <input
         v-else-if="!isDisabled && lowermax"
         :value="displayValue"

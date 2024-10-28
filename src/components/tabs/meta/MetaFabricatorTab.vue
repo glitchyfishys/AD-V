@@ -32,8 +32,6 @@ export default {
       </span>
       and the rest are single-purchase.
       <br>
-      ONLY THE REBUYABLE UPGRADES AND THE FIRST TEN SINGLE PURCHASE HAVE BEEN IMPLEMENTED
-      <br>
     </div>
     <div
       v-for="row in 5"
