@@ -102,6 +102,7 @@ class QuoteLine {
     if(player.options.themeModern == "S16") return "Effarig";
     if(player.options.themeModern == "S17") return "The Nameless Ones'";
     if(player.options.themeModern == "S18") return "Lai'tela";
+    if(player.options.themeModern == "S19") return "Pelle";
     if(player.options.themeModern == "S14") return "Ra";
     if(player.options.themeModern == "S13") return "V";
     if(this.name != undefined) return this.name;
@@ -113,6 +114,7 @@ class QuoteLine {
     if(player.options.themeModern == "S16") return [[Celestials.effarig.symbol, 1]];
     if(player.options.themeModern == "S17") return [[Celestials.enslaved.symbol, 1]];
     if(player.options.themeModern == "S18") return [[Celestials.laitela.symbol, 1]];
+    if(player.options.themeModern == "S19") return [[Celestials.pelle.symbol, 1]];
     if(player.options.themeModern == "S14") return [[Celestials.ra.symbol, 1]];
     if(player.options.themeModern == "S13") return [[Celestials.v.symbol, 1]];
     return typeof this._celestialArray === "function" ? this._celestialArray() : this._celestialArray;
@@ -123,6 +125,7 @@ class QuoteLine {
     if(player.options.themeModern == "S16") return [Celestials.effarig.symbol];
     if(player.options.themeModern == "S17") return [Celestials.enslaved.symbol];
     if(player.options.themeModern == "S18") return [Celestials.laitela.symbol];
+    if(player.options.themeModern == "S19") return [Celestials.pelle.symbol];
     if(player.options.themeModern == "S14") return [Celestials.ra.symbol];
     if(player.options.themeModern == "S13") return [Celestials.v.symbol];
     return this.celestials.map(c => Celestials[c[0]].symbol);

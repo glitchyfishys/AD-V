@@ -357,7 +357,7 @@ export const Pelle = {
     return zalgo(str, Math.floor(stage ** 2 * 7));
   },
 
-  endTabNames: "Can You Blow My Whistle Baby Whistle Baby Let Me Know :) :) :) :) :)".split(" "),
+  endTabNames: "I Need To Put A Joke Here Just Like The Redemption Mod Um Eh Uh ???".split(" "),
 
   quotes: Quotes.pelle,
   reset() {

@@ -43,6 +43,7 @@ export default {
       if(player.options.themeModern == "S16") return "Effarig-Teresa's";
       if(player.options.themeModern == "S17") return `The Nameless Teresa's`;
       if(player.options.themeModern == "S18") return `Lai'tela-Teresa's`;
+      if(player.options.themeModern == "S19") return `Pelle-Teresa's`;
       if(player.options.themeModern == "S13") return "V-Teresa's";
       return "Teresa's";
     },
@@ -51,6 +52,7 @@ export default {
       if(player.options.themeModern == "S16") return "Effarig-Teresa";
       if(player.options.themeModern == "S17") return `The Nameless Teresa'`;
       if(player.options.themeModern == "S18") return `Lai'tela-Teresa`;
+      if(player.options.themeModern == "S19") return `Pelle-Teresa`;
       if(player.options.themeModern == "S13") return "V-Teresa";
       return "Teresa";
     },

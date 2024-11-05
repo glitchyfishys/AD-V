@@ -79,6 +79,18 @@ export default {
         ? `${this.formatDecimalAmount(num)} ${pluralize("Eternity", num.floor())}`
         : "no Eternities";
     },
+    realityCountString() {
+      const num = this.reality.count;
+      return num > 0
+        ? `${this.format(num, 3)} ${pluralize("Reality", Math.floor(num))}`
+        : "no Realities";
+    },
+    metaCountString() {
+      const num = this.meta.count;
+      return num.gt(0)
+        ? `${this.formatDecimalAmount(num, 3)} ${pluralize("Meta", num.floor())}`
+        : "no Metas";
+    },
     fullGameCompletions() {
       return player.records.fullGameCompletions;
     },
@@ -327,7 +339,7 @@ export default {
       <div :class="realityClassObject()">
         {{ isDoomed ? "Doomed Reality" : "Reality" }}
       </div>
-      <div>You have {{ quantifyInt("Reality", reality.count) }}.</div>
+      <div>You have {{ realityCountString }}.</div>
       <div>Your fastest game-time Reality was {{ reality.best.toStringShort() }}.</div>
       <div>Your fastest real-time Reality was {{ reality.bestReal.toStringShort() }}.</div>
       <div :class="{ 'c-stats-tab-doomed' : isDoomed }">
@@ -348,6 +360,7 @@ export default {
       <br>
     </div>
     
+    <br>
     <div
       v-if="meta.isUnlocked"
       class="c-stats-tab-subheader c-stats-tab-general"
@@ -356,7 +369,7 @@ export default {
         Meta
       </div>
       <div>
-        You have {{ meta.count.toString() }} Metas
+        You have {{ metaCountString }}.
       </div>
       <div v-if="meta.hasBest">
         Your fastest Meta was {{ meta.best.toStringShort() }}.

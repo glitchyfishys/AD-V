@@ -43,6 +43,7 @@ export default {
       if(player.options.themeModern == "S16") return "Effarig-Lai'tela's";
       if(player.options.themeModern == "S17") return `The Nameless Lai'tela's'`;
       if(player.options.themeModern == "S14") return "Ra-Lai'tela's";
+      if(player.options.themeModern == "S19") return `Pelle-Lai'tela's`;
       if(player.options.themeModern == "S13") return "V-Lai'tela's";
       return "Lai'tela's";
     },
@@ -51,6 +52,7 @@ export default {
       if(player.options.themeModern == "S16") return "Effarig-Lai'tela";
       if(player.options.themeModern == "S17") return `The Nameless Lai'tela`;
       if(player.options.themeModern == "S14") return "Ra-Lai'tela";
+      if(player.options.themeModern == "S19") return `Pelle-Lai'tela`;
       if(player.options.themeModern == "S13") return "V-Lai'tela";
       return "Lai'tela";
     },
@@ -64,7 +66,7 @@ export default {
     update() {
       this.isDoomed = Pelle.isDoomed;
       this.darkMatter.copyFrom(Currency.darkMatter);
-      this.isDMCapped = this.darkMatter.eq("1e1000000000");
+      this.isDMCapped = this.darkMatter.gte("1e1000000000");
       this.maxDarkMatter.copyFrom(Currency.darkMatter.max);
       this.darkEnergy.copyFrom(Currency.darkEnergy);
       this.matterExtraPurchasePercentage = Laitela.matterExtraPurchaseFactor - 1;

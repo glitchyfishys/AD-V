@@ -149,6 +149,7 @@ export default {
       if(player.options.themeModern == "S16") return "the Nameless Effarig's";
       if(player.options.themeModern == "S18") return `The Nameless Lai'tela's`;
       if(player.options.themeModern == "S14") return "The Nameless Ra's";
+      if(player.options.themeModern == "S19") return `The Nameless Pelle's`;
       if(player.options.themeModern == "S13") return "The Nameless V's";
       return "The Nameless Ones'";
     },

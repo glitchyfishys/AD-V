@@ -205,7 +205,7 @@ export default {
             v-if="!isObscured"
             :class="{ 'o-pelle-disabled': isDisabled }"
           >
-            Reward: {{ config.reward }}
+            Reward: {{ typeof config.reward == "function" ?  config.reward() : config.reward}}
             <EffectDisplay
               v-if="config.formatEffect"
               br

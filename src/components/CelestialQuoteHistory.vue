@@ -18,7 +18,8 @@ export default {
     if(player.options.themeModern == "S15") return `Teresa's`;
     if(player.options.themeModern == "S16") return `Effarig's`;
       if(player.options.themeModern == "S17") return `The Nameless Ones'`;
-      if(player.options.themeModern == "S18") return `Lai'tela`;
+      if(player.options.themeModern == "S18") return `Lai'tela's`;
+      if(player.options.themeModern == "S19") return `Pelle's`;
     if(player.options.themeModern == "S13") return `V's`;
     if(player.options.themeModern == "S14") return `Ra's`;
     return this.celestial == "glitch" ? "Glitch" : Celestials[this.celestial].possessiveName;
@@ -36,6 +37,7 @@ export default {
       if(player.options.themeModern == "S16") return `effarig`;
       if(player.options.themeModern == "S17") return `enslaved`;
       if(player.options.themeModern == "S18") return `laitela`;
+      if(player.options.themeModern == "S19") return `pelle`;
       if(player.options.themeModern == "S14") return `ra`;
       if(player.options.themeModern == "S13") return `v`;
       return this.celestial;

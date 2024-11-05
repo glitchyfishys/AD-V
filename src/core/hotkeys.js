@@ -186,7 +186,7 @@ export const shortcuts = [
   },  {
     name: "Meta",
     keys: ["v"],
-    type: "bindHotkey",
+    type: "bindRepeatableHotkey",
     function: () => requestManualMeta(),
     visible: () => PlayerProgress.metaUnlocked()
   }, {

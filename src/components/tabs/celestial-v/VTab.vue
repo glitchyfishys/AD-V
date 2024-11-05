@@ -140,6 +140,7 @@ export default {
       if(player.options.themeModern == "S16") return "Effarig-V's";
       if(player.options.themeModern == "S17") return `The Nameless V's`;
       if(player.options.themeModern == "S18") return `Lai'tela-V's`;
+      if(player.options.themeModern == "S19") return `Pelle-V's`;
       if(player.options.themeModern == "S14") return "Ra-V's";
       return "V's";
     },
@@ -148,6 +149,7 @@ export default {
       if(player.options.themeModern == "S16") return "Effarig-V";
       if(player.options.themeModern == "S17") return `The Nameless V`;
       if(player.options.themeModern == "S18") return `Lai'tela-V`;
+      if(player.options.themeModern == "S19") return `Pelle-V`;
       if(player.options.themeModern == "S14") return "Ra-V";
       return "V";
     },

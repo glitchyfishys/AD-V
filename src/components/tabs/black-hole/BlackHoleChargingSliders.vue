@@ -57,6 +57,7 @@ export default {
       this.maxNegativeBlackHole = (GlitchSpeedUpgrades.all[2].isBought ? 1e100 : 300);
       this.lowermax = GlitchSpeedUpgrades.all[2].isBought;
 
+      this.extra = `the input is exponential so ${format(10)} would be ${format(1e10)}`
       if (this.isFocused) return;
       this.updateDisplayValue();
       
@@ -203,10 +204,10 @@ export default {
           <i class="fas fa-question-circle l-margin-left" />
         </span>)
         <br>
-        <span
+        <div
         v-if="lowermax">
-        the input is exponential and 10 would be 1e10
-        </span>
+        {{ extra }}
+      </div>
       </b>
 
       <SliderComponent

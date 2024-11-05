@@ -142,7 +142,7 @@ export const Glitch = {
   },
 
   get riftForceGain(){
-    if((!this.isRunning || this.activeAugments.length < 9) && (!MetaFabricatorUpgrade(6).isBought && !Pelle.isDoomed) ) return new Decimal(0);
+    if((!this.isRunning || this.activeAugments.length < 9) && (!MetaFabricatorUpgrade(6).isBought || Pelle.isDoomed) ) return new Decimal(0);
 
     function form (value) {return (GlitchSpeedUpgrades.all[2].isBought ? (value.log10() ** 0.2) : Decimal.log10(Decimal.log10(value)))};
     
