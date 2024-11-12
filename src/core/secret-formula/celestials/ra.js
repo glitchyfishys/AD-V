@@ -391,7 +391,7 @@ export const ra = {
     },
     canteXP: {
       id: 37,
-      reward: () => `Gain more memorys based on`,
+      reward: () => `Gain more memorys based on Replicanti (none of these have been done and are just templates)`,
       effect: () => Decimal.pow(Ra.pets.cante.level, 4).toNumber(),
       pet: "cante",
       level: 2,

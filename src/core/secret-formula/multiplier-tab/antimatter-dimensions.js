@@ -51,7 +51,7 @@ export const AD = {
     isActive: dim => (dim ? dim <= MultiplierTabHelper.activeDimCount("AD") : true),
     dilationEffect: () => {
       const baseEff = (player.dilation.active || Enslaved.isRunning)
-        ? 0.75 * Effects.product(DilationUpgrade.dilationPenalty)
+        ? dilationPenalty()
         : 1;
       return baseEff * (Effarig.isRunning ? Effarig.multDilation : 1);
     },
@@ -350,7 +350,7 @@ export const AD = {
     name: "Pelle Upgrades",
     multValue: dim => Decimal.pow(PelleUpgrade.antimatterDimensionMult.effectOrDefault(1),
       dim ? 1 : MultiplierTabHelper.activeDimCount("AD")),
-    powValue: () => PelleRifts.paradox.effectOrDefault(DC.D1).toNumber(),
+    powValue: () => PelleRifts.paradox.effectOrDefault(DC.D1).add(PelleRifts.glitch.effectOrDefault(DC.D1)).toNumber(),
     isActive: () => Pelle.isDoomed && !EternityChallenge(11).isRunning,
     icon: MultiplierTabIcons.PELLE,
   },
@@ -463,6 +463,12 @@ export const AD = {
     isActive: () => V.isRunning,
     icon: MultiplierTabIcons.GENERIC_V,
   },
+  nerfVEX: {
+    name: "V's EX Reality",
+    powValue: () => V.rageDimPower.toNumber(),
+    isActive: () => V.isRunningExtreme,
+    icon: MultiplierTabIcons.GENERIC_VEX,
+  },
   nerfCursed: {
     name: "Cursed Glyphs",
     powValue: () => getAdjustedGlyphEffect("curseddimensions"),
@@ -475,5 +481,32 @@ export const AD = {
     powValue: () => (PelleStrikes.infinity.hasStrike ? 0.5 : 1),
     isActive: () => Pelle.isDoomed,
     icon: MultiplierTabIcons.PELLE,
-  }
+  },
+  glitchChallengePI: {
+    name: "Glitch Challenge (PI)",
+    multValue: () => DC.D1.timesEffectsOf(
+        preInfinityUG(0),
+        preInfinityUG(1),
+        preInfinityUG(2),
+        preInfinityUG(3),
+      ),
+    isActive: () => true,
+    icon: MultiplierTabIcons.GLITCH_CHALLENGE,
+  },
+  glitchRiftPI: {
+    name: "Glitch Rift (PI)",
+    multValue: () => DC.D1.timesEffectsOf(
+        GlitchRifts.alpha.milestones[0],
+        GlitchRifts.alpha.milestones[1]
+      ),
+    isActive: () => true,
+    icon: MultiplierTabIcons.GLITCH_CHALLENGE,
+  },
+  glitchUpgrades: {
+    name: "Glitch Upgrades",
+    multValue: () => GlitchRealityUpgrade(5).effectOrDefault(1),
+    powValue: () => GlitchRealityUpgrade(16).effectOrDefault(1),
+    isActive: () => true,
+    icon: MultiplierTabIcons.GLITCH_CHALLENGE,
+  },
 };

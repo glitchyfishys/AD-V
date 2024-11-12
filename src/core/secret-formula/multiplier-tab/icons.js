@@ -187,6 +187,11 @@ export const MultiplierTabIcons = {
     color: "var(--color-v--base)",
     textColor: "black",
   },
+  GENERIC_VEX: {
+    symbol: "<b>⌬<i class='fas fa-skull' /></b>",
+    color: "var(--color-v--base)",
+    textColor: "black",
+  },
   GENERIC_RA: {
     symbol: `<i class="fas fa-sun" />`,
     color: "var(--color-ra--base)",
@@ -212,6 +217,10 @@ export const MultiplierTabIcons = {
   PELLE: {
     symbol: "<b>♅</b>",
     color: "var(--color-pelle--base)",
+  },
+  GLITCH_CHALLENGE: {
+    symbol: "<b>ὣ</b>",
+    color: "var(--color-glitch--base)",
   },
   IAP: {
     symbol: `<i class="fas fa-coins" />`,

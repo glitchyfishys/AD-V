@@ -128,7 +128,7 @@ export const metaFabricatorUpgrades = [
     name: "Timeless",
     id: 11,
     cost: 3,
-    description: "Nameless do not reset and gain bonus Tesseracts based on Metas",
+    description: "Nameless do not reset and gain bonus Tesseracts based on Metas also get an autobuyer for Tesseracts",
     effect: () => Currency.metas.value.div(5).pow(2.2),
     formatEffect: value => "+" + format(value,2,2)
   },
@@ -146,7 +146,7 @@ export const metaFabricatorUpgrades = [
     id: 13,
     cost: 4,
     description: "Metas boost Meta Relay gain",
-    effect: () => Currency.metas.value.pow(1.44).div(15).add(1),
+    effect: () => Currency.metas.value.pow(1.44).div(15).add(1).min(1e10), // just in case of someone getting alot (we don't need that much yet)
     formatEffect: value => format(value)
   },
   {
@@ -206,8 +206,8 @@ export const metaFabricatorUpgrades = [
     name: "Spacous Generator",
     id: 20,
     cost: 80,
-    description: "Generate Space Theorems based on Metas",
-    effect: () => Currency.metas.value.pow(1.2).div(60).min(1000),
+    description: "Generate Space Theorems based on Metas (caps at 25000)",
+    effect: () => Currency.metas.value.pow(1.2).div(60),
     formatEffect: value => format(value, 2, 2) + "/s"
   },
   {
@@ -232,11 +232,11 @@ export const metaFabricatorUpgrades = [
     id: 23,
     cost: 2e9,
     description: "Increase the antimatter hardcap based on Metas",
-    effect: () => Currency.metas.value.pow(0.8).mul(27).add(1),
+    effect: () => Currency.metas.value.div(15).pow(2.5).add(1),
     formatEffect: value => formatPow(value,2,2),
   },
   {
-    name: "Be gone Hardcap",
+    name: "some pointless stuff",
     id: 24,
     cost: 1e12,
     description: "Unlock auto buyers for Singularity cap and Keep Charged Infinity upgrades, Ra memory level",

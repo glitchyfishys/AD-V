@@ -264,7 +264,7 @@ export const Ra = {
   },
   memoryTick(realDiff, generateChunks) {
     if (!this.isUnlocked) return;
-    for (const pet of Ra.pets.all) pet.tick(realDiff, generateChunks);
+    for (const pet of Ra.pets.all) pet.tick(realDiff, generateChunks / ((pet.name == "Cante" || pet.name == "Null") ? 1e25 : 1));
   },
   get productionPerMemoryChunk() {
     let res = Effects.product(Ra.unlocks.continuousTTBoost.effects.memories, Achievement(168) );
@@ -400,7 +400,9 @@ export const Ra = {
     this.updateAlchemyFlow(realityRealTime);
   },
   get alchemyResourceCap() {
-    return (30000 + GlitchRealityUpgrades.all[2].effectOrDefault(0)) * (VUnlocks.glyphCap.isUnlocked ? 3 : 1);
+    let cap = (30000 + GlitchRealityUpgrades.all[2].effectOrDefault(0)) * (VUnlocks.glyphCap.isUnlocked ? 3 : 1);
+    cap = cap / ((cap / 1e6) ** 0.9);
+    return cap
   },
   get momentumValue() {
     const hoursFromUnlock = TimeSpan.fromMilliseconds(player.celestials.ra.momentumTime).totalHours;

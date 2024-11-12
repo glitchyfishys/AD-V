@@ -26,6 +26,7 @@ export default {
       isColored: false,
       hasEffarig: false,
       hasReality: false,
+      hasGlitch: false,
       logTotalSacrifice: 0,
       pelleChaosEffect: {},
     };
@@ -41,7 +42,9 @@ export default {
         `<span style="color: ${GlyphAppearanceHandler.getBorderColor("effarig")};">Effarig</span>`);
       if (this.hasReality) uniqueGlyphs.push(
         `<span style="animation: a-reality-glyph-description-cycle 2s infinite;">Reality</span>`);
-      return `You cannot have more than one ${uniqueGlyphs.join(" or ")}
+      if (this.hasGlitch) uniqueGlyphs.push(
+        `<span style="color: ${GlyphAppearanceHandler.getBorderColor("glitch")};">Glitch</span>`);
+      return `You cannot have more than one ${makeEnumerationOR(uniqueGlyphs)}
         Glyph equipped${uniqueGlyphs.length > 1 ? " each." : "."}`;
     },
     noEffects() {
@@ -77,6 +80,7 @@ export default {
       this.isColored = player.options.glyphTextColors;
       this.hasEffarig = Glyphs.active.some(g => g && g.type === "effarig");
       this.hasReality = Glyphs.active.some(g => g && g.type === "reality");
+      this.hasGlitch = Glyphs.active.some(g => g && g.type === "glitch");
 
       this.logTotalSacrifice = GameCache.logTotalGlyphSacrifice.value.toNumber();
 

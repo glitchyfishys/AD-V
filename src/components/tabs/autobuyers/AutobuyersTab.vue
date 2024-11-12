@@ -7,6 +7,7 @@ import EternityAutobuyerBox from "./EternityAutobuyerBox";
 import GalaxyAutobuyerBox from "./GalaxyAutobuyerBox";
 import OpenModalHotkeysButton from "@/components/OpenModalHotkeysButton";
 import RealityAutobuyerBox from "./RealityAutobuyerBox";
+import MetaAutobuyerBox from "./MetaAutobuyerBox";
 import SimpleAutobuyersMultiBox from "./SimpleAutobuyersMultiBox";
 import TickspeedAutobuyerBox from "./TickspeedAutobuyerBox";
 
@@ -22,7 +23,8 @@ export default {
     DimensionBoostAutobuyerBox,
     TickspeedAutobuyerBox,
     DimensionAutobuyerBox,
-    SimpleAutobuyersMultiBox
+    SimpleAutobuyersMultiBox,
+    MetaAutobuyerBox
   },
   data() {
     return {
@@ -83,6 +85,7 @@ export default {
       Antimatter Dimension Autobuyers can have their bulk upgraded once interval is below {{ formatInt(100) }} ms.
     </b>
     <b v-if="hasInstant">Autobuyers with "Instant" interval will trigger every game tick ({{ gameTickLength }}).</b>
+    <MetaAutobuyerBox class="c-meta-pos" />
     <RealityAutobuyerBox class="c-reality-pos" />
     <EternityAutobuyerBox class="c-eternity-pos" />
     <BigCrunchAutobuyerBox class="c-infinity-pos" />
@@ -105,6 +108,10 @@ export default {
 when they're open. It looks slightly hacky but actually can't be done any other way; each AutobuyerBox creates
 its own stacking context, which means that all z-indices specified within are essentially scoped and the
 AutobuyerBox components will always render in page order regardless of internal z-indices without these. */
+.c-meta-pos {
+  z-index: 4;
+}
+
 .c-reality-pos {
   z-index: 3;
 }

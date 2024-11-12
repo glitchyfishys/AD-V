@@ -97,5 +97,11 @@ export const gamespeed = {
     powValue: () => Decimal.clampMax(Time.thisRealityRealTime.totalMinutes.div(10), 1).toNumber(),
     isActive: () => Laitela.isRunning,
     icon: MultiplierTabIcons.GENERIC_LAITELA,
-  }
+  },
+  glitchRiftPI: {
+    name: "Glitch Rift (PI)",
+    multValue: () => GlitchRifts.alpha.milestones[2].effectOrDefault(1),
+    isActive: () => true,
+    icon: MultiplierTabIcons.GLITCH_CHALLENGE,
+  },
 };

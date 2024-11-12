@@ -153,7 +153,7 @@ export default {
         // Handle nerf powers differently from everything else in order to render them with the correct bar percentage
         const perc = entry.data.pow >= 1
           ? multFrac / totalPosPow + powFrac * (1 - 1 / totalPosPow)
-          : Math.log(entry.data.pow) / Math.log(totalNegPow) * (totalNegPow - 1);
+          : Math.min(Math.log(entry.data.pow) / Math.log(totalNegPow), totalNegPow / powList.filter(p => p < 1).length) * -0.8;
 
         // This is clamped to a minimum of something that's still nonzero in order to show it at <0.1% instead of 0%
         percentList.push(

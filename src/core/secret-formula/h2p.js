@@ -1848,6 +1848,20 @@ Rifts once the current cap has been reached.`,
       Completing all of the Challenges unlocks Glitch, The Celestial of Programing <br>
 `,
     }, {
+      name: "Meta",
+      alias: "Meta Reset",
+      tags: ["Glitch", "Meta", "Celestial", "EXV", "EX-V", "VEX", "V-EX"],
+      tab: "meta/metaFabricator",
+      isUnlocked: () => true,
+      info: () => `
+      Meta is a reset for making the Meta Fabricator once complete you will be able to enter the Meta realm<br><br>
+      
+      The Fabricator has 5 rebuyable upgrades and 20 single purchase<br>
+      There are also milestone 4 for Metas and 4 for speed<br>
+
+      Going Meta will reset Celestials and Achivements along with all of Reality
+      `,
+    }, {
       name: "Mod",
       alias: "Mod",
       tags: ["Glitch", "Challenges", "Celestial", "Mod"],
@@ -1889,7 +1903,7 @@ Rifts once the current cap has been reached.`,
       Time study Export, Respec and Import are added to the side of the Time Therom shop <br>
       Shift clicking Reality upgrades, Black hole power upgrades bulk buy 25 <br>
       Shift clicking the Infinity Prestige button will buy a Tesseract without switching tabs <br>
-      STD coins are gained over time at one per fifteen minutes <br>
+      STD coins are gained over time at one per 2.5 minutes <br>
       <br>
       Other: <br>
       News ticker speed can go upto 1000% <br>

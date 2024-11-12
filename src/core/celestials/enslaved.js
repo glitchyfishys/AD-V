@@ -230,12 +230,12 @@ export const Enslaved = {
   symbol: "\uf0c1",
 
   reset() {
+    player.celestials.enslaved.stored = new Decimal();
+    player.celestials.enslaved.storedReal = 0;
+    player.celestials.enslaved.tesseracts = 0;
     if(MetaFabricatorUpgrade(11)) return;
     player.celestials.enslaved.completed = false;
     player.celestials.enslaved.unlocks = [];
-    player.celestials.enslaved.tesseracts = 0;
-    player.celestials.enslaved.stored = new Decimal();
-    player.celestials.enslaved.storedReal = 0;
     player.celestials.enslaved.isAutoReleasing = false;
     player.celestials.enslaved.isStoring = false;
     player.celestials.enslaved.isStoringReal = false;

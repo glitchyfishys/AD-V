@@ -31,7 +31,7 @@ export const MultiplierTabHelper = {
       InfinityChallenge(5).reward,
       PelleUpgrade.galaxyPower,
       PelleRifts.decay.milestones[1]
-    ) * Pelle.specialGlyphEffect.power;
+    ) * Pelle.specialGlyphEffect.power * Glitch.chaosCoresBoost.toNumber();
   },
 
   // Helper method for galaxies and tickspeed, broken up as contributions of tickspeed*log(perGalaxy) and galaxyCount to
@@ -181,6 +181,20 @@ export const MultiplierTabHelper = {
     }
   },
 
+  GCCheckAD(gc, dimStr) {
+    return true;
+  },
+
+  GRDimCheck(gr, dimStr) {
+    switch (gr) {
+      case 1:
+        return dimStr === "AD1";
+        case 2:
+        return dimStr === "AD8";
+      default:
+        return false;
+    }
+  },
   blackHoleSpeeds() {
     const currBH = BlackHoles.list
       .filter(bh => bh.isUnlocked)

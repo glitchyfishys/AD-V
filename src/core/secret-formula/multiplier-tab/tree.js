@@ -7,14 +7,17 @@ const dynamicGenProps = ["TP", "DT", "infinities", "eternities", "gamespeed", "r
 const propList = {
   AD: ["purchase", "dimboost", "sacrifice", "achievementMult", "achievement", "infinityUpgrade",
     "breakInfinityUpgrade", "infinityPower", "infinityChallenge", "timeStudy", "eternityChallenge", "glyph", "v",
-    "alchemy", "pelle", "iap", "effectNC", "nerfIC", "nerfV", "nerfCursed", "nerfPelle"],
+    "alchemy", "pelle", "iap", "effectNC", "nerfIC", "nerfV", "nerfCursed", "nerfPelle", "glitchChallengePI", "glitchRiftPI",
+    "glitchUpgrades", "nerfVEX"],
   ID: ["purchase", "achievementMult", "achievement", "replicanti", "infinityChallenge", "timeStudy", "eternityUpgrade",
-    "eternityChallenge", "glyph", "alchemy", "imaginaryUpgrade", "pelle", "iap", "nerfV", "nerfCursed", "nerfPelle"],
+    "eternityChallenge", "glyph", "alchemy", "imaginaryUpgrade", "pelle", "iap", "nerfV", "nerfCursed", "nerfPelle", "nerfVEX"],
   TD: ["purchase", "achievementMult", "achievement", "timeStudy", "eternityUpgrade", "eternityChallenge",
-    "dilationUpgrade", "realityUpgrade", "glyph", "alchemy", "imaginaryUpgrade", "pelle", "iap", "nerfV", "nerfCursed"],
+    "dilationUpgrade", "realityUpgrade", "glyph", "alchemy", "imaginaryUpgrade", "pelle", "iap", "nerfV", "nerfCursed",
+    "glitchChallengeReality", "glitchRiftReality", "nerfVEX"],
   IP: ["base", "infinityUpgrade", "achievement", "timeStudy", "dilationUpgrade", "glyph", "alchemy", "pelle", "iap",
-    "nerfTeresa", "nerfV"],
-  EP: ["base", "eternityUpgrade", "timeStudy", "glyph", "realityUpgrade", "pelle", "iap", "nerfTeresa", "nerfV"],
+    "nerfTeresa", "nerfV", "glitchChallengePI", "glitchChallengeBI", "glitchChallengeEternity"],
+  EP: ["base", "eternityUpgrade", "timeStudy", "glyph", "realityUpgrade", "pelle", "iap", "nerfTeresa", "nerfV", "glitchChallengeEternity",
+    "glitchChallengeReality"],
 };
 
 // Some of the props above would contain every entry except "total" in their respective value GameDB entry, so we
@@ -143,6 +146,21 @@ const targetedEffects = {
     ID: [2, 4, 9],
     TD: [1, 10],
   },
+  glitchChallengePI: {
+    checkFn: MultiplierTabHelper.GCCheckAD,
+    AD: [0, 1, 2, 3],
+    IP: [6, 7],
+  },
+  glitchChallengeBI: {
+    checkFn: MultiplierTabHelper.GCCheckAD,
+    IP: [0, 1, 2, 3],
+    replicanti: [4, 5],
+  },
+  glitchRiftPI: {
+    checkFn: MultiplierTabHelper.GRDimCheck,
+    AD: [0,1],
+    gamespeed: [3],
+  },
 };
 
 // Highest actively-producing dimensions need a special case
@@ -169,7 +187,8 @@ const removedRegexes = ["AD_sacrifice", "AD_breakInfinityUpgrade", "AD_nerfIC", 
   "ID_replicanti", "ID_infinityChallenge", "ID_eternityUpgrades",
   "TD_achievement", "TD_eternityUpgrade", "TD_dilationUpgrade", "TD_realityUpgrade",
   ".._achievementMult", ".._glyph", ".._alchemy", ".._imaginaryUpgrade", ".._iap",
-  ".._nerfV", ".._nerfCursed", ".._nerfPelle", ".._pelle"
+  ".._nerfV", ".._nerfCursed", ".._nerfPelle", ".._pelle", "TD_glitchChallengeReality", "TD_glitchRiftReality",
+  "AD_glitchUpgrades"
 ];
 const removedProps = Object.keys(multiplierTabTree)
   .filter(key => removedRegexes.some(regex => key.match(regex)));

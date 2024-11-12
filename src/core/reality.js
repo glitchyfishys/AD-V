@@ -442,7 +442,7 @@ export function beginProcessReality(realityProps) {
 
     let gl = Math.min(glyphLevel.actualLevel, Math.floor(Glyphs.levelCap))
     
-    if(Perk.autoGlyph.canBeApplied){
+    if(Perk.autoGlyph.canBeApplied && !Pelle.isDoomed){
     for (let i=0; i < player.reality.glyphs.inventory.length; i++){
       if(!(player.reality.glyphs.inventory[i].type == "reality" || player.reality.glyphs.inventory[i].type == "cursed" || player.reality.glyphs.inventory[i].type == "glitch") ){
         player.reality.glyphs.inventory[i].level = Math.max(gl, Math.min(player.reality.glyphs.inventory[i].level, Glyphs.levelCap) );

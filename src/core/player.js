@@ -62,6 +62,13 @@ window.player = {
   auto: {
     autobuyersOn: true,
     disableContinuum: false,
+    meta: {
+      mode: 0,
+      mr: DC.D1,
+      xHighest: DC.D1,
+      time: 1,
+      isActive: false
+    },
     reality: {
       mode: 0,
       rm: DC.D1,
@@ -201,6 +208,9 @@ window.player = {
       all: Array.range(0, 4).map(() => ({
         isActive: true,
       })),
+      isActive: true,
+    },
+    tess: {
       isActive: true,
     },
     darkMatterDims: {
@@ -1053,7 +1063,10 @@ window.player = {
       singularities: true,
       celestialMemories: true,
       blackHole: true,
-      realityShards: true
+      realityShards: true,
+      riftForce: true,
+      metas: true,
+      metaRelays: true,
     },
     hiddenTabBits: 0,
     hiddenSubtabBits: Array.repeat(0, 12),

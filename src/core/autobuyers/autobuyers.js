@@ -37,6 +37,9 @@ import { GlitchUpgradeAutobuyerState } from "./glitch-upgrade-autobuyer";
 import { NonRepeatableGlitchUpgradeAutobuyerState } from "./glitch-upgrade-autobuyer";
 
 import { SingularityCapAutobuyerState } from "./singularity-cap-autobuyer";
+import { TesseractAutobuyerState } from "./tessearact-autobuyer";
+
+import { MetaAutobuyerState } from "./meta-autobuyer";
 
 export const Autobuyer = {
   annihilation: new AnnihilationAutobuyerState(),
@@ -79,6 +82,9 @@ export const Autobuyer = {
   glitchUpgrades: GlitchUpgradeAutobuyerState.createAccessor(),
 
   singCap: new SingularityCapAutobuyerState(),
+  tess: new TesseractAutobuyerState(),
+
+  meta: new MetaAutobuyerState(),
 };
 
 export const Autobuyers = (function() {
@@ -92,6 +98,7 @@ export const Autobuyers = (function() {
     Autobuyer.bigCrunch,
     Autobuyer.eternity,
     Autobuyer.reality,
+    Autobuyer.meta,
   ];
 
   const single = [
@@ -109,6 +116,7 @@ export const Autobuyers = (function() {
     Autobuyer.singleImag,
     Autobuyer.singleGlitchUpgrades,
     Autobuyer.singCap,
+    Autobuyer.tess,
   ];
 
   const singleComplex = [
@@ -174,7 +182,8 @@ export const Autobuyers = (function() {
         Autobuyer.galaxy,
         Autobuyer.bigCrunch,
         Autobuyer.eternity,
-        Autobuyer.reality].some(autobuyer => autobuyer.isUnlocked);
+        Autobuyer.reality,
+        Autobuyer.meta].some(autobuyer => autobuyer.isUnlocked);
     },
 
     toggle() {

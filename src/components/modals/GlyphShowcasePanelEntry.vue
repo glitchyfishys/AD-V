@@ -76,7 +76,7 @@ export default {
         color: GlyphAppearanceHandler.getBorderColor(this.type),
         "font-weight": "bold",
         "text-shadow": this.type === "cursed" ? "0.05rem 0.05rem var(--color-text)" : undefined,
-        animation: this.type === "reality" ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
+        animation: this.type === "reality" ? "a-reality-glyph-description-cycle 2s infinite" : undefined,
       };
     },
     rarityStyle() {

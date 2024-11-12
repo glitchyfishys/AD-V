@@ -13,7 +13,7 @@ export const EP = {
     // This effectively hides everything if the player can't actually gain any
     multValue: () => (Player.canEternity ? gainedEternityPoints() : 1),
     isActive: () => PlayerProgress.eternityUnlocked() || Player.canEternity,
-    dilationEffect: () => (Laitela.isRunning ? 0.75 * Effects.product(DilationUpgrade.dilationPenalty) : 1),
+    dilationEffect: () => (Laitela.isRunning ? dilationPenalty(true) : 1),
     isDilated: true,
     overlay: ["Δ", "<i class='fa-solid fa-layer-group' />"],
   },
@@ -91,14 +91,30 @@ export const EP = {
 
   nerfTeresa: {
     name: "Teresa's Reality",
-    powValue: () => 0.55,
+    powValue: () => 0.55 * GlitchSpeedUpgrades.all[0].effectOrDefault(1),
     isActive: () => Teresa.isRunning,
     icon: MultiplierTabIcons.GENERIC_TERESA,
   },
   nerfV: {
     name: "V's Reality",
-    powValue: () => 0.5,
+    powValue: () => 0.5 * GlitchSpeedUpgrades.all[0].effectOrDefault(1),
     isActive: () => V.isRunning,
     icon: MultiplierTabIcons.GENERIC_V,
+  },
+  glitchChallengeEternity: {
+    name: "Glitch Challenge (Eternity)",
+    multValue: () => DC.D1.timesEffectsOf(
+      eternityUG(4),
+    ),
+    isActive: () => eternityUG(4).isBought,
+    icon: MultiplierTabIcons.GLITCH_CHALLENGE,
+  },
+  glitchChallengeReality: {
+    name: "Glitch Challenge (Reality)",
+    multValue: () => DC.D1.timesEffectsOf(
+      realityUG(0),
+    ),
+    isActive: () => realityUG(0).isBought,
+    icon: MultiplierTabIcons.GLITCH_CHALLENGE,
   },
 };

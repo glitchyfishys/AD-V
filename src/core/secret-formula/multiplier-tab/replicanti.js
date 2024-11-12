@@ -74,6 +74,21 @@ export const replicanti = {
     isActive: () => Pelle.isDoomed && PelleRifts.decay.effectValue.gt(1),
     icon: MultiplierTabIcons.PELLE,
   },
+  glitchChallengeBI: {
+    name: "Glitch Challenge (BI)",
+    multValue: () => DC.D1.timesEffectsOf(
+      breakInfinityUG(4),
+      breakInfinityUG(5),
+    ),
+    isActive: () => [4,5].some(x => breakInfinityUG(x).isBought),
+    icon: MultiplierTabIcons.GLITCH_CHALLENGE,
+  },
+  glitchRiftEternity: {
+    name: "Glitch Rift (Eternity)",
+    multValue: () =>  GlitchRifts.delta.milestones[0].effectOrDefault(1),
+    isActive: () => true,
+    icon: MultiplierTabIcons.GLITCH_CHALLENGE,
+  },
   iap: {
     name: "Shop Tab Purchases",
     multValue: () => ShopPurchase.replicantiPurchases.currentMult,

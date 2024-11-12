@@ -27,7 +27,7 @@ export const ID = {
       : (PlayerProgress.eternityUnlocked() || InfinityDimension(1).isProducing)),
     dilationEffect: () => {
       const baseEff = player.dilation.active
-        ? 0.75 * Effects.product(DilationUpgrade.dilationPenalty)
+        ? dilationPenalty()
         : 1;
       return baseEff * (Effarig.isRunning ? Effarig.multDilation : 1);
     },
@@ -282,6 +282,12 @@ export const ID = {
     powValue: () => 0.5,
     isActive: () => V.isRunning,
     icon: MultiplierTabIcons.GENERIC_V,
+  },
+  nerfVEX: {
+    name: "V's EX Reality",
+    powValue: () => V.rageDimPower.toNumber(),
+    isActive: () => V.isRunningExtreme,
+    icon: MultiplierTabIcons.GENERIC_VEX,
   },
   nerfCursed: {
     name: "Cursed Glyphs",

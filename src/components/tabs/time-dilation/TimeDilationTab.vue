@@ -122,15 +122,15 @@ export default {
       else this.toMaxTooltip = estimateText.startsWith("<") ? "Currently Increasing" : estimateText;
     },
     bulk(){
-      DilationUpgrades.rebuyable[0].purchase(1e8);
-      if(!Pelle.isDoomed) DilationUpgrades.rebuyable[2].purchase(1e8);
+      DilationUpgrades.rebuyable[0].purchase(1e50);
+      if(!Pelle.isDoomed) DilationUpgrades.rebuyable[2].purchase(1e50);
       if(PelleRifts.paradox.milestones[0].canBeApplied){
-        DilationUpgrade.dtGainPelle.purchase(1e8);
-        DilationUpgrade.galaxyMultiplier.purchase(1e8);
-        DilationUpgrade.tickspeedPower.purchase(1e8);
+        DilationUpgrade.dtGainPelle.purchase(1e50);
+        DilationUpgrade.galaxyMultiplier.purchase(1e50);
+        DilationUpgrade.tickspeedPower.purchase(1e50);
       }
       // do resetting one last
-      DilationUpgrades.rebuyable[1].purchase(1e8);
+      DilationUpgrades.rebuyable[1].purchase(1e50);
     }
   }
 };

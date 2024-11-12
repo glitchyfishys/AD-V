@@ -35,7 +35,7 @@ export default {
         "text-shadow": `-1px 1px 1px var(--color-text-base), 1px 1px 1px var(--color-text-base),
                             -1px -1px 1px var(--color-text-base), 1px -1px 1px var(--color-text-base),
                             0 0 3px ${color}`,
-        animation: animateReality ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
+        animation: animateReality ? "a-reality-glyph-description-cycle 2s infinite" : undefined,
       };
     },
     symbol() {

@@ -87,10 +87,12 @@ export class Sacrifice {
       prePowerSacrificeMult = new Decimal((ad1Amount.log10() / 10) / Math.max(sacrificed.log10() / 10, 1));
     }
 
-    let postPowerSacrificeMult = prePowerSacrificeMult.clampMin(1).pow(this.sacrificeExponent);
+    let total = prePowerSacrificeMult.clampMin(1).pow(this.sacrificeExponent);
 
-    let softcap = (postPowerSacrificeMult).div("1e1E16").pow(MetaFabricatorUpgrade(15).isBought ? 0.5 : 0.9);
-    return postPowerSacrificeMult.gte("1e1E16") ? postPowerSacrificeMult.div(softcap) : postPowerSacrificeMult;
+    if(total.gte("1e1E16")) total = total.div(total.div("1e1E16").pow(MetaFabricatorUpgrade(15).isBought ? 0.6 : 0.9));
+    if(total.gte("1e1E50")) total = total.pow( 1 / ((total.log10() / 1e50) ** 0.95));
+
+    return total;
   }
 
   static get totalBoost() {

@@ -167,9 +167,10 @@ export const Glitch = {
   },
 
   get chaosCoresBoost(){
-    if(Currency.chaosCores.eq(0)) return new Decimal(1);
+    if(Currency.chaosCores.eq(0) || V.isRunningExtreme) return new Decimal(1);
     let eff = Decimal.max( Currency.chaosCores.value.pow(0.1).mul(Currency.chaosCores.value.log10()).pow(0.25), 1);
     if(eff.gt(1e15)) eff = eff.div(eff.div(1e15).pow(0.9))
+    if(Pelle.isDoomed) eff = eff.pow(0.1);
     return eff.min(1e50);
   },
 

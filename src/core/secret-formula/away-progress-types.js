@@ -141,4 +141,14 @@ export const awayProgressTypes = [
     reference: ["celestials", "pelle", "realityShards"],
     isUnlocked: () => Pelle.isDoomed,
   },
+  {
+    name: "metaRealys",
+    reference: ["meta", "metaRelays"],
+    isUnlocked: () => PlayerProgress.metaUnlocked(),
+  },
+  {
+    name: "metas",
+    reference: ["meta", "metas",],
+    isUnlocked: () => PlayerProgress.metaUnlocked(),
+  },
 ];

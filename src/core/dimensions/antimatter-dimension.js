@@ -103,7 +103,7 @@ export function getDimensionFinalMultiplierUncached(tier) {
     multiplier = multiplier.pow(1.66);
   }
 
-  multiplier = multiplier.pow(1 + GlitchRealityUpgrades.all[15].effectOrDefault(0));
+  multiplier = multiplier.pow(GlitchRealityUpgrades.all[15].effectOrDefault(1));
   
   if (V.isRunningExtreme) {
     multiplier = multiplier.pow(0.001);
@@ -124,6 +124,10 @@ export function getDimensionFinalMultiplierUncached(tier) {
 
   if(multiplier.gt("1e1E26") && !MetaFabricatorUpgrade(15).isBought) multiplier = multiplier.pow( 1 / Math.sqrt(multiplier.log10() / 1e26) );
   if(multiplier.gt("1e1E30")) multiplier = multiplier.pow( 1 / ((multiplier.log10() / 1e30) ** 0.85) );
+
+  if(multiplier.gt("1e1E50")) multiplier = multiplier.pow( 1 / ((multiplier.log10() / 1e50) ** 0.9) );
+  if(multiplier.gt("1e1E100")) multiplier = multiplier.pow( 1 / ((multiplier.log10() / 1e100) ** 0.95) );
+  if(multiplier.gt("1e1E200")) multiplier = multiplier.pow( 1 / ((multiplier.log10() / 1e200) ** 0.99) );
   
   return multiplier;
 }
@@ -137,6 +141,8 @@ function applyADMultipliers(mult, tier) {
   } else {
     buy10Value = Math.floor(AntimatterDimension(tier).bought / 10);
   }
+
+  if(buy10Value > 1e18) buy10Value = buy10Value / (buy10Value / 1e18) ** (MetaFabricatorUpgrade(15).isBought ? 0.45 : 0.9);
 
   multiplier = multiplier.times(Decimal.pow(AntimatterDimensions.buyTenMultiplier, buy10Value));
   multiplier = multiplier.times(DimBoost.multiplierToADTier(tier));
@@ -633,8 +639,6 @@ class AntimatterDimensionState extends DimensionState {
     // a dimension-only method (so don't just copy it over to tickspeed).
     // We need to use dimension.currencyAmount here because of different costs in NC6.
     let amount = this.costScale.getContinuumValue(this.currencyAmount, 10) * Laitela.matterExtraPurchaseFactor;
-
-    if(amount > 1e18) amount = Math.max(amount / (amount / 1e18) ** 0.9, 1e18);
     
     return amount;
   }

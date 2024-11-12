@@ -45,7 +45,7 @@ export const preInfinityUG = [
     progLock: () => player.dimensionBoosts > 4 || player.galaxies > 0 || PlayerProgress.infinityUnlocked(),
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
     description: "1st AD multiplier by the amount of 8th AD",
-    effect: () => Decimal.pow(1.1, AntimatterDimension(8).bought).add(1),
+    effect: () => Decimal.pow(1.1, AntimatterDimension(8).totalAmount.div(10)).add(1),
     formatEffect: value => formatX(value, 2, 2)
   },
   {

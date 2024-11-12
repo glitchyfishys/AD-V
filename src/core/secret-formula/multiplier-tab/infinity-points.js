@@ -13,7 +13,7 @@ export const IP = {
     // This effectively hides everything if the player can't actually gain any
     multValue: () => (Player.canCrunch ? gainedInfinityPoints() : 1),
     isActive: () => PlayerProgress.infinityUnlocked() || Player.canCrunch,
-    dilationEffect: () => (Laitela.isRunning ? 0.75 * Effects.product(DilationUpgrade.dilationPenalty) : 1),
+    dilationEffect: () => (Laitela.isRunning ? dilationPenalty(true) : 1),
     isDilated: true,
     overlay: ["∞", "<i class='fa-solid fa-layer-group' />"],
   },
@@ -110,14 +110,42 @@ export const IP = {
 
   nerfTeresa: {
     name: "Teresa's Reality",
-    powValue: () => 0.55,
+    powValue: () => 0.55 * GlitchSpeedUpgrades.all[0].effectOrDefault(1),
     isActive: () => Teresa.isRunning,
     icon: MultiplierTabIcons.GENERIC_TERESA,
   },
   nerfV: {
     name: "V's Reality",
-    powValue: () => 0.5,
+    powValue: () => 0.5 * GlitchSpeedUpgrades.all[0].effectOrDefault(1),
     isActive: () => V.isRunning,
     icon: MultiplierTabIcons.GENERIC_V,
+  },
+  glitchChallengePI: {
+    name: "Glitch Challenge (PI)",
+    multValue: () => DC.D1.timesEffectsOf(
+      preInfinityUG(6),
+      preInfinityUG(7),
+    ),
+    isActive: () => [6,7].some(x => preInfinityUG(x).isBought),
+    icon: MultiplierTabIcons.GLITCH_CHALLENGE,
+  },
+  glitchChallengeBI: {
+    name: "Glitch Challenge (BI)",
+    multValue: () => DC.D1.timesEffectsOf(
+      breakInfinityUG(0),
+      breakInfinityUG(1),
+      breakInfinityUG(2),
+      breakInfinityUG(3),
+    ),
+    isActive: () => [0,1,2,3].some(x => breakInfinityUG(x).isBought),
+    icon: MultiplierTabIcons.GLITCH_CHALLENGE,
+  },
+  glitchChallengeEternity: {
+    name: "Glitch Challenge (Eternity)",
+    multValue: () => DC.D1.timesEffectsOf(
+      eternityUG(0),
+    ),
+    isActive: () => eternityUG(0).isBought,
+    icon: MultiplierTabIcons.GLITCH_CHALLENGE,
   },
 };

@@ -27,7 +27,7 @@ export const TD = {
       : (PlayerProgress.realityUnlocked() || TimeDimension(1).isProducing)),
     dilationEffect: () => {
       const baseEff = player.dilation.active
-        ? 0.75 * Effects.product(DilationUpgrade.dilationPenalty)
+        ? dilationPenalty()
         : 1;
       return baseEff * (Effarig.isRunning ? Effarig.multDilation : 1);
     },
@@ -84,7 +84,7 @@ export const TD = {
     multValue: () => (TimeDimension(8).isProducing
       ? Decimal.pow(GlyphSacrifice.time.effectValue, Math.clampMax(TimeDimension(8).bought, 1e8))
       : DC.D1),
-    isActive: () => GlyphSacrifice.time.effectValue > 1,
+    isActive: () => GlyphSacrifice.time.effectValue.gt(1),
     icon: MultiplierTabIcons.SACRIFICE("time"),
   },
   powPurchase: {
@@ -251,17 +251,38 @@ export const TD = {
     isActive: () => ShopPurchaseData.totalSTD > 0,
     icon: MultiplierTabIcons.IAP,
   },
-
   nerfV: {
     name: "V's Reality",
     powValue: () => 0.5,
     isActive: () => V.isRunning,
     icon: MultiplierTabIcons.GENERIC_V,
   },
+  nerfVEX: {
+    name: "V's EX Reality",
+    powValue: () => V.rageDimPower.toNumber(),
+    isActive: () => V.isRunningExtreme,
+    icon: MultiplierTabIcons.GENERIC_VEX,
+  },
   nerfCursed: {
     name: "Cursed Glyphs",
     powValue: () => getAdjustedGlyphEffect("curseddimensions"),
     isActive: () => getAdjustedGlyphEffect("curseddimensions") !== 1,
     icon: MultiplierTabIcons.SPECIFIC_GLYPH("cursed"),
+  },
+  glitchChallengeReality: {
+    name: "Glitch Challenge (Reality)",
+    multValue: () => DC.D1.timesEffectsOf(
+      realityUG(3),
+    ),
+    isActive: () => realityUG(3).isBought,
+    icon: MultiplierTabIcons.GLITCH_CHALLENGE,
+  },
+  glitchRiftReality: {
+    name: "Glitch Rift (Reality)",
+    multValue: () => DC.D1.timesEffectsOf(
+      realityUG(0),
+    ),
+    isActive: () => GlitchRifts.gamma.milestones[0].canBeApplied,
+    icon: MultiplierTabIcons.GLITCH_CHALLENGE,
   },
 };

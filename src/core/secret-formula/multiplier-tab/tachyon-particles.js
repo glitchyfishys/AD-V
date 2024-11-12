@@ -72,5 +72,13 @@ export const TP = {
     powValue: () => Enslaved.tachyonNerf,
     isActive: () => Enslaved.isRunning,
     icon: MultiplierTabIcons.GENERIC_ENSLAVED,
-  }
+  },
+  glitchChallengeReality: {
+    name: "Glitch Challenge (Reality)",
+    multValue: () => DC.D1.timesEffectsOf(
+      realityUG(1),
+    ),
+    isActive: () => realityUG(1).isBought,
+    icon: MultiplierTabIcons.GLITCH_CHALLENGE,
+  },
 };

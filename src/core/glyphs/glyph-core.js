@@ -707,13 +707,13 @@ export const Glyphs = {
     Currency.eternityPoints.value = new Decimal(undoData.ep);
     Currency.timeTheorems.value = new Decimal(undoData.tt);
     EternityChallenges.all.map((ec, ecIndex) => ec.completions = undoData.ecs[ecIndex]);
-    player.records.thisInfinity.time = undoData.thisInfinityTime;
+    player.records.thisInfinity.time = new Decimal(undoData.thisInfinityTime);
     player.records.thisInfinity.realTime = undoData.thisInfinityRealTime;
-    player.records.thisEternity.time = undoData.thisEternityTime;
+    player.records.thisEternity.time = new Decimal(undoData.thisEternityTime);
     player.records.thisEternity.realTime = undoData.thisEternityRealTime;
-    player.records.thisReality.time = undoData.thisRealityTime;
+    player.records.thisReality.time = new Decimal(undoData.thisRealityTime);
     player.records.thisReality.realTime = undoData.thisRealityRealTime;
-    player.celestials.enslaved.stored = undoData.storedTime || 0;
+    player.celestials.enslaved.stored = new Decimal(undoData.storedTime || 0);
     if (undoData.dilationStudies) {
       player.dilation.studies = Array.fromBitmask(undoData.dilationStudies);
       player.dilation.upgrades = new Set(Array.fromBitmask(undoData.dilationUpgrades));

@@ -375,6 +375,7 @@ GameKeyboard.bindHotkey("alt+r", () => toggleAutobuyer(Autobuyer.replicantiGalax
 GameKeyboard.bindHotkey("alt+c", () => toggleAutobuyer(Autobuyer.bigCrunch));
 GameKeyboard.bindHotkey("alt+e", () => toggleAutobuyer(Autobuyer.eternity));
 GameKeyboard.bindHotkey("alt+y", () => toggleAutobuyer(Autobuyer.reality));
+GameKeyboard.bindHotkey("alt+v", () => toggleAutobuyer(Autobuyer.meta));
 
 (function() {
   function bindDimensionHotkeys(tier) {

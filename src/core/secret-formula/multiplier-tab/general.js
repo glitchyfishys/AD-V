@@ -140,4 +140,90 @@ export const general = {
       };
     },
   },
+  glitchChallengePI: {
+    name: gc => `Glitch Challenge ${gc+1}`,
+    multValue: (gc, dim) => {
+      return preInfinityUG(gc).effectOrDefault(1);
+    },
+    isActive: gc => preInfinityUG(gc).canBeApplied,
+    icon: gc => {
+      const base = MultiplierTabIcons.GLITCH_CHALLENGE;
+      return {
+        color: base.color,
+        symbol: `${base.symbol + "<i class='fas fa-arrow-down-wide-short' />"}${gc+1}`,
+      };
+    },
+  },
+  glitchChallengeBI: {
+    name: gc => `Glitch Challenge ${gc+1}`,
+    multValue: (gc, dim) => {
+      return breakInfinityUG(gc).effectOrDefault(1);
+    },
+    isActive: gc => breakInfinityUG(gc).canBeApplied,
+    icon: gc => {
+      const base = MultiplierTabIcons.GLITCH_CHALLENGE;
+      return {
+        color: base.color,
+        symbol: `${base.symbol + "<i class='fas fa-arrow-down-wide-short' />"}${gc+1}`,
+      };
+    },
+  },
+  glitchChallengeEternity: {
+    name: gc => `Glitch Challenge ${gc+1}`,
+    multValue: (gc, dim) => {
+      return eternityUG(gc).effectOrDefault(1);
+    },
+    isActive: gc => eternityUG(gc).canBeApplied,
+    icon: gc => {
+      const base = MultiplierTabIcons.GLITCH_CHALLENGE;
+      return {
+        color: base.color,
+        symbol: `${base.symbol + "<i class='fas fa-arrow-down-wide-short' />"}${gc+1}`,
+      };
+    },
+  },
+  glitchChallengeReality: {
+    name: gc => `Glitch Challenge ${gc+1}`,
+    multValue: (gc, dim) => {
+      return realityUG(gc).effectOrDefault(1);
+    },
+    isActive: gc => realityUG(gc).canBeApplied,
+    icon: gc => {
+      const base = MultiplierTabIcons.GLITCH_CHALLENGE;
+      return {
+        color: base.color,
+        symbol: `${base.symbol + "<i class='fas fa-arrow-down-wide-short' />"}${gc+1}`,
+      };
+    },
+  },
+  glitchRiftPI: {
+    name: (gr, dim,) => `Glitch Rift (PI) AD${gr == 1 ? 8 : 1}`,
+    multValue: (gr, dim) => {
+      if(dim == 1) return GlitchRifts.alpha.milestones[0].effectOrDefault(1);
+      if(dim == 8) return GlitchRifts.alpha.milestones[1].effectOrDefault(1);
+      return GlitchRifts.alpha.milestones[gr].effectOrDefault(1);
+    },
+    isActive: gr => realityUG(gr).canBeApplied,
+    icon: gr => {
+      const base = MultiplierTabIcons.GLITCH_CHALLENGE;
+      return {
+        color: base.color,
+        symbol: `${base.symbol + "<i class='fas fa-arrow-down-wide-short' />"}${gr+1}`,
+      };
+    },
+  },
+  glitchUpgrades: {
+    name: (gu) => `Glitch Upgrade ${gu}`,
+    multValue: (gu, dim) => {
+      return GlitchRealityUpgrade(gu).effectOrDefault(1);
+    },
+    isActive: gu => GlitchRealityUpgrade(gu).canBeApplied,
+    icon: gu => {
+      const base = MultiplierTabIcons.GLITCH_CHALLENGE;
+      return {
+        color: base.color,
+        symbol: `${base.symbol + "<i class='fas fa-arrow' />"}${gu}`,
+      };
+    },
+  }
 };

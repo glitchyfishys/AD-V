@@ -199,7 +199,7 @@ export const glitchRealityUpgrades = [
     checkRequirement: () =>  GlitchRealityUpgrades.all[14].isBought && MachineHandler.gainedRealityMachines.times(simulatedRealityCount()).gte("1.8e308") && Glitch.isRunning && Glitch.augmentEffectBits == 315,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     description: "Glitch stays complete past Pelle and unlock Glitch's second layer after beating Pelle, also ADs are powered by 2.5",
-    effect: () =>  1.5,
-    formatEffect: value => (GlitchRealityUpgrades.all[15].isBought ? "Unlocked" : "Locked, ^2.5 AD")
+    effect: () =>  2.5,
+    formatEffect: value => (GlitchRealityUpgrades.all[15].isBought ? "Unlocked, ^2.5 AD" : "Locked")
   },
 ];

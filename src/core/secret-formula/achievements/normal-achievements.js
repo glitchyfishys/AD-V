@@ -1435,8 +1435,37 @@ export const normalAchievements = [
   {
     id: 198,
     name: "This is geting Meta",
-    get description() {return `Escape the confinements of the multiverse`},
+    description: `Escape the confinements of the multiverse`,
     checkRequirement: () => true,
+    checkEvent: GAME_EVENT.META_RESET_AFTER,
+  },
+  {
+    id: 201,
+    name: "Again?",
+    description: `Finish EX-V again?`,
+    checkRequirement: () => player.celestials.v.runUnlocks[10] == 4 && Currency.metas.gt(0),
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
+  },
+  {
+    id: 202,
+    name: "No more?",
+    description: `meta 5 times`,
+    checkRequirement: () => Currency.metas.gte(5),
+    checkEvent: GAME_EVENT.META_RESET_AFTER,
+  },
+  {
+    id: 203,
+    name: "Speedruning",
+    description: `get Meta Milestone 8`,
+    checkRequirement: () => Time.bestMetaRealTime.totalMinutes.lte(5),
+    checkEvent: GAME_EVENT.META_RESET_AFTER,
+  },
+  {
+    id: 204,
+    name: "you can stop grinding now",
+    get description() { return `meta ${format(1000)} times`},
+    checkRequirement: () => Currency.metas.gte(1000),
+    reward: "you get a meta autobuyer",
     checkEvent: GAME_EVENT.META_RESET_AFTER,
   },
 ];

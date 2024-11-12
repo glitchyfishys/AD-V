@@ -26,8 +26,6 @@ export function getTickSpeedMultiplier() {
   let galaxies = effectiveBaseGalaxies();
 
   let CC = Glitch.chaosCoresBoost;
-  if(Pelle.isDoomed) CC = CC.pow(0.1);
-  if(V.isRunningExtreme) CC = DC.D1;
   
   const effects = Effects.product(
     InfinityUpgrade.galaxyBoost,
@@ -191,6 +189,10 @@ export const Tickspeed = {
 
     if(tickspeed.gt("1e1E20")) tickspeed = tickspeed.pow( 1 / ( (tickspeed.log10() / 1e20) ** 0.95) );
     
+    if(tickspeed.gt("1e1E50")) tickspeed = tickspeed.pow( 1 / ((tickspeed.log10() / 1e50) ** 0.95) );
+    if(tickspeed.gt("1e1E100")) tickspeed = tickspeed.pow( 1 / ((tickspeed.log10() / 1e100) ** 0.95) );
+    if(tickspeed.gt("1e1E200")) tickspeed = tickspeed.pow( 1 / ((tickspeed.log10() / 1e200) ** 0.99) );
+
     return tickspeed.min("1e1E300");
   },
 
@@ -206,6 +208,7 @@ export const Tickspeed = {
     else boughtTickspeed = player.totalTickBought;
     let total = boughtTickspeed + player.totalTickGained + x;
     if(total > 1e20) total = total / ((total / 1e20) ** 0.9);
+    if(total > 1e50) total = total / ((total / 1e50) ** 0.95);
 
     return total;
   },

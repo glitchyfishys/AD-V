@@ -213,7 +213,7 @@ export function gainedMetas() {
 }
 
 export function gainedMetaRelays() {
-  let mr = (MetaFabricatorUpgrade(23).isBought && !Pelle.isDoomed) ? Decimal.pow10(Math.log10(player.records.thisMeta.maxAM.log10()) / 15).add(1) : DC.D1;
+  let mr = (MetaFabricatorUpgrade(23).isBought && !Pelle.isDoomed) ? Decimal.pow10(Math.log10(player.records.thisMeta.maxAM.log10()) / 10).add(1) : DC.D1;
   mr = mr.add(Currency.metas.value);
   mr = mr.mul(MetaMilestone.metaSpeed.effectOrDefault(1));
   mr = mr.mul(MetaFabricatorUpgrade(13).effectOrDefault(1));
@@ -448,13 +448,13 @@ export function getGameSpeedupForDisplay() {
 // Separated out for organization; however this is also used in more than one spot in gameLoop() as well. Returns
 // true if the rest of the game loop should be skipped
 export function realTimeMechanics(realDiff) {
-  player.IAP.STDcoins += realDiff / (1000 * 900);
+  player.IAP.STDcoins += realDiff / (1000 * 150);
 
   Currency.riftForce.add(Glitch.riftForceGain.div(1000 / realDiff));
 
   if(MetaFabricatorUpgrade(8).isBought && !Pelle.isDoomed) player.celestials.teresa.bestRunAM = player.celestials.teresa.bestRunAM.max(Currency.antimatter.value);
   
-  player.celestials.v.metaTheorems += MetaFabricatorUpgrade(20).effectOrDefault(DC.D0).div(1000 / realDiff).toNumber();
+  player.celestials.v.metaTheorems = Math.min(player.celestials.v.metaTheorems + MetaFabricatorUpgrade(20).effectOrDefault(DC.D0).div(1000 / realDiff).toNumber(), 25000);
   V.updateTotalRunUnlocks();
 
   // Ra memory generation bypasses stored real time, but memory chunk generation is disabled when storing real time.

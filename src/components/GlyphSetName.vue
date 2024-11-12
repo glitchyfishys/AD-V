@@ -203,7 +203,7 @@ export default {
         "text-shadow": `-1px 1px 1px var(--color-text-base), 1px 1px 1px var(--color-text-base),
                         -1px -1px 1px var(--color-text-base), 1px -1px 1px var(--color-text-base),
                         0 0 3px ${this.textColor}`,
-        animation: this.mainGlyphName.id === "reality" ? "a-reality-glyph-description-cycle 10s infinite" : undefined,
+        animation: this.mainGlyphName.id === "reality" ? "a-reality-glyph-description-cycle 2s infinite" : undefined,
       };
     }
   },
