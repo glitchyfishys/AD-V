@@ -119,7 +119,7 @@ class RaPetState extends GameMechanicState {
   }
 
   set memoryChunks(value) {
-    this.data.memoryChunks = Math.min(value, 1e250);
+    this.data.memoryChunks = (isNaN(value) || value == Infinity) ? 1e250 : Decimal.min(value, 1e250).toNumber();
   }
 
   get requiredMemories() {
@@ -208,17 +208,28 @@ class RaPetState extends GameMechanicState {
 
   tick(realDiff, generateChunks) {
     const seconds = realDiff / 1000;
-    const newMemoryChunks = Math.min(generateChunks
-      ? seconds * this.memoryChunksPerSecond
-      : 0, 1e150);
+    if(this.name == "Cante" || this.name == "Null") {
+      const newMemoryChunks = Math.min(generateChunks ? seconds * Ra.CandNChunkProduction * this.memoryChunksPerSecond : 0, 1e150);
+
+      const newMemories = Math.min(seconds * (this.memoryChunks + newMemoryChunks / 2) *
+      this.memoryUpgradeCurrentMult, 1e250);
+
+      this.memoryChunks += newMemoryChunks;
+    this.memories += newMemories;
+    if(this.memories > this.maxMemories) this.memories = this.maxMemories;
+    if(this.memoryChunks > this.maxMemories) this.memoryChunks = this.maxMemories;
+
+      return;
+    }
+    const newMemoryChunks = Math.min(generateChunks ? seconds * this.memoryChunksPerSecond : 0, 1e150);
     // Adding memories from half of the gained chunks this tick results in the best mathematical behavior
     // for very long simulated ticks
-    const newMemories = Math.min(seconds * (this.memoryChunks + newMemoryChunks / 2) * Ra.productionPerMemoryChunk *
-      this.memoryUpgradeCurrentMult, 1e250);
+    const newMemories = Math.min(seconds * (this.memoryChunks + newMemoryChunks / 2) *
+      Ra.productionPerMemoryChunk * this.memoryUpgradeCurrentMult, 1e250);
     this.memoryChunks += newMemoryChunks;
     this.memories += newMemories;
-    if(this.memories > this.maxmemories) this.memories = this.maxmemories
-    if(this.memoryChunks > this.maxmemories) this.memoryChunks = this.maxmemories
+    if(this.memories > this.maxMemories) this.memories = this.maxMemories;
+    if(this.memoryChunks > this.maxMemories) this.memoryChunks = this.maxMemories;
   }
 
   reset() {
@@ -250,11 +261,11 @@ export const Ra = {
   },
   reset() {
     const data = player.celestials.ra;
-    data.petWithRemembrance = "";
     data.run = false;
     data.disCharge = false;
     data.peakGamespeed = new Decimal(1);
     if(MetaFabricatorUpgrade(24).isBought) return;
+    data.petWithRemembrance = "";
     data.charged = new Set();
     data.unlockBits = 0;
       for (const pet of Ra.pets.all) {
@@ -264,7 +275,7 @@ export const Ra = {
   },
   memoryTick(realDiff, generateChunks) {
     if (!this.isUnlocked) return;
-    for (const pet of Ra.pets.all) pet.tick(realDiff, generateChunks / ((pet.name == "Cante" || pet.name == "Null") ? 1e25 : 1));
+    for (const pet of Ra.pets.all) pet.tick(realDiff, generateChunks);
   },
   get productionPerMemoryChunk() {
     let res = Effects.product(Ra.unlocks.continuousTTBoost.effects.memories, Achievement(168) );
@@ -272,6 +283,13 @@ export const Ra = {
       if (pet.isUnlocked) res *= Decimal.max(pet.memoryProductionMultiplier,1).toNumber();
     }
     return Math.min(res ** MetaMilestone.metaProgress.effectOrDefault(new Decimal(1)).toNumber(), 1e250);
+  },
+  get CandNChunkProduction() {
+    let res = 1;
+    res *= Decimal.max( Ra.pets.null.memoryProductionMultiplier, 1).toNumber();
+    res *= Decimal.max( Ra.pets.cante.memoryProductionMultiplier, 1).toNumber();
+
+    return Math.min(res, 1e250);
   },
   get memoryBoostResources() {
     const boostList = [];
@@ -475,4 +493,6 @@ export const GlyphAlteration = {
 
 EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
   if (Tab.celestials.ra.isOpen) Ra.quotes.unlock.show();
+  if (Tab.celestials.ra.isOpen && MetaFabricatorUpgrade(25).isBought) Ra.quotes.CandN.show();
 });
+

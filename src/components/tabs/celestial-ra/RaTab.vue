@@ -13,6 +13,7 @@ export default {
   data() {
     return {
       memoriesPerChunk: 0,
+      memoriesPerCandNChunk: 0,
       showReality: false,
       isRaCapped: false,
       totalLevels: 0,
@@ -23,6 +24,7 @@ export default {
       petWithRemembrance: "",
       isRunning: false,
       memoryBoosts: "",
+      meta25: false,
     };
   },
   computed: {
@@ -68,16 +70,16 @@ export default {
         pet: Ra.pets.cante,
         scalingUpgradeVisible: () => Ra.unlocks.repMul.isUnlocked,
         scalingUpgradeText: () => {
-          const  memory = Ra.unlocks.canteXP.effectOrDefault(1);
-          return `x${format(memory,2,2)} memory gain.`;
+          const  memory = Ra.unlocks.repMul.effectOrDefault(1);
+          return `${format(memory,2,2)} Replicanti Power.`;
         },
       },
       {
         pet: Ra.pets.null,
-        scalingUpgradeVisible: () => Ra.unlocks.nullCharge.isUnlocked,
+        scalingUpgradeVisible: () => Ra.unlocks.nullInfCap.isUnlocked,
         scalingUpgradeText: () => {
           const  memory = Ra.unlocks.nullXP.effectOrDefault(1);
-          return `x${format(memory,2,2)} memory gain.`;
+          return `x${format(memory,2,2)} Infinity Dimensions cap.`;
         },
       },
     ],
@@ -114,6 +116,7 @@ export default {
   methods: {
     update() {
       this.memoriesPerChunk = Ra.productionPerMemoryChunk;
+      this.memoriesPerCandNChunk = Ra.CandNChunkProduction;
       this.isRaCapped = Ra.totalPetLevel === Ra.maxTotalPetLevel;
       this.totalLevels = Ra.totalPetLevel;
       this.hasRemembrance = Ra.remembrance.isUnlocked;
@@ -123,6 +126,7 @@ export default {
       this.petWithRemembrance = Ra.petWithRemembrance;
       this.isRunning = Ra.isRunning;
       this.memoryBoosts = Ra.memoryBoostResources;
+      this.meta25 = MetaFabricatorUpgrade(25).isBought;
     },
     sName(){
       if(player.options.themeModern == "S15") return "Teresa-Ra's";
@@ -151,6 +155,7 @@ export default {
       <div v-if="!isRaCapped">
         Each Memory Chunk generates a base of one Memory per second<span v-if="memoriesPerChunk > 1">,
           which has been increased to {{ quantify("Memory", memoriesPerChunk, 2, 3) }} per second</span>.
+          <span v-if="meta25"><br>which has been increased to {{ quantify("Memory", memoriesPerCandNChunk, 2, 3) }} per second for Cante and Null</span>.
         <br>
         Storing real time prevents Memory Chunk generation, but Memories will still be gained normally.
         <span v-if="memoriesPerChunk > 1">

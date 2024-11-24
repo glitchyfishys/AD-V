@@ -201,8 +201,10 @@ export const secretAchievements = [
   },
   {
     id: 52,
-    name: "what",
-    description: "???"
+    name: "ERROR",
+    description: "you shold not have this yet",
+    checkRequirement: () => Glyphs.activeToChar().toLowerCase() == "error",
+    checkEvent: GAME_EVENT.GLYPHS_EQUIPPED_CHANGED
   },
   {
     id: 53,

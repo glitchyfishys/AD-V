@@ -1870,10 +1870,10 @@ Rifts once the current cap has been reached.`,
       This Mod changes: <br>
       Four Achievement info and unlock requirements and two Rewards <br>
 
-      EC1 reuirement amount <br>
+      EC1 requirement amount <br>
 
       Teresa RM pouring cap <br>
-      V Achievement requrements and for Unlocking V <br>
+      V Achievement requirements and for Unlocking V <br>
       Ra memory level cap <br>
       Alchemy cap <br>
       One Pelle Quote <br>
@@ -1883,24 +1883,25 @@ Rifts once the current cap has been reached.`,
       And Adds: <br>
       New Teresa pouring Milestone <br>
       New Effarig upgrade <br>
-      New V Hard Achievement <br>
+      New Hard V Achievement <br>
       <br>
       <br>
+      Main Content: <br>
       Glitch Challenges and Rifts <br>
       Glitch Celestial and upgrades <br>
       Destroying Pelle many times <br>
       <br>
       Chaos Dimensions <br>
       <br>
-      Secret Achievements (NYI) <br>
-      Glitch Glyph (NYI) <br>
+      Secret Achievements (NC) <br>
+      Glitch Glyph (NC) <br>
       <br>
       QOL: <br>
       Buy max AD Autobuyer upgrades <br>
       Toggle ADs buy max <br>
       Sticky Header, The Prestige buttons and Currencys will scroll down with you <br>
       Complete ECs based on the amount of EP that you would have needed to complete that Challenge <br>
-      Time study Export, Respec and Import are added to the side of the Time Therom shop <br>
+      Time study Export, Respec and Import are added to the side of the Time Theorem shop <br>
       Shift clicking Reality upgrades, Black hole power upgrades bulk buy 25 <br>
       Shift clicking the Infinity Prestige button will buy a Tesseract without switching tabs <br>
       STD coins are gained over time at one per 2.5 minutes <br>

@@ -78,7 +78,12 @@ export default {
       this.requiredMemories = pet.requiredMemories;
       this.memoryChunks = pet.memoryChunks;
       this.memoryChunksPerSecond = pet.memoryChunksPerSecond;
-      this.memoriesPerSecond = pet.memoryChunks * Ra.productionPerMemoryChunk * this.currentMemoryMult;
+      if(pet.name == "Cante" || pet.name == "Null") {
+        this.memoriesPerSecond = pet.memoryChunks * Ra.CandNChunkProduction * this.currentMemoryMult;
+      }
+      else {
+        this.memoriesPerSecond = pet.memoryChunks * Ra.productionPerMemoryChunk * this.currentMemoryMult;
+      }
       this.canGetMemoryChunks = pet.canGetMemoryChunks;
       this.memoryMultiplier = pet.memoryProductionMultiplier;
       this.memoryUpgradeCost = pet.memoryUpgradeCost;

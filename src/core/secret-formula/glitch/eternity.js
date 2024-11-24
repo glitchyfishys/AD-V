@@ -60,9 +60,9 @@ export const eternityUG = [
     formatEffect: value => formatX(value, 2, 2)
   },
   {
-    name: "Logical Tictonics",
+    name: "Logical Tectonics",
     id: 5,
-    requirement: "get time study 181 without compleing EC1, EC2 or EC3 5 times (pre-Reality)",
+    requirement: "Get Time Study 181 without completing EC1, EC2 or EC3 5 times (pre-Reality)",
     hasFailed: () => EternityChallenges.all[0].completions == 5 || EternityChallenges.all[1].completions == 5 || EternityChallenges.all[2].completions == 5,
     checkRequirement: () => player.timestudy.studies.includes(181) && !(EternityChallenges.all[0].completions == 5) && !(EternityChallenges.all[1].completions == 5) && !(EternityChallenges.all[2].completions == 5),
     progLock: () => PlayerProgress.realityUnlocked(),

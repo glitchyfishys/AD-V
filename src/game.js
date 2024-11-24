@@ -205,11 +205,12 @@ export function gainedGlyphLevel() {
 }
 
 export function gainedMetas() {
-  let Metas = DC.D1;
+  let metas = DC.D1;
 
-  Metas = Metas.mul(MetaFabricatorUpgrade(21).effectOrDefault(1));
+  metas = metas.mul(MetaFabricatorUpgrade(21).effectOrDefault(1));
+  metas = metas.mul(Ra.unlocks.nullMetaBoost.effectOrDefault(1));
 
-  return Metas;
+  return metas;
 }
 
 export function gainedMetaRelays() {
@@ -217,6 +218,8 @@ export function gainedMetaRelays() {
   mr = mr.add(Currency.metas.value);
   mr = mr.mul(MetaMilestone.metaSpeed.effectOrDefault(1));
   mr = mr.mul(MetaFabricatorUpgrade(13).effectOrDefault(1));
+  mr = mr.mul(Ra.unlocks.nullMetaAntimatter.effectOrDefault(1));
+  mr = mr.mul(Ra.unlocks.canteMetaBoost.effectOrDefault(1));
   return mr.floor();
 }
 

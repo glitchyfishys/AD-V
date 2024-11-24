@@ -139,4 +139,12 @@ export const sidebarResources = [
     formatValue: x => format(x, 2),
     formatClass: "o-sidebar-currency--glitch",
   },
+  {
+    id: 18,
+    optionName: "Meta Relays",
+    isAvailable: () => PlayerProgress.metaUnlocked(),
+    value: () => Currency.metaRelays,
+    formatValue: x => format(x, 2),
+    formatClass: "o-sidebar-currency--meta",
+  },
 ];

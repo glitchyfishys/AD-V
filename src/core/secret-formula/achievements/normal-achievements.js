@@ -1462,10 +1462,17 @@ export const normalAchievements = [
   },
   {
     id: 204,
-    name: "you can stop grinding now",
-    get description() { return `meta ${format(1000)} times`},
+    name: "You can stop grinding now",
+    get description() { return `Meta ${format(1000)} times`},
     checkRequirement: () => Currency.metas.gte(1000),
-    reward: "you get a meta autobuyer",
+    reward: "You get a meta autobuyer",
     checkEvent: GAME_EVENT.META_RESET_AFTER,
+  },
+  {
+    id: 205,
+    name: "We don't need more memories",
+    get description() { return `Unlock new memories`},
+    checkRequirement: () => MetaFabricatorUpgrade(25).isBought,
+    checkEvent: GAME_EVENT.GAME_TICK_AFTER,
   },
 ];

@@ -29,6 +29,9 @@ export function manualBigCrunchResetRequest() {
   if (GameEnd.creditsEverClosed) return;
   // We show the modal under two conditions - on the first ever infinity (to explain the mechanic) and
   // post-break (to show total IP and infinities gained)
+
+
+
   if (player.options.confirmations.bigCrunch && (!PlayerProgress.infinityUnlocked() || player.break)) {
     Modal.bigCrunch.show();
   } else {
@@ -38,6 +41,12 @@ export function manualBigCrunchResetRequest() {
 
 export function bigCrunchResetRequest(disableAnimation = false) {
   if (!Player.canCrunch) return;
+
+  if((!realityUGs.all[6].config.hasFailed() && !realityUGs.all[6].isBought) && player.options.confirmations.glitchCL && Glyphs.activeWithoutCompanion.length > 3 && Effarig.currentStage == 1 && Effarig.isRunning){
+    Modal.message.show(`you will fail glitch challenge ${realityUGs.all[6].config.name} <br> which is to ${realityUGs.all[6].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
+    return;
+  }
+
   if (!disableAnimation && player.options.animations.bigCrunch && !FullScreenAnimationHandler.isDisplaying) {
     bigCrunchAnimation();
     setTimeout(bigCrunchReset, 1000);

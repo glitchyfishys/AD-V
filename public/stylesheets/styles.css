@@ -792,6 +792,26 @@ button:focus {
   background: var(--color-celestials);
 }
 
+.o-tab-btn--glitch {
+  color: var(--color-glitch);
+  background-color: var(--color-prestige--accent);
+  border-color: var(--color-glitch);
+}
+
+.o-tab-btn--glitch:hover {
+  background: var(--color-glitch);
+}
+
+.o-tab-btn--meta {
+  color: var(--color-meta);
+  background-color: var(--color-prestige--accent);
+  border-color: var(--color-meta);
+}
+
+.o-tab-btn--meta:hover {
+  background: var(--color-meta);
+}
+
 /* #endregion tab buttons */
 
 #loading {
@@ -9180,6 +9200,23 @@ input.o-automator-block-input {
   background: var(--color-celestials);
 }
 
+.c-hide-modal-tab-button--glitch {
+  color: var(--color-glitch);
+  border-color: var(--color-glitch);
+}
+
+.c-hide-modal-tab-button--glitch:hover {
+  background: var(--color-glitch);
+}
+
+.c-hide-modal-tab-button--meta {
+  color: var(--color-meta);
+  border-color: var(--color-meta);
+}
+
+.c-hide-modal-tab-button--meta:hover {
+  background: var(--color-meta);
+}
 /* Prevent any themes overriding font awesome */
 .fa,
 .far,

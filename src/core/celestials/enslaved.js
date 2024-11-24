@@ -233,7 +233,7 @@ export const Enslaved = {
     player.celestials.enslaved.stored = new Decimal();
     player.celestials.enslaved.storedReal = 0;
     player.celestials.enslaved.tesseracts = 0;
-    if(MetaFabricatorUpgrade(11)) return;
+    if(MetaFabricatorUpgrade(11).isBought) return;
     player.celestials.enslaved.completed = false;
     player.celestials.enslaved.unlocks = [];
     player.celestials.enslaved.isAutoReleasing = false;

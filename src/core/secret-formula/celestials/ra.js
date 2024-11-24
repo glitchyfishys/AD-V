@@ -66,7 +66,7 @@ export const ra = {
     null: {
       id: "null",
       name: "Null",
-      color: "#000000",
+      color: "#909090",
       chunkGain: "Metas",
       memoryGain: "Null",
       requiredUnlock: () => MetaFabricatorUpgrade(25).isBought,
@@ -390,25 +390,29 @@ export const ra = {
       displayIcon: `<span class="fas fa-bolt"></span>`,
     },
     canteXP: {
-      id: 37,
-      reward: () => `Gain more memorys based on Replicanti (none of these have been done and are just templates)`,
-      effect: () => Decimal.pow(Ra.pets.cante.level, 4).toNumber(),
+      id: 36,
+      reward: () => `Gain more memories based on Replicanti`,
+      effect: () => Currency.replicanti.value.e ** 0.05,
       pet: "cante",
       level: 2,
       displayIcon: `Ξ`,
     },
     repMul: {
       id: 37,
-      reward: () => `Gain a multiplier to Replicanti based on Cante's memory level`,
-      effect: () => Decimal.pow(Ra.pets.cante.level, 4),
+      reward: () => `Gain a power to Replicanti based on Cante's memory level`,
+      effect: () => {
+        let e = Decimal.pow(1.5, Ra.pets.cante.level).toNumber();
+        if(e > 1e7) e = e / ((e / 1e7) ** 0.9);
+        return e;
+      },
       pet: "cante",
       level: 5,
       displayIcon: `Ξ`,
     },
     repEffect: {
       id: 38,
-      reward: () => `Increse the effectiveness of RGs`,
-      effect: () => Decimal.pow(Ra.pets.cante.level, 4),
+      reward: () => `Increse the effectiveness of RGs by ${formatPercents(0.5)} per level`,
+      effect: () => Decimal.pow(1.5, Ra.pets.cante.level - 15).toNumber(),
       pet: "cante",
       level: 15,
       displayIcon: `Ξ`,
@@ -416,59 +420,96 @@ export const ra = {
     repCap: {
       id: 39,
       reward: () => `Increse the cap of RGs`,
-      effect: () => Decimal.pow(Ra.pets.cante.level, 2),
+      effect: () => Decimal.pow(Ra.pets.cante.level / 50, Ra.pets.cante.level / 50).toNumber(),
       pet: "cante",
       level: 50,
       displayIcon: `Ξ`,
     },
     canteUnlock: {
       id: 40,
-      reward: () => `Unlock Cante, the Celestial of Replicanti`,
+      reward: () => `Unlock Cante, the Celestial of Replicanti (NYI)`,
       pet: "cante",
       level: 150,
       displayIcon: `Ξ`,
     },
-    nullXP: {
+    canteMetaBoost: {
       id: 41,
-      reward: () => `NYI`,
-      effect: () => Decimal.pow(Ra.pets.null.level, 2).toNumber(),
+      reward: () => `Replicanti boosts Meta gain`,
+      pet: "cante",
+      effect: () => Currency.replicanti.value.e ** 0.1,
+      level: 200,
+      displayIcon: `Ξ`,
+    },
+    repAD: {
+      id: 49,
+      reward: () => `Replicanti boosts ADs but lowers Chaos Cores Tickspeed effect`,
+      pet: "cante",
+      effect: () => (Currency.replicanti.value.e * 0.9) * (1.15 ** Ra.pets.cante.level),
+      level: 100,
+      displayIcon: `Ξ`,
+    },
+    nullXP: {
+      id: 42,
+      reward: () => `Multiply Null and Cantes Memory Chunck gain by x${format(1.9,0,1)} per level`,
+      effect: () => Decimal.pow(1.9, Ra.pets.null.level).toNumber(),
       pet: "null",
       level: 5,
       displayIcon: `<span class="fas fa-droplet"></span>`,
     },
     nullCharge: {
-      id: 41,
-      reward: () => `NYI`,
+      id: 43,
+      reward: () => `Uncap Dimension Boosts but it's softcaped past ${format(1e12)}`,
       pet: "null",
       level: 15,
       displayIcon: `<span class="fas fa-droplet"></span>`,
     },
-    nullUpgrade1: {
-      id: 42,
-      reward: () => `NYI`,
+    nullInfCap: {
+      id: 44,
+      reward: () => `Infinity Dimension Hardcap is multiplied based on Null level`,
+      effect: () => Decimal.pow(2, Ra.pets.null.level).toNumber(),
       pet: "null",
       level: 35,
       displayIcon: `<span class="fas fa-droplet"></span>`,
     },
-    nullUpgrade2: {
-      id: 43,
-      reward: () => `NYI`,
+    nullMetaAntimatter: {
+      id: 45,
+      reward: () => `Boost Meta Relay gain based on Antimatter and Null level`,
+      effect: () => {
+        let pow = (0.01 * Decimal.pow(1.05, Ra.pets.null.level - 75).toNumber());
+        if(pow > 0.1) pow = pow / ((pow / 0.1) ** 0.5);
+        return Currency.antimatter.value.log(1e5) ** pow;
+      },
       pet: "null",
       level: 75,
       displayIcon: `<span class="fas fa-droplet"></span>`,
     },
-    nullUpgrade3: {
-      id: 44,
-      reward: () => `NYI`,
+    nullMetaBoost: {
+      id: 46,
+      reward: () => `Double Meta gain every null level past 125`,
+      effect: () => Decimal.pow(2, Ra.pets.null.level - 125),
       pet: "null",
       level: 125,
       displayIcon: `<span class="fas fa-droplet"></span>`,
     },
-    nullUpgrade1: {
-      id: 45,
-      reward: () => `Nnlock Null, the Celestial of void`,
+    nullUnlock: {
+      id: 47,
+      reward: () => `Nnlock Null, the Celestial of Void (NYI)`,
       pet: "null",
       level: 150,
+      displayIcon: `<span class="fas fa-droplet"></span>`,
+    },
+    nullUpgrade3: {
+      id: 48,
+      reward: () => `Gain more MR based on ???`,
+      pet: "null",
+      level: 175,
+      displayIcon: `<span class="fas fa-droplet"></span>`,
+    },
+    nullUpgrade4: {
+      id: 50,
+      reward: () => `Unlock the Celestial of ???`,
+      pet: "null",
+      level: 200,
       displayIcon: `<span class="fas fa-droplet"></span>`,
     },
   }

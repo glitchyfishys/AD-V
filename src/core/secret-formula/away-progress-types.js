@@ -142,7 +142,7 @@ export const awayProgressTypes = [
     isUnlocked: () => Pelle.isDoomed,
   },
   {
-    name: "metaRealys",
+    name: "meta Realys",
     reference: ["meta", "metaRelays"],
     isUnlocked: () => PlayerProgress.metaUnlocked(),
   },

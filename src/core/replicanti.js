@@ -139,6 +139,7 @@ export function totalReplicantiSpeedMult(overCap) {
   totalMult = totalMult.times(ShopPurchase.replicantiPurchases.currentMult);
   totalMult = totalMult.times(breakInfinityUGs.all[5].effectOrDefault(1));
   totalMult = totalMult.times(GlitchRifts.delta.milestones[0].effectOrDefault(1));
+  totalMult = totalMult.pow(Ra.unlocks.repMul.effectOrDefault(1));
   if (Pelle.isDisabled("replicantiIntervalMult")) return totalMult;
 
   const preCelestialEffects = Effects.product(
@@ -473,7 +474,7 @@ export const ReplicantiUpgrade = {
     }
 
     get extra() {
-      return Effects.max(0, TimeStudy(131)) + Effects.max(0, TimeStudy(132)) + PelleRifts.decay.milestones[2].effectOrDefault(0);
+      return (Effects.max(0, TimeStudy(131)) + Effects.max(0, TimeStudy(132)) + PelleRifts.decay.milestones[2].effectOrDefault(0)) * Ra.unlocks.repCap.effectOrDefault(1);
     }
 
     get cap() {
@@ -583,7 +584,7 @@ export const Replicanti = {
       return this.bought + this.extra;
     },
     get max() {
-      return ReplicantiUpgrade.galaxies.value + ReplicantiUpgrade.galaxies.extra;
+      return Math.floor(ReplicantiUpgrade.galaxies.value + ReplicantiUpgrade.galaxies.extra);
     },
     get canBuyMore() {
       if (!Replicanti.amount.gte(Decimal.NUMBER_MAX_VALUE)) return false;

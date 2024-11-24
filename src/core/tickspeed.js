@@ -4,7 +4,8 @@ export function effectiveBaseGalaxies() {
   // Note that this already includes the "50% more" active path effect
   let replicantiGalaxies = Replicanti.galaxies.bought;
   replicantiGalaxies *= (1 + Effects.sum(
-    TimeStudy(133)
+    TimeStudy(133),
+    Ra.unlocks.repEffect
   ));
   if (TimeStudy(132).isBought) replicantiGalaxies *= 1.2;
   

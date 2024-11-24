@@ -32,7 +32,7 @@ export const breakInfinityUG = [
     checkRequirement: () => player.antimatter.gte("1e650") && player.challenge.infinity.current == 1 && !player.dimensions.infinity[0].amount.gt(0),
     progLock: () => false,
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
-    description: "1e50 more Infinity Points",
+    description: "Get 1e50 times more Infinity Points",
     effect: () => 1e50,
     formatEffect: value => formatX(value, 2, 2),
     isUseless: () => Pelle.isDoomed
@@ -44,7 +44,7 @@ export const breakInfinityUG = [
     progLock: () => false,
     checkRequirement: () => player.infinityPoints.e >= 150,
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
-    description: "IP multiplier from Antimatter Galaxies",
+    description: "IP multiplier based on Antimatter Galaxies",
     effect: () => 1 + Math.pow(player.galaxies, 3),
     formatEffect: value => formatX(value, 2, 2)
   },
@@ -56,7 +56,7 @@ export const breakInfinityUG = [
     checkRequirement: () => player.replicanti.amount.gte(10) && player.replicanti.chance == 0.01 && player.replicanti.interval >= 1000,
     progLock: () => PlayerProgress.eternityUnlocked(),
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
-    description: "Replicanti speed by it's amount",
+    description: "Replicanti speed is incresace it's amount",
     effect: () => 1 + Math.sqrt(player.replicanti.amount.log10()),
     formatEffect: value => formatX(value, 2, 2),
     isUseless: () => Pelle.isDoomed
@@ -69,7 +69,7 @@ export const breakInfinityUG = [
     checkRequirement: () => player.replicanti.amount.gte(1e100) && player.replicanti.chance == 0.01 && player.replicanti.interval >= 1000,
     progLock: () => PlayerProgress.eternityUnlocked(),
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
-    description: "Increase Replcanti speed by their Galxies",
+    description: "Increase Replicanti speed based on their Galaxies",
     effect: () => 1 + (Math.pow(player.replicanti.galaxies, 1.2) / 38),
     formatEffect: value => formatX(value, 2, 2)
   },

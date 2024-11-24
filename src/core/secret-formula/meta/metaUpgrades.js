@@ -3,7 +3,7 @@ import { DC } from "../../constants";
 const rebuyableMul = props => {
   props.cost = () => getHybridCostScaling(
     player.meta.upgrades.rebuyable[props.id],
-    1e30,
+    1e50,
     props.initialCost,
     props.costMult,
     props.costMult / 10,
@@ -22,7 +22,7 @@ const rebuyableMul = props => {
 const rebuyablePow = props => {
   props.cost = () => getHybridCostScaling(
     player.meta.upgrades.rebuyable[props.id],
-    1e30,
+    1e50,
     props.initialCost,
     props.costMult,
     props.costMult / 10,
@@ -40,7 +40,7 @@ const rebuyablePow = props => {
 
 export const metaFabricatorUpgrades = [
   rebuyableMul({
-    name: "Amplifier Charger",
+    name: "Amplifiers Charger",
     id: 1,
     initialCost: 1,
     costMult: 60,
@@ -68,7 +68,7 @@ export const metaFabricatorUpgrades = [
     id: 4,
     initialCost: 1,
     costMult: 120,
-    textTemplate: "The Singulatity cap is {value} times higher",
+    textTemplate: "The Singularity cap is {value} times higher",
     effect: 2
   }),
   rebuyableMul({
@@ -128,7 +128,7 @@ export const metaFabricatorUpgrades = [
     name: "Timeless",
     id: 11,
     cost: 3,
-    description: "Nameless do not reset and gain bonus Tesseracts based on Metas also get an autobuyer for Tesseracts",
+    description: "Nameless do not reset and gain bonus Tesseracts based on Metas. You also get a autobuyer for Tesseracts",
     effect: () => Currency.metas.value.div(5).pow(2.2),
     formatEffect: value => "+" + format(value,2,2)
   },
@@ -154,7 +154,7 @@ export const metaFabricatorUpgrades = [
     id: 14,
     cost: 4,
     description: "V Achevements do not reset (unless you reset Extreme)",
-    effect: () => Currency.metas.value.pow(1.44).div(15).add(1),
+    effect: () => 1,
     formatEffect: value => "",
     noLabel: true
   },
@@ -211,7 +211,7 @@ export const metaFabricatorUpgrades = [
     formatEffect: value => format(value, 2, 2) + "/s"
   },
   {
-    name: "Meta charger",
+    name: "Meta Charger",
     id: 21,
     cost: 1e6,
     description: "Game more Metas based on Metas",
@@ -222,7 +222,7 @@ export const metaFabricatorUpgrades = [
     name: "Nu uh",
     id: 22,
     cost: 5e6,
-    description: "Chaos Dimensions only reset thier amount",
+    description: "Chaos Dimensions only reset their amount",
     effect: () => 1,
     formatEffect: value => "",
     noLabel: true
@@ -231,15 +231,15 @@ export const metaFabricatorUpgrades = [
     name: "Be gone Hardcap",
     id: 23,
     cost: 2e9,
-    description: "Increase the antimatter hardcap based on Metas",
-    effect: () => Currency.metas.value.div(15).pow(2.5).add(1),
+    description: "Increase the Antimatter hardcap based on Metas",
+    effect: () => Currency.metas.value.div(15).pow(2.5).add(1).min(1e50),
     formatEffect: value => formatPow(value,2,2),
   },
   {
     name: "some pointless stuff",
     id: 24,
     cost: 1e12,
-    description: "Unlock auto buyers for Singularity cap and Keep Charged Infinity upgrades, Ra memory level",
+    description: "Unlock autobuyers for Singularity cap, Keep Charged Infinity upgrades and Ra memory level",
     effect: () => 1,
     formatEffect: value => "",
     noLabel: true
@@ -248,7 +248,7 @@ export const metaFabricatorUpgrades = [
     name: "Forgeting someone?",
     id: 25,
     cost: 1e18,
-    description: "Unlock 2 Ra memorys for Cante and Null (NYI)",
+    description: "Unlock 2 Ra memories for Cante and Null",
     effect: () => 1,
     formatEffect: value => "",
     noLabel: true

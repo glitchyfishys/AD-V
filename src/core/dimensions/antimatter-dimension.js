@@ -117,6 +117,7 @@ export function getDimensionFinalMultiplierUncached(tier) {
   
   multiplier = multiplier.pow(V.rageDimPower);
   
+
   // This power effect goes intentionally after all the nerf effects and shouldn't be moved before them
   if (AlchemyResource.inflation.isUnlocked && multiplier.gte(AlchemyResource.inflation.effectValue)) {
     multiplier = multiplier.pow(1.05);
@@ -125,9 +126,11 @@ export function getDimensionFinalMultiplierUncached(tier) {
   if(multiplier.gt("1e1E26") && !MetaFabricatorUpgrade(15).isBought) multiplier = multiplier.pow( 1 / Math.sqrt(multiplier.log10() / 1e26) );
   if(multiplier.gt("1e1E30")) multiplier = multiplier.pow( 1 / ((multiplier.log10() / 1e30) ** 0.85) );
 
-  if(multiplier.gt("1e1E50")) multiplier = multiplier.pow( 1 / ((multiplier.log10() / 1e50) ** 0.9) );
-  if(multiplier.gt("1e1E100")) multiplier = multiplier.pow( 1 / ((multiplier.log10() / 1e100) ** 0.95) );
-  if(multiplier.gt("1e1E200")) multiplier = multiplier.pow( 1 / ((multiplier.log10() / 1e200) ** 0.99) );
+  multiplier = multiplier.pow(Ra.unlocks.repAD.effectOrDefault(1));
+  
+  if(multiplier.gt("1e1E50")) multiplier = multiplier.pow( 1 / ((multiplier.log10() / 1e50) ** 0.3) );
+  if(multiplier.gt("1e1E100")) multiplier = multiplier.pow( 1 / ((multiplier.log10() / 1e100) ** 0.35) );
+  if(multiplier.gt("1e1E200")) multiplier = multiplier.pow( 1 / ((multiplier.log10() / 1e200) ** 0.5) );
   
   return multiplier;
 }

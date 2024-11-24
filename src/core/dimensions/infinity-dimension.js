@@ -381,7 +381,7 @@ export const InfinityDimensions = {
   },
 
   get totalDimCap() {
-    return this.HARDCAP_PURCHASES + this.capIncrease;
+    return (this.HARDCAP_PURCHASES + this.capIncrease) * Ra.unlocks.nullInfCap.effectOrDefault(1);
   },
 
   canBuy() {

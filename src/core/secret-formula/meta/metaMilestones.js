@@ -4,14 +4,14 @@ export const metaMilestones = {
         reward: () => `Glitch Challenges can be completed at any time, you also gain a ${
             format(Decimal.mul(1.15, MetaMilestone.metaBoost.isReached ? MetaMilestone.metaBoost.effectOrDefault(1) : 1), 2, 2)
             } power to IP,EP,RM, Ra memory gain and Replicanti interval,
-             you also gain additional Meta Relays eqaul to your meta count`,
+             you also gain additional Meta Relays equal to your meta count`,
         effect: () => Decimal.mul(1.15, MetaMilestone.metaBoost.isReached ? MetaMilestone.metaBoost.effectOrDefault(1) : 1),
         condition: () => Currency.metas.gte(1),
         req: "1 Meta"
     },
     realityStart: {
         event: GAME_EVENT.META_RESET_AFTER,
-        reward: () => `You start Metas with ${format(1e6)} Realities and Reallity upgrades don't have thier requirements reset`,
+        reward: () => `You start Metas with ${format(1e6)} Realities and Reality upgrades don't have their requirements reset`,
         effect: () => 1e6,
         condition: () => Currency.metas.gte(2),
         req: "2 Metas"
@@ -25,14 +25,14 @@ export const metaMilestones = {
     },
     glyphKeep: {
         event: GAME_EVENT.META_RESET_AFTER,
-        reward: () => `You keep Glyphs but thier level is reset, Glitch Challenges and Achevements don't reset on Meta`,
+        reward: () => `You keep Glyphs but their level is reset, Glitch Challenges and Achievements don't reset on Meta`,
         effect: () => 1,
         condition: () => Currency.metas.gte(4),
         req: "4 Metas"
     },
     metaSpeed: {
         event: GAME_EVENT.META_RESET_AFTER,
-        reward: () => `You gain ${formatX(MetaMilestone.metaSpeed.effectValue)} more MR based on your fasted Meta`,
+        reward: () => `You gain ${formatX(MetaMilestone.metaSpeed.effectValue)} more MR based on your fastest Meta`,
         effect: () => Decimal.clampMin( Decimal.div(200, Time.bestMetaRealTime.totalMinutes), 1),
         condition: () => Time.bestMetaRealTime.totalHours.lte(1),
         req: "BestMeta < 1h"
@@ -46,7 +46,7 @@ export const metaMilestones = {
     },
     metaRaAndLai: {
         event: GAME_EVENT.META_RESET_AFTER,
-        reward: () => `Keep Ra's glitched memory and lai'tela autobuyers`,
+        reward: () => `Keep Ra's glitch memory and lai'tela autobuyers`,
         effect: () => 10,
         condition: () => Time.bestMetaRealTime.totalMinutes.lte(15),
         req: "BestMeta < 15m"

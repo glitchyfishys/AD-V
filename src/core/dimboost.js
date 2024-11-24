@@ -72,6 +72,11 @@ export class DimBoost {
       // this case would trigger when we're in IC1.
       return 5;
     }
+
+    if(Ra.unlocks.nullCharge.isUnlocked){
+      return 1e300;
+    }
+
     return 1e12;
   }
 
@@ -98,6 +103,38 @@ export class DimBoost {
   static bulkRequirement(bulk) {
     const targetResets = DimBoost.purchasedBoosts + bulk;
     const tier = Math.min(targetResets + 3, this.maxDimensionsUnlockable);
+
+    let amount = 20;
+    const discount = Effects.sum(
+      TimeStudy(211),
+      TimeStudy(222)
+    );
+    if (tier === 6 && NormalChallenge(10).isRunning) {
+      amount += Math.round((targetResets - 3) * (20 - discount));
+    } else if (tier === 8) {
+      amount += Math.round((targetResets - 5) * (15 - discount));
+    }
+    if (EternityChallenge(5).isRunning) {
+      amount += Math.pow(targetResets - 1, 3) + targetResets - 1;
+    }
+
+    if(targetResets > 1e12) amount = Math.round(amount * 0.8);
+
+    amount -= Effects.sum(InfinityUpgrade.resetBoost);
+    if (InfinityChallenge(5).isCompleted) amount -= 1;
+
+    amount *= InfinityUpgrade.resetBoost.chargedEffect.effectOrDefault(1);
+
+    if(targetResets > 1e12) amount = amount ** 1.25 * 0.98;
+
+    amount = Math.round(amount);
+
+    return new DimBoostRequirement(tier, amount);
+  }
+
+  static scaleRequirement(bulk) {
+    const targetResets = bulk;
+    const tier = Math.min(targetResets + 3, this.maxDimensionsUnlockable);
     let amount = 20;
     const discount = Effects.sum(
       TimeStudy(211),
@@ -117,9 +154,32 @@ export class DimBoost {
 
     amount *= InfinityUpgrade.resetBoost.chargedEffect.effectOrDefault(1);
 
-    amount = Math.round(amount);
+    return amount;
+  }
 
-    return new DimBoostRequirement(tier, amount);
+  static scale() {
+    let discount = Effects.sum(
+      TimeStudy(211),
+      TimeStudy(222)
+    );
+    
+    const s = NormalChallenge(10).isRunning ? (20 - discount) : (15 - discount);
+    const k = s * InfinityUpgrade.resetBoost.chargedEffect.effectOrDefault(1);
+    return k
+  }
+
+  static totBoosts() {
+    const s = DimBoost.scale();
+    const dim = NormalChallenge(10).isRunning ? AntimatterDimension(6).totalAmount.toNumber() : AntimatterDimension(8).totalAmount.toNumber();
+    const discount = Effects.sum(
+      TimeStudy(211),
+      TimeStudy(222)
+    );
+    let boosts = (dim - discount) / s + (NormalChallenge(10).isRunning ? 3 : 5) - 0.1;
+
+    if (boosts > 1e12) boosts = boosts ** 0.8;
+
+    return boosts;
   }
 
   static get unlockedByBoost() {
@@ -176,9 +236,9 @@ export class DimBoost {
 // eslint-disable-next-line max-params
 export function softReset(tempBulk, forcedADReset = false, forcedAMReset = false, enteringAntimatterChallenge = false) {
   if (Currency.antimatter.gt(Player.infinityLimit)) return;
-  const bulk = Math.min(tempBulk, DimBoost.maxBoosts - player.dimensionBoosts);
+  const bulk = tempBulk > 1e12 ? tempBulk : Math.min(tempBulk, DimBoost.maxBoosts - player.dimensionBoosts);
   EventHub.dispatch(GAME_EVENT.DIMBOOST_BEFORE, bulk);
-  player.dimensionBoosts = Math.max(0, player.dimensionBoosts + bulk);
+  player.dimensionBoosts = Math.max(0, tempBulk > 1e12 ? tempBulk : (player.dimensionBoosts + bulk));
   resetChallengeStuff();
   const canKeepDimensions = Pelle.isDoomed
     ? PelleUpgrade.dimBoostResetsNothing.canBeApplied
@@ -244,6 +304,7 @@ export function manualRequestDimensionBoost(bulk) {
 export function requestDimensionBoost(bulk) {
   if (Currency.antimatter.gt(Player.infinityLimit) || !DimBoost.requirement.isSatisfied) return;
   if (!DimBoost.canBeBought) return;
+  
   if((!preInfinityUGs.all[0].config.hasFailed() && !preInfinityUGs.all[0].isBought) && player.options.confirmations.glitchCL && player.dimensionBoosts == 0){
     return;
   }
@@ -270,6 +331,9 @@ function maxBuyDimBoosts() {
   if (DimBoost.canUnlockNewDimension) {
     if (DimBoost.requirement.isSatisfied) softReset(1);
     return;
+  }
+  if(DimBoost.totBoosts() > 1e12) {
+    softReset(DimBoost.totBoosts());
   }
   const req1 = DimBoost.bulkRequirement(1);
   if (!req1.isSatisfied) return;

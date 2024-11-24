@@ -16,7 +16,7 @@ export const realityUG = [
   {
   name: "Dialated",
     id: 1,
-    requirement: () => `Reach ${format("1e1250")} (pending) Eternity Points while Dialated before your first Reality (check multiplier breakdown)`,
+    requirement: () => `Reach ${format("1e1250")} (pending) Eternity Points while Dilated before your first Reality (check multiplier breakdown)`,
     hasFailed: () => false,
     progLock: () => PlayerProgress.realityUnlocked(),
     checkRequirement: () => gainedEternityPoints().gte("1e1250") && player.dilation.active,
@@ -51,12 +51,12 @@ export const realityUG = [
   {
     name: "Sacrifisal Power",
     id: 4,
-    requirement: () => `reach ${format("1e5000")} eternity points in teresa's Reality the first time`,
+    requirement: () => `Reach ${format("1e5000")} eternity points in Teresa's Reality the first time`,
     hasFailed: () => false,
     progLock: () => player.celestials.teresa.bestRunAM.e >= 308,
     checkRequirement: () => player.eternityPoints.e >= 5000 && Teresa.isRunning,
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
-    description: "EC4 and EC8 have no path reqierment (unlock other paths at the same row)",
+    description: "EC4 and EC8 have no path requierment (unlock other paths at the same row)",
     effect: 1,
     formatEffect: value => formatX(value, 2, 2),
   },
@@ -101,7 +101,7 @@ export const realityUG = [
     progLock: () => false,
     checkRequirement: () =>  player.celestials.v.unlockBits != 0,
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
-    description: "Gain space theorem",
+    description: () => `Gain ${format(10)} space theorem`,
     effect: 10,
     formatEffect: value => format(value, 2, 2)
   },
@@ -123,14 +123,14 @@ export const realityUG = [
     progLock: () => false,
     checkRequirement: () =>  Laitela.isUnlocked,
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
-    description: "Dark Matter / Energy gained is 50 times faster",
+    description: () => `Gain ${format(50)} times more Dark Matter and Energy`,
     effect: 50,
-    formatEffect: () => "Active"
+    formatEffect: () => value => format(value, 2)
   },
   {
-    name: "galactic Overload",
+    name: "Galactic Overload",
     id: 11,
-    requirement: () => `Have ${format(10000)} Singularities without desablizing once`,
+    requirement: () => `Have ${format(10000)} Singularities without destabilizing once`,
     hasFailed: () => false,
     progLock: () => Laitela.difficultyTier != 0,
     checkRequirement: () =>  player.celestials.laitela.singularities.gte(10000),
@@ -140,14 +140,14 @@ export const realityUG = [
     formatEffect: value => format(value, 2, 2)
   },
   {
-    name: "Pre galactic ",
+    name: "Pre Galactic",
     id: 12,
     requirement: () => `Reach ${format("1e66.66E9")} Antimatter in Effarig's Reality with 5 Cursed Glyphs, before destablizing Latela's Reality thrice`,
     hasFailed: () => false,
     progLock: () => Laitela.difficultyTier > 2,
     checkRequirement: () =>  player.requirementChecks.reality.maxGlyphs <= -15 && Effarig.isRunning && Currency.antimatter.gt("1e6.666E10"),
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
-    description: "Unlock two new treasa shop items",
+    description: "Unlock two new Treasa shop items",
     effect: () => 1,
     formatEffect: () => "Active"
   },
@@ -159,8 +159,8 @@ export const realityUG = [
     checkRequirement: () =>  player.glitch.preinfinity.upgradebits >= 255 && player.glitch.breakinfinity.upgradebits >= 63 && player.glitch.eternity.upgradebits >= 63 && player.glitch.reality.upgradebits >= 8191,
     progLock: () => false,
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
-    description: "Unlock a pelle rift",
+    description: "Unlock a Pelle Rift",
     effect: () => 1,
-    formatEffect: () => "unlocked"
+    formatEffect: () => "Unlocked"
   },
 ];

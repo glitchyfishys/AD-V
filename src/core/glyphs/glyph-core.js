@@ -792,6 +792,13 @@ export const Glyphs = {
     }
     return hash;
   },
+  activeToChar(){
+    let s = "";
+    for (let i = 0; i < 5; i++) {
+      s = s + this.active[i]?.type.charAt(0);
+    }
+    return s;
+  },
   giveCursedGlyph() {
     if (GameCache.glyphInventorySpace.value === 0) {
       Modal.message.show("No available inventory space; Sacrifice some Glyphs to free up space.",

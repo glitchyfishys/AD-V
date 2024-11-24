@@ -64,7 +64,7 @@ export class CanteMemoryAutobuyerState extends RaPetAutobuyerState{
     get _petName(){ return 'cante'; }
 
     get isUnlocked(){
-        return MetaFabricatorUpgrade(9).isBought;
+        return false;
     }
 
     static get autobuyerGroupName(){ return "Cante's Memory"; }
@@ -76,7 +76,7 @@ export class NullMemoryAutobuyerState extends RaPetAutobuyerState{
     get _petName(){ return 'null'; }
 
     get isUnlocked(){
-        return MetaFabricatorUpgrade(9).isBought;
+        return false;
     }
 
     static get autobuyerGroupName(){ return "Null's Memory"; }

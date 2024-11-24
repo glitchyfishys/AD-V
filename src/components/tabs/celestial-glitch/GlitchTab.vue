@@ -97,7 +97,7 @@ export default {
     toggleCollapseSpeed() {
       player.celestials.glitch.collapsed.forspeed = !this.collapsedSpeed;
     },
-    toggletoshow(){
+    toggleToShow(){
       var toggles = 9; //base
       if(GlitchSpeedUpgrades.all[0].isBought) toggles++;
       return toggles;
@@ -108,7 +108,6 @@ export default {
 
 <template>
   <div class="l-glitch-celestial-tab">
-   this is a work in progress
 
     <div class="c-glitch-compact-top">
       <div>
@@ -119,7 +118,7 @@ export default {
       </div>
       <div>
       <PrimaryButton
-        v-for="x in toggletoshow()"
+        v-for="x in toggleToShow()"
         :key="x"
         class="o-primary-btn--subtab-option  o-reality-effect"
         @click="effects(x-1)">

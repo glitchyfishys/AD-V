@@ -1,3 +1,16 @@
+const celBackground = cel => [[cel, 0]];
+const RaMulti = ["Ra", "Rancey", "Repress"];
+
+const flashCelestial = [
+  ["ra", 0.4],
+  ["laitela", 0.4],
+  ["pelle", 0.4],
+  ["teresa", 0.4],
+  ["effarig", 0.4],
+  ["enslaved", 0.4],
+  ["v", 0.4]
+];
+
 export const raQuotes = {
   unlock: {
     id: 0,
@@ -126,5 +139,15 @@ export const raQuotes = {
       "Please leave.",
       "I do not want to hurt you too.",
     ]
+  },
+  CandN: {
+    id: 14,
+    lines: [
+      { text: "Hi $1, I have need you to Remember two other Celestials", name: "Glitch", background: celBackground("glitch"), 1: RaMulti},
+      "Huh why... I don't want to cause any more damage",
+      { text: "I'm not doing it again... not to the others, I've done enough", background: flashCelestial},
+      { text: "Ra it's Cante and Null... We need them...", name: "Glitch", background: celBackground("glitch")},
+      "Fine, My head will hurt a lot more after this, I better be getting a Reward from this...",
+    ],
   },
 };
