@@ -139,19 +139,36 @@ GameDatabase.celestials.descriptions = [
         return `AD's ^0.95
         ID's ^0.15
         TD's ^0.33
-        you only start with break/infinity upgrades and you can not charge them
-        some reality/celestials effects don't work
-        you are forced to have ${Glitch.forceglyphs} cursed glyphs equipped
-        plus the effects you have chosen`;
+        You only start with break/infinity upgrades and you can not charge them.
+        Some reality/celestials effects don't work.
+        You are forced to have ${Glitch.forceGlyphs} cursed glyphs equipped.
+        Plus the effects you have chosen.`;
       }
       
       return "null";
     },
     description() {
       if(Glitch.tier == 0){
-        return "while in glitch's Reality you can gain Rift Force (all effects active) witch can unlock upgrades after completing their goals";
+        return "While in glitch's Reality you can gain Rift Force (all effects active) witch can unlock upgrades after completing their goals.";
       }
     },
-      
+  },
+  {
+    name: "Cante",
+    effects() {
+        return `You will fail.`;
+    },
+    description() {
+      return `Enjoy.`;
+    },
+  },
+  {
+    name: "Null",
+    effects() {
+        return `You will fail.`;
+    },
+    description() {
+      return `Enjoy.`;
+    },
   },
 ];

@@ -155,7 +155,7 @@ export default {
       <div v-if="!isRaCapped">
         Each Memory Chunk generates a base of one Memory per second<span v-if="memoriesPerChunk > 1">,
           which has been increased to {{ quantify("Memory", memoriesPerChunk, 2, 3) }} per second</span>.
-          <span v-if="meta25"><br>which has been increased to {{ quantify("Memory", memoriesPerCandNChunk, 2, 3) }} per second for Cante and Null</span>.
+          <span v-if="meta25"><br>Which has been increased to {{ quantify("Memory", memoriesPerCandNChunk, 2, 3) }} per second for Cante and Null</span>.
         <br>
         Storing real time prevents Memory Chunk generation, but Memories will still be gained normally.
         <span v-if="memoriesPerChunk > 1">

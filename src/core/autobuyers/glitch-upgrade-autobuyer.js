@@ -20,7 +20,7 @@ export class GlitchUpgradeAutobuyerState extends AutobuyerState {
   tick() {
     const upg = GlitchRealityUpgrade(this.id);
     var max = 0;
-    while (Currency.riftForce.gte(upg.cost) && max < 500) {
+    while (Currency.riftForce.gte(upg.cost) && max < 250) {
       upg.purchase();
       max++;
     }

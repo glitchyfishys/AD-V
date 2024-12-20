@@ -51,6 +51,10 @@ export const Glitch = {
     return activeAugments().length;
   },
   
+  get forceGlyphs(){
+    return 5 - (GlitchRealityUpgrades.all[6].effectOrDefault(0) + GlitchRealityUpgrades.all[14].effectOrDefault(0));
+  },
+
   initializeRun() {
     player.celestials.glitch.run = true;
 
@@ -66,7 +70,7 @@ export const Glitch = {
     if(this.tier == 0){
 
       disChargeAll();
-      const cga = this.forceglyphs;
+      const cga = this.forceGlyphs;
       if(Glyphs.active.filter(x => x == null ? false :(x.type == "cursed")).length < cga){
         Glyphs.unequipAll(true);
         for(let i=0;i<cga;i++) {
@@ -79,7 +83,7 @@ export const Glitch = {
       }
       
       
-      this.augmentEffectActive(0) ?  player.celestials.teresa.run = true : undefined;
+      this.augmentEffectActive(0) ? player.celestials.teresa.run = true : undefined;
       this.augmentEffectActive(1) ? player.celestials.effarig.run = true : undefined;
       this.augmentEffectActive(2) ? player.celestials.enslaved.run = true : undefined;
       this.augmentEffectActive(5) ? player.celestials.v.run = true : undefined;
@@ -119,10 +123,6 @@ export const Glitch = {
     "passiveGen"
 ]);
     
-  },
-
-  get forceglyphs(){
-    return 5 - GlitchRealityUpgrades.all[6].effectOrDefault(0) - GlitchRealityUpgrades.all[14].effectOrDefault(0);
   },
 
   get riftForce(){
@@ -177,13 +177,13 @@ export const Glitch = {
 
   riftToCore(){
     if(this.riftForce.lt(10)) return;
-    Currency.chaosCores.add(Currency.riftForce.value.log(5) ** 0.2);
+    Currency.chaosCores.add(Currency.riftForce.value.log(5) ** 0.35);
     Currency.riftForce.value = new Decimal(0);
   },
 
   get riftToCoreGain(){
     if(this.riftForce.lt(10)) return "0";
-    return format(Currency.riftForce.value.log(5) ** 0.3, 2);
+    return format(Currency.riftForce.value.log(5) ** 0.35, 2);
   },
 
   get laitelamaxdim(){

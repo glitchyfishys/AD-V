@@ -75,7 +75,7 @@ export const realityUG = [
     name: "External Dilation",
     id: 6,
     requirement: () => `Reach ${format(Number.MAX_VALUE, 2)} Antimatter in Effarigs Reality (Infinity Layer) with three Glyphs maximum`,
-    hasFailed: () => player.reality.glyphs.active.length > 3,
+    hasFailed: () => Effarig.currentStage != 1,
     checkRequirement: () => player.antimatter.gte(1.79e308) && Effarig.isRunning && ((Effarig.currentStage == 1 && player.reality.glyphs.active.length <= 3) || PlayerProgress.metaUnlocked()),
     progLock: () => Effarig.currentStage > 1,
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,

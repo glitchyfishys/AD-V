@@ -2,11 +2,13 @@
 import wordShift from "@/core/word-shift";
 
 import PelleUpgrade from "./PelleUpgrade";
+import PrimaryToggleButton from "../../PrimaryToggleButton.vue";
 
 export default {
   name: "GalaxyGeneratorPanel",
   components: {
-    PelleUpgrade
+    PelleUpgrade,
+    PrimaryToggleButton,
   },
   data() {
     return {
@@ -21,6 +23,8 @@ export default {
       isCollapsed: false,
       barWidth: 0,
       capRiftName: "",
+      isAutoUnlocked: false,
+      isAutobuyerOn: false,
     };
   },
   computed: {
@@ -44,6 +48,11 @@ export default {
       return Math.pow(this.generatedGalaxies / this.cap, 0.45);
     }
   },
+  watch: {
+    isAutobuyerOn(newValue){
+      Autobuyer.galgenSac.isActive = newValue;
+    }
+  },
   methods: {
     update() {
       this.isUnlocked = Pelle.hasGalaxyGenerator;
@@ -58,6 +67,8 @@ export default {
       this.sacrificeActive = GalaxyGenerator.sacrificeActive;
       this.barWidth = (this.isCapped ? this.capRift.reducedTo : this.emphasisedStart);
       if (this.capRift) this.capRiftName = wordShift.wordCycle(this.capRift.name);
+      this.isAutoUnlocked = Autobuyer.galgenSac.isUnlocked;
+      this.isAutobuyerOn = Autobuyer.galgenSac.isActive;
     },
     increaseCap() {
       if (GalaxyGenerator.isCapped) GalaxyGenerator.startSacrifice();
@@ -70,6 +81,7 @@ export default {
       Pelle.quotes.galaxyGeneratorUnlock.show();
     }
   },
+  
 };
 </script>
 
@@ -95,6 +107,7 @@ export default {
           Galaxies.
           <span class="c-galaxies-amount">+{{ format(galaxiesPerSecond, 2, 1) }}/s</span>
         </div>
+        <div class="l-spoon-btn-group">
         <div>
           <button
             class="c-increase-cap"
@@ -134,6 +147,13 @@ export default {
             </div>
           </button>
         </div>
+        <PrimaryToggleButton
+            v-if="isAutoUnlocked"
+            v-model="isAutobuyerOn"
+            label="Auto"
+            style="margin-top: -.75rem; max-width: 70rem; width: 100%; align-self: center;"
+          />
+      </div>
         <div class="l-galaxy-generator-upgrades-container">
           <PelleUpgrade
             v-for="upgrade in upgrades"

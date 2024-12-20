@@ -541,3 +541,19 @@ Currency.metas = new class extends DecimalCurrency {
     this.value = new Decimal();
   }
 }();
+
+Currency.artificialMatter = new class extends DecimalCurrency {
+  get value() { return player.celestials.cante.artificialMatter; }
+  set value(value) { player.celestials.cante.artificialMatter = value; }
+  reset(){
+    this.value = new Decimal();
+  }
+}();
+
+Currency.abyssalMatter = new class extends DecimalCurrency {
+  get value() { return player.celestials.null.abyssalMatter; }
+  set value(value) { player.celestials.null.abyssalMatter = value; }
+  reset(){
+    this.value = new Decimal();
+  }
+}();

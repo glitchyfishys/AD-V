@@ -39,6 +39,9 @@ import { NonRepeatableGlitchUpgradeAutobuyerState } from "./glitch-upgrade-autob
 import { SingularityCapAutobuyerState } from "./singularity-cap-autobuyer";
 import { TesseractAutobuyerState } from "./tessearact-autobuyer";
 
+import { GalaxyGeneratorUpgradeAutobuyerState } from './galgen-autobuyer';
+import { GalaxyGeneratorSacrificeAutobuyerState } from './galgen-autobuyer';
+
 import { MetaAutobuyerState } from "./meta-autobuyer";
 
 export const Autobuyer = {
@@ -84,6 +87,9 @@ export const Autobuyer = {
   singCap: new SingularityCapAutobuyerState(),
   tess: new TesseractAutobuyerState(),
 
+  galgenUpgrade: GalaxyGeneratorUpgradeAutobuyerState.createAccessor(),
+  galgenSac: new GalaxyGeneratorSacrificeAutobuyerState(),
+
   meta: new MetaAutobuyerState(),
 };
 
@@ -117,6 +123,7 @@ export const Autobuyers = (function() {
     Autobuyer.singleGlitchUpgrades,
     Autobuyer.singCap,
     Autobuyer.tess,
+    Autobuyer.galgenSac,
   ];
 
   const singleComplex = [
@@ -140,6 +147,7 @@ export const Autobuyers = (function() {
     Autobuyer.canteMem.zeroIndexed,
     Autobuyer.nullMem.zeroIndexed,
     Autobuyer.glitchUpgrades.zeroIndexed,
+    Autobuyer.galgenUpgrade.zeroIndexed,
   ];
   const all = dimensions.concat(prestige, singleComplex, arrays);
   const multiple = [
@@ -160,7 +168,7 @@ export const Autobuyers = (function() {
     Autobuyer.canteMem,
     Autobuyer.nullMem,
     Autobuyer.glitchUpgrades,
-
+    Autobuyer.galgenUpgrade,
   ];
 
   return {

@@ -37,10 +37,6 @@ export default {
     activeCondition() {
       return this.config.activeCondition ? this.config.activeCondition() : null;
     },
-    isDoomed: () => Pelle.isDoomed,
-    isUseless() {
-      return this.isDoomed && this.config.pelleUseless;
-    }
   },
   methods: {
     update() {;

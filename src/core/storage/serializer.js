@@ -63,10 +63,10 @@ export const GameSaveSerializer = {
   // confuse your saves with AD saves but can still import AD saves (this will
   // also require changing some other code slightly, particularly decode).
   startingString: {
-    savefile: "AntimatterDimensionsSavefileFormat",
-    "automator script": "AntimatterDimensionsAutomatorScriptFormat",
-    "automator data": "AntimatterDimensionsAutomatorDataFormat",
-    "glyph filter": "AntimatterDimensionsGlyphFilterFormat",
+    savefile: "AntimatterDimensionsVSavefileFormat",
+    "automator script": "AntimatterDimensionsVAutomatorScriptFormat",
+    "automator data": "AntimatterDimensionsVAutomatorDataFormat",
+    "glyph filter": "AntimatterDimensionsVGlyphFilterFormat",
   },
   // The ending strings aren't as verbose so that we can save a little space.
   endingString: {
@@ -78,7 +78,7 @@ export const GameSaveSerializer = {
   // This should always be three characters long, and should ideally go AAA, AAB, AAC, etc.
   // so that we can do inequality tests on it to compare versions (though skipping a version
   // shouldn't be a problem).
-  version: "AAB",
+  version: "AAC",
   // Steps are given in encoding order.
   // Export and cloud save use the same steps because the maximum ~15% saving
   // from having them be different seems not to be worth it.

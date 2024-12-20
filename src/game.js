@@ -764,7 +764,7 @@ function passivePrestigeGen() {
     eternitiedGain = Decimal.times(eternitiedGain, getAdjustedGlyphEffect("timeetermult"));
     eternitiedGain = new Decimal(Time.deltaTime).times(
       Decimal.pow(eternitiedGain, AlchemyResource.eternity.effectValue));
-    if(Pelle.isDoomed) eternitiedGain = DC.D1;
+    if(Pelle.isDoomed) eternitiedGain = MetaFabricatorUpgrade(7).isBought ? DC.D1 :DC.D0;
     player.reality.partEternitied = player.reality.partEternitied.plus(eternitiedGain);
     Currency.eternities.add(player.reality.partEternitied.floor());
     player.reality.partEternitied = player.reality.partEternitied.sub(player.reality.partEternitied.floor());
@@ -794,7 +794,7 @@ function passivePrestigeGen() {
       infGen = infGen.plus(gainedInfinities().times(
         Currency.eternities.value.minus(eternitiedGain.div(2).floor())).add(1).times(Time.deltaTime));
     }
-    if(Pelle.isDoomed && MetaFabricatorUpgrade(7).isBought) infGen = DC.D1;
+    if(Pelle.isDoomed) infGen = MetaFabricatorUpgrade(7).isBought ? DC.D1 :DC.D0;
 
     infGen = infGen.plus(player.partInfinitied);
     Currency.infinities.add(infGen.floor());

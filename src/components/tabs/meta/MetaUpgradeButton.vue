@@ -36,8 +36,7 @@ export default {
     },
     classObject() {
       return {
-        "c-meta-upgrade-btn--useless": this.isUseless,
-        "c-meta-upgrade-btn--bought": this.isBought && !this.isUseless,
+        "c-meta-upgrade-btn--bought": this.isBought,
         "c-meta-upgrade-btn--unavailable": !this.isBought && !this.canBeBought,
         "c-meta-upgrade-btn--available": !this.isBought && !this.canBeBought,
       };
@@ -46,9 +45,6 @@ export default {
       return {
         description: this.config.requirement
       };
-    },
-    isUseless() {
-      return Pelle.disabledRUPGs.includes(this.upgrade.id) && Pelle.isDoomed;
     },
   },
   watch: {
@@ -83,7 +79,6 @@ export default {
       >
         {{ config.name }}
       </HintText>
-      <span :class="{ 'o-pelle-disabled': isUseless }">
         <DescriptionDisplay :config="config" />
         <template>
           <EffectDisplay
@@ -97,7 +92,6 @@ export default {
             name="Meta Relay"
           />
         </template>
-      </span>
     </button>
     <PrimaryToggleButton
       v-if="isRebuyable && isAutoUnlocked"
@@ -112,7 +106,7 @@ export default {
 .l-meta-upgrade-btn {
   display: flex;
   flex-direction: column;
-  width: 12rem;
+  width: 18rem;
   height: 12rem;
   position: relative;
   justify-content: center;

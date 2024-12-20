@@ -92,7 +92,9 @@ class AlchemyResourceState extends GameMechanicState {
   get capped() {
     return this.amount >= this.cap;
   }
-
+  get over25K() {
+    return this.amount >= 25000;
+  }
   reset() {
     this.amount = 0;
   }

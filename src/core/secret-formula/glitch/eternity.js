@@ -18,7 +18,7 @@ export const eternityUG = [
     requirement: () => `Reach ${format(Number.MAX_VALUE, 2)} Infinity Points on your second Eternity without Time Dimensions (pre-Reality)`,
     hasFailed: () => player.dimensions.time[0].amount.neq(0),
     checkRequirement: () => player.dimensions.time[0].amount.eq(0) && player.infinityPoints.gte(1.79e308),
-    progLock: () => PlayerProgress.realityUnlocked() || !player.eternities.eq(1),
+    progLock: () => PlayerProgress.realityUnlocked() || player.eternities.neq(1),
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
     description: "Free Tickspeed threshold decreased to 1.3",
     effect: () => 1.3,

@@ -74,7 +74,7 @@ export default {
     isVeryLarge() {
       return this.isBlackHole
         ? false
-        : Decimal.gt(this.before, Decimal.pow10(1e9));
+        : Decimal.gt(this.before, Decimal.pow10(1e12));
     }
   },
   methods: {
@@ -206,14 +206,20 @@ export default {
 .c-modal-away-progress__teresa-memories,
 .c-modal-away-progress__effarig-memories,
 .c-modal-away-progress__enslaved-memories,
-.c-modal-away-progress__v-memories {
+.c-modal-away-progress__v-memories,
+.c-modal-away-progress__glitch-memories,
+.c-modal-away-progress__cante-memories,
+.c-modal-away-progress__null-memories {
   filter: brightness(0.8);
 }
 
 .t-dark .c-modal-away-progress__teresa-memories,
 .t-dark .c-modal-away-progress__effarig-memories,
 .t-dark .c-modal-away-progress__enslaved-memories,
-.t-dark .c-modal-away-progress__v-memories {
+.t-dark .c-modal-away-progress__v-memories,
+.t-dark .c-modal-away-progress__glitch-memories,
+.t-dark .c-modal-away-progress__cante-memories,
+.t-dark .c-modal-away-progress__null-memories {
   filter: none;
 }
 
@@ -237,8 +243,17 @@ export default {
   color: var(--color-pelle--base);
 }
 
+.c-modal-away-progress__glitch-memories,
 .c-modal-away-progress__rift-force {
   color: var(--color-glitch--accent);
+}
+
+.c-modal-away-progress__cante-memories {
+  color: var(--color-cante);
+}
+
+.c-modal-away-progress__null-memories {
+  color: var(--color-null);
 }
 
 .c-modal-away-progress__disabled b,

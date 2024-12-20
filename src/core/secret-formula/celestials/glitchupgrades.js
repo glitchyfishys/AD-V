@@ -34,7 +34,7 @@ export const glitchRealityUpgrades = [
     id: 2,
     initialCost: 5,
     costMult: 40,
-    textTemplate: "The Glyph Sacrifice is {value} times higher, also some effects are increased past 1e300",
+    textTemplate: "The max Glyph Sacrifice is {value} times higher, also some effects are increased past 1e300",
     effect: 1e10
   }),
   rebuyable({
@@ -90,7 +90,7 @@ export const glitchRealityUpgrades = [
     hasFailed: () => player.celestials.glitch.augment.effectbits != 265,
     checkRequirement: () => Currency.antimatter.gte("1e1E13") && Glitch.isRunning && player.celestials.glitch.augment.effectbits == 265,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    description: "You only are forced to have 4 Cursed Glyphs",
+    description: "You are only forced to have 4 Cursed Glyphs",
     effect: () =>  1,
     formatEffect: value => ("+" + format(value))
   },

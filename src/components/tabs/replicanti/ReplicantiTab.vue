@@ -137,18 +137,18 @@ export default {
       if (this.isInEC8) {
         this.ec8Purchases = player.eterc8repl;
       }
-      this.amount.copyFrom(Replicanti.amount);
+      this.amount.copyFrom(Currency.replicanti);
       this.mult.copyFrom(replicantiMult());
       this.hasTDMult = DilationUpgrade.tdMultReplicanti.isBought;
       this.multTD.copyFrom(DilationUpgrade.tdMultReplicanti.effectValue);
       this.hasDTMult = getAdjustedGlyphEffect("replicationdtgain") !== 0 && !Pelle.isDoomed;
       this.multDT = Math.clampMin(
-        Decimal.log10(Replicanti.amount) *
+        Decimal.log10(Currency.replicanti.value) *
           getAdjustedGlyphEffect("replicationdtgain"),
         1
       );
       this.hasIPMult = AlchemyResource.exponential.amount > 0 && !this.isDoomed;
-      this.multIP = Replicanti.amount.powEffectOf(AlchemyResource.exponential);
+      this.multIP = Currency.replicanti.value.powEffectOf(AlchemyResource.exponential);
       this.isUncapped = PelleRifts.vacuum.milestones[1].canBeApplied;
       this.hasRaisedCap = EffarigUnlock.infinity.isUnlocked && !this.isUncapped;
       this.replicantiCap.copyFrom(replicantiCap());

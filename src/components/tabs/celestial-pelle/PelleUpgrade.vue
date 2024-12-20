@@ -2,13 +2,15 @@
 import CostDisplay from "@/components/CostDisplay";
 import CustomizableTooltip from "@/components/CustomizeableTooltip";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
+import PrimaryToggleButton from "../../PrimaryToggleButton.vue";
 
 export default {
   name: "PelleUpgrade",
   components: {
     DescriptionDisplay,
     CostDisplay,
-    CustomizableTooltip
+    CustomizableTooltip,
+    PrimaryToggleButton
   },
   props: {
     upgrade: {
@@ -27,6 +29,11 @@ export default {
       type: Boolean,
       required: false,
     },
+    isRebuyable: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   data() {
     return {
@@ -39,7 +46,10 @@ export default {
       hovering: false,
       hasRemnants: false,
       galaxyCap: 0,
-      notAffordable: false
+      notAffordable: false,
+      isAutoUnlocked: false,
+      isAutobuyerOn: false,
+      rebuyableId: 0,
     };
   },
   computed: {
@@ -79,6 +89,12 @@ export default {
       return `${this.currentTimeEstimate} ➜ ${this.projectedTimeEstimate}`;
     },
   },
+  watch: {
+    isAutobuyerOn(newValue){
+      if(this.isRebuyable) Autobuyer.rebuyablePelle(this.rebuyableId).isActive = newValue;
+      else Autobuyer.galgenUpgrade(this.rebuyableId).isActive = newValue;
+    }
+  },
   methods: {
     update() {
       this.canBuy = this.upgrade.canBeBought && !this.faded;
@@ -97,6 +113,19 @@ export default {
       const genDB = GameDatabase.celestials.pelle.galaxyGeneratorUpgrades;
       this.notAffordable = (this.config === genDB.additive || this.config === genDB.multiplicative) &&
         (Decimal.gt(this.upgrade.cost, this.galaxyCap - GalaxyGenerator.generatedGalaxies + player.galaxies));
+
+        let autobuyer = {isUnlocked: false, isActive: false};
+      if(this.isRebuyable){
+        const upgrades = ["antimatterDimensionMult", "timeSpeedMult", "glyphLevels", "infConversion", "galaxyPower"];
+        this.rebuyableId = upgrades.findIndex(id => id === this.upgrade.id)+1;
+        autobuyer = Autobuyer.rebuyablePelle(this.rebuyableId);
+      } else if(this.galaxyGenerator){
+        const upgrades = GalaxyGeneratorUpgrades.all.map(upgrade => upgrade.id);
+        this.rebuyableId = upgrades.findIndex(id => id === this.upgrade.id)+1;
+        autobuyer = Autobuyer.galgenUpgrade(this.rebuyableId);
+      }
+      this.isAutoUnlocked = autobuyer.isUnlocked;
+      this.isAutobuyerOn = autobuyer.isActive;
     },
     secondsUntilCost(rate) {
       const value = this.galaxyGenerator ? player.galaxies + GalaxyGenerator.galaxies : Currency.realityShards.value;
@@ -107,6 +136,7 @@ export default {
 </script>
 
 <template>
+  <div>
   <button
     class="c-pelle-upgrade"
     :class="{
@@ -160,6 +190,14 @@ export default {
       :name="galaxyGenerator ? config.currencyLabel : 'Reality Shard'"
     />
   </button>
+  <PrimaryToggleButton
+      v-if="(isRebuyable || galaxyGenerator) && isAutoUnlocked"
+      v-model="isAutobuyerOn"
+      label="Auto:"
+      class="l--spoon-btn-group__little-spoon"
+      style="margin-top: -.5rem; width: 18.5rem; margin-left: 0.3rem;"
+    />
+    </div>
 </template>
 
 <style scoped>

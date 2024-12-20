@@ -172,7 +172,7 @@ export function replicantiCap() {
       .pow(TimeStudy(31).isBought ? 120 : 30)
       .clampMin(1)
       .times(Decimal.NUMBER_MAX_VALUE)
-    : Decimal.NUMBER_MAX_VALUE;
+    : new Decimal(Decimal.NUMBER_MAX_VALUE);
 }
 
 // eslint-disable-next-line complexity

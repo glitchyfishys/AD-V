@@ -258,7 +258,7 @@ export const V = {
     return 1000 * Math.pow(1.15, currReductionSteps);
   },
   nextExtremeReductionCost(currReductionSteps) {
-    return 1e9 * Math.pow(15, currReductionSteps);
+    return 1e8 * Math.pow(12, currReductionSteps);
   },
   quotes: Quotes.v,
   symbol: "⌬"

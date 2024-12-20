@@ -183,9 +183,8 @@ shop.purchaseTimeSkip = function() {
     player.celestials.enslaved.storedReal = Math.min(player.celestials.enslaved.storedReal, Enslaved.storedRealTimeCap);
   }
 
-  player.IAP.STDcoins -= time / 900;
+  player.IAP.STDcoins -= time / 150;
   simulateTime(time);
-  
 };
 
 shop.purchaseLongerTimeSkip = function() {
@@ -198,7 +197,6 @@ shop.purchaseLongerTimeSkip = function() {
     player.celestials.enslaved.storedReal = Math.min(player.celestials.enslaved.storedReal, Enslaved.storedRealTimeCap);
   }
 
-  player.IAP.STDcoins -= time / 900;
+  player.IAP.STDcoins -= time / 150;
   simulateTime(time);
-  
 };

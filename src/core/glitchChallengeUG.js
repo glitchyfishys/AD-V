@@ -141,7 +141,7 @@ class breakInfinityUGState extends BitPurchasableMechanicState {
   }
 
   tryUnlock() {
-    if (this.isAvailableForPurchase || !this.config.checkRequirement() || this.isLocked) return;
+    if (this.isAvailableForPurchase || !this.config.checkRequirement() || this.islocked) return;
     player.glitch.breakinfinity.upgradebits |= (1 << this.id);
     GameUI.notify.error(`You've unlocked glitched Upgrade: ${this.config.name}`);
   }
@@ -224,7 +224,7 @@ class eternityUGState extends BitPurchasableMechanicState {
   }
   
   tryUnlock() {
-    if (this.isAvailableForPurchase || !this.config.checkRequirement() || this.isLocked) return;
+    if (this.isAvailableForPurchase || !this.config.checkRequirement() || this.islocked) return;
     player.glitch.eternity.upgradebits |= (1 << this.id);
     GameUI.notify.error(`You've unlocked glitched eternity Upgrade: ${this.config.name}`);
   }

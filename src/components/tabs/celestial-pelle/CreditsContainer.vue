@@ -46,7 +46,7 @@ export default {
     rolling(newVal, oldVal) {
       if (GameEnd.creditsEverClosed) return;
       if (!oldVal && newVal && this.audio === null) {
-        this.audio = new Audio(`audio/credits.mp3`);
+        this.audio = new Audio(`audio/credits.mp3`);// i have an idea
         this.audio.play();
       }
     }

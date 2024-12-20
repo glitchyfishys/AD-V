@@ -276,6 +276,13 @@ window.player = {
         })),
       },
     },
+    galgenUpgrades: {
+      all: Array.range(0, 5).map(() => ({
+        isActive: false,
+      })),
+      isActive: true,
+    },
+    galgenSac: { isActive: false },
     singularity: { isActive: true },
     singCap: { isActive: true },
     ipMultBuyer: { isActive: true, },
@@ -929,6 +936,18 @@ window.player = {
         },
       }
     },
+    cante: {
+      run: false,
+      artificialMatter: DC.D0,
+      replicators: Array.range(0, 8).map(() => ({
+        bought: 0,
+        amount: DC.D0
+      })),
+    },
+    null: {
+      run: false,
+      abyssalMatter: DC.D0,
+    }
   },
   isGameEnd: false,
   tabNotifications: new Set(),

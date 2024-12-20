@@ -138,7 +138,13 @@ export const Effarig = {
   reset() {
     if(MetaMilestone.metaKeepEff.isReached) return;
     Currency.relicShards.reset();
-    player.celestials.effarig.unlockBits = 0;
+    const effarig = player.celestials.effarig;
+    effarig.unlockBits = 0;
+    effarig.autoAdjustGlyphWeights = false;
+    effarig.glyphWeights.dt = 25;
+    effarig.glyphWeights.ep = 25;
+    effarig.glyphWeights.eternities = 25;
+    effarig.glyphWeights.repl = 25;
   }
 };
 

@@ -526,7 +526,7 @@ export const perks = {
     label: "AGL",
     family: PERK_FAMILY.REALITY,
     get description() {
-      return `all glyph levels are increase on reality.`;
+      return `All Glyph levels are increase to your highest ever Glyph level when you Reality.`;
     },
     effect: 4,
     layoutPosList: [110745, 83001, 78600, 80195, 80215, 0],
@@ -536,7 +536,7 @@ export const perks = {
     label: "ARS",
     family: PERK_FAMILY.REALITY,
     get description() {
-      return `simulate an additional reality and choose between 2 more glyphs`;
+      return `Simulate an additional Reality and choose between 2 more Glyphs ${Ra.unlocks.extraGlyphChoicesAndRelicShardRarityAlwaysMax.isUnlocked ? '(uneffected by Effarig level one)': ''}`;
     },
     effect: 4,
     layoutPosList: [20160, 81403, 81404, 79405, 79806, 0],
@@ -546,7 +546,7 @@ export const perks = {
     label: "BHB",
     family: PERK_FAMILY.REALITY,
     get description() {
-      return `add ${formatInt(5)} levels to both black holes interval and duration`;
+      return `Add ${formatInt(5)} levels to both Black Holes interval and duration`;
     },
     effect: 4,
     layoutPosList: [72770, 77800, 81397, 81005, 78605, 0],

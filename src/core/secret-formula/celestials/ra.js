@@ -327,7 +327,7 @@ export const ra = {
     },
     memroygain1: {
       id: 28,
-      reward: () => `increase memory gain by 10 times`,
+      reward: () => `increase memory gain by 10 times.`,
       effect: 10,
       pet: "glitchyfishys",
       level: 1,
@@ -335,7 +335,7 @@ export const ra = {
     },
     memroygain2: {
       id: 29,
-      reward: () => `increase memory gain by 15 times`,
+      reward: () => `increase memory gain by 15 times.`,
       effect: 15,
       pet: "glitchyfishys",
       level: 5,
@@ -343,7 +343,7 @@ export const ra = {
     },
     glitchyfishysXP: {
       id: 30,
-      reward: () => `increase all memory gain by Reality Machines AND Antimatter`,
+      reward: () => `increase all memory gain by Reality Machines AND Antimatter.`,
       effect: () => 1 + Math.pow(Currency.realityMachines.value.pLog10() / 25, 0.18) * Math.pow(Currency.antimatter.value.pLog10() / 1e5, 0.18),
       pet: "glitchyfishys",
       level: 10,
@@ -351,7 +351,7 @@ export const ra = {
     },
     memroygain3: {
       id: 31,
-      reward: () => `increase memory gain by 5 times`,
+      reward: () => `increase memory gain by 5 times.`,
       effect: 5,
       pet: "glitchyfishys",
       level: 15,
@@ -359,7 +359,7 @@ export const ra = {
     },
     memroygain4: {
       id: 32,
-      reward: () => `increase memory gain by 5 times`,
+      reward: () => `increase memory gain by 5 times.`,
       effect: 5,
       pet: "glitchyfishys",
       level: 25,
@@ -367,7 +367,7 @@ export const ra = {
     },
     memroygain5: {
       id: 33,
-      reward: () => `increase memory gain by 5 times`,
+      reward: () => `increase memory gain by 5 times.`,
       effect: 5,
       pet: "glitchyfishys",
       level: 30,
@@ -375,7 +375,7 @@ export const ra = {
     },
     PassiveAlc: {
       id: 34,
-      reward: () => `alchamy happens passively `,
+      reward: () => `alchemy happens passively.`,
       effect: 1,
       pet: "glitchyfishys",
       level: 40,
@@ -411,7 +411,7 @@ export const ra = {
     },
     repEffect: {
       id: 38,
-      reward: () => `Increse the effectiveness of RGs by ${formatPercents(0.5)} per level`,
+      reward: () => `Increase the effectiveness of RGs by ${formatPercents(0.5)} per level`,
       effect: () => Decimal.pow(1.5, Ra.pets.cante.level - 15).toNumber(),
       pet: "cante",
       level: 15,
@@ -419,7 +419,7 @@ export const ra = {
     },
     repCap: {
       id: 39,
-      reward: () => `Increse the cap of RGs`,
+      reward: () => `Increase the cap of RGs based on Cante's level`,
       effect: () => Decimal.pow(Ra.pets.cante.level / 50, Ra.pets.cante.level / 50).toNumber(),
       pet: "cante",
       level: 50,
@@ -450,7 +450,7 @@ export const ra = {
     },
     nullXP: {
       id: 42,
-      reward: () => `Multiply Null and Cantes Memory Chunck gain by x${format(1.9,0,1)} per level`,
+      reward: () => `Multiply Null and Cantes Memory Chunk gain by x${format(1.9,0,1)} per level`,
       effect: () => Decimal.pow(1.9, Ra.pets.null.level).toNumber(),
       pet: "null",
       level: 5,
@@ -493,7 +493,7 @@ export const ra = {
     },
     nullUnlock: {
       id: 47,
-      reward: () => `Nnlock Null, the Celestial of Void (NYI)`,
+      reward: () => `Unlock Null, the Celestial of Void (NYI)`,
       pet: "null",
       level: 150,
       displayIcon: `<span class="fas fa-droplet"></span>`,

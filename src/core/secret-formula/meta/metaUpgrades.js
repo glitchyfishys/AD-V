@@ -153,7 +153,7 @@ export const metaFabricatorUpgrades = [
     name: "Insert Meme Here",
     id: 14,
     cost: 4,
-    description: "V Achevements do not reset (unless you reset Extreme)",
+    description: "V Achievements do not reset (unless you reset Extreme)",
     effect: () => 1,
     formatEffect: value => "",
     noLabel: true
@@ -236,7 +236,7 @@ export const metaFabricatorUpgrades = [
     formatEffect: value => formatPow(value,2,2),
   },
   {
-    name: "some pointless stuff",
+    name: "Some pointless stuff",
     id: 24,
     cost: 1e12,
     description: "Unlock autobuyers for Singularity cap, Keep Charged Infinity upgrades and Ra memory level",

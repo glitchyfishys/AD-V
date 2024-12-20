@@ -18,7 +18,7 @@ export default {
       };
     },
     glitchresettext(){
-      return GlitchRealityUpgrade(16).isBought ? "but keep some Celestrel stuff" : "";
+      return GlitchRealityUpgrade(16).isBought ? "but keep some Celestial stuff" : "";
     },
   },
   methods: {

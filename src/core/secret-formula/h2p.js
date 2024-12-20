@@ -1870,7 +1870,7 @@ Rifts once the current cap has been reached.`,
       This Mod changes: <br>
       Four Achievement info and unlock requirements and two Rewards <br>
 
-      EC1 requirement amount <br>
+      Lower EC1 eternity requirement <br>
 
       Teresa RM pouring cap <br>
       V Achievement requirements and for Unlocking V <br>
@@ -1893,8 +1893,8 @@ Rifts once the current cap has been reached.`,
       <br>
       Chaos Dimensions <br>
       <br>
-      Secret Achievements (NC) <br>
-      Glitch Glyph (NC) <br>
+      Secret Achievements (not complete) <br>
+      Glitch Glyph <br>
       <br>
       QOL: <br>
       Buy max AD Autobuyer upgrades <br>
@@ -1908,7 +1908,7 @@ Rifts once the current cap has been reached.`,
       <br>
       Other: <br>
       News ticker speed can go upto 1000% <br>
-      Two new secret themes <br>
+      Seven new secret themes <br>
 `,
     }
   ]

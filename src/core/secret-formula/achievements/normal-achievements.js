@@ -1220,8 +1220,8 @@ export const normalAchievements = [
   {
     id: 166,
     name: "Nicenice.",
-    get description() { return `Get a Glyph with level exactly ${formatInt(6969)}.${ PlayerProgress.metaUnlocked() ? ` or over ${format(1e6)}` : ""}`; },
-    checkRequirement: () => gainedGlyphLevel().actualLevel === 6969 || (gainedGlyphLevel().actualLevel > 1e6 && PlayerProgress.metaUnlocked()),
+    get description() { return `Get a Glyph with level exactly ${formatInt(6969)} or over ${format(1e6)}`},
+    checkRequirement: () => gainedGlyphLevel().actualLevel === 6969 || gainedGlyphLevel().actualLevel > 1e6,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     get reward() { return `+${formatInt(69)} to Glyph level.`; },
     effect: 69
@@ -1283,8 +1283,8 @@ export const normalAchievements = [
   {
     id: 175,
     name: "The First Antihistorian",
-    get description() { return `Get ${formatInt(Ra.alchemyResourceCap)} of all Alchemy Resources.`; },
-    checkRequirement: () => AlchemyResources.all.every(x => x.amount >= Ra.alchemyResourceCap),
+    get description() { return `Get ${formatInt(25000)} of all Alchemy Resources.`; },
+    checkRequirement: () => AlchemyResources.all.every(x => x.over25K),
     checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
     get reward() {
       return `Synergism can go above ${formatPercents(1)} and Momentum increases ${formatX(10)} faster.`;
@@ -1417,7 +1417,7 @@ export const normalAchievements = [
     id: 195,
     name: "I guess that was expected",
     get description() {return `Reach the Antimatter hard cap`},
-    checkRequirement: () => Currency.antimatter.gte("1e1E50"),
+    checkRequirement: () => Currency.antimatter.gte("1e1E50") && !Pelle.isDoomed,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
   },
   {
@@ -1438,6 +1438,9 @@ export const normalAchievements = [
     description: `Escape the confinements of the multiverse`,
     checkRequirement: () => true,
     checkEvent: GAME_EVENT.META_RESET_AFTER,
+    get reward() {
+      return `Gain autobuyes for the Galaxy Generator`;
+    },
   },
   {
     id: 201,

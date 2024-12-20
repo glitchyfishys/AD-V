@@ -796,7 +796,6 @@ export function finishProcessReality(realityProps) {
   Lazy.invalidateAll();
   ECTimeStudyState.invalidateCachedRequirements();
   EventHub.dispatch(GAME_EVENT.REALITY_RESET_AFTER);
-
   if (TeresaUnlocks.startEU.canBeApplied) {
     for (const id of [1, 2, 3, 4, 5, 6]) player.eternityUpgrades.add(id);
   } else if (RealityUpgrade(14).isBought) {

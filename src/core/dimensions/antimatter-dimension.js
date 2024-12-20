@@ -99,9 +99,7 @@ export function getDimensionFinalMultiplierUncached(tier) {
   
   let mul = GlitchRealityUpgrades.all[4].effectOrDefault(new Decimal(1)).pow(GlitchRealityUpgrades.all[12].isBought ? 2 : 1).pow(1 / Glitch.decay);
 
-  if (Glitch.isRunning && !GlitchRealityUpgrades.all[4].isBought) {
-    multiplier = multiplier.pow(1.66);
-  }
+  if (Glitch.isRunning && !GlitchRealityUpgrades.all[4].isBought) multiplier = multiplier.mul(1e10);
 
   multiplier = multiplier.pow(GlitchRealityUpgrades.all[15].effectOrDefault(1));
   
@@ -109,7 +107,7 @@ export function getDimensionFinalMultiplierUncached(tier) {
     multiplier = multiplier.pow(0.001);
   }
 
-  if(Pelle.isDoomed) mul = mul.pow((1 / ((1e60 / Math.min(Currency.realityShards.value.toNumber(),1e60)) ** .16)));
+  if(Pelle.isDoomed) mul = mul.pow((1 / ((1e60 / Math.min(Currency.realityShards.value.toNumber(),1e60)) ** 0.16)));
   
   if(player.dilation.active && Pelle.isDoomed) mul = dilatedValueOf(mul);
 

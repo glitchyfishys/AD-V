@@ -209,6 +209,7 @@ class RaPetState extends GameMechanicState {
   tick(realDiff, generateChunks) {
     const seconds = realDiff / 1000;
     if(this.name == "Cante" || this.name == "Null") {
+      if(!this.isUnlocked) return;
       const newMemoryChunks = Math.min(generateChunks ? seconds * Ra.CandNChunkProduction * this.memoryChunksPerSecond : 0, 1e150);
 
       const newMemories = Math.min(seconds * (this.memoryChunks + newMemoryChunks / 2) *
@@ -419,7 +420,7 @@ export const Ra = {
   },
   get alchemyResourceCap() {
     let cap = (30000 + GlitchRealityUpgrades.all[2].effectOrDefault(0)) * (VUnlocks.glyphCap.isUnlocked ? 3 : 1);
-    cap = cap / ((cap / 1e6) ** 0.9);
+    if(cap > 1e6) cap = cap / ((cap / 1e6) ** 0.9);
     return cap
   },
   get momentumValue() {

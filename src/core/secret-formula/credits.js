@@ -437,8 +437,8 @@ export const credits = {
       name2: "Katherine Goforth-Harbin",
       roles: 13
     }, {
-      name: "Glitch",
-      name2: "Glitchyfishys",
+      name: "Glitchyfishys",
+      name2: "Cel Of Chaos",
       roles: 14
     }
   ]
