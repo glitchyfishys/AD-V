@@ -68,6 +68,12 @@ export const GameSaveSerializer = {
     "automator data": "AntimatterDimensionsVAutomatorDataFormat",
     "glyph filter": "AntimatterDimensionsVGlyphFilterFormat",
   },
+  oldStartingString: {
+    savefile: "AntimatterDimensionsSavefileFormat",
+    "automator script": "AntimatterDimensionsAutomatorScriptFormat",
+    "automator data": "AntimatterDimensionsAutomatorDataFormat",
+    "glyph filter": "AntimatterDimensionsGlyphFilterFormat",
+  },
   // The ending strings aren't as verbose so that we can save a little space.
   endingString: {
     savefile: "EndOfSavefile",
@@ -125,9 +131,16 @@ export const GameSaveSerializer = {
     // and whether it's a save or automator script. We can change the last 3 letters
     // of the string savefiles start with from AAA to something else,
     // if we want a new version of savefile encoding.
+    if(version == 'AAC'){
+      return this.steps.filter(i => (!i.condition) || i.condition(version)).concat({
+        encode: x => `${GameSaveSerializer.startingString[type] + GameSaveSerializer.version}${x}`,
+        decode: x => x.slice(GameSaveSerializer.startingString[type].length + 3)
+      });
+    }
+
     return this.steps.filter(i => (!i.condition) || i.condition(version)).concat({
-      encode: x => `${GameSaveSerializer.startingString[type] + GameSaveSerializer.version}${x}`,
-      decode: x => x.slice(GameSaveSerializer.startingString[type].length + 3)
+      encode: x => `${GameSaveSerializer.oldStartingString[type] + GameSaveSerializer.version}${x}`,
+      decode: x => x.slice(GameSaveSerializer.oldStartingString[type].length + 3)
     });
   },
   // Apply each step's encode function in encoding order.
@@ -147,6 +160,10 @@ export const GameSaveSerializer = {
   decodeText(text, type) {
     if (text.startsWith(this.startingString[type])) {
       const len = this.startingString[type].length;
+      const version = text.slice(len, len + 3);
+      return this.getSteps(type, version).reduceRight((x, step) => step.decode(x, type), text);
+    } else if(text.startsWith(this.oldStartingString[type])){
+      const len = this.oldStartingString[type].length;
       const version = text.slice(len, len + 3);
       return this.getSteps(type, version).reduceRight((x, step) => step.decode(x, type), text);
     }
