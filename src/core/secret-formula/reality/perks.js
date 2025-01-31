@@ -24,7 +24,7 @@ function vectorToNum(v) {
  * To make a new preset layout, define vectorToNum in the console, move all the nodes around in-game and then run
  *    Object.values(PerkNetwork.network.body.nodes).filter(n => n.edges.length !== 0).map(v => vectorToNum(v))
  * in the console to get all the current node positions. Then, append the resulting numbers to each layoutPosList
- * array below and make the appropriate entry in PerkLayouts.
+ * array below and make the appripriate entry in PerkLayouts.
  *
  * Note: This encoding/decoding only works properly for coordinates with values between -1000 and 1000, and will
  * be slightly off for vectors whose coordinates aren't divisible by 5
@@ -587,7 +587,8 @@ export const perkConnections = (function() {
     [p.retroactiveTP1, p.bypassTGReset, p.startTP, p.retroactiveTP2],
     [p.retroactiveTP2, p.retroactiveTP3],
     [p.retroactiveTP3, p.retroactiveTP4],
-    [p.autobuyerDilation, p.autounlockEU2, p.autounlockDilation1, p.bypassECDilation, p.bypassTGReset, p.dilationAutobuyerBulk],
+    [p.autobuyerDilation, p.autounlockEU2, p.autounlockDilation1,
+      p.bypassECDilation, p.bypassTGReset, p.dilationAutobuyerBulk],
     [p.autobuyerFasterID],
     [p.ttBuySingle, p.ttFree],
     [p.ttFree, p.ttBuyMax],

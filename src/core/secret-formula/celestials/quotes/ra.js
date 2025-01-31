@@ -136,6 +136,8 @@ export const raQuotes = {
       "They were right to banish me.",
       "My powers...",
       "They steal, they corrupt.",
+      {text: "Is this the cause of it?", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
+      {text: "Did they take it from here", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
       "Please leave.",
       "I do not want to hurt you too.",
     ]

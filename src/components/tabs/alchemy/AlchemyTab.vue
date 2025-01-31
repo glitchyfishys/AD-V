@@ -20,8 +20,9 @@ export default {
       glitchCreationVisible: false,
       animationTimer: 0,
       alchemyCap: 0,
-      capFactor: 0,
+      capFactor: new Decimal(),
       createdRealityGlyph: false,
+      createdGlitchGlyph: false,
       allReactionsDisabled: false,
       // Used to force a re-render of reaction lines when reality glyphs are created
       realityAmount: 0,
@@ -53,6 +54,12 @@ export default {
         "tutorial--glow": !this.createdRealityGlyph
       };
     },
+    glitchGlyphCreationClass() {
+      return {
+        "o-primary-btn--subtab-option": true,
+        "tutorial--glow": !this.createdGlitchGlyph
+      };
+    },
     reactions() {
       return AlchemyReactions.all.compact().filter(r => r.product.isUnlocked);
     },
@@ -70,16 +77,19 @@ export default {
       this.glitchCreationVisible = VUnlocks.RMcap.isUnlocked;
       this.animationTimer += 35;
       this.alchemyCap = Ra.alchemyResourceCap;
-      this.capFactor = 1 / GlyphSacrificeHandler.glyphRefinementEfficiency;
+      this.capFactor = new Decimal(GlyphSacrificeHandler.glyphRefinementEfficiency).recip();
       this.createdRealityGlyph = player.reality.glyphs.createdRealityGlyph;
+      this.createdGlitchGlyph = player.reality.glyphs.createdGlitchGlyph;
       this.allReactionsDisabled = this.reactions.every(reaction => !reaction.isActive);
-      this.realityAmount = AlchemyResource.reality.amount;
-      this.glitchAmount = AlchemyResource.glitch.amount;
+      this.realityAmount = structuredClone(AlchemyResource.reality.amount);
+      this.glitchAmount = structuredClone(AlchemyResource.glitch.amount);
       this.alc = player.options.animations.background;
     },
     orbitSize(orbit) {
-      const maxRadius = this.layout.orbits.map(o => o.radius).max();
-      return `${(orbit.radius / maxRadius * 50)}%`;
+      const maxRadius = this.layout.orbits.map(o => o.radius).nMax();
+      let radius = Decimal.clampMax(orbit.radius, 1e100);
+      radius = radius.toNumber();
+      return `${(radius / maxRadius * 50)}%`;
     },
     handleMouseEnter(node) {
       this.infoResourceId = node.resource.id;
@@ -110,11 +120,11 @@ export default {
       const outRes = reactionArrow.product.resource;
       // We render the reaction as capped if it won't trigger; this can happen under two conditions - either the
       // output is higher than this particular input amount, or it's at its cap due to a different input
-      return (outRes.amount > 0 && outRes.amount >= inRes.amount) || outRes.amount >= outRes.cap;
+      return (outRes.amount.gt(0) && outRes.amount.lte(inRes.amount)) || outRes.amount.gte(outRes.cap);
     },
     isLessThanRequired(reactionArrow) {
-      return reactionArrow.product.resource.amount > 0 &&
-        reactionArrow.reagent.cost < reactionArrow.reagent.resource.cap;
+      return reactionArrow.product.resource.amount.gt(0) &&
+        Decimal.lt(reactionArrow.reagent.cost, reactionArrow.reagent.resource.cap);
     },
     isActiveReaction(reactionArrow) {
       return reactionArrow.reaction.isActive && !this.isDoomed;
@@ -223,7 +233,7 @@ export default {
       </PrimaryButton>
       <PrimaryButton
         v-if="glitchCreationVisible"
-        :class="realityGlyphCreationClass"
+        :class="glitchGlyphCreationClass"
         onclick="Modal.glitchGlyph.show()"
       >
         View Glitch Glyph creation
@@ -261,10 +271,8 @@ export default {
           :class="orbitClass"
         />
       </svg>
-      
-      
       <AlchemyCircleNode
-         v-for="(node, i) in layout.nodes"
+        v-for="(node, i) in layout.nodes"
         :key="i"
         :node="node"
         :is-focused="isFocusedNode(node)"
@@ -287,7 +295,7 @@ export default {
             v-bind="reactionArrowPositions(reactionArrow)"
             :class="reactionArrowClass(reactionArrow)"
           />
-      </svg>
+        </svg>
       </span>
     </div>
   </div>

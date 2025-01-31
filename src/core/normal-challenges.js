@@ -6,9 +6,9 @@ export function updateNormalAndInfinityChallenges(diff) {
     if (AntimatterDimension(2).amount.neq(0)) {
       Currency.matter.bumpTo(1);
       // These caps are values which occur at approximately e308 IP
-      const cappedBase = 1.03 + Math.clampMax(DimBoost.totalBoosts, 400) / 200 +
-        Math.clampMax(player.galaxies, 100) / 100;
-      Currency.matter.multiply(Decimal.pow(cappedBase, diff.div(20) ));
+      const cappedBase = Decimal.clampMax(DimBoost.totalBoosts, 400).div(200).add(1.03)
+        .add(Decimal.clampMax(player.galaxies, 100).div(100));
+      Currency.matter.multiply(Decimal.pow(cappedBase, diff.div(20)));
     }
     if (Currency.matter.gt(Currency.antimatter.value) && NormalChallenge(11).isRunning && !Player.canCrunch) {
       const values = [Currency.antimatter.value, Currency.matter.value];
@@ -19,11 +19,11 @@ export function updateNormalAndInfinityChallenges(diff) {
   }
 
   if (NormalChallenge(3).isRunning) {
-    player.chall3Pow = player.chall3Pow.times(DC.D1_00038.pow(diff.div(100))).clampMax(Decimal.NUMBER_MAX_VALUE);
+    player.chall3Pow = player.chall3Pow.times(DC.D1_00038.pow(diff.div(100))).clampMax(DC.NUMMAX);
   }
 
   if (NormalChallenge(2).isRunning) {
-    player.chall2Pow = Decimal.add(player.chall2Pow, diff.div(100 / 1800)).min(1).toNumber();
+    player.chall2Pow = Decimal.min(player.chall2Pow.add(diff.div(100).div(1800)), 1);
   }
 
   if (InfinityChallenge(2).isRunning) {
@@ -114,17 +114,17 @@ class NormalChallengeState extends GameMechanicState {
 
   get goal() {
     if (Enslaved.isRunning && Enslaved.BROKEN_CHALLENGES.includes(this.id)) {
-      return (player.records.fullGameCompletions > 0) ? Decimal.MAX_VALUE : DC.E1E15;
+      return player.records.fullGameCompletions > 0 ?  DC.BEMAX : DC.E1E15;
     }
-    return Decimal.NUMBER_MAX_VALUE;
+    return DC.NUMMAX;
   }
 
   updateChallengeTime() {
     const bestTimes = player.challenge.normal.bestTimes;
-    if (bestTimes[this.id - 2].lte(player.records.thisInfinity.time)) {
+    if (player.records.thisInfinity.time.gte(bestTimes[this.id - 2])) {
       return;
     }
-    player.challenge.normal.bestTimes[this.id - 2] = player.records.thisInfinity.time;
+    player.challenge.normal.bestTimes[this.id - 2].copyFrom(player.records.thisInfinity.time);
     GameCache.challengeTimeSum.invalidate();
     GameCache.worstChallengeTime.invalidate();
   }

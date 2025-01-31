@@ -1,5 +1,8 @@
 <script>
+import { DC } from "../../../core/constants";
+
 import { MatterScale } from "./matter-scale";
+
 import PrimaryButton from "@/components/PrimaryButton";
 
 export default {
@@ -9,55 +12,56 @@ export default {
   },
   data() {
     return {
-      infinity: {
-        isUnlocked: false,
-        count: new Decimal(0),
-        banked: new Decimal(0),
-        projectedBanked: new Decimal(0),
-        bankRate: new Decimal(0),
-        hasBest: false,
-        best: TimeSpan.zero,
-        this: TimeSpan.zero,
-        thisReal: TimeSpan.zero,
-        bestRate: new Decimal(0),
-      },
-      eternity: {
-        isUnlocked: false,
-        count: new Decimal(0),
-        hasBest: false,
-        best: TimeSpan.zero,
-        this: TimeSpan.zero,
-        thisReal: TimeSpan.zero,
-        bestRate: new Decimal(0),
-      },
-      reality: {
-        isUnlocked: false,
-        count: 0,
-        best: TimeSpan.zero,
-        bestReal: TimeSpan.zero,
-        this: TimeSpan.zero,
-        thisReal: TimeSpan.zero,
-        bestRate: new Decimal(0),
-        bestRarity: 0,
-      },
-      meta: {
-        isUnlocked: false,
-        count: new Decimal(0),
-        best: TimeSpan.zero,
-        bestReal: TimeSpan.zero,
-        this: TimeSpan.zero,
-        thisReal: TimeSpan.zero,
-        totalTimePlayed: "",
-        bestRate: new Decimal(0),
-      },
       isDoomed: false,
       realTimeDoomed: TimeSpan.zero,
-      totalAntimatter: new Decimal(0),
+      totalAntimatter: new Decimal(),
       realTimePlayed: TimeSpan.zero,
       timeSinceCreation: 0,
       uniqueNews: 0,
       totalNews: 0,
       secretAchievementCount: 0,
+      infinity: {
+        isUnlocked: false,
+        count: new Decimal(),
+        banked: new Decimal(),
+        projectedBanked: new Decimal(),
+        bankRate: new Decimal(),
+        hasBest: false,
+        best: TimeSpan.zero,
+        this: TimeSpan.zero,
+        thisReal: TimeSpan.zero,
+        bestRate: new Decimal(),
+      },
+      eternity: {
+        isUnlocked: false,
+        count: new Decimal(),
+        hasBest: false,
+        best: TimeSpan.zero,
+        this: TimeSpan.zero,
+        thisReal: TimeSpan.zero,
+        bestRate: new Decimal(),
+      },
+      reality: {
+        isUnlocked: false,
+        count: new Decimal(),
+        best: TimeSpan.zero,
+        bestReal: TimeSpan.zero,
+        this: TimeSpan.zero,
+        thisReal: TimeSpan.zero,
+        totalTimePlayed: TimeSpan.zero,
+        bestRate: new Decimal(),
+        bestRarity: 0,
+      },
+      meta: {
+        isUnlocked: false,
+        count: new Decimal(),
+        best: TimeSpan.zero,
+        bestReal: TimeSpan.zero,
+        this: TimeSpan.zero,
+        thisReal: TimeSpan.zero,
+        totalTimePlayed: "",
+        bestRate: new Decimal(),
+      },
       matterScale: [],
       lastMatterTime: 0,
       paperclips: 0,
@@ -79,18 +83,6 @@ export default {
         ? `${this.formatDecimalAmount(num)} ${pluralize("Eternity", num.floor())}`
         : "no Eternities";
     },
-    realityCountString() {
-      const num = this.reality.count;
-      return num > 0
-        ? `${this.format(num, 3)} ${pluralize("Reality", Math.floor(num))}`
-        : "no Realities";
-    },
-    metaCountString() {
-      const num = this.meta.count;
-      return num.gt(0)
-        ? `${this.formatDecimalAmount(num, 3)} ${pluralize("Meta", num.floor())}`
-        : "no Metas";
-    },
     fullGameCompletions() {
       return player.records.fullGameCompletions;
     },
@@ -98,7 +90,7 @@ export default {
       return Time.toDateTimeString(player.records.gameCreatedTime);
     },
     saveAge() {
-      return TimeSpan.fromMilliseconds(this.timeSinceCreation);
+      return TimeSpan.fromMilliseconds(new Decimal(this.timeSinceCreation));
     },
   },
   methods: {
@@ -106,7 +98,8 @@ export default {
       const records = player.records;
       this.totalAntimatter.copyFrom(records.totalAntimatter);
       this.realTimePlayed.setFrom(records.realTimePlayed);
-      this.fullTimePlayed = TimeSpan.fromMilliseconds(records.previousRunRealTime + records.realTimePlayed);
+      this.fullTimePlayed = TimeSpan.fromMilliseconds(
+        new Decimal(records.previousRunRealTime.add(records.realTimePlayed)));
       this.uniqueNews = NewsHandler.uniqueTickersSeen;
       this.totalNews = player.news.totalSeen;
       this.secretAchievementCount = SecretAchievements.all.filter(a => a.isUnlocked).length;
@@ -117,7 +110,6 @@ export default {
       const infinity = this.infinity;
       const bestInfinity = records.bestInfinity;
       infinity.isUnlocked = isInfinityUnlocked;
-      
       if (isInfinityUnlocked) {
         infinity.count.copyFrom(Currency.infinities);
         infinity.banked.copyFrom(Currency.infinitiesBanked);
@@ -125,10 +117,10 @@ export default {
           Achievement(131).effects.bankedInfinitiesGain,
           TimeStudy(191)
         );
-        infinity.bankRate = infinity.projectedBanked.div(Decimal.clampMin(33, Time.thisEternityRealTime.totalMilliseconds)).times(60000);
-        infinity.hasBest = bestInfinity.time.lt(999999999999);
-        infinity.best.copyFrom(Time.bestInfinity);
-        infinity.this.copyFrom(Time.thisInfinity);
+        infinity.bankRate = infinity.projectedBanked.div(Decimal.clampMin(33, records.thisEternity.time)).times(60000);
+        infinity.hasBest = !bestInfinity.time.eq(DC.BEMAX);
+        infinity.best.setFrom(bestInfinity.time);
+        infinity.this.setFrom(records.thisInfinity.time);
         infinity.bestRate.copyFrom(bestInfinity.bestIPminEternity);
       }
 
@@ -139,9 +131,9 @@ export default {
       
       if (isEternityUnlocked) {
         eternity.count.copyFrom(Currency.eternities);
-        eternity.hasBest = bestEternity.time.lt(999999999999);
-        eternity.best.copyFrom(Time.bestEternity);
-        eternity.this.copyFrom(Time.thisEternity);
+        eternity.hasBest = !bestEternity.time.eq(DC.BEMAX);
+        eternity.best.setFrom(bestEternity.time);
+        eternity.this.setFrom(records.thisEternity.time);
         eternity.bestRate.copyFrom(bestEternity.bestEPminReality);
       }
 
@@ -151,39 +143,42 @@ export default {
       reality.isUnlocked = isRealityUnlocked;
 
       if (isRealityUnlocked) {
-        reality.count = Math.floor(Currency.realities.value);
-        reality.best.copyFrom(Time.bestReality);
-        reality.bestReal.copyFrom(Time.bestRealityRealTime);
-        reality.this.copyFrom(Time.thisReality);
+        reality.count.copyFrom(Currency.realities);
+        reality.best.setFrom(bestReality.time);
+        reality.bestReal.setFrom(bestReality.realTime);
+        reality.this.setFrom(records.thisReality.time);
+        reality.totalTimePlayed.setFrom(records.totalTimePlayed);
         // Real time tracking is only a thing once reality is unlocked:
-        infinity.thisReal.copyFrom(Time.bestInfinityRealTime);
-        infinity.bankRate = infinity.projectedBanked.div(Decimal.clampMin(33, Time.thisEternityRealTime.totalMilliseconds)).times(60000);
-        eternity.thisReal.copyFrom(Time.thisEternityRealTime);
-        reality.thisReal.copyFrom(Time.thisRealityRealTime);
+        infinity.thisReal.setFrom(records.thisInfinity.realTime);
+        infinity.bankRate = infinity.projectedBanked.div(Decimal.clampMin(33, records.thisEternity.realTime))
+          .times(60000);
+        eternity.thisReal.setFrom(records.thisEternity.realTime);
+        reality.thisReal.setFrom(records.thisReality.realTime);
         reality.bestRate.copyFrom(bestReality.RMmin);
-        reality.bestRarity = Math.max(strengthToRarity(bestReality.glyphStrength), 0);
+        reality.bestRarity = strengthToRarity(bestReality.glyphStrength).clampMin(0);
       }
 
       const isMetaUnlocked = progress.isMetaUnlocked;
       const meta = this.meta;
+      const thisMeta = records.thisMeta;
       const bestMeta = records.bestMeta;
       meta.isUnlocked = isMetaUnlocked;
 
       if (isMetaUnlocked) {
         meta.count.copyFrom(Currency.metas);
-        meta.best.copyFrom(Time.bestMetaTime);
-        meta.bestReal.copyFrom(Time.bestMetaRealTime);
-        meta.hasBest = bestMeta.realTime < 999999999999;
-        meta.this.copyFrom(Time.thisMetaTime);
+        meta.best.setFrom(bestMeta.time);
+        meta.bestReal.setFrom(bestMeta.realTime);
+        meta.hasBest = bestMeta.realTime.lt(1e300);
+        meta.this.setFrom(thisMeta.time);
         meta.totalTimePlayed = Time.totalTimePlayed.toStringShort();
-        meta.thisReal.copyFrom(Time.thisMetaRealTime);
+        meta.thisReal.setFrom(thisMeta.realTime);
         meta.bestRate.copyFrom(bestMeta.MRmin);
       }
-
+      
       this.updateMatterScale();
 
       this.isDoomed = Pelle.isDoomed;
-      this.realTimeDoomed.copyFrom(Time.realTimeDoomed);
+      this.realTimeDoomed.setFrom(player.records.realTimeDoomed);
       this.paperclips = player.news.specialTickerData.paperclips;
     },
     formatDecimalAmount(value) {
@@ -218,7 +213,7 @@ export default {
       </div>
       <div class="c-stats-tab-general">
         <div>You have made a total of {{ format(totalAntimatter, 2, 1) }} antimatter.</div>
-        <div>You have played for {{ realTimePlayed.toStringShort() }}. (real time)</div>
+        <div>You have played for {{ realTimePlayed }}. (real time)</div>
         <div v-if="reality.isUnlocked">
           Your existence has spanned {{ reality.totalTimePlayed }} of time. (game time)
         </div>
@@ -243,7 +238,7 @@ export default {
           <b>
             You have completed the entire game {{ quantifyInt("time", fullGameCompletions) }}.
             <br>
-            You have played for {{ fullTimePlayed.toStringShort() }} across all playthroughs.
+            You have played for {{ fullTimePlayed }} across all playthroughs.
           </b>
         </div>
       </div>
@@ -339,7 +334,7 @@ export default {
       <div :class="realityClassObject()">
         {{ isDoomed ? "Doomed Reality" : "Reality" }}
       </div>
-      <div>You have {{ realityCountString }}.</div>
+      <div>You have {{ quantifyInt("Reality", reality.count) }}.</div>
       <div>Your fastest game-time Reality was {{ reality.best.toStringShort() }}.</div>
       <div>Your fastest real-time Reality was {{ reality.bestReal.toStringShort() }}.</div>
       <div :class="{ 'c-stats-tab-doomed' : isDoomed }">
@@ -369,7 +364,7 @@ export default {
         Meta
       </div>
       <div>
-        You have {{ metaCountString }}.
+        You have {{ quantifyInt("Meta", meta.count) }}.
       </div>
       <div v-if="meta.hasBest">
         Your fastest Meta was {{ meta.best.toStringShort() }}.
@@ -379,6 +374,8 @@ export default {
         You have spent {{ meta.this.toStringShort() }} in this Meta.
           ({{ meta.thisReal.toStringShort() }} real time)
       </div>
+      <div>Your fastest game-time Meta was {{ meta.best.toStringShort() }}.</div>
+      <div>Your fastest real-time Meta was {{ meta.bestReal.toStringShort() }}.</div>
       <div>
         Your best Meta Relays per minute
         is {{ format(meta.bestRate, 2, 2) }}.

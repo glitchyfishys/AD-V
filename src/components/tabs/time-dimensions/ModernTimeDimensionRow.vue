@@ -24,10 +24,9 @@ export default {
     return {
       isUnlocked: false,
       isCapped: false,
-      isoverloaded: false,
       multiplier: new Decimal(0),
       amount: new Decimal(0),
-      bought: 0,
+      bought: new Decimal(0),
       rateOfChange: new Decimal(0),
       cost: new Decimal(0),
       isAvailableForPurchase: false,
@@ -57,7 +56,7 @@ export default {
       if (this.showTTCost) return `${this.formattedEPCost}<br>${this.timeEstimate}`;
       if (this.isoverloaded) return `you can not purchase any more than ${format(1e15)} Time Dimensions`;
       if (this.isCapped) return `Nameless prevents the purchase of more than ${format(1)} Time Dimension`;
-      return `Purchased ${format(this.bought)} times`;
+      return `Purchased ${quantifyInt("time", this.bought)}`;
     },
     showRow() {
       return this.realityUnlocked || this.isUnlocked || this.requirementReached;
@@ -72,12 +71,12 @@ export default {
       return this.buttonContents.length > 15;
     },
     showCostTitle() {
-      return this.cost.exponent < 1e6;
+      return this.cost.max(1).log10().lte(1e6);
     },
     timeEstimate() {
       if (!this.showTTCost || this.ttGen.eq(0)) return "";
       const time = Decimal.sub(this.ttCost, this.currTT).dividedBy(this.ttGen);
-      return time.gt(0) ? `Enough TT in ${TimeSpan.fromSeconds(time.toNumber()).toStringShort()}` : "";
+      return time.gt(0) ? `Enough TT in ${TimeSpan.fromSeconds(time).toStringShort()}` : "";
     }
   },
   watch: {
@@ -92,12 +91,12 @@ export default {
       
       const allow = (Enslaved.isRunning && !Glitch.isRunning) || Glitch.augmentEffectActive(3);
       
-      this.isCapped = allow && dimension.bought > 0;
-      this.isoverloaded = dimension.bought >= 1e15;
+      this.isCapped = allow && dimension.bought.gt(0);
+      this.isoverloaded = dimension.bought.gte(1e15);
       this.isUnlocked = dimension.isUnlocked;
       this.multiplier.copyFrom(dimension.multiplier);
       this.amount.copyFrom(dimension.amount);
-      this.bought = dimension.bought;
+      this.bought.copyFrom(dimension.bought);
       if (tier < 8) {
         this.rateOfChange.copyFrom(dimension.rateOfChange);
       }

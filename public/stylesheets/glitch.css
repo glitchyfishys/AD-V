@@ -15,6 +15,11 @@
   --color-meta-base: #7a1d3e;
   --color-meta-light: #ffc7db;
   --color-meta-dark: #5b0d28;
+
+  --color-missing: repeating-conic-gradient(#f0f 0% 25%, black 0% 50%);
+
+  --color-cante--base: #44a8da;
+  --color-cante--chaos: #ff3333;
 }
 
 .l-glitch-celestial-tab {
@@ -241,12 +246,10 @@ Chaos Styles
 }
 
 @keyframes a-metazebg {
-  0% { opacity: 0; filter: invert(0);}
-  20% { opacity: 0; }
-  30% { opacity: 1; }
-  70% { opacity: 1; }
-  80% { opacity: 0; filter: invert(0);}
-  100% { opacity: 0; filter: invert(1); }
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { opacity: 0;}
 }
 
 
@@ -289,4 +292,8 @@ Chaos Styles
   background-color: black;
   border-color: var(--color-meta);
   animation: a-time-study 7s infinite;
+}
+
+.o-meta-reset{
+  background-image: url("../images/meta.png");
 }

@@ -68,6 +68,9 @@ export default {
     },
     blobSnowflakes(newValue) {
       player.options.animations.blobSnowflakes = parseInt(newValue, 10);
+    },
+    blobHole(newValue) {
+      player.options.animations.blobHole = newValue;
     }
   },
   methods: {
@@ -82,6 +85,8 @@ export default {
       this.tachyonsUnlocked = this.realityUnlocked || Currency.tachyonParticles.gt(0);
       this.animatedThemeUnlocked = Theme.animatedThemeUnlocked;
       this.isS11Active = Theme.currentName() === "S11";
+      this.isS11Unlocked = Themes.available().map(t => t.name).includes("S11");
+      this.isBlackHoleUnlocked = BlackHoles.areUnlocked;
 
       const options = player.options.animations;
       this.bigCrunch = options.bigCrunch;
@@ -89,6 +94,7 @@ export default {
       this.dilation = options.dilation;
       this.tachyonParticles = options.tachyonParticles;
       this.reality = options.reality;
+      this.meta = options.meta;
       this.background = options.background;
       this.blobSnowflakes = options.blobSnowflakes;
     },

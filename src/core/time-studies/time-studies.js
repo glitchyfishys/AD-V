@@ -142,7 +142,7 @@ export function respecTimeStudies(auto) {
   }
   player.timestudy.studies = [];
   GameCache.timeStudies.invalidate();
-  player.celestials.v.STSpent = 0;
+  player.celestials.v.STSpent = new Decimal(0);
   const ecStudy = TimeStudy.eternityChallenge.current();
   if (ecStudy !== undefined) {
     ecStudy.refund();
@@ -166,9 +166,8 @@ export class TimeStudyState extends GameMechanicState {
 
   get STCost() {
     const base = this.config.STCost;
-    if(this.id > 400) return base;
-    return VUnlocks.raUnlock.canBeApplied
-      ? base - 2
+    return (VUnlocks.raUnlock.canBeApplied && this.id < 400)
+      ? Decimal.sub(base, 2)
       : base;
   }
 

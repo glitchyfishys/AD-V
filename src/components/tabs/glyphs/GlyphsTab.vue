@@ -32,10 +32,10 @@ export default {
     return {
       enslavedHint: "",
       showInstability: false,
-      instabilityThreshold: 0,
-      hyperInstabilityThreshold: 0,
-      glitchInstabilityThreshold: 0,
-      chaosInstabilityThreshold: 0,
+      instabilityThreshold: new Decimal(),
+      hyperInstabilityThreshold: new Decimal(),
+      glitchInstabilityThreshold: new Decimal(),
+      chaosInstabilityThreshold: new Decimal(),
       showGlitch: false,
       showChaos: false,
       isInCelestialReality: false,
@@ -62,9 +62,12 @@ export default {
   methods: {
     update() {
       this.resetRealityDisplayed = PlayerProgress.realityUnlocked();
-      this.showInstability = player.records.bestReality.glyphLevel > 800;
-      this.showGlitch = player.records.bestReality.glyphLevel > 1e5;
-      this.showChaos = player.records.bestReality.glyphLevel > 5e7;
+      this.instabilityThreshold.copyFrom(Glyphs.instabilityThreshold);
+      this.hyperInstabilityThreshold.copyFrom(Glyphs.hyperInstabilityThreshold);
+      this.showInstability = player.records.bestReality.glyphLevel.gt(this.instabilityThreshold.sub(200));
+      this.showGlitch = player.records.bestReality.glyphLevel.gte(1e5);
+      this.showChaos = player.records.bestReality.glyphLevel.gte(5e7);
+
       this.instabilityThreshold = Glyphs.instabilityThreshold;
       this.hyperInstabilityThreshold = Glyphs.hyperInstabilityThreshold;
       this.glitchInstabilityThreshold = Glyphs.glitchInstabilityThreshold;
@@ -77,7 +80,7 @@ export default {
       this.sacrificeUnlocked = GlyphSacrificeHandler.canSacrifice;
       this.sacrificeDisplayed = player.reality.showGlyphSacrifice;
       if (!Enslaved.isRunning) return;
-      const haveBoost = Glyphs.activeWithoutCompanion.find(e => e.level < Enslaved.glyphLevelMin) !== undefined;
+      const haveBoost = Glyphs.activeWithoutCompanion.find(e => e.level.lt(Enslaved.glyphLevelMin)) !== undefined;
       if (haveBoost) {
         this.enslavedHint = "done... what little... I can... with Glyphs...";
       }

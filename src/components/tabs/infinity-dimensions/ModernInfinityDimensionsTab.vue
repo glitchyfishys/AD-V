@@ -19,28 +19,22 @@ export default {
       isEC9Running: false,
       isEnslavedRunning: false,
       isAnyAutobuyerUnlocked: false,
-      conversionRate: 0,
-      nextDimCapIncrease: 0,
+      conversionRate: new Decimal(0),
+      nextDimCapIncrease: new Decimal(0),
       tesseractCost: new Decimal(0),
-      totalDimCap: 0,
+      totalDimCap: new Decimal(0),
       canBuyTesseract: false,
       enslavedCompleted: false,
-      boughtTesseracts: 0,
-      extraTesseracts: 0,
+      boughtTesseracts: new Decimal(0),
+      extraTesseracts: new Decimal(0),
       creditsClosed: false,
       showLockedDimCostNote: true,
-      ID8cap: 1e12,
+      ID8cap: new Decimal(),
     };
   },
   computed: {
-    sacrificeBoostDisplay() {
-      return formatX(this.sacrificeBoost, 2, 2);
-    },
-    sacrificeTooltip() {
-      return `Boosts 8th Antimatter Dimension by ${this.sacrificeBoostDisplay}`;
-    },
     tesseractCountString() {
-      const extra = this.extraTesseracts > 0 ? ` + ${format(this.extraTesseracts, 2, 2)}` : "";
+      const extra = this.extraTesseracts.gt(0) ? ` + ${format(this.extraTesseracts, 2, 2)}` : "";
       return `${formatInt(this.boughtTesseracts)}${extra}`;
     },
   },
@@ -49,9 +43,9 @@ export default {
       this.showLockedDimCostNote = !InfinityDimension(8).isUnlocked;
       this.isEC9Running = EternityChallenge(9).isRunning;
       this.infinityPower.copyFrom(Currency.infinityPower);
-      this.conversionRate = InfinityDimensions.powerConversionRate;
+      this.conversionRate.copyFrom(InfinityDimensions.powerConversionRate);
       if (this.isEC9Running) {
-        this.dimMultiplier.copyFrom(Decimal.pow(Math.max(this.infinityPower.log2(), 1), 4).max(1));
+        this.dimMultiplier.copyFrom(Decimal.pow(Decimal.max(this.infinityPower.log2(), 1), 4).max(1));
       } else {
         this.dimMultiplier.copyFrom(this.infinityPower.pow(this.conversionRate).max(1));
       }
@@ -63,15 +57,15 @@ export default {
       }
       this.isEnslavedRunning = Enslaved.isRunning;
       this.isAnyAutobuyerUnlocked = Autobuyer.infinityDimension(1).isUnlocked;
-      this.nextDimCapIncrease = Tesseracts.nextTesseractIncrease;
+      this.nextDimCapIncrease.copyFrom(Tesseracts.nextTesseractIncrease);
       this.tesseractCost.copyFrom(Tesseracts.nextCost);
-      this.totalDimCap = InfinityDimensions.totalDimCap;
+      this.totalDimCap.copyFrom(InfinityDimensions.totalDimCap);
       this.canBuyTesseract = Tesseracts.canBuyTesseract;
       this.enslavedCompleted = Enslaved.isCompleted;
-      this.boughtTesseracts = Tesseracts.bought;
-      this.extraTesseracts = Tesseracts.extra;
+      this.boughtTesseracts.copyFrom(Tesseracts.bought);
+      this.extraTesseracts.copyFrom(Tesseracts.extra);
       this.creditsClosed = GameEnd.creditsEverClosed;
-      this.ID8cap = 1e12 ** TimeStudy(403).effectOrDefault(1);
+      this.ID8cap = Decimal.pow(1e12, TimeStudy(403).effectOrDefault(1));
     },
     maxAll() {
       InfinityDimensions.buyMax();

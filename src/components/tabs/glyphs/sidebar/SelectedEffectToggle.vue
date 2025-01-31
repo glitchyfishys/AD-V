@@ -1,3 +1,5 @@
+<!-- eslint-disable line-comment-position -->
+<!-- eslint-disable no-inline-comments -->
 <script>
 export default {
   name: "SelectedEffectToggle",
@@ -55,23 +57,28 @@ export default {
     effarigBits() {
       const effectDB = GameDatabase.reality.glyphEffects;
       return {
-        RM: effectDB.effarigrm.bitmaskIndex,
-        glyph: effectDB.effarigglyph.bitmaskIndex,
+        RM: effectDB.effarigrm.intID,
+        glyph: effectDB.effarigglyph.intID,
       };
     }
   },
   methods: {
     update() {
-      this.isActive = (AutoGlyphProcessor.types[this.glyphType].specifiedMask & (1 << this.effect.bitmaskIndex)) !== 0;
-      const effarigMask = AutoGlyphProcessor.types.effarig.specifiedMask;
+      this.isActive = AutoGlyphProcessor.types[this.glyphType].specifiedMask.includes(this.effect.id);
       this.effarigSettings = {
-        RM: (effarigMask & (1 << this.effarigBits.RM)) !== 0,
-        glyph: (effarigMask & (1 << this.effarigBits.glyph)) !== 0
+        RM: AutoGlyphProcessor.types.effarig.specifiedMask.includes("effarigrm"),
+        glyph: AutoGlyphProcessor.types.effarig.specifiedMask.includes("effarigglyph")
       };
       this.noExclude = Ra.unlocks.glyphEffectCount.canBeApplied;
     },
     toggleSelection() {
-      AutoGlyphProcessor.types[this.glyphType].specifiedMask ^= 1 << this.effect.bitmaskIndex;
+      if (AutoGlyphProcessor.types[this.glyphType].specifiedMask.includes(this.effect.id)) {
+        AutoGlyphProcessor.types[this.glyphType].specifiedMask =
+        // Lazy workaround to remove only the glyph effect id and nothing else
+        AutoGlyphProcessor.types[this.glyphType].specifiedMask.filter(e => e !== this.effect.id);
+      } else {
+        AutoGlyphProcessor.types[this.glyphType].specifiedMask.push(this.effect.id);
+      }
     },
     setEffectCount(event) {
       const inputValue = event.target.value;

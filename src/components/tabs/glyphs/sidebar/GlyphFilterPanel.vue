@@ -16,11 +16,11 @@ export default {
     return {
       mode: AUTO_GLYPH_SCORE.LOWEST_SACRIFICE,
       effectCount: 0,
-      lockedTypes: GlyphTypes.locked.map(e => e.id),
-      advancedType: GLYPH_TYPES[0],
+      advancedType: GlyphInfo.glyphTypes[0],
       alchemyUnlocked: false,
       // Note: there are two units at play: strength is from 1..3.5+; rarity is 0..100
-      rarityThresholds: GLYPH_TYPES.mapToObject(e => e, () => 0),
+      rarityThresholds: GlyphInfo.glyphTypes.mapToObject(e => e, () => new Decimal()),
+      scaledRarityThresholds: GlyphInfo.glyphTypes.mapToObject(e => e, () => 0),
       autoRealityForFilter: player.options.autoRealityForFilter,
     };
   },
@@ -29,7 +29,8 @@ export default {
       return AUTO_GLYPH_SCORE;
     },
     glyphTypes() {
-      return GlyphTypes.list.filter(e => !this.lockedTypes.includes(e.id));
+      return GlyphInfo.glyphTypes.filter(e => (GlyphInfo[e].generationRequirement ? GlyphInfo[e].generationRequirement()
+        : true && GlyphInfo[e].isGenerated));
     },
     raritySliderProps() {
       return {
@@ -70,13 +71,21 @@ export default {
     }
   },
   methods: {
+    glyphInfoFromType(type) {
+      return GlyphInfo[type];
+    },
     update() {
       this.effectCount = player.reality.glyphs.filter.simple;
       this.mode = AutoGlyphProcessor.scoreMode;
       for (const type of generatedTypes) {
-        this.rarityThresholds[type] = AutoGlyphProcessor.types[type].rarity;
+        this.rarityThresholds[type].copyFrom(AutoGlyphProcessor.types[type].rarity);
       }
-      this.lockedTypes = GlyphTypes.locked.map(e => e.id);
+
+      for (const type of generatedTypes) {
+        // The div here would be like the highest rarity you can get or whatever
+        this.scaledRarityThresholds[type] = AutoGlyphProcessor.types[type].rarity.toNumber();
+      }
+
       this.alchemyUnlocked = Ra.unlocks.unlockGlyphAlchemy.canBeApplied;
     },
     optionClass(idx) {
@@ -124,7 +133,7 @@ export default {
       player.reality.hasCheckedFilter = false;
     },
     setRarityThreshold(id, value) {
-      AutoGlyphProcessor.types[id].rarity = value;
+      AutoGlyphProcessor.types[id].rarity = new Decimal(value);
     },
     setEffectCount(event) {
       const inputValue = event.target.value;
@@ -154,14 +163,15 @@ export default {
     // Clicking bumps the rarity over to adjacent thresholds between rarities; normal clicks move to the higher one
     // and shift-clicks move to the lower one. There is a loop-around that makes 100 go to 0 next and vice versa
     bumpRarity(type) {
-      const rarityThresholds = GlyphRarities.map(r => strengthToRarity(r.minStrength));
+      // eslint-disable-next-line no-param-reassign
+      const rarityThresholds = GlyphInfo.rarities.map(r => strengthToRarity(r.minStrength));
       let newRarity;
       if (ui.view.shiftDown) {
-        const lower = rarityThresholds.filter(s => s < this.rarityThresholds[type]);
-        newRarity = lower.length === 0 ? 100 : lower.max();
+        const lower = rarityThresholds.filter(s => s.lt(this.rarityThresholds[type]));
+        newRarity = lower.length === 0 ? new Decimal(100) : lower.max();
       } else {
         // Note: As the minimum of an empty array is zero, this wraps around to 0% again if clicked at 100% rarity
-        newRarity = rarityThresholds.filter(s => s > this.rarityThresholds[type]).min();
+        newRarity = rarityThresholds.filter(s => s.gt(this.rarityThresholds[type])).min();
       }
       this.setRarityThreshold(type, newRarity);
     },
@@ -182,7 +192,7 @@ export default {
       const serializeType = settings => [settings.rarity, settings.score, settings.effectCount,
         settings.specifiedMask, settings.effectScores.join("/")].join(",");
       const simpleData = [filter.select, filter.simple, filter.trash].join("|");
-      const typeData = ALCHEMY_BASIC_GLYPH_TYPES.map(t => serializeType(filter.types[t])).join("|");
+      const typeData = GlyphInfo.alchemyGlyphTypes.map(t => serializeType(filter.types[t])).join("|");
       copyToClipboard(GameSaveSerializer.encodeText(`${simpleData}|${typeData}`, "glyph filter"));
       GameUI.notify.info("Filter settings copied to clipboard");
     },
@@ -275,21 +285,21 @@ export default {
       </span>
       <div
         v-for="type in glyphTypes"
-        :key="type.id"
+        :key="glyphInfoFromType(type).id"
         class="l-glyph-sacrifice-options__rarity-slider-div"
       >
-        <span @click="bumpRarity(type.id)">
+        <span @click="bumpRarity(glyphInfoFromType(type).id)">
           <GlyphComponent
-            :glyph="{type: type.id, strength: strengthThreshold(type.id) }"
+            :glyph="{type: type, strength: strengthThreshold(glyphInfoFromType(type).id) }"
             v-bind="glyphIconProps"
             class="o-clickable"
           />
         </span>
         <SliderComponent
           v-bind="raritySliderProps"
-          :value="rarityThresholds[type.id]"
+          :value="scaledRarityThresholds[glyphInfoFromType(type).id]"
           :width="'100%'"
-          @input="setRarityThreshold(type.id, $event)"
+          @input="setRarityThreshold(type, $event)"
         />
       </div>
     </div>
@@ -301,13 +311,13 @@ export default {
         Glyph Type:
         <span
           v-for="type in glyphTypes"
-          :key="type.id"
-          v-tooltip="type.id.capitalize()"
+          :key="glyphInfoFromType(type).id"
+          v-tooltip="glyphInfoFromType(type).id.capitalize()"
           class="l-glyph-sacrifice-options__advanced-type-select c-glyph-sacrifice-options__advanced-type-select"
-          :style="advancedTypeSelectStyle(type)"
-          @click="advancedType=type.id"
+          :style="advancedTypeSelectStyle(glyphInfoFromType(type))"
+          @click="advancedType=glyphInfoFromType(type).id"
         >
-          {{ getSymbol(type.id) }}
+          {{ getSymbol(glyphInfoFromType(type).id) }}
         </span>
       </div>
       <br>
@@ -321,16 +331,16 @@ export default {
         </span>
         <SliderComponent
           v-bind="raritySliderProps"
-          :value="rarityThresholds[advancedType]"
+          :value="scaledRarityThresholds[advancedType]"
           :width="'100%'"
           @input="setRarityThreshold(advancedType, $event)"
         />
       </div>
       <template v-for="type in glyphTypes">
         <AutoSacrificeEffectTab
-          v-show="type.id === advancedType"
-          :key="type.id"
-          :glyph-type="type.id"
+          v-show="glyphInfoFromType(type).id === advancedType"
+          :key="glyphInfoFromType(type).id"
+          :glyph-type="glyphInfoFromType(type).id"
         />
       </template>
     </div>
@@ -342,21 +352,21 @@ export default {
         Glyph Type:
         <span
           v-for="type in glyphTypes"
-          :key="type.id"
-          v-tooltip="type.id.capitalize()"
+          :key="glyphInfoFromType(type).id"
+          v-tooltip="glyphInfoFromType(type).id.capitalize()"
           class="l-glyph-sacrifice-options__advanced-type-select c-glyph-sacrifice-options__advanced-type-select"
-          :style="advancedTypeSelectStyle(type)"
-          @click="advancedType=type.id"
+          :style="advancedTypeSelectStyle(glyphInfoFromType(type))"
+          @click="advancedType=glyphInfoFromType(type).id"
         >
-          {{ getSymbol(type.id) }}
+          {{ getSymbol(glyphInfoFromType(type).id) }}
         </span>
       </div>
       <br>
       <template v-for="type in glyphTypes">
         <AutoSacrificeAdvancedTab
-          v-show="type.id === advancedType"
-          :key="type.id"
-          :glyph-type="type.id"
+          v-show="glyphInfoFromType(type).id === advancedType"
+          :key="glyphInfoFromType(type).id"
+          :glyph-type="glyphInfoFromType(type).id"
         />
       </template>
     </div>
@@ -412,6 +422,7 @@ export default {
 .l-top-left-btn {
   cursor: pointer;
   border: var(--var-border-width, 0.2rem) solid;
+  border-radius: var(--var-border-radius, 0.2rem);
   width: 2.5rem;
   margin: 0.5rem 0 0 0.5rem;
   padding: 0.5rem;
@@ -423,6 +434,7 @@ export default {
   align-items: center;
   cursor: pointer;
   border: var(--var-border-width, 0.2rem) solid;
+  border-radius: var(--var-border-radius, 0.2rem);
   width: 2rem;
   height: 2rem;
   margin: 0.5rem 0.5rem 0 0;

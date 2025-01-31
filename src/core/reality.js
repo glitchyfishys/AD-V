@@ -17,7 +17,7 @@ export const GlyphSelection = {
     if(Perk.simReality.isBought){
       m += 2;
     }
-    return Effects.max(1, Perk.firstPerk) *
+    return Effects.nMax(1, Perk.firstPerk) *
       Ra.unlocks.extraGlyphChoicesAndRelicShardRarityAlwaysMax.effectOrDefault(1) + m;
   },
 
@@ -31,12 +31,12 @@ export const GlyphSelection = {
     let newStrength;
     do {
       newStrength = GlyphGenerator.randomStrength(rng);
-    } while (newStrength < strengthThreshold);
-    if (glyphList.some(e => e.strength >= strengthThreshold)) return;
+    } while (newStrength.lt(strengthThreshold));
+    if (glyphList.some(e => e.strength.gte(strengthThreshold))) return;
     glyphList[Math.floor(random * glyphList.length)].strength = newStrength;
   },
 
-  glyphList(countIn, level, config = {rng: new GlyphGenerator.RealGlyphRNG() }) {
+  glyphList(countIn, level, config) {
     // Always generate at least 4 choices so that the RNG never diverges based on
     // the 4-choice perk.
     const count = Math.clampMin(countIn, 4);
@@ -47,8 +47,11 @@ export const GlyphSelection = {
     // To attempt to reduce RNG swing, we follow slightly different logic early on in order
     // to spread out types and effects more equally for the first few realities. Types and
     // effects are spread out over the choices of each consecutive group of 5 realities
+
+    // Code needs rewriting at a later date as it is all bitmask stuff rn, so we use a constant false fn
+    // eslint-disable-next-line no-constant-condition
     if (GlyphGenerator.isUniformityActive) {
-      glyphList = GlyphGenerator.uniformGlyphs(level, rng, player.realities);
+      glyphList = GlyphGenerator.uniformGlyphSelections(level, rng, player.realities);
     } else {
       for (let out = 0; out < count; ++out) {
         types.push(GlyphGenerator.randomType(rng, types));
@@ -75,11 +78,11 @@ export const GlyphSelection = {
 
   update(level) {
     if (this.realityProps === undefined) return;
-    if (level.rawLevel > this.realityProps.gainedGlyphLevel.rawLevel) {
+    if (level.rawLevel.gt(this.realityProps.gainedGlyphLevel.rawLevel)) {
       this.realityProps.gainedGlyphLevel.rawLevel = level.rawLevel;
       for (const glyph of this.glyphs) glyph.rawLevel = level.rawLevel;
     }
-    if (level.actualLevel > this.realityProps.gainedGlyphLevel.actualLevel) {
+    if (level.actualLevel.gt(this.realityProps.gainedGlyphLevel.actualLevel)) {
       this.realityProps.gainedGlyphLevel.actualLevel = level.actualLevel;
       for (const glyph of this.glyphs) {
         glyph.level = level.actualLevel;
@@ -116,29 +119,29 @@ export const GlyphSelection = {
   // The uniformity code behaves poorly without START, so we generate actually generate them 4 at a time and then
   // deterministically pick one of them randomly
   get indexWithoutSTART() {
-    const lexIndex = player.realities * ((player.reality.initialSeed % 5) + 3);
+    const lexIndex = player.realities.times((player.reality.initialSeed % 5) + 3).toNumber();
     return permutationIndex(4, lexIndex)[0];
   }
 };
 
 export function isRealityAvailable() {
-  return player.records.thisReality.maxEP.exponent >= 4000 && TimeStudy.reality.isBought;
+  return player.records.thisReality.maxEP.gte("1e4000") && TimeStudy.reality.isBought;
 }
 
 // Returns the number of "extra" realities from stored real time or Multiversal effects, should be called
 // with false for checking and true for actual usage, and only "used" once per reality.
 export function simulatedRealityCount(advancePartSimCounters) {
-  const amplifiedSim = Enslaved.boostReality ? Enslaved.realityBoostRatio - 1 : 0;
+  const amplifiedSim = Enslaved.boostReality ? Enslaved.realityBoostRatio.sub(1) : new Decimal();
   const multiversalSim = AlchemyResource.multiversal.effectValue;
-  const simCount = (multiversalSim + 1) * (amplifiedSim + 1) + player.partSimulatedReality - 1;
+  const simCount = amplifiedSim.add(1).mul(multiversalSim.add(1)).add(player.partSimulatedReality.sub(1));
   let c = 0
   if(Perk.simReality.isBought){
     c++;
   }
   if (advancePartSimCounters) {
-    player.partSimulatedReality = (simCount + c) - Math.floor(simCount + c);
+    player.partSimulatedReality = simCount.sub(simCount.add(c).floor());
   }
-  return Math.floor(simCount + c);
+  return simCount.add(c).floor();
 }
 
 /**
@@ -149,23 +152,28 @@ export function requestManualReality() {
   if (GlyphSelection.active || !isRealityAvailable()) return;
   if (GameEnd.creditsEverClosed) return;
 
-  if((!realityUGs.all[0].config.hasFailed() && !realityUGs.all[0].isBought) && player.options.confirmations.glitchCL){
+  if((!realityUGs.all[0].config.hasFailed() && !realityUGs.all[0].isBought) && (player.options.confirmations.glitchCL && 
+ !PlayerProgress.metaUnlocked())){
     Modal.message.show(`you will fail glitch challenge ${realityUGs.all[0].config.name} <br> which is to ${realityUGs.all[0].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
     return;
   }
-  else if((!realityUGs.all[1].config.hasFailed() && !realityUGs.all[1].isBought) && player.options.confirmations.glitchCL){
+  else if((!realityUGs.all[1].config.hasFailed() && !realityUGs.all[1].isBought) && (player.options.confirmations.glitchCL && 
+ !PlayerProgress.metaUnlocked())){
     Modal.message.show(`you will fail glitch challenge ${realityUGs.all[1].config.name} <br> which is to ${realityUGs.all[1].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
     return;
   }
-  else if((!realityUGs.all[2].config.hasFailed() && !realityUGs.all[2].isBought) && player.options.confirmations.glitchCL){
+  else if((!realityUGs.all[2].config.hasFailed() && !realityUGs.all[2].isBought) && (player.options.confirmations.glitchCL && 
+ !PlayerProgress.metaUnlocked())){
     Modal.message.show(`you will fail glitch challenge ${realityUGs.all[2].config.name} <br> which is to ${realityUGs.all[2].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
     return;
   }
-  else if((!realityUGs.all[4].config.hasFailed() && !realityUGs.all[4].isBought) && player.options.confirmations.glitchCL && Teresa.isRunning){
+  else if((!realityUGs.all[4].config.hasFailed() && !realityUGs.all[4].isBought) && (player.options.confirmations.glitchCL && 
+ !PlayerProgress.metaUnlocked()) && Teresa.isRunning){
     Modal.message.show(`you will fail glitch challenge ${realityUGs.all[4].config.name} <br> which is to ${realityUGs.all[4].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
     return;
   }
-  else if((!realityUGs.all[6].config.hasFailed() && !realityUGs.all[6].isBought) && player.options.confirmations.glitchCL && Effarig.isRunning && Effarig.currentStage == 1){
+  else if((!realityUGs.all[6].config.hasFailed() && !realityUGs.all[6].isBought) && (player.options.confirmations.glitchCL && 
+ !PlayerProgress.metaUnlocked()) && Effarig.isRunning && Effarig.currentStage == 1){
     Modal.message.show(`you will fail glitch challenge ${realityUGs.all[6].config.name} <br> which is to ${realityUGs.all[6].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
     return;
   }
@@ -174,13 +182,11 @@ export function requestManualReality() {
     Modal.reality.show();
     return;
   }
-
   if (GameCache.glyphInventorySpace.value === 0) {
     Modal.message.show("No available inventory space; free up space by shift-clicking Glyphs to get rid of them.",
       { closeEvent: GAME_EVENT.GLYPHS_CHANGED });
     return;
   }
-  
   startManualReality(false);
 }
 
@@ -196,11 +202,12 @@ export function startManualReality(sacrifice, glyphID) {
 export function processManualReality(sacrifice, glyphID) {
   if (!isRealityAvailable()) return;
 
-  if (player.realities === 0) {
+  // Prevent issues with decimal realities by checking whether realities are < 1
+  if (player.realities.lt(1)) {
     // If this is our first Reality, lock in the initial seed and then give the companion and starting glyphs
     player.reality.seed = player.reality.initialSeed;
-    if (player.reality.glyphs.inventory.length == 0) Glyphs.addToInventory(GlyphGenerator.companionGlyph(Currency.eternityPoints.value));
     Glyphs.addToInventory(GlyphGenerator.startingGlyph(gainedGlyphLevel()));
+    Glyphs.addToInventory(GlyphGenerator.companionGlyph(Currency.eternityPoints.value));
   } else if (Perk.firstPerk.isEffectActive) {
     // If we have firstPerk, we pick from 4+ glyphs, and glyph generation functions as normal.
     GlyphSelection.generate(GlyphSelection.choiceCount);
@@ -315,44 +322,51 @@ export function autoReality() {
 }
 
 function updateRealityRecords(realityProps) {
-  const thisRunRMmin = realityProps.gainedRM.dividedBy(Math.clampMin(0.0005, Time.thisRealityRealTime.totalMinutes.toNumber()));
+  const thisRunRMmin = realityProps.gainedRM.div(Time.thisRealityRealTime.totalMinutes.clampMin(0.0005));
   if (player.records.bestReality.RMmin.lt(thisRunRMmin)) {
     player.records.bestReality.RMmin = thisRunRMmin;
     player.records.bestReality.RMminSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
-  if (player.records.bestReality.glyphLevel < realityProps.gainedGlyphLevel.actualLevel) {
+  if (player.records.bestReality.glyphLevel.lt(realityProps.gainedGlyphLevel.actualLevel)) {
     player.records.bestReality.glyphLevel = realityProps.gainedGlyphLevel.actualLevel;
     player.records.bestReality.glyphLevelSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
-  player.records.bestReality.time = Decimal.min(player.records.thisReality.time, player.records.bestReality.time);
-  if (player.records.thisReality.realTime < player.records.bestReality.realTime) {
+  player.records.bestReality.time = player.records.thisReality.time.clampMax(player.records.bestReality.time);
+  if (player.records.thisReality.realTime.lt(player.records.bestReality.realTime)) {
     player.records.bestReality.realTime = player.records.thisReality.realTime;
     player.records.bestReality.speedSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
   }
+  player.records.bestReality.trueTime = Math.min(player.records.bestReality.trueTime, player.records.thisReality.trueTime)
 }
 
 function giveRealityRewards(realityProps) {
-  const multiplier = realityProps.simulatedRealities + 1;
-  const realityAndPPMultiplier = multiplier + binomialDistribution(multiplier, Achievement(154).effectOrDefault(0)) + realityUGs.all[2].effectOrDefault(1);
+  const multiplier = realityProps.simulatedRealities.add(1);
+  const realityAndPPMultiplier = multiplier.add(binomialDistribution(multiplier, Achievement(154).effectOrDefault(0))).add(realityUGs.all[2].effectOrDefault(1));
   const gainedRM = Currency.realityMachines.gte(MachineHandler.hardcapRM) ? DC.D0 : realityProps.gainedRM;
   Currency.realityMachines.add(gainedRM.times(multiplier));
   updateRealityRecords(realityProps);
   addRealityTime(
-    player.records.thisReality.time, player.records.thisReality.realTime, gainedRM,
-    realityProps.gainedGlyphLevel.actualLevel, realityAndPPMultiplier, multiplier,
+    player.records.thisReality.trueTime,
+    player.records.thisReality.time,
+    player.records.thisReality.realTime,
+    gainedRM,
+    realityProps.gainedGlyphLevel.actualLevel,
+    realityAndPPMultiplier,
+    multiplier,
     MachineHandler.projectedIMCap);
   Currency.realities.add(realityAndPPMultiplier);
-  Currency.perkPoints.add(realityAndPPMultiplier * GlitchRifts.gamma.milestones[1].effectOrDefault(1) + realityUGs.all[5].effectOrDefault(1) );
+  Currency.perkPoints.add(realityAndPPMultiplier.mul(GlitchRifts.gamma.milestones[1].effectOrDefault(1) + realityUGs.all[5].effectOrDefault(1)) );
   if (TeresaUnlocks.effarig.canBeApplied) {
-    Currency.relicShards.add(realityProps.gainedShards.mul(multiplier));
+    Currency.relicShards.add(realityProps.gainedShards.times(multiplier));
   }
-  if (multiplier > 1 && Enslaved.boostReality) {
+  if (multiplier.gt(1) && Enslaved.boostReality) {
     // Real time amplification is capped at 1 second of reality time; if it's faster then using all time at once would
     // be wasteful. Being faster than 1 second will only use as much time as needed to get the 1-second factor instead.
     if (Time.thisRealityRealTime.totalSeconds.lt(1)) {
-      player.celestials.enslaved.storedReal = player.celestials.enslaved.storedReal * (1 - Time.thisRealityRealTime.totalSeconds.toNumber());
+      player.celestials.enslaved.storedReal = player.celestials.enslaved.storedReal
+        .mul(Decimal.sub(1, Time.thisRealityRealTime.totalSeconds));
     } else {
-      player.celestials.enslaved.storedReal = 0;
+      player.celestials.enslaved.storedReal = DC.D0;
     }
     Enslaved.boostReality = false;
   }
@@ -372,11 +386,8 @@ function giveRealityRewards(realityProps) {
       player.celestials.teresa.bestAMSet = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
 
       // Encode iM values into the RM variable as e10000 * iM in order to only require one prop
-      let machineRecord;
-      if (Currency.imaginaryMachines.value === 0) machineRecord = player.reality.maxRM;
-      else machineRecord = DC.E10000.times(Currency.imaginaryMachines.value);
-      player.celestials.teresa.lastRepeatedMachines = player.celestials.teresa.lastRepeatedMachines
-        .clampMin(machineRecord);
+      player.celestials.teresa.lastRepeatedMachines = player.reality.maxRM;
+      player.celestials.teresa.lastRepeatediM = Currency.imaginaryMachines.value;
     }
     Teresa.quotes.completeReality.show();
   }
@@ -394,7 +405,7 @@ function giveRealityRewards(realityProps) {
 
   if (Glitch.isRunning) {
 
-    const effects = Glitch.activeAugments.length > 0 ? (makeEnumeration(Glitch.activeAugments) + " active, congratulations"): "nothing active, try making a new reality";
+    const effects = Glitch.activeAugments.length > 0 ? (makeEnumeration(Glitch.activeAugments) + " active, congratulations"): "nothing active";
     const modalText = `You have completed Glitch's Reality! with ${ effects }`;
     Modal.message.show(modalText, {}, 2);
     
@@ -413,7 +424,7 @@ export function beginProcessReality(realityProps) {
   // Save a few important props before resetting all resources. We need to do this before processing glyphs so
   // that we don't try to reality again while async is running, but we need to retain RNG and level or else
   // glyphs will be generated with values based on post-reset values
-  const glyphsToProcess = realityProps.simulatedRealities + (realityProps.alreadyGotGlyph ? 0 : 1);
+  const glyphsToProcess = realityProps.simulatedRealities.add(realityProps.alreadyGotGlyph ? 0 : 1);
   const rng = GlyphGenerator.getRNG(false);
   const glyphLevel = gainedGlyphLevel();
   finishProcessReality(realityProps);
@@ -422,8 +433,8 @@ export function beginProcessReality(realityProps) {
   // sampling code in order to just directly give all the glyphs. The later code is a fixed amount of overhead
   // which is large enough that quick realities can cause it to softlock the game due to lag on slower devices
   // Note: This is mostly a copy-paste of a code block in processManualReality() with slight modifications
-  if (glyphsToProcess < 100) {
-    for (let glyphNum = 0; glyphNum < glyphsToProcess; glyphNum++) {
+  if (glyphsToProcess.lt(100)) {
+    for (let glyphNum = 0; glyphNum < glyphsToProcess.toNumber(); glyphNum++) {
       GlyphSelection.generate(GlyphSelection.choiceCount, glyphLevel);
       if (EffarigUnlock.glyphFilter.isUnlocked) {
         const glyphChoices = GlyphSelection.glyphList(GlyphSelection.choiceCount,
@@ -438,29 +449,30 @@ export function beginProcessReality(realityProps) {
         GlyphSelection.select(Math.floor(Math.random() * GlyphSelection.choiceCount), false);
       }
     }
-    Glyphs.processSortingAfterReality();
 
-    let gl = Math.min(glyphLevel.actualLevel, Math.floor(Glyphs.levelCap))
+    let gl = Decimal.min(glyphLevel.actualLevel, Decimal.floor(Glyphs.levelCap))
     
     if(Perk.autoGlyph.canBeApplied && !Pelle.isDoomed){
-    for (let i=0; i < player.reality.glyphs.inventory.length; i++){
-      if(!(player.reality.glyphs.inventory[i].type == "reality" || player.reality.glyphs.inventory[i].type == "cursed" || player.reality.glyphs.inventory[i].type == "glitch") ){
-        player.reality.glyphs.inventory[i].level = Math.max(gl, Math.min(player.reality.glyphs.inventory[i].level, Glyphs.levelCap) );
+      for (let i=0; i < player.reality.glyphs.inventory.length; i++){
+        if(!(player.reality.glyphs.inventory[i].type == "reality" || player.reality.glyphs.inventory[i].type == "cursed" || player.reality.glyphs.inventory[i].type == "glitch") ){
+          player.reality.glyphs.inventory[i].level = Decimal.max(gl, Decimal.min(player.reality.glyphs.inventory[i].level, Glyphs.levelCap) );
+        }
+        if (MetaMilestone.metaRealityAndGlitchGlyphAuto.isReached && (player.reality.glyphs.inventory[i].type == "reality" || player.reality.glyphs.inventory[i].type == "glitch")){
+          player.reality.glyphs.inventory[i].level = Decimal.max(Ra.alchemyResourceCap, Decimal.min(player.reality.glyphs.inventory[i].level, Glyphs.levelCap) )
+        }
       }
-      if (MetaMilestone.metaRealityAndGlitchGlyphAuto.isReached && (player.reality.glyphs.inventory[i].type == "reality" || player.reality.glyphs.inventory[i].type == "glitch")){
-        player.reality.glyphs.inventory[i].level = Math.max(Ra.alchemyResourceCap, Math.min(player.reality.glyphs.inventory[i].level, Glyphs.levelCap) )
+      for (let i=0; i < player.reality.glyphs.active.length; i++){
+        if(!(player.reality.glyphs.active[i].type == "reality" || player.reality.glyphs.active[i].type == "cursed" || player.reality.glyphs.active[i].type == "glitch") ){
+          player.reality.glyphs.active[i].level = Decimal.max(gl, Decimal.min(player.reality.glyphs.active[i].level, Glyphs.levelCap) );
+        }
+        if (MetaMilestone.metaRealityAndGlitchGlyphAuto.isReached && (player.reality.glyphs.active[i].type == "reality" || player.reality.glyphs.active[i].type == "glitch")){
+          player.reality.glyphs.active[i].level = Decimal.max(Ra.alchemyResourceCap, Decimal.min(player.reality.glyphs.active[i].level, Glyphs.levelCap) )
+        }
       }
     }
-    for (let i=0; i < player.reality.glyphs.active.length; i++){
-      if(!(player.reality.glyphs.active[i].type == "reality" || player.reality.glyphs.active[i].type == "cursed" || player.reality.glyphs.active[i].type == "glitch") ){
-        player.reality.glyphs.active[i].level = Math.max(gl, Math.min(player.reality.glyphs.active[i].level, Glyphs.levelCap) );
-      }
-      if (MetaMilestone.metaRealityAndGlitchGlyphAuto.isReached && (player.reality.glyphs.active[i].type == "reality" || player.reality.glyphs.active[i].type == "glitch")){
-        player.reality.glyphs.active[i].level = Math.max(Ra.alchemyResourceCap, Math.min(player.reality.glyphs.active[i].level, Glyphs.levelCap) )
-      }
-    }
-  }
-    
+
+    Glyphs.processSortingAfterReality();
+
     return;
   }
 
@@ -688,17 +700,17 @@ export function finishProcessReality(realityProps) {
 
   Currency.infinities.reset();
   Currency.infinitiesBanked.reset();
-  player.records.bestInfinity.time = new Decimal(999999999999);
-  player.records.bestInfinity.realTime = 999999999999;
-  player.records.thisInfinity.time =  new Decimal();
-  player.records.thisInfinity.lastBuyTime = new Decimal();
-  player.records.thisInfinity.realTime = 0;
-  player.dimensionBoosts = 0;
-  player.galaxies = 0;
+  player.records.bestInfinity.time = DC.BEMAX;
+  player.records.bestInfinity.realTime = DC.BEMAX;
+  player.records.thisInfinity.time = DC.D0;
+  player.records.thisInfinity.lastBuyTime = DC.D0;
+  player.records.thisInfinity.realTime = DC.D0;
+  player.dimensionBoosts = DC.D0;
+  player.galaxies = DC.D0;
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
-  player.break = false;
-  player.IPMultPurchases = 0;
+  if(!MetaMilestone.glyphKeep.isReached) player.break = false;
+  player.IPMultPurchases = DC.D0;
   Currency.infinityPower.reset();
   Currency.timeShards.reset();
   Replicanti.reset(true);
@@ -708,12 +720,12 @@ export function finishProcessReality(realityProps) {
   // This has to be reset before Currency.eternities to make the bumpLimit logic work correctly
   EternityUpgrade.epMult.reset();
   if (!PelleUpgrade.eternitiesNoReset.canBeApplied) Currency.eternities.reset();
-  player.records.thisEternity.time = new Decimal();
-  player.records.thisEternity.realTime = 0;
-  player.records.bestEternity.time = new Decimal(999999999999);
-  player.records.bestEternity.realTime = 999999999999;
+  player.records.thisEternity.time = DC.D0;
+  player.records.thisEternity.realTime = DC.D0;
+  player.records.bestEternity.time = DC.BEMAX;
+  player.records.bestEternity.realTime = DC.BEMAX;
   if (!PelleUpgrade.keepEternityUpgrades.canBeApplied) player.eternityUpgrades.clear();
-  player.totalTickGained = 0;
+  player.totalTickGained = DC.D0;
   if (!PelleUpgrade.keepEternityChallenges.canBeApplied) player.eternityChalls = {};
   player.reality.unlockedEC = 0;
   player.reality.lastAutoEC = DC.D0;
@@ -729,11 +741,11 @@ export function finishProcessReality(realityProps) {
   } else {
     Player.resetRequirements("reality");
   }
-  player.records.thisReality.time = new Decimal();
-  player.records.thisReality.realTime = 0;
+  player.records.thisReality.time = DC.D0;
+  player.records.thisReality.realTime = DC.D0;
   player.records.thisReality.maxReplicanti = DC.D0;
   if (!PelleUpgrade.timeStudiesNoReset.canBeApplied) Currency.timeTheorems.reset();
-  player.celestials.v.STSpent = 0;
+  player.celestials.v.STSpent = DC.D0;
   if (!PelleUpgrade.timeStudiesNoReset.canBeApplied) {
     player.dilation.studies = [];
     player.dilation.active = false;
@@ -741,20 +753,20 @@ export function finishProcessReality(realityProps) {
   if (!PelleUpgrade.dilationUpgradesNoReset.canBeApplied) {
     player.dilation.upgrades.clear();
     player.dilation.rebuyables = {
-      1: 0,
-      2: 0,
-      3: 0,
-      11: 0,
-      12: 0,
-      13: 0
+      1: DC.D0,
+      2: DC.D0,
+      3: DC.D0,
+      11: DC.D0,
+      12: DC.D0,
+      13: DC.D0
     };
   }
   if (!PelleUpgrade.tachyonParticlesNoReset.canBeApplied) {
     Currency.tachyonParticles.reset();
   }
   player.dilation.nextThreshold = DC.E3;
-  player.dilation.baseTachyonGalaxies = 0;
-  player.dilation.totalTachyonGalaxies = 0;
+  player.dilation.baseTachyonGalaxies = DC.D0;
+  player.dilation.totalTachyonGalaxies = DC.D0;
   Currency.dilatedTime.reset();
   player.records.thisInfinity.maxAM = DC.D0;
   player.records.thisEternity.maxAM = DC.D0;
@@ -763,7 +775,7 @@ export function finishProcessReality(realityProps) {
   Currency.antimatter.reset();
   Enslaved.autoReleaseTick = 0;
   player.celestials.enslaved.hasSecretStudy = false;
-  player.celestials.laitela.entropy = 0;
+  player.celestials.laitela.entropy = DC.D0;
 
   playerInfinityUpgradesOnReset();
   resetInfinityRuns();
@@ -773,7 +785,7 @@ export function finishProcessReality(realityProps) {
   resetChallengeStuff();
   AntimatterDimensions.reset();
   secondSoftReset(false);
-  player.celestials.ra.peakGamespeed = DC.DM1;
+  player.celestials.ra.peakGamespeed = DC.D1;
 
   InfinityDimensions.resetAmount();
   player.records.thisInfinity.bestIPmin = DC.D0;
@@ -796,6 +808,7 @@ export function finishProcessReality(realityProps) {
   Lazy.invalidateAll();
   ECTimeStudyState.invalidateCachedRequirements();
   EventHub.dispatch(GAME_EVENT.REALITY_RESET_AFTER);
+
   if (TeresaUnlocks.startEU.canBeApplied) {
     for (const id of [1, 2, 3, 4, 5, 6]) player.eternityUpgrades.add(id);
   } else if (RealityUpgrade(14).isBought) {
@@ -856,15 +869,15 @@ export function applyRUPG10() {
     mode: current.mode,
     priority: current.priority,
     isActive: current.isActive,
-    lastTick: player.records.realTimePlayed
+    lastTick: player.records.trueTimePlayed
   }));
 
   for (const autobuyer of Autobuyers.all) {
     if (autobuyer.data.interval !== undefined) autobuyer.data.interval = 100;
   }
 
-  player.dimensionBoosts = Math.max(4 + GlitchRealityUpgrades.all[7].isBought, player.dimensionBoosts);
-  player.galaxies = Math.max(1, player.galaxies);
+  player.dimensionBoosts = player.dimensionBoosts.clampMin(4 + (GlitchRealityUpgrades.all[7].isBought ? 1 : 0));
+  player.galaxies = player.galaxies.clampMin(1);
   player.break = true;
   Currency.eternities.bumpTo(100);
   Replicanti.amount = Replicanti.amount.clampMin(1);

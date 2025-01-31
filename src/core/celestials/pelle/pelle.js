@@ -81,17 +81,16 @@ export const Pelle = {
         ${formatInt(5)} additional Glyphs in order to Doom your Reality.`, 1);
       return;
     }
-    for (const type of BASIC_GLYPH_TYPES) Glyphs.addToInventory(GlyphGenerator.doomedGlyph(type));
+    for (const type of GlyphInfo.basicGlyphTypes) Glyphs.addToInventory(GlyphGenerator.doomedGlyph(type));
     Glyphs.refreshActive();
     player.options.confirmations.glyphReplace = false;
-    player.reality.automator.state.repeat = true;
     player.reality.automator.state.forceRestart = false;
     if (BlackHoles.arePaused) BlackHoles.togglePause();
     player.celestials.pelle.doomed = true;
     Pelle.armageddon(false);
     respecTimeStudies(true);
     Currency.infinityPoints.reset();
-    player.IPMultPurchases = 0;
+    player.IPMultPurchases = DC.D0;
     Autobuyer.bigCrunch.mode = AUTO_CRUNCH_MODE.AMOUNT;
     disChargeAll();
     clearCelestialRuns();
@@ -103,8 +102,8 @@ export const Pelle = {
     player.auto.antimatterDims.isActive = true;
 
     player.buyUntil10 = true;
-    player.records.realTimeDoomed = 0;
-    for (const res of AlchemyResources.all) res.amount = 0;
+    player.records.realTimeDoomed = DC.D0;
+    for (const res of AlchemyResources.all) res.amount = DC.D0;
     AutomatorBackend.stop();
 
     // Force-unhide all tabs except for the shop tab, for which we retain the hide state instead
@@ -151,14 +150,14 @@ export const Pelle = {
   },
 
   get canArmageddon() {
-    return this.remnantsGain >= 1;
+    return this.remnantsGain.gte(1);
   },
 
   armageddon(gainStuff) {
     if (!this.canArmageddon && gainStuff) return;
     EventHub.dispatch(GAME_EVENT.ARMAGEDDON_BEFORE, gainStuff);
     if (gainStuff) {
-      this.cel.remnants += this.remnantsGain;
+      this.cel.remnants = this.cel.remnants.add(this.remnantsGain);
     }
     finishProcessReality({ reset: true, armageddon: true });
     disChargeAll();
@@ -185,8 +184,8 @@ export const Pelle = {
   },
 
   get disabledAchievements() {
-    return [164, 156, 143, 142, 141, 137, 134, 133, 132, 131, 126, 125, 118, 117, 116, 113, 111, 104, 103, 95, 93, 92, 91,
-      87, 85, 78, 76, 74, 65, 55, 54, 37];
+    return [164, 156, 143, 142, 141, 137, 134, 133, 132, 131, 126, 125, 118, 117, 116, 113, 111, 104, 103, 95, 93, 92,
+      91, 87, 85, 78, 76, 74, 65, 55, 54, 37];
   },
 
   get uselessInfinityUpgrades() {
@@ -267,18 +266,13 @@ export const Pelle = {
   },
 
   get canDilateInPelle() {
-    return this.cel.remnants >= this.remnantRequirementForDilation;
+    return this.cel.remnants.gte(this.remnantRequirementForDilation);
   },
 
   resetResourcesForDilation() {
     this.cel.records.totalAntimatter = new Decimal("1e180000");
     this.cel.records.totalInfinityPoints = new Decimal("1e60000");
     Currency.eternityPoints.reset();
-    // Oddly specific number? Yes, it's roughly the amount of EP you have
-    // when starting dilation for the first time
-    // Since 5th strike previously did not reset your current EP the previous reset value was kind of useless which
-    // lead to some balancing problems, this hopefully prevents people starting dilation too early and getting
-    // softlocked, or starting it too late and getting not-softlocked.
     this.cel.records.totalEternityPoints = new Decimal("1e1100");
   },
 
@@ -288,20 +282,18 @@ export const Pelle = {
     let ep = this.cel.records.totalEternityPoints.plus(1).log10();
 
     if (PelleStrikes.dilation.hasStrike) {
-      am *= 500;
-      ip *= 10;
-      ep *= 5;
+      am = am.times(500);
+      ip = ip.times(10);
+      ep = ep.times(5);
     }
 
-    const gain = (
-      (Math.log10(am + 2) + Math.log10(ip + 2) + Math.log10(ep + 2)) / 1.64
-    ) ** 7.5;
+    const gain = am.add(2).log10().add(ip.add(2).log10()).add(ep.add(2).log10()).div(1.64).pow(7.5);
 
-    return gain < 1 ? gain : Math.floor(gain - this.cel.remnants);
+    return gain.lt(1) ? gain : Decimal.floor(gain.minus(this.cel.remnants));
   },
 
   realityShardGain(remnants) {
-    return Decimal.pow(10, remnants ** (1 / 7.5) * 4).minus(1).div(1e3);
+    return Decimal.pow(10, Decimal.pow(remnants, (1 / 7.5)).times(4)).minus(1).div(1e3);
   },
 
   get realityShardGainPerSecond() {
@@ -309,7 +301,7 @@ export const Pelle = {
   },
 
   get nextRealityShardGain() {
-    return this.realityShardGain(this.remnantsGain + this.cel.remnants);
+    return this.realityShardGain(this.remnantsGain.add(this.cel.remnants));
   },
 
   // Calculations assume this is in units of proportion per second (eg. 0.03 is 3% drain per second)
@@ -322,11 +314,11 @@ export const Pelle = {
   },
 
   get glyphStrength() {
-    return 1;
+    return DC.D1;
   },
 
   antimatterDimensionMult(x) {
-    return Decimal.pow(10, Math.log10(x + 1) + x ** 5.1 / 1e3 + 4 ** x / 1e19);
+    return Decimal.pow(10, Decimal.log10(x.add(1)).add(x.pow(5.1).div(1e3)).add(DC.D4.pow(x).div(1e19)));
   },
 
   get activeGlyphType() {
@@ -361,78 +353,81 @@ export const Pelle = {
 
   quotes: Quotes.pelle,
   reset() {
-    const P = player.celestials.pelle;
-
-    P.rebuyables = {
-      antimatterDimensionMult: 0,
-      timeSpeedMult: 0,
-      glyphLevels: 0,
-      infConversion: 0,
-      galaxyPower: 0,
-      galaxyGeneratorAdditive: 0,
-      galaxyGeneratorMultiplicative: 0,
-      galaxyGeneratorAntimatterMult: 0,
-      galaxyGeneratorIPMult: 0,
-      galaxyGeneratorEPMult: 0
-    }
-    P.doomed = false;
-    P.upgrades = new Set();
-    Currency.remnants.reset();
-    Currency.realityShards.reset();
-
-    P.records.totalAntimatter = DC.D0;
-    P.records.totalInfinityPoints = DC.D0;
-    P.records.totalEternityPoints = DC.D0;
-    player.records.thisMeta.maxAM= DC.D1;
-
-    P.rifts = {
-        vacuum: {
-            fill: DC.D0,
-            active: false,
-            reducedTo: 1
-        },
-        decay: {
-            fill: DC.D0,
-            active: false,
-            percentageSpent: 0,
-            reducedTo: 1
-        },
-        chaos: {
-            fill: 0,
-            active: false,
-            reducedTo: 1
-        },
-        recursion: {
-            fill: DC.D0,
-            active: false,
-            reducedTo: 1
-        },
-        paradox: {
-            fill: DC.D0,
-            active: false,
-            reducedTo: 1
-        },
-        glitch: {
-            fill: 0,
-            active: false,
-            reducedTo: 1
-        }
-    }
-
-    P.progressBits = 0;
-
-    P.galaxyGenerator =  {
-          unlocked: false,
-          spentGalaxies: 0,
-          generatedGalaxies: 0,
-          phase: 0,
-          sacrificeActive: false
-    }
-
-    GameEnd._additionalEnd = 0;
     GameEnd.additionalEnd = 0;
     player.isGameEnd = false;
-  }
+    player.records.thisMeta.maxAM = DC.D0;
+    player.celestials.pelle = {
+      doomed: false,
+      upgrades: new Set(),
+      remnants: DC.D0,
+      realityShards: DC.D0,
+      records: {
+        totalAntimatter: DC.D0,
+        totalInfinityPoints: DC.D0,
+        totalEternityPoints: DC.D0,
+      },
+      rebuyables: {
+        antimatterDimensionMult: DC.D0,
+        timeSpeedMult: DC.D0,
+        glyphLevels: DC.D0,
+        infConversion: DC.D0,
+        galaxyPower: DC.D0,
+        galaxyGeneratorAdditive: DC.D0,
+        galaxyGeneratorMultiplicative: DC.D0,
+        galaxyGeneratorAntimatterMult: DC.D0,
+        galaxyGeneratorIPMult: DC.D0,
+        galaxyGeneratorEPMult: DC.D0,
+      },
+      rifts: {
+        vacuum: {
+          fill: DC.D0,
+          active: false,
+          reducedTo: 1
+        },
+        decay: {
+          fill: DC.D0,
+          active: false,
+          percentageSpent: 0,
+          reducedTo: 1
+        },
+        chaos: {
+          fill: DC.D0,
+          active: false,
+          reducedTo: 1
+        },
+        recursion: {
+          fill: DC.D0,
+          active: false,
+          reducedTo: 1
+        },
+        paradox: {
+          fill: DC.D0,
+          active: false,
+          reducedTo: 1
+        },
+        glitch: {
+          fill: DC.D0,
+          active: false,
+          reducedTo: 1
+        }
+      },
+      progressBits: 0,
+      galaxyGenerator: {
+        unlocked: false,
+        spentGalaxies: DC.D0,
+        generatedGalaxies: DC.D0,
+        phase: 0,
+        sacrificeActive: false
+      },
+      quoteBits: 0,
+      collapsed: {
+        upgrades: false,
+        rifts: false,
+        galaxies: false
+      },
+      showBought: false,
+    };
+  },
 };
 
 EventHub.logic.on(GAME_EVENT.ARMAGEDDON_AFTER, () => {
@@ -475,7 +470,7 @@ export class RebuyablePelleUpgradeState extends RebuyableMechanicState {
   }
 
   get isCapped() {
-    return this.boughtAmount >= this.config.cap;
+    return this.boughtAmount.gte(this.config.cap);
   }
 
   get isCustomEffect() { return true; }
@@ -522,5 +517,4 @@ export const PelleUpgrade = mapGameDataToObject(
 );
 
 PelleUpgrade.rebuyables = PelleUpgrade.all.filter(u => u.isRebuyable);
-// An upgrade was added post-release; it's simpler to just sort them by cost rather than to migrate the internal data
 PelleUpgrade.singles = PelleUpgrade.all.filter(u => !u.isRebuyable).sort((a, b) => a.cost - b.cost);

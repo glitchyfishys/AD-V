@@ -451,7 +451,7 @@ export const AutomatorBackend = {
   },
 
   get currentInterval() {
-    return Math.clampMin(Math.pow(0.994, Currency.realities.value) * 500, 1);
+    return Decimal.clampMin(Decimal.pow(0.994, Currency.realities.value).mul(500), 1);
   },
 
   get currentRawText() {
@@ -738,9 +738,9 @@ export const AutomatorBackend = {
 
     player.reality.automator.execTimer += diff;
     const commandsThisUpdate = Math.min(
-      Math.floor(player.reality.automator.execTimer / this.currentInterval), this.MAX_COMMANDS_PER_UPDATE
+      Math.floor(player.reality.automator.execTimer / this.currentInterval.toNumber()), this.MAX_COMMANDS_PER_UPDATE
     );
-    player.reality.automator.execTimer -= commandsThisUpdate * this.currentInterval;
+    player.reality.automator.execTimer -= commandsThisUpdate * this.currentInterval.toNumber();
 
     for (let count = 0; count < commandsThisUpdate && this.isRunning; ++count) {
       if (!this.step()) break;
@@ -964,7 +964,7 @@ export const AutomatorBackend = {
     this.state.mode = AUTOMATOR_MODE.PAUSE;
   },
 
-  start(scriptID = this.state.topLevelScript, initialMode = AUTOMATOR_MODE.RUN, compile = true) {
+  start(scriptID = this.state.topLevelScript, initialMode = AUTOMATOR_MODE.RUN, compile_ = true) {
     // Automator execution behaves oddly across new games, so we explicitly stop it from running if not unlocked
     if (!Player.automatorUnlocked) return;
     this.hasJustCompleted = false;
@@ -972,7 +972,7 @@ export const AutomatorBackend = {
     player.reality.automator.execTimer = 0;
     const scriptObject = this.findScript(scriptID);
     if (!scriptObject) return;
-    if (compile) scriptObject.compile();
+    if (compile_) scriptObject.compile();
     if (scriptObject.commands) {
       this.reset(scriptObject.commands);
       this.state.mode = initialMode;

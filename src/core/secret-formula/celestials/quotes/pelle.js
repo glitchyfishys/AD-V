@@ -12,6 +12,8 @@ const flashCelestial = [
 /** @param {string} cel */
 const primaryBackground = cel => [["pelle", 1.5], [cel, 1.5]];
 
+const celBackground = cel => [[cel, 0]];
+
 /* eslint-disable no-multi-spaces */
 const destroyer =    ["False",         "Deity",         "Destroyer"];
 const eternal =      ["Eternal",       "Deity",         "Monarch"];
@@ -211,7 +213,9 @@ export const pelleQuotes = {
         text: "Every time you rushed to the $1, you lost.",
         background: primaryBackground("effarig"),
         1: tired,
-      }, {
+      },
+      {text: "Is this what saw from Pelle?", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
+      {
         text: "Maybe this was your plan all along.",
         background: primaryBackground("effarig"),
       }, {
@@ -258,7 +262,9 @@ export const pelleQuotes = {
         text: "Was it worth destroying an already broken $1?",
         background: primaryBackground("enslaved"),
         1: lesser,
-      }, {
+      },
+      {text: "Is the corruption forming?", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
+      {
         text: "The 4th $1 seems similar to the first.",
         background: primaryBackground("v"),
         1: lesser,
@@ -279,7 +285,10 @@ export const pelleQuotes = {
         text: "Arguably the $1 worst moment...",
         background: primaryBackground("v"),
         1: destroyer,
-      }, {
+      },
+      {text: "I can see it.", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
+      {text: "Its being made here.", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
+      {
         text: "Is when you lost to the $1.",
         background: primaryBackground("v"),
         1: pride,
@@ -329,7 +338,10 @@ export const pelleQuotes = {
       }, {
         text: "Or were they too naive for you to enjoy it?",
         background: primaryBackground("ra"),
-      }, {
+      },
+      {text: "Is's... unstable.", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch')},
+      {text: "This is what happened.", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch')},
+      {
         text: "The 6th $1.",
         background: primaryBackground("laitela"),
         1: lesser,
@@ -358,7 +370,9 @@ export const pelleQuotes = {
       }, {
         text: "Back to watching the $1 flounder.",
         1: destroyer
-      }
+      },
+      {text: "I, don't this it was safe", displayed: () =>CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
+      {text: "If the \"Destroyer\" gets to close it will puncture all the other Realities", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
     ],
   },
   galaxyGeneratorUnlock: {
@@ -377,6 +391,8 @@ export const pelleQuotes = {
     lines: [
       { text: "I give you a choice, $1.", 1: destroyer },
       { text: "Limit the $1, or...", 1: filament },
+      {text: "They are getting too close", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
+      {text: "I have too protect the other Realities", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
       { text: "Destroy the 5 $1...", 1: inevitable },
       "Wait, what were they called?",
       { text: "$1?", 1: inevitable },
@@ -447,12 +463,16 @@ export const pelleQuotes = {
       { text: "The many $1 in the past. Can't we just $2 this", 1: battles, 2: resolve },
       { text: "We have done this for $1", 1: forever },
       { text: "You have done this $1.", 1: destroyer },
+      {text: "The Realities should be safe.", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
+      {text: "If not atlest mine.", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
       "SO",
       "NEVER",
       "GONNA",
       "GIVE",
       "YOU",
       "UP",
+      {text: "Why did Pelle say that?", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
+      {text: "That wasn't part of the script.", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
     ],
   },
 };

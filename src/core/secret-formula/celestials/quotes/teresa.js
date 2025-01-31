@@ -1,3 +1,5 @@
+const celBackground = cel => [[cel, 0]];
+
 export const teresaQuotes = {
   initial: {
     id: 0,
@@ -25,6 +27,8 @@ export const teresaQuotes = {
     id: 3,
     lines: [
       "You are still no match for us.",
+      {text: "Nothing is here?", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
+      {text: "Were they not strong enough", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
       "I hope the others succeed where I have failed."
     ]
   }

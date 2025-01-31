@@ -81,8 +81,8 @@ export default {
       const canUnlockEC = [0, stringEC].includes(player.challenge.eternity.current);
       const hasECMismatch = combinedTree.ec !== stringEC;
       return {
-        timeTheorems: combinedTree.spentTheorems[0] - currentStudyTree.spentTheorems[0],
-        spaceTheorems: combinedTree.spentTheorems[1] - currentStudyTree.spentTheorems[1],
+        timeTheorems: combinedTree.spentTheorems[0].sub(currentStudyTree.spentTheorems[0]),
+        spaceTheorems: combinedTree.spentTheorems[1].sub(currentStudyTree.spentTheorems[1]),
         newStudies: makeEnumeration(newStudiesArray),
         newStudiesArray,
         firstPaths: makeEnumeration(combinedTree.dimensionPaths),

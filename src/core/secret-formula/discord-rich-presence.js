@@ -164,8 +164,8 @@ export const discordRichPresence = {
       hasReached: () => player.eternityChalls.eterc1 > 0,
       mainResource: () => `${format(player.eternityPoints, 2)} EP`,
       resourceList: [
-        () => quantify("EC completion",
-          Object.values(player.eternityChalls).reduce((sum, c) => sum + c, 0), 0, 0, formatInt)
+        () => quantify("EC completion", Object.values(player.eternityChalls)
+          .reduce((sum, c) => sum + c, 0), 0, 0, formatInt)
       ]
     },
     {
@@ -231,8 +231,7 @@ export const discordRichPresence = {
       // Imaginary Machines unlocked
       name: () => Ra.displayName,
       hasReached: () => MachineHandler.isIMUnlocked,
-      mainResource: () =>
-        `${format(player.reality.realityMachines)} RM + ${format(player.reality.imaginaryMachines, 2)} iM`,
+      mainResource: () => `${formatMachines(player.reality.realityMachines, player.reality.imaginaryMachines)} RM`,
       resourceList: [
         () => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`,
         () => `Ra Levels: ${Ra.pets.all.map(p => formatInt(p.level)).join("/")}`
@@ -241,15 +240,13 @@ export const discordRichPresence = {
     {
       name: () => Laitela.displayName,
       hasReached: () => Laitela.isUnlocked,
-      mainResource: () =>
-        `${format(player.reality.realityMachines)} RM + ${format(player.reality.imaginaryMachines, 2)} iM`,
+      mainResource: () => `${formatMachines(player.reality.realityMachines, player.reality.imaginaryMachines)} RM`,
       resourceList: [
         () => `Best GL: ${formatInt(player.records.bestReality.glyphLevel)}`,
         () => quantify("Singularity", player.celestials.laitela.singularities, 2, 0, format)],
     },
     {
-      // We can't use celestial displayName here like the others because that will cause
-      // the text scramble to get put on DRP
+      // We can't use celestial displayName here like the others because text scramble will get put on DRP
       name: "Pelle",
       hasReached: () => Pelle.isDoomed,
       mainResource: () => quantify("Reality Shard", player.celestials.pelle.realityShards, 2),

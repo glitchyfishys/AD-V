@@ -46,7 +46,7 @@ export default {
     update() {
       this.mode = this.autobuyer.mode;
       this.levelCap = Glyphs.levelCap;
-      this.isOverCap = this.autobuyer.glyph > this.levelCap;
+      this.isOverCap = this.levelCap.lt(this.autobuyer.glyph);
       // The container only has room for 2 textboxes, so we switch what they go to based on the current mode
       this.hasAlternateInputs = Autobuyer.reality.mode > AUTO_REALITY_MODE.BOTH;
     },
@@ -111,7 +111,7 @@ export default {
       </div>
       <AutobuyerInput
         :autobuyer="autobuyer"
-        :type="(hasAlternateInputs && hasRelicMode) ? 'decimal' : 'int'"
+        :type="(hasAlternateInputs && hasRelicMode) ? 'decimal' : 'decimal'"
         :property="(hasAlternateInputs && hasRelicMode) ? 'shard' : 'glyph'"
       />
       <div v-if="isOverCap">

@@ -82,9 +82,17 @@ export class RealityAutobuyerState extends AutobuyerState {
     // than everything else, preempting other settings and only checking them if it fails
     // In order to reduce excessive computational load, this only ever gets checked once per reality unless filter
     // settings are changed (which causes it to check again); otherwise, glyph choices would be generated every tick
-    const shouldCheckFilter = EffarigUnlock.glyphFilter.isUnlocked && !player.reality.hasCheckedFilter;
+    const dontCheckModes = [AUTO_GLYPH_SCORE.LOWEST_SACRIFICE, AUTO_GLYPH_SCORE.LOWEST_ALCHEMY,
+      AUTO_GLYPH_SCORE.ALCHEMY_VALUE];
+    const shouldCheckFilter = EffarigUnlock.glyphFilter.isUnlocked && !player.reality.hasCheckedFilter &&
+      !dontCheckModes.includes(AutoGlyphProcessor.scoreMode);
     if (isRealityAvailable() && player.options.autoRealityForFilter && shouldCheckFilter) {
-      const choices = GlyphSelection.glyphList(GlyphSelection.choiceCount, gainedGlyphLevel(),
+      const gainedLevel = gainedGlyphLevel();
+      const checkModes = [AUTO_REALITY_MODE.GLYPH, AUTO_REALITY_MODE.EITHER, AUTO_REALITY_MODE.BOTH];
+      const levelToCheck = checkModes.includes(this.mode)
+        ? { actualLevel: Decimal.min(this.glyph, Glyphs.levelCap), rawLevel: DC.D1 }
+        : gainedLevel;
+      const choices = GlyphSelection.glyphList(GlyphSelection.choiceCount, levelToCheck,
         { isChoosingGlyph: false });
       const bestGlyph = AutoGlyphProcessor.pick(choices);
       player.reality.hasCheckedFilter = true;
@@ -97,9 +105,9 @@ export class RealityAutobuyerState extends AutobuyerState {
     let proc = false;
     // The game generally displays amplified values, so we want to adjust the thresholds to
     // account for that and make the automation trigger based on the actual displayed values
-    const ampFactor = simulatedRealityCount(false) + 1;
+    const ampFactor = simulatedRealityCount(false).add(1);
     const rmProc = MachineHandler.gainedRealityMachines.times(ampFactor).gte(this.rm);
-    const glyphProc = gainedGlyphLevel().actualLevel >= Math.min(this.glyph, Glyphs.levelCap);
+    const glyphProc = gainedGlyphLevel().actualLevel.gte(this.glyph);
     switch (this.mode) {
       case AUTO_REALITY_MODE.RM:
         proc = rmProc;
@@ -114,10 +122,10 @@ export class RealityAutobuyerState extends AutobuyerState {
         proc = rmProc && glyphProc;
         break;
       case AUTO_REALITY_MODE.TIME:
-        proc = (player.records.thisReality.realTime / 1000) > this.time;
+        proc = player.records.thisReality.realTime / 1000 > this.time;
         break;
       case AUTO_REALITY_MODE.RELIC_SHARD:
-        proc = (Effarig.shardsGained.mul(ampFactor)).gt(this.shard);
+        proc = Effarig.shardsGained.mul(ampFactor).gt(this.shard);
         break;
     }
     if (proc) autoReality();

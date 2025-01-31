@@ -85,17 +85,17 @@ export default {
       off="Resume autobuyers"
       class="o-primary-btn--subtab-option"
     />
-    
     <PrimaryButton
       class="o-primary-btn--subtab-option"
-      @click="toggleAllAutobuyers()">
+      @click="toggleAllAutobuyers()"
+    >
       {{ allAutobuyersDisabled ? "Enable" : "Disable" }} all autobuyers
     </PrimaryButton>
     
       <PrimaryButton
       class="o-primary-btn--subtab-option"
       @click="bulk()">
-        AD buy {{ ADbulk ? "max" : "single" }}
+        Switch ADs to buy {{ ADbulk ? "max" : "single" }}
     </PrimaryButton>
     
     <span v-if="isDoomed">
@@ -105,7 +105,6 @@ export default {
       >
         Continuum is disabled
       </PrimaryButton>
-      
     </span>
     <span v-else>
       <PrimaryToggleButton
@@ -121,11 +120,10 @@ export default {
         <PrimaryButton
           class="o-primary-btn--subtab-option"
           @click="upmax()">
-          upgrade all AD autobuyers
+          Upgrade all AD autobuyers
         </PrimaryButton>
     </span>
   </div>
-  
 </template>
 
 <style scoped>

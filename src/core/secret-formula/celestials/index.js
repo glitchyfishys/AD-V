@@ -1,22 +1,23 @@
-import { finalSigil } from "./navigation-sigils/final-sigil";
-import { galaxyIcon } from "./navigation-sigils/galaxy-icon";
 import { alchemyResources } from "./alchemy";
+import { celestialNavigation } from "./navigation";
 import { effarigUnlocks } from "./effarig";
 import { enslaved } from "./enslaved";
+import { finalSigil } from "./navigation-sigils/final-sigil";
+import { galaxyIcon } from "./navigation-sigils/galaxy-icon";
 import { pelleGalaxyGeneratorUpgrades } from "./galaxy-generator";
-import { celestialNavigation } from "./navigation";
+import { pelleRifts } from "./rifts";
+import { pelleStrikes } from "./strikes";
 import { pelleUpgrades } from "./pelle-upgrades";
 import { perkShop } from "./perk-shop";
-import { ra } from "./ra";
-import { pelleRifts } from "./rifts";
-import { singularityMilestones } from "./singularity-milestones";
-import { pelleStrikes } from "./strikes";
-import { teresa } from "./teresa";
 import { quotes } from "./quotes";
+import { ra } from "./ra";
+import { singularityMilestones } from "./singularity-milestones";
+import { teresa } from "./teresa";
 import { v } from "./v";
 import { GlitchRifts } from "./glitchrift";
 import { glitchRealityUpgrades } from "./glitchupgrades";
 import { glitchSpeedUpgrades } from "./glitchspeed";
+import { cante } from "./cante";
 
 export const celestials = {
   effarig: {
@@ -47,4 +48,5 @@ export const celestials = {
   GlitchRifts,
   glitchRealityUpgrades,
   glitchSpeedUpgrades,
+  cante: cante,
 };

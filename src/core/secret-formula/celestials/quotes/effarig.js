@@ -1,3 +1,5 @@
+const celBackground = cel => [[cel, 0]];
+
 export const effarigQuotes = {
   initial: {
     id: 0,
@@ -50,6 +52,9 @@ export const effarigQuotes = {
       { text: "You have completed Effarig's Eternity.", showCelestialName: false },
       "This is the limit. I do not want you to proceed past this point.",
       "You will not finish this in your lifetime.",
+      {text: "Huh there's a corruption here", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
+      {text: "Hidden right between Reality", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
+      {text: "What do i do about that>", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
       "I will just wait here until you give up.",
     ]
   },

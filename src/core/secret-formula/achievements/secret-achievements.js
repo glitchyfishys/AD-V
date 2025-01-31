@@ -1,3 +1,4 @@
+import { DC } from "../../constants";
 
 export const secretAchievements = [
   {
@@ -57,7 +58,7 @@ export const secretAchievements = [
     id: 22,
     name: "Deep fried",
     get description() { return `Buy ${formatInt(1e5)} Antimatter Galaxies in total while using emoji notation.`; },
-    checkRequirement: () => player.requirementChecks.permanent.emojiGalaxies >= 1e5,
+    checkRequirement: () => player.requirementChecks.permanent.emojiGalaxies.gte(1e5),
     checkEvent: GAME_EVENT.GALAXY_RESET_AFTER
   },
   {
@@ -92,7 +93,7 @@ export const secretAchievements = [
     id: 27,
     name: "It's not called matter dimensions is it?",
     description: "Get Infinite matter.",
-    checkRequirement: () => Currency.matter.gte(Decimal.NUMBER_MAX_VALUE),
+    checkRequirement: () => Currency.matter.gte(DC.NUMMAX),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER
   },
   {
@@ -234,6 +235,6 @@ export const secretAchievements = [
   {
     id: 58,
     name: "I am a Developer",
-    get description() { return `Save the game ${formatInt(50000)} times without refreshing.`; }
+    get description() { return `Save the game ${formatInt(5000)} times without refreshing.`; }
   },
 ];

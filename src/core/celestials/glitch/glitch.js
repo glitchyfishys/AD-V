@@ -144,31 +144,31 @@ export const Glitch = {
   get riftForceGain(){
     if((!this.isRunning || this.activeAugments.length < 9) && (!MetaFabricatorUpgrade(6).isBought || Pelle.isDoomed) ) return new Decimal(0);
 
-    function form (value) {return (GlitchSpeedUpgrades.all[2].isBought ? (value.log10() ** 0.2) : Decimal.log10(Decimal.log10(value)))};
+    function form (value) {return (GlitchSpeedUpgrades.all[2].isBought ? (value.add(1).log10().pow(0.2)) : Decimal.log10(value.add(1)).add(1).log10())};
     
-    const AM = form(Currency.antimatter.value) ** 1.25;
-    const IP = form(Currency.infinityPoints.value)** 2;
-    const EP = form(Currency.eternityPoints.value) ** 3.5;
-    let total = ((isNaN(AM) || AM == Infinity || AM < 1) ? 1 : AM) * ((isNaN(IP) || IP == Infinity || IP < 1) ? 1 : IP) * ((isNaN(EP) || EP == Infinity || EP < 1)? 1 : EP);
+    const AM = form(Currency.antimatter.value).pow(1.25);
+    const IP = form(Currency.infinityPoints.value).pow(2);
+    const EP = form(Currency.eternityPoints.value).pow(3.5);
+    let total = (AM.lt(1) ? new Decimal(1) : AM).mul(IP.lt(1) ? 1 : IP).mul(EP.lt(1) ? 1 : EP);
 
-    GlitchRealityUpgrades.all[12].isBought ? total = (total ** 2) : total;
+    total = GlitchRealityUpgrades.all[12].isBought ? total.pow(2) : total;
     
-    if(total > 200) total = total * ((total /200) ** 1.25);
-    let value = new Decimal(total / 24).times(GlitchRealityUpgrades.all[0].effectOrDefault(1)).pow( total > 24 ? 3.33 : 1);
-    if(value.gt("1e450") && player.records.fullGameCompletions > 0) value = value.mul( new Decimal(Decimal.log10(value)).pow(25));
+    if(total.gt(200)) total = total.mul(total.div(200).pow(1.25));
+    let value = total.div(24).times(GlitchRealityUpgrades.all[0].effectOrDefault(1)).pow( total.gt(24) ? 3.33 : 1);
+    if(value.gt("1e450") && player.records.fullGameCompletions > 0) value = value.mul( Decimal.log10(value.add(1)).pow(25));
     
-    const CC = Currency.chaosCores.value.mul(Currency.chaosCores.value.log(2)).pow(5).max(1);
+    const CC = Currency.chaosCores.value.mul(Currency.chaosCores.value.add(2).log(2)).pow(5).max(1);
 
     value = value.mul(CC);
 
-    if(value.gt("1e1E6")) value = value.pow( 1 / (((value.log10() / 1e6) ** 0.8)));
+    if(value.gt("1e1E6")) value = value.pow(value.add(1).log10().div(1e6).pow(0.8).recip());
 
     return value
   },
 
   get chaosCoresBoost(){
     if(Currency.chaosCores.eq(0) || V.isRunningExtreme) return new Decimal(1);
-    let eff = Decimal.max( Currency.chaosCores.value.pow(0.1).mul(Currency.chaosCores.value.log10()).pow(0.25), 1);
+    let eff = Decimal.max( Currency.chaosCores.value.pow(0.1).mul(Currency.chaosCores.value.add(1).log10()).pow(0.25), 1);
     if(Ra.unlocks.repAD.isUnlocked) eff = eff.pow(0.05);
     if(eff.gt(1e15)) eff = eff.div(eff.div(1e15).pow(0.9))
     if(Pelle.isDoomed) eff = eff.pow(0.1);
@@ -177,31 +177,31 @@ export const Glitch = {
 
   riftToCore(){
     if(this.riftForce.lt(10)) return;
-    Currency.chaosCores.add(Currency.riftForce.value.log(5) ** 0.35);
+    Currency.chaosCores.add(Currency.riftForce.value.add(1).log(5).pow(0.35));
     Currency.riftForce.value = new Decimal(0);
   },
 
   get riftToCoreGain(){
     if(this.riftForce.lt(10)) return "0";
-    return format(Currency.riftForce.value.log(5) ** 0.35, 2);
+    return format(Currency.riftForce.value.log(5).pow(0.35), 2);
   },
 
   get laitelamaxdim(){
     return Math.min(5 + GlitchRealityUpgrades.all[5].effectOrDefault(0),8);
   },
   get decay(){
-    if(!this.augmentEffectActive(9)) return 1;
-    return Math.pow(2, Math.max(Time.thisRealityRealTime.totalSeconds.toNumber() / 30 , 0));
+    if(!this.augmentEffectActive(9)) return new Decimal(1);
+    return Decimal.pow(2, Time.thisRealityRealTime.totalSeconds.div(30).max(0));
   },
   
   get ADnerf(){
-    return (this.augmentEffectActive(9) ? (0.95 / this.decay) : 0.95);
+    return (this.augmentEffectActive(9) ? Decimal.div(0.95, this.decay) : 0.95);
   },
   get IDnerf(){
-    return (this.augmentEffectActive(9) ? (0.15 / this.decay) : 0.15);
+    return (this.augmentEffectActive(9) ? Decimal.div(0.15, this.decay) : 0.15);
   },
   get TDnerf(){
-    return (this.augmentEffectActive(9) ? (0.3 / this.decay) : 0.3);
+    return (this.augmentEffectActive(9) ? Decimal.div(0.3, this.decay) : 0.3);
   },
   
   get description() {
@@ -231,7 +231,7 @@ export const Glitch = {
 
     G.upgrades.broughtbits = 0;
     G.upgrades.speedbroughtbits = 0;
-    G.upgrades.rebuyable = [0,0,0,0,0];
+    G.upgrades.rebuyable = [new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0), new Decimal(0)];
 
     if(MetaMilestone.glyphKeep.isReached) return;
     player.glitch.preinfinity.upgradebits = 0;

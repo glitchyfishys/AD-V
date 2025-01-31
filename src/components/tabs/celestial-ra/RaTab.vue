@@ -12,8 +12,7 @@ export default {
   },
   data() {
     return {
-      memoriesPerChunk: 0,
-      memoriesPerCandNChunk: 0,
+      memoriesPerChunk: new Decimal(),
       showReality: false,
       isRaCapped: false,
       totalLevels: 0,
@@ -115,7 +114,7 @@ export default {
   },
   methods: {
     update() {
-      this.memoriesPerChunk = Ra.productionPerMemoryChunk;
+      this.memoriesPerChunk.copyFrom(Ra.productionPerMemoryChunk);
       this.memoriesPerCandNChunk = Ra.CandNChunkProduction;
       this.isRaCapped = Ra.totalPetLevel === Ra.maxTotalPetLevel;
       this.totalLevels = Ra.totalPetLevel;
@@ -153,12 +152,12 @@ export default {
     <div class="c-ra-memory-header">
       <CelestialQuoteHistory celestial="ra" />
       <div v-if="!isRaCapped">
-        Each Memory Chunk generates a base of one Memory per second<span v-if="memoriesPerChunk > 1">,
+        Each Memory Chunk generates a base of one Memory per second<span v-if="memoriesPerChunk.gt(1)">,
           which has been increased to {{ quantify("Memory", memoriesPerChunk, 2, 3) }} per second</span>.
           <span v-if="meta25"><br>Which has been increased to {{ quantify("Memory", memoriesPerCandNChunk, 2, 3) }} per second for Cante and Null</span>.
         <br>
         Storing real time prevents Memory Chunk generation, but Memories will still be gained normally.
-        <span v-if="memoriesPerChunk > 1">
+        <span v-if="memoriesPerChunk.gt(1)">
           <br>
           This is being increased due to {{ memoryBoosts }}.
         </span>

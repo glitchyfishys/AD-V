@@ -14,7 +14,21 @@ export const Cante = {
   
   leaveRun() {
     player.celestials.cante.run = false;
+  },
 
+  get repUnlocks(){
+      return GameDatabase.celestials.cante.repUnlocks;
+  },
+  get unlockedReps(){
+    return this.repUnlocks.filter(o => o.condition()).length;
+  },
+
+  get purged(){
+    return this.purges > 0;
+  },
+
+  get purges(){
+    return player.celestials.cante.purges;
   },
 
   get ADnerf(){
@@ -41,3 +55,7 @@ export const Cante = {
   },
 
 };
+
+EventHub.logic.on(GAME_EVENT.TAB_CHANGED, () => {
+  if(Tab.meta.CanteTab.isOpen) Cante.quotes.show.show();
+});

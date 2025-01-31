@@ -1,8 +1,6 @@
 <script>
-import { DC } from "@/core/constants";
-
 import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
-import CustomizableTooltip from "@/components/CustomizeableTooltip";
+import CustomizeableTooltip from "@/components/CustomizeableTooltip";
 import GlyphSetPreview from "@/components/GlyphSetPreview";
 import PerkShopUpgradeButton from "./PerkShopUpgradeButton";
 
@@ -12,7 +10,7 @@ export default {
     GlyphSetPreview,
     PerkShopUpgradeButton,
     CelestialQuoteHistory,
-    CustomizableTooltip
+    CustomizeableTooltip
   },
   data() {
     return {
@@ -27,8 +25,9 @@ export default {
       bestAM: new Decimal(0),
       bestAMSet: [],
       lastMachines: new Decimal(0),
-      runReward: new Decimal(0),
-      perkPoints: 0,
+      lastiM: new Decimal(),
+      runReward: new Decimal(),
+      perkPoints: new Decimal(),
       hasReality: false,
       hasEPGen: false,
       hasPerkShop: false,
@@ -101,9 +100,9 @@ export default {
       return GameDatabase.celestials.descriptions[0].effects();
     },
     lastMachinesString() {
-      return this.lastMachines.lt(DC.E10000)
+      return this.lastiM.eq(0)
         ? `${quantify("Reality Machine", this.lastMachines, 2)}`
-        : `${quantify("Imaginary Machine", this.lastMachines.dividedBy(DC.E10000), 2)}`;
+        : `${quantify("Imaginary Machine", this.lastiM, 2)}`;
     },
     unlockInfoTooltipArrowStyle() {
       return {
@@ -132,10 +131,11 @@ export default {
       this.hasPerkShop = TeresaUnlocks.shop.isUnlocked;
       this.raisedPerkShop = Ra.unlocks.perkShopIncrease.canBeApplied;
       this.bestAM.copyFrom(player.celestials.teresa.bestRunAM);
-      this.bestAMSet = Glyphs.copyForRecords(player.celestials.teresa.bestAMSet);
+      this.bestAMSet = cloneDeep(Glyphs.copyForRecords(player.celestials.teresa.bestAMSet));
       this.lastMachines.copyFrom(player.celestials.teresa.lastRepeatedMachines);
-      this.runReward = Teresa.runRewardMultiplier;
-      this.perkPoints = Currency.perkPoints.value;
+      this.lastiM.copyFrom(player.celestials.teresa.lastRepeatediM);
+      this.runReward.copyFrom(Teresa.runRewardMultiplier);
+      this.perkPoints.copyFrom(Currency.perkPoints.value);
       this.rm.copyFrom(Currency.realityMachines);
       this.isRunning = Teresa.isRunning;
       this.canUnlockNextPour = TeresaUnlocks.all
@@ -148,7 +148,7 @@ export default {
     unlockDescriptionHeight(unlockInfo) {
       const maxPrice = TeresaUnlocks[Teresa.lastUnlock].price;
       const pos = Math.log1p(unlockInfo.price) / Math.log1p(maxPrice);
-      return `calc(${(80 * pos).toFixed(2)}% - 0.1rem)`;
+      return `calc(${(100 * pos).toFixed(2)}% - 0.1rem)`;
     },
     hasUnlock(unlockInfo) {
       return unlockInfo.isUnlocked;
@@ -247,7 +247,7 @@ export default {
               {{ format(pouredAmount, 2, 2) }}/{{ format(pouredAmountCap, 2, 2) }}
             </div>
           </div>
-          <CustomizableTooltip
+          <CustomizeableTooltip
             v-for="unlockInfo in unlockInfos"
             :key="unlockInfo.id"
             content-class="c-teresa-unlock-description--hover-area"
@@ -269,7 +269,7 @@ export default {
                 {{ format(unlockInfo.price, 2, 2) }}: {{ unlockInfo.description }}
               </b>
             </template>
-          </CustomizableTooltip>
+          </CustomizeableTooltip>
         </div>
       </div>
       <div

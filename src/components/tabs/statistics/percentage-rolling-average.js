@@ -21,7 +21,7 @@ export class PercentageRollingAverage {
     const average = [];
     const reference = dataPoints[0];
     for (let i = 0; i < reference.length; i++) {
-      average[i] = dataPoints.map(p => p[i]).sum() / dataPoints.length;
+      average[i] = Decimal.div(dataPoints.map(p => p[i]).sum(), dataPoints.length);
     }
 
     return average;

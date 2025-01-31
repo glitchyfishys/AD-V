@@ -61,7 +61,6 @@ export default {
       class="c-reality-container"
     >
       <RealityCurrencyHeader />
-
       <ArmageddonButton
         v-if="isDoomed"
         :is-header="true"

@@ -4,14 +4,13 @@ export default {
   data() {
     return {
       darkMatter: new Decimal(0),
-      darkMatterMult: new Decimal(0),
-      allow: false,
-      darkMatterMultGain: new Decimal(0),
+      darkMatterMult: new Decimal(),
+      darkMatterMultGain: new Decimal(),
       autobuyerUnlocked: false,
       annihilationButtonVisible: false,
       matterRequirement: 0,
       darkMatterMultRatio: 0,
-      autoAnnihilationInput: player.auto.annihilation.multiplier,
+      autoAnnihilationInput: new Decimal(),
       isEnabled: true,
     };
   },
@@ -30,15 +29,14 @@ export default {
       this.matterRequirement = Laitela.annihilationDMRequirement;
       this.darkMatterMultRatio = Laitela.darkMatterMultRatio;
       this.isEnabled = player.auto.annihilation.isActive;
-      this.allow = this.darkMatterMult.gt(1);
     },
     annihilate() {
       Laitela.annihilate();
     },
     handleAutoAnnihilationInputChange() {
-      const float = parseFloat(this.autoAnnihilationInput);
-      if (isNaN(float)) {
-        this.autoAnnihilationInput = player.auto.annihilation.multiplier;
+      const float = new Decimal(this.autoAnnihilationInput);
+      if (float.isNan()) {
+        this.autoAnnihilationInput.copyFrom(player.auto.annihilation.multiplier);
       } else {
         player.auto.annihilation.multiplier = float;
       }
@@ -64,7 +62,7 @@ export default {
     </button>
     <br>
     <br>
-    <span v-if="allow">
+    <span v-if="darkMatterMult.gt(1)">
       Current multiplier to all Dark Matter Dimensions: <b>{{ formatX(darkMatterMult, 2, 2) }}</b>
       <br>
       <br>

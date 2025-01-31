@@ -10,7 +10,7 @@ export default {
   },
   data() {
     return {
-      remnantsGain: 0,
+      remnantsGain: new Decimal(0),
       realityShardGain: new Decimal(0),
       nextRealityShardGain: new Decimal(0),
       canArmageddon: false,
@@ -18,7 +18,7 @@ export default {
   },
   computed: {
     remnants() {
-      return format(this.remnantsGain, 2, this.remnantsGain > 1 ? 0 : 2);
+      return format(this.remnantsGain, 2, this.remnantsGain.gt(1) ? 0 : 2);
     },
     buttonClassObject() {
       return {
@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     update() {
-      this.remnantsGain = Pelle.remnantsGain;
+      this.remnantsGain.copyFrom(Pelle.remnantsGain);
       this.realityShardGain.copyFrom(Pelle.realityShardGainPerSecond);
       this.nextRealityShardGain.copyFrom(Pelle.nextRealityShardGain);
       this.canArmageddon = Pelle.canArmageddon;
@@ -87,7 +87,7 @@ export default {
 .l-armageddon-button--header {
   font-size: 1rem;
   font-weight: bold;
-  padding: 0rem;
+  padding: 0;
 }
 
 .c-armageddon-button:hover {

@@ -1,7 +1,7 @@
+import { DC } from "./constants";
+
 Array.prototype.distinct = function() {
-    return this.filter(function (value, index, self) {
-        return self.indexOf(value) === index;
-    });
+  return this.filter((value, index, self) => self.indexOf(value) === index);
 };
 
 Math.wrap = function(number, min, max) {
@@ -68,22 +68,30 @@ Decimal.prototype.copyFrom = function(decimal) {
   if (!(decimal instanceof Decimal) && !(decimal instanceof DecimalCurrency)) {
     throw "Copy value is not Decimal or DecimalCurrency";
   }
-  this.mantissa = decimal.mantissa;
-  this.exponent = decimal.exponent;
+  this.mag = decimal.mag;
+  this.layer = decimal.layer;
+  this.sign = decimal.sign;
+};
+
+Decimal.prototype.expEquiv = function(decimal, floor = false) {
+  if (decimal.abs().lte(1)) return new Decimal(0);
+  if (!floor) return decimal.max(1).log10();
+  return decimal.max(1).log10().floor();
 };
 
 window.copyToClipboard = (function() {
-  let el = document.createElement('textarea');
+  const el = document.createElement("textarea");
   document.body.appendChild(el);
   el.style.position = "absolute";
-  el.style.left = '-9999999px';
-  el.setAttribute('readonly', '');
+  el.style.left = "-9999999px";
+  el.setAttribute("readonly", "");
   return function(str) {
     try {
       el.value = str;
       el.select();
-      return document.execCommand('copy');
-    } catch(ex) {
+      return document.execCommand("copy");
+    } catch (ex) {
+      // eslint-disable-next-line no-console
       console.log(ex);
       return false;
     }
@@ -91,8 +99,8 @@ window.copyToClipboard = (function() {
 }());
 
 window.safeCall = function safeCall(fn) {
-    if (fn) fn();
-}
+  if (fn) fn();
+};
 
 String.prototype.capitalize = function() {
   return this.toLowerCase().replace(/^\w/u, c => c.toUpperCase());
@@ -158,12 +166,12 @@ Array.prototype.last = function(predicate) {
 Array.prototype.mapToObject = function(keyFun, valueFun) {
   if (typeof keyFun !== "function" || typeof valueFun !== "function")
     throw "keyFun and valueFun must be functions";
-  let out = {}
+  const out = {};
   for (let idx = 0; idx < this.length; ++idx) {
     out[keyFun(this[idx], idx)] = valueFun(this[idx], idx);
   }
   return out;
-}
+};
 
 /**
  * @type {number[]}
@@ -171,27 +179,58 @@ Array.prototype.mapToObject = function(keyFun, valueFun) {
 Array.dimensionTiers = Array.range(1, 8);
 
 /**
- * @returns {number}
+ * @type {any[]}
  */
-Array.prototype.sum = function() {
+Array.fromObject = object => {
+  return Object.values(object);
+};
+
+/**
+ * @returns {Number}
+ */
+Array.prototype.nSum = function() {
   if (this.length === 0) return 0;
   return this.reduce(Number.sumReducer);
 };
 
 /**
- * @returns {number}
+ * @returns {Number}
  */
-Array.prototype.max = function() {
+Array.prototype.nMax = function() {
   if (this.length === 0) return 0;
   return this.reduce((a, b) => Math.max(a, b));
 };
 
 /**
- * @returns {number}
+ * @returns {Number}
  */
-Array.prototype.min = function() {
+Array.prototype.nMin = function() {
   if (this.length === 0) return 0;
   return this.reduce((a, b) => Math.min(a, b));
+};
+
+/**
+ * @returns {Decimal}
+ */
+Array.prototype.sum = function() {
+  if (this.length === 0) return DC.D0;
+  return this.reduce(Decimal.sumReducer);
+};
+
+/**
+ * @returns {Decimal}
+ */
+Array.prototype.max = function() {
+  if (this.length === 0) return DC.D0;
+  return this.reduce((a, b) => Decimal.max(a, b), 0);
+};
+
+/**
+ * @returns {Decimal}
+ */
+Array.prototype.min = function() {
+  if (this.length === 0) return DC.D0;
+  return this.reduce((a, b) => Decimal.min(a, b), DC.BEMAX);
 };
 
 /**
@@ -210,7 +249,7 @@ Array.prototype.countWhere = function(predicate) {
  * @returns {Decimal}
  */
 Decimal.prototype.clampMaxExponent = function(maxExp) {
-  return this.exponent >= maxExp
+  return this.max(1).log10().gte(maxExp)
     ? Decimal.fromMantissaExponent_noNormalize(1, maxExp) : this;
 };
 

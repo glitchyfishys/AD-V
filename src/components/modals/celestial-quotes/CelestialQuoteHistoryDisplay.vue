@@ -63,7 +63,7 @@ export default {
         ...this.commonButtonClass,
         "c-modal-celestial-quote-history__arrow-right fa-chevron-circle-right": true,
         "c-modal-celestial-quote-history__arrow--disabled":
-          this.currentQuoteLine >= this.focusedQuote.quote.totalLines - 1,
+          this.currentQuoteLine >= this.totalLines() - 1,
       };
     },
   },
@@ -125,12 +125,18 @@ export default {
     },
     progressRight() {
       if (Date.now() - this.lastProgress < 150) return;
-      this.focusedQuote.currentLine = Math.min(this.focusedQuote.quote.totalLines - 1,
+      this.focusedQuote.currentLine = Math.min(this.totalLines() - 1,
         this.focusedQuote.currentLine + 1);
       this.lastProgress = Date.now();
     },
     close() {
       Quote.clearHistory();
+    },
+    displayedLines(lines){
+      return lines.config.lines.filter((x,i) => lines._lines[i].isDisplayed);
+    },
+    totalLines(){
+      return this.displayedLines(this.focusedQuote.quote).length;
     }
   }
 };
@@ -156,7 +162,7 @@ function easeOut(x) {
       @click="focusedQuoteId = quoteId"
     >
       <div
-        v-for="(_, lineId) in quote.quote.config.lines"
+        v-for="(_, lineId) in displayedLines(quote.quote)"
         :key="lineId"
         @click="quote.currentLine = lineId"
       >

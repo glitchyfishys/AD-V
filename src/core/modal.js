@@ -289,7 +289,7 @@ function getSaveInfo(save) {
     infinityPoints: new Decimal(0),
     eternityPoints: new Decimal(0),
     realityMachines: new Decimal(0),
-    imaginaryMachines: 0,
+    imaginaryMachines: new Decimal(0),
     dilatedTime: new Decimal(0),
     bestLevel: 0,
     pelleAM: new Decimal(0),
@@ -310,7 +310,7 @@ function getSaveInfo(save) {
   resources.infinityPoints.copyFrom(new Decimal(save.infinityPoints));
   resources.eternityPoints.copyFrom(new Decimal(save.eternityPoints));
   resources.realityMachines.copyFrom(new Decimal(save.reality?.realityMachines));
-  resources.imaginaryMachines = save.reality?.iMCap ?? 0;
+  resources.imaginaryMachines.copyFrom(new Decimal(save.reality?.imaginaryMachines));
   // Use max DT instead of current DT because spending it can cause it to drop and trigger the conflict modal
   // unnecessarily. We only use current DT as a fallback (eg. loading a save from pre-reality versions)
   resources.dilatedTime.copyFrom(new Decimal(save.records?.thisReality.maxDT ?? (save.dilation?.dilatedTime ?? 0)));

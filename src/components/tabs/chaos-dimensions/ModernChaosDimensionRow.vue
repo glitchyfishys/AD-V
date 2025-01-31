@@ -17,11 +17,11 @@ export default {
     return {
       isUnlocked: false,
       isCapped: false,
-      multiplier: new Decimal(0),
-      amount: new Decimal(0),
-      bought: 0,
-      cost: new Decimal(0),
-      rateOfChange: new Decimal(0),
+      multiplier: new Decimal(),
+      amount: new Decimal(),
+      bought: new Decimal(),
+      cost: new Decimal(),
+      rateOfChange: new Decimal(),
       isAffordable: false,
       isShown: false,
       amountDisplay: "",
@@ -62,12 +62,12 @@ export default {
 
       const dimension = ChaosDimension(tier);
       this.isUnlocked = dimension.isAvailableForPurchase;
-      this.isCapped = dimension.bought >= 1e100;
+      this.isCapped = dimension.bought.gte(1e100);
 
       this.cost.copyFrom(dimension.cost)
       this.multiplier.copyFrom(dimension.multiplier);
       this.amount.copyFrom(dimension.totalAmount);
-      this.bought = dimension.bought;
+      this.bought.copyFrom(dimension.bought);
       this.cost.copyFrom(dimension.cost);
 
       if (tier < 8) {

@@ -46,7 +46,7 @@ export default {
         v-if="hasTutorial"
         class="h2p-tooltip"
       >
-        Click for info about this Mod
+        Click for info
       </div>
     </div>
     <div

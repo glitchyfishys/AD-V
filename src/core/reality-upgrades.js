@@ -1,5 +1,7 @@
 import { BitPurchasableMechanicState, RebuyableMechanicState } from "./game-mechanics";
 
+const E30 = new Decimal(1e30);
+
 class RealityUpgradeState extends BitPurchasableMechanicState {
   constructor(config) {
     super(config);
@@ -107,6 +109,10 @@ class RealityUpgradeState extends BitPurchasableMechanicState {
 }
 
 class RebuyableRealityUpgradeState extends RebuyableMechanicState {
+  constructor(config){
+    super(config)
+    this._infinityAmount = findFirstInfiniteCostPurchase(1e30, this.config.initialCost.toNumber(), this.config.costMult.toNumber(), this.config.costMult.toNumber() / 10 );
+  }
   get currency() {
     return Currency.realityMachines;
   }
@@ -118,6 +124,35 @@ class RebuyableRealityUpgradeState extends RebuyableMechanicState {
   set boughtAmount(value) {
     player.reality.rebuyables[this.id] = value;
   }
+
+  purchaseHybrid(){
+    if(this.currency.lt('e310')){
+      const amount = E30.div(this.config.initialCost).log(this.config.costMult).add(1).floor();
+      if(amount.gt(this.boughtAmount)) {
+        const cost = this.config.hybridCostScaling(amount);
+        if(this.currency.gt(cost)) {
+          this.boughtAmount = amount;
+        }
+      }
+      if(this.boughtAmount.lt(this._infinityAmount)) {
+        const infinityCost = this.config.hybridCostScaling(amount);
+        if(this.currency.gt(infinityCost)) {
+          this.boughtAmount = new Decimal(this._infinityAmount);
+        }
+      }
+    }
+
+    const expoCost = new ExponentialCostScaling({
+        baseCost: new Decimal('e309'),
+        baseIncrease: new Decimal(1000),
+        costScale: this.config.initialCost.times(this.config.costMult),
+        scalingCostThreshold: Decimal.NUMBER_MAX_VALUE
+      });
+    const amo = expoCost.getMaxBought(new Decimal(0), this.currency.value, 1)
+    if(amo != null) this.boughtAmount = amo.quantity.add(this._infinityAmount);
+
+  }
+
 }
 
 RealityUpgradeState.index = mapGameData(

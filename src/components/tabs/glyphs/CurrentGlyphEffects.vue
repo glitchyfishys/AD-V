@@ -82,7 +82,7 @@ export default {
       this.hasReality = Glyphs.active.some(g => g && g.type === "reality");
       this.hasGlitch = Glyphs.active.some(g => g && g.type === "glitch");
 
-      this.logTotalSacrifice = GameCache.logTotalGlyphSacrifice.value.toNumber();
+      this.logTotalSacrifice = GameCache.logTotalGlyphSacrifice.value;
 
       this.pelleChaosEffect = Pelle.specialGlyphEffect;
     },

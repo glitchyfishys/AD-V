@@ -17,12 +17,12 @@ export function getChaosDimensionFinalMultiplierUncached(tier) {
   let multiplier = DC.D1;
 
   multiplier = multiplier.mul(Decimal.pow(dimension.perPurchase, dimension.bought));
-  multiplier = multiplier.mul(GlyphSacrifice.glitch.effectOrDefault(1));
+  multiplier = multiplier.mul(GlyphInfo.glitch.sacrificeInfo.effect());
   multiplier = multiplier.mul(MetaFabricatorUpgrade(17).effectOrDefault(1));
 
   multiplier = applyCDPowers(multiplier, tier);
 
-  if(multiplier.gt("1e1E15")) multiplier = multiplier.pow( 1 / Math.sqrt(multiplier.log10() / 1e15) );
+  if(multiplier.gt("1e1E15")) multiplier = multiplier.pow( multiplier.log10().div(1e15).pow(0.5).recip() );
   
   return multiplier;
 }
@@ -57,30 +57,33 @@ export function buyMaxChaosDimension(tier, bulk = Infinity) {
   const dimension = ChaosDimension(tier);
   if (!dimension.isAvailableForPurchase) return;
   
-  let bulkLeft = bulk;
+  let bulkLeft = new Decimal(bulk);
 
-  if (bulkLeft <= 0) return;
+  if (bulkLeft.lte(1)) return;
 
   // This is the bulk-buy math, explicitly ignored if abnormal cost increases are active
   const maxBought = dimension.costScale.getMaxBought(
-    Math.floor(dimension.bought), dimension.currencyAmount, 1
+    Decimal.floor(dimension.bought), dimension.currencyAmount, DC.D1
   );
   if (maxBought === null) {
     return;
   }
   let buying = maxBought.quantity;
-  if (buying > bulkLeft) buying = bulkLeft;
-  dimension.amount = dimension.amount.plus(buying).round();
-  dimension.bought +=  buying;
-  if(dimension.currencyAmount.e < 1e15) dimension.currencyAmount = dimension.currencyAmount.minus(Decimal.pow10(maxBought.logPrice));
+  if (buying.gt(bulkLeft)) buying = bulkLeft;
+  dimension.amount = dimension.amount.add(buying).round();
+  dimension.bought =  dimension.bought.add(buying);
+  if(dimension.currencyAmount.lt('ee15')) dimension.currencyAmount = dimension.currencyAmount.sub(Decimal.pow10(maxBought.logPrice));
 }
 
 class ChaosDimensionState extends DimensionState {
   constructor(tier) {
     super(() => player.dimensions.chaos, tier);
-    const BASE_COSTS = [null, 10, 100, 1e4, 1e8, 1e16, 1e21, 1e35, 1e50, new Decimal("1e1000"), new Decimal("1e2000"), new Decimal("1e5000"), new Decimal("1e15E3")];
+    const BASE_COSTS = [null, new Decimal(10), new Decimal(100), new Decimal(1e4), new Decimal(1e8), new Decimal(1e16),
+      new Decimal(1e21), new Decimal(1e35), new Decimal(1e50), new Decimal("1e1000"),
+      new Decimal("1e2000"),new Decimal("1e5000"), new Decimal("1e15E3")];
     this._baseCost = BASE_COSTS[tier];
-    const BASE_COST_MULTIPLIERS = [null, 1e4, 1e7, 1e12, 1e15, 1e18, 1e24, 1e30, 1e34];
+    const BASE_COST_MULTIPLIERS = [null, new Decimal(1e4), new Decimal(1e7), new Decimal(1e12),
+      new Decimal(1e15), new Decimal(1e18), new Decimal(1e24), new Decimal(1e30), new Decimal(1e34)];
     this._baseCostMultiplier = BASE_COST_MULTIPLIERS[tier];
     const PER_PURCHASE = [null, 10, 20, 40, 80, 160, 320, 640, 1280];
     this.perPurchase = PER_PURCHASE[tier];
@@ -93,7 +96,7 @@ class ChaosDimensionState extends DimensionState {
     return new ExponentialCostScaling({
       baseCost: this._baseCost,
       baseIncrease: this._baseCostMultiplier,
-      costScale: 10,
+      costScale: DC.E1,
       scalingCostThreshold: new Decimal("1e325")
     });
   }
@@ -102,12 +105,12 @@ class ChaosDimensionState extends DimensionState {
    * @returns {Decimal}
    */
   get cost() {
-    return this.costScale.calculateCost(Math.floor(this.bought));
+    return this.costScale.calculateCost(this.bought.floor());
   }
 
   get howManyCanBuy() {
     const ratio = this.currencyAmount.dividedBy(this.cost);
-    return Decimal.floor(Decimal.max(Decimal.min(ratio, 0), 0)).toNumber();
+    return Decimal.floor(Decimal.max(Decimal.min(ratio, 0), 0));
   }
 
   /**
@@ -159,7 +162,7 @@ class ChaosDimensionState extends DimensionState {
 
   reset() {
     this.amount = DC.D0;
-    this.bought = 0;
+    this.bought = DC.D0;
   }
 
   resetAmount() {
@@ -225,12 +228,12 @@ export const ChaosDimensions = {
     if (!dimension.isAvailableForPurchase || !dimension.isAffordable) return false;
 
     const howMany = dimension.howManyCanBuy;
-    const cost = dimension.cost.times(howMany);
+    const cost = dimension.cost.mul(howMany);
     
-    if(dimension.currencyAmount.e < 1e15) dimension.currencyAmount = dimension.currencyAmount.minus(cost);
+    if(dimension.currencyAmount.lt('ee15')) dimension.currencyAmount = dimension.currencyAmount.sub(cost);
 
-    dimension.bought += howMany;
-    dimension.amount = dimension.amount.plus(howMany);
+    dimension.bought = dimension.bought.add(howMany);
+    dimension.amount = dimension.amount.add(howMany);
 
     onBuyChaosDimension(tier);
 

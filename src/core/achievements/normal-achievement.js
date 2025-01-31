@@ -1,5 +1,5 @@
+import { DC } from "../constants";
 import { GameMechanicState } from "../game-mechanics";
-
 import { SteamRuntime } from "@/steam";
 
 class AchievementState extends GameMechanicState {
@@ -23,8 +23,7 @@ class AchievementState extends GameMechanicState {
   get column() {
     return this._column;
   }
-  
-  
+
   get isPreReality() {
     return this.row < 14;
   }
@@ -77,11 +76,12 @@ class AchievementState extends GameMechanicState {
       GameUI.notify.reality(`Automatically unlocked: ${this.name}`);
     } else {
       GameUI.notify.success(`Achievement: ${this.name}`);
+      SteamRuntime.activateAchievement(this.id);
     }
     if (player.speedrun.isActive && !player.speedrun.achievementTimes[this.id]) {
-      // This stores a lot of data in the savefile and seems particularly susceptible to floating-point rounding issues
+      // This stores a lot of data in the savefile and seems particularly suceptible to floating-point rounding issues
       // for some reason, so we floor to get rid of fractions of milliseconds and reduce what filesize impact we can
-      player.speedrun.achievementTimes[this.id] = Math.floor(player.records.realTimePlayed);
+      player.speedrun.achievementTimes[this.id] = Math.floor(player.records.trueTimePlayed);
     }
     Achievements._power.invalidate();
     EventHub.dispatch(GAME_EVENT.ACHIEVEMENT_UNLOCKED);
@@ -119,17 +119,17 @@ export const Achievements = {
   },
 
   get allRows() {
-    const count = Achievements.all.map(a => a.row).max();
+    const count = Achievements.all.map(a => a.row).nMax();
     return Achievements.rows(1, count);
   },
 
   get preRealityRows() {
-    const count = Achievements.preReality.map(a => a.row).max();
+    const count = Achievements.preReality.map(a => a.row).nMax();
     return Achievements.rows(1, count);
   },
 
   get prePelleRows() {
-    const count = Achievements.prePelle.map(a => a.row).max();
+    const count = Achievements.prePelle.map(a => a.row).nMax();
     return Achievements.rows(1, count);
   },
 
@@ -166,22 +166,22 @@ export const Achievements = {
   },
 
   get timeToNextAutoAchieve() {
-    if (!PlayerProgress.realityUnlocked()) return 0;
-    if (GameCache.achievementPeriod.value === 0) return 0;
-    if (Achievements.preReality.countWhere(a => !a.isUnlocked) === 0) return 0;
-    return Decimal.sub(this.period, player.reality.achTimer);
+    if (!PlayerProgress.realityUnlocked()) return DC.D0;
+    if (GameCache.achievementPeriod.value.eq(0)) return DC.D0;
+    if (Achievements.preReality.countWhere(a => !a.isUnlocked) === 0) return DC.D0;
+    return this.period.sub(player.reality.achTimer);
   },
 
   _power: new Lazy(() => {
     const unlockedRows = Achievements.allRows
       .countWhere(row => row.every(ach => ach ? ach.isUnlocked : true ));
-    const basePower = Math.pow(1.25, unlockedRows) * Math.pow(1.03, Achievements.effectiveCount);
-    const exponent = getAdjustedGlyphEffect("effarigachievement") * Ra.unlocks.achievementPower.effectOrDefault(1);
-    return Math.min(Math.pow(basePower, exponent),1e308);
+    const basePower = Decimal.pow(1.25, unlockedRows).mul(Decimal.pow(1.03, Achievements.effectiveCount));
+    const exponent = getAdjustedGlyphEffect("effarigachievement").mul(Ra.unlocks.achievementPower.effectOrDefault(1));
+    return basePower.pow(exponent);
   }),
 
   get power() {
-    if (Pelle.isDisabled("achievementMult")) return 1;
+    if (Pelle.isDisabled("achievementMult")) return DC.D1;
     return Achievements._power.value;
   },
 
@@ -193,5 +193,5 @@ export const Achievements = {
 };
 
 EventHub.logic.on(GAME_EVENT.PERK_BOUGHT, () => {
-  player.reality.achTimer = Decimal.clampMax(player.reality.achTimer, Achievements.period);
+  player.reality.achTimer = Decimal.min(player.reality.achTimer, Achievements.period);
 });

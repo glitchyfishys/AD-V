@@ -17,13 +17,13 @@ export default {
   computed: {
     creditStyles() {
       return {
-        bottom: `${this.scroll}rem`,
+        bottom: `${this.scroll}px`,
         display: this.rolling ? "block" : "none"
       };
     },
     muteStyle() {
       return {
-        top: `calc(${this.scroll + 2}rem - 100vh)`,
+        top: `calc(${this.scroll + 20}px - 100vh)`,
         display: this.rolling ? "block" : "none"
       };
     },
@@ -46,7 +46,7 @@ export default {
     rolling(newVal, oldVal) {
       if (GameEnd.creditsEverClosed) return;
       if (!oldVal && newVal && this.audio === null) {
-        this.audio = new Audio(`audio/credits.mp3`);// i have an idea
+        this.audio = new Audio(`audio/credits-${Math.floor(Math.random() * 4) + 1}.mp3`);
         this.audio.play();
       }
     }
@@ -62,10 +62,11 @@ export default {
   },
   methods: {
     update() {
+      const height = (this.$refs.creditsDisplay?.offsetHeight || 0) + innerHeight;
       this.rolling = GameEnd.endState > END_STATE_MARKERS.CREDITS_START;
       this.scroll = (
         Math.clampMax(GameEnd.endState, END_STATE_MARKERS.CREDITS_END) - END_STATE_MARKERS.CREDITS_START
-      ) * 60;
+      ) / (END_STATE_MARKERS.SONG_END - END_STATE_MARKERS.CREDITS_START) * height;
       if (this.audio) this.audio.volume = this.isMuted
         ? 0
         : Math.clamp((GameEnd.endState - END_STATE_MARKERS.CREDITS_START), 0, 0.3);
@@ -92,7 +93,9 @@ export default {
       :class="`c-${celIndex}-credits`"
       v-html="celSymbol"
     />
-    <CreditsDisplay />
+    <span ref="creditsDisplay">
+      <CreditsDisplay />
+    </span>
   </div>
 </template>
 

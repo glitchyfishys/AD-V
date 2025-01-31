@@ -4,21 +4,22 @@ function dimInfinityMult() {
   return Currency.infinitiesTotal.value.times(0.2).plus(1);
 }
 function chargedDimInfinityMult() {
-  return 1 + Math.log10(Math.max(1, Currency.infinitiesTotal.value.pLog10())) * Math.sqrt(Ra.pets.teresa.level) / 150;
+  return Decimal.log10(Decimal.max(1, Currency.infinitiesTotal.value.pLog10()))
+    .mul(Math.sqrt(Ra.pets.teresa.level) / 150).add(1);
 }
 
 export const infinityUpgrades = {
   totalTimeMult: {
     id: "timeMult",
     cost: 1,
-    description: () => `Antimatter Dimensions gain a multiplier based on ${ PlayerProgress.metaUnlocked() ? "time in this Meta" : "time played"}`,
-    effect: () => Decimal.pow(Time.thisMetaTime.totalMinutes.div(2), 0.15).max(1),
+    description: () => `Antimatter Dimensions gain a multiplier based on time played ${ PlayerProgress.metaUnlocked() ? 'in this meta' : ''}`,
+    effect: () => Decimal.pow(Time.thisMetaTime.totalMinutes.div(2), 0.15),
     formatEffect: value => formatX(value, 2, 2),
     charged: {
       description: "Antimatter Dimensions gain a power effect based on time played and Teresa level",
-      effect: () => 1 +
-        Math.log10(Decimal.log10(Time.thisMetaTime.totalMilliseconds)) *
-        Math.pow(Ra.pets.teresa.level, 0.5) / 150,
+      effect: () =>
+        Decimal.log10(Decimal.log10(Time.thisMetaTime.totalMilliseconds))
+          .times(Decimal.pow(Ra.pets.teresa.level, 0.5)).div(150).add(1),
       formatEffect: value => formatPow(value, 4, 4)
     }
   },
@@ -121,9 +122,9 @@ export const infinityUpgrades = {
     charged: {
       description:
         "Antimatter Dimensions gain a power effect based on time spent in current Infinity and Teresa level",
-      effect: () => 1 +
-        Math.log10(Decimal.log10(Time.thisInfinity.totalMilliseconds.add(100))) *
-        Math.sqrt(Ra.pets.teresa.level) / 150,
+      effect: () => 
+        Decimal.log10(Decimal.log10(Time.thisInfinity.totalMilliseconds.add(100)))
+          .times(Math.sqrt(Ra.pets.teresa.level)).div(150).add(1),
       formatEffect: value => formatPow(value, 4, 4)
     }
   },
@@ -158,20 +159,20 @@ export const infinityUpgrades = {
     cost: 10,
     checkRequirement: () => InfinityUpgrade.dimboostMult.isBought,
     description: () => `Passively generate Infinity Points ${formatInt(10)} times slower than your fastest Infinity`,
-    // Cutting corners: this is not actual effect, but it is totalIPMult that is displayed on upgrade
+    // Cutting corners: this is not actual effect, but it is totalIPMult that is displyed on upgrade
     effect: () => (Teresa.isRunning || V.isRunning || Pelle.isDoomed ? DC.D0 : GameCache.totalIPMult.value),
     formatEffect: value => {
       if (Teresa.isRunning || V.isRunning) return "Disabled in this reality";
       if (Pelle.isDoomed) return "Disabled";
-      if (player.records.bestInfinity.time.gte(999999999999)) return "Too slow to generate";
-      return `${format(value, 2)} every ${Time.bestInfinity.times(10).toStringShort()}`;
+      if (player.records.bestInfinity.time.gte(DC.BEMAX.log10())) return "Too slow to generate";
+      return `${format(value, 2)} every ${Time.bestInfinity.times(DC.E1).toStringShort()}`;
     },
     charged: {
       description: () =>
         `Gain Reality Machines each real-time second proportional to amount gained on Reality,
         increasing with Teresa level`,
-      effect: () => Math.pow(Ra.pets.teresa.level, 2) *
-        Ra.unlocks.continuousTTBoost.effects.autoPrestige.effectOrDefault(1),
+      effect: () => Decimal.mul(Math.pow(Ra.pets.teresa.level, 2),
+        Ra.unlocks.continuousTTBoost.effects.autoPrestige.effectOrDefault(1)),
       formatEffect: value => formatX(value, 2, 1)
     }
   },
@@ -225,7 +226,7 @@ export const infinityUpgrades = {
     description: () => `Multiply Infinity Points from all sources by ${formatX(2)}`,
     // Normally the multiplier caps at e993k or so with 3300000 purchases, but if the cost is capped then we just give
     // an extra e7k to make the multiplier look nice
-    effect: () => (player.IPMultPurchases >= 3300000 ? DC.E1E6 : DC.D2.pow(player.IPMultPurchases)),
+    effect: () => (player.IPMultPurchases.gte(3300000) ? DC.E1E6 : DC.D2.pow(player.IPMultPurchases)),
     cap: () => Effarig.eternityCap ?? DC.E1E6,
     formatEffect: value => formatX(value, 2, 2),
   }

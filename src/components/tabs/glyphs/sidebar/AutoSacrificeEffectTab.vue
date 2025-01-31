@@ -19,13 +19,13 @@ export default {
   },
   computed: {
     typeConfig() {
-      return GlyphTypes[this.glyphType];
+      return GlyphInfo[this.glyphType];
     },
     autoSacrificeSettings() {
       return AutoGlyphProcessor.types[this.glyphType];
     },
     effects() {
-      return this.typeConfig.effects;
+      return this.typeConfig.effects();
     },
     descStyle() {
       return {
@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     update() {
-      this.effectCount = this.autoSacrificeSettings.effectCount;
+      this.effectCount = this.autoSacrificeSettings ? this.autoSacrificeSettings.effectCount : 0;
     },
     setEffectCount(event) {
       const inputValue = event.target.value;

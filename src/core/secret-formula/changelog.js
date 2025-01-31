@@ -9,6 +9,21 @@ export const changelog = [
    * }
    */
   {
+    date: [2025, 1, 31],
+    name: "Breaking Infinity Infinity",
+    info: `
+      <b>New stuff:</b><br>
+      We now use the BE port <br>
+      Cante the Celestial of Replicanti<br>
+      Added Pandemonium < br>
+      Unique Meta animation <br>
+      Timewalls <br>
+      Removed Pandemonium < br>
+      Oh and uhh... <br>
+      Fixed tiepoles and bugs
+    `
+  },
+  {
     date: [2024, 5, 2],
     name: "Celebrate Android Reality Update",
     info: `
@@ -18,7 +33,6 @@ some changes mainly based on the player comments and feedback from the Android v
 <br>
 <b><i>Once again, thank you so much for playing Antimatter Dimensions!</i></b>
 <br>
-<br> note: not all have been done in this branch
 <b>Major things:</b><br>
 <ul>
 <li>Added newly joined Android testers in credits</li>
@@ -83,7 +97,6 @@ affected by this bug</li>
 <br>
 `
   },
-  
   {
     date: [2023, 7, 18],
     name: "Final Official Patch",

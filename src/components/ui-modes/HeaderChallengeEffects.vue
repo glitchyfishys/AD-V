@@ -34,23 +34,24 @@ export default {
 
       this.isInEffarig = Effarig.isRunning;
       if (this.isInEffarig) {
-        this.effarigMultNerfText = `${formatPow( Math.clampMax(0.25 + 0.25 * Effarig.nerfFactor(Currency.infinityPower.value), 0.9999), 0, 4)}`;
-        this.effarigTickNerfText = `${formatPow( Math.clampMax(0.7 + 0.1 * Effarig.nerfFactor(Currency.timeShards.value), 0.9999) , 0, 4)}`;
+        this.effarigMultNerfText = `${formatPow(Effarig.nerfFactor(Currency.infinityPower.value).add(1).div(4).min(0.9999), 4, 4)}`;
+        this.effarigTickNerfText = `${formatPow(Effarig.nerfFactor(Currency.timeShards.value).add(7).div(10).min(0.9999) , 4, 4)}`;
       }
       this.isInLaitela = Laitela.isRunning;
       if (this.isInLaitela && !Glitch.isRunning) {
-        if (player.celestials.laitela.entropy > 0) {
+        if (player.celestials.laitela.entropy.gt(0)) {
           this.laitelaEntropy = `${formatPercents(player.celestials.laitela.entropy, 2, 2)}`;
           this.laitelaTimer = Time.thisRealityRealTime.toStringShort();
         } else {
           this.laitelaEntropy = `${formatPercents(1, 2, 2)}`;
-          this.laitelaTimer = TimeSpan.fromSeconds(player.celestials.laitela.thisCompletion).toStringShort();
+          this.laitelaTimer = TimeSpan.fromSeconds(new Decimal(player.celestials.laitela.thisCompletion))
+            .toStringShort();
         }
       }
 
       this.waitingforHint = Enslaved.canTickHintTimer;
       const rawMsUntilHints = 5 * 3600 * 1000 - player.celestials.enslaved.hintUnlockProgress;
-      this.enslavedTimer = TimeSpan.fromMilliseconds(rawMsUntilHints / (Enslaved.isRunning ? 1 : 0.4))
+      this.enslavedTimer = TimeSpan.fromMilliseconds(new Decimal(rawMsUntilHints / (Enslaved.isRunning ? 1 : 0.4)))
         .toStringShort();
 
       this.GlitchReality = Glitch.isRunning;

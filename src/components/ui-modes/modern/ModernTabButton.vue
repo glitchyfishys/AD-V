@@ -99,7 +99,6 @@ export default {
             {{ subtab.name }}
           </div>
         </div>
-        
       </template>
     </div>
   </div>
@@ -124,7 +123,7 @@ export default {
 .o-tab-btn--infinity::before {
   background-color: var(--color-infinity);
 }
-  
+
 .o-tab-btn--eternity::before {
   background-color: var(--color-eternity);
 }
@@ -146,14 +145,14 @@ export default {
 }
 
 .o-tab-btn--subtab:first-child {
-  border-top-left-radius: var(--var-border-radius, 1rem);
-  border-bottom-left-radius: var(--var-border-radius, 1rem);
+  border-top-left-radius: var(--var-border-radius, 0.5rem);
+  border-bottom-left-radius: var(--var-border-radius, 0.5rem);
   transition: border-radius 0s;
 }
 
 .o-tab-btn--subtab:last-child {
-  border-top-right-radius: var(--var-border-radius, 1rem);
-  border-bottom-right-radius: var(--var-border-radius, 1rem);
+  border-top-right-radius: var(--var-border-radius, 0.5rem);
+  border-bottom-right-radius: var(--var-border-radius, 0.5rem);
   transition: border-radius 0s;
 }
 </style>

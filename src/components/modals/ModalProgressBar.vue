@@ -16,9 +16,9 @@ export default {
       };
     },
     remainingTime() {
-      const timeSinceStart = Decimal.sub(Date.now(), this.progress.startTime).toNumber();
+      const timeSinceStart = Date.now() - this.progress.startTime;
       const ms = timeSinceStart * (this.progress.max - this.progress.current) / this.progress.current;
-      return TimeSpan.fromMilliseconds(ms).toStringShort();
+      return TimeSpan.fromMilliseconds(new Decimal(ms)).toStringShort();
     },
     buttons() {
       return this.progress.buttons || [];
@@ -37,7 +37,7 @@ export default {
           {{ progress.label }}
         </div>
         <div>
-          {{ progress.info() }}
+          {{ progress.info }}
         </div>
         <div class="modal-progress-bar__margin">
           <div>

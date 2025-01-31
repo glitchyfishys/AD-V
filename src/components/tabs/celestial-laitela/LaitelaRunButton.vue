@@ -8,10 +8,10 @@ export default {
   },
   data() {
     return {
-      realityTime: 0,
+      realityTime: new Decimal(0),
       maxDimTier: 0,
       isRunning: false,
-      realityReward: 1,
+      realityReward: new Decimal(1),
       singularitiesUnlocked: false,
       bestSet: [],
       tierNotCompleted: true,
@@ -38,7 +38,7 @@ export default {
     },
     completionTime() {
       if (this.tierNotCompleted) return "Not completed at this tier";
-      return `Fastest Completion: ${TimeSpan.fromSeconds(this.realityTime).toStringShort()}`;
+      return `Fastest Completion: ${TimeSpan.fromSeconds(new Decimal(this.realityTime)).toStringShort()}`;
     },
     runEffects() {
       return GameDatabase.celestials.descriptions[5].effects().split("\n");
@@ -50,22 +50,24 @@ export default {
   },
   methods: {
     update() {
-      this.realityTime = Time.laitelaFastestCompletion.totalMilliseconds;
+      this.realityTime.copyFrom(player.celestials.laitela.fastestCompletion);
       this.maxDimTier = Laitela.maxAllowedDimension;
-      this.realityReward = Laitela.realityReward;
+      this.realityReward.copyFrom(Laitela.realityReward);
       this.isRunning = Laitela.isRunning;
       this.singularitiesUnlocked = Currency.singularities.gt(0);
-      this.bestSet = Glyphs.copyForRecords(player.records.bestReality.laitelaSet);
+      this.bestSet = cloneDeep(Glyphs.copyForRecords(player.records.bestReality.laitelaSet));
       this.tierNotCompleted = this.realityTime.eq(3600) || (this.realityTime.eq(300) && this.maxDimTier < 8);
     },
     startRun() {
       if (this.isDoomed) return;
 
-      if ((!realityUGs.all[11].config.hasFailed() && !realityUGs.all[11].isBought) && player.options.confirmations.glitchCL){
+      if ((!realityUGs.all[11].config.hasFailed() && !realityUGs.all[11].isBought) && (player.options.confirmations.glitchCL && 
+ !PlayerProgress.metaUnlocked())){
         Modal.message.show(`you will fail glitch challenge ${realityUGs.all[11].config.name} <br> which is to ${realityUGs.all[11].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
         return;
       }
-      else if((!realityUGs.all[12].config.hasFailed() && !realityUGs.all[12].isBought) && player.options.confirmations.glitchCL && Laitela.difficultyTier == 2){
+      else if((!realityUGs.all[12].config.hasFailed() && !realityUGs.all[12].isBought) && (player.options.confirmations.glitchCL && 
+ !PlayerProgress.metaUnlocked()) && Laitela.difficultyTier == 2){
         Modal.message.show(`you will fail glitch challenge ${realityUGs.all[12].config.name} <br> which is to ${realityUGs.all[12].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
         return;
       }
@@ -99,7 +101,7 @@ export default {
       :class="runButtonClassObject()"
       @click="startRun"
     />
-    <div v-if="realityReward > 1">
+    <div v-if="realityReward.gt(1)">
       <b>
         All Dark Matter multipliers are {{ formatX(realityReward, 2, 2) }} higher.
       </b>

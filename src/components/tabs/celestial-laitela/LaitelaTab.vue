@@ -28,13 +28,13 @@ export default {
       isDMCapped: false,
       maxDarkMatter: new Decimal(0),
       darkEnergy: new Decimal(0),
-      matterExtraPurchasePercentage: 0,
+      matterExtraPurchasePercentage: new Decimal(0),
       autobuyersUnlocked: false,
       singularityPanelVisible: false,
       singularitiesUnlocked: false,
-      singularityCap: 0,
-      singularityWaitTime: 0,
-      showAnnihilation: false,
+      singularityCap: new Decimal(0),
+      singularityWaitTime: "",
+      showAnnihilation: false
     };
   },
   computed: {
@@ -68,16 +68,17 @@ export default {
       this.darkMatter.copyFrom(Currency.darkMatter);
       this.isDMCapped = this.darkMatter.gte("1e1000000000");
       this.maxDarkMatter.copyFrom(Currency.darkMatter.max);
-      this.darkEnergy.copyFrom(Currency.darkEnergy);
-      this.matterExtraPurchasePercentage = Laitela.matterExtraPurchaseFactor - 1;
+      this.darkEnergy.copyFrom(player.celestials.laitela.darkEnergy);
+      this.matterExtraPurchasePercentage.copyFrom(Laitela.matterExtraPurchaseFactor.sub(1));
       this.autobuyersUnlocked = SingularityMilestone.darkDimensionAutobuyers.canBeApplied ||
         SingularityMilestone.darkDimensionAutobuyers.canBeApplied ||
         SingularityMilestone.autoCondense.canBeApplied ||
-        Laitela.darkMatterMult.gte(1);
+        Laitela.darkMatterMult.gt(1);
       this.singularityPanelVisible = Currency.singularities.gt(0);
       this.singularitiesUnlocked = Singularity.capIsReached || this.singularityPanelVisible;
-      this.singularityCap = Singularity.cap;
-      this.singularityWaitTime = TimeSpan.fromSeconds(Decimal.sub(this.singularityCap, this.darkEnergy).div(Currency.darkEnergy.productionPerSecond).toNumber()).toStringShort();
+      this.singularityCap.copyFrom(Singularity.cap);
+      this.singularityWaitTime = TimeSpan.fromSeconds((this.singularityCap.sub(this.darkEnergy))
+        .div(Currency.darkEnergy.productionPerSecond)).toStringShort();
       this.showAnnihilation = Laitela.annihilationUnlocked;
 
       const d1 = DarkMatterDimension(1);

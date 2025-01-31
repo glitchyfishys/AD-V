@@ -1,8 +1,10 @@
 export const DeltaTimeState = {
-  deltaTime: new TimeSpan(0),
-  unscaledDeltaTime: new TimeSpan(0),
-  update(deltaTime, gameDeltaTime) {
-    this.unscaledDeltaTime = TimeSpan.fromMilliseconds(deltaTime);
+  deltaTime: new TimeSpan(new Decimal(0)),
+  realDeltaTime: new TimeSpan(new Decimal(0)),
+  trueDeltaTime: new TimeSpan(new Decimal(0)),
+  update(trueDeltaTime, deltaTime, gameDeltaTime) {
+    this.trueDeltaTime = TimeSpan.fromMilliseconds(new Decimal(trueDeltaTime));
+    this.realDeltaTime = TimeSpan.fromMilliseconds(deltaTime);
     this.deltaTime = TimeSpan.fromMilliseconds(gameDeltaTime);
   }
 };
@@ -55,11 +57,19 @@ export const Time = {
     return this.deltaTimeFull.totalMilliseconds;
   },
   /**
-   * Frame delta time, but without EC12 or black hole effects
+   * Frame delta time, but without any game speed effects
    * @returns {TimeSpan}
    */
-  get unscaledDeltaTime() {
-    return DeltaTimeState.unscaledDeltaTime;
+  get realDeltaTime() {
+    return DeltaTimeState.realDeltaTime;
+  },
+
+  /**
+   * Frame delta time, but without any effects
+   * @returns {TimeSpan}
+   */
+  get trueDeltaTime() {
+    return DeltaTimeState.trueDeltaTime;
   },
 
   /**
@@ -140,6 +150,20 @@ export const Time = {
   /**
    * @returns {TimeSpan}
    */
+  get thisInfinityTrueTime() {
+    return this.fromMilliseconds(() => new Decimal(player.records.thisInfinity.trueTime));
+  },
+  /**
+     * @param {TimeSpan} timespan
+     */
+  set thisInfinityTrueTime(timespan) {
+    this.toMilliseconds(timespan, value => player.records.thisInfinity.trueTime = value.toNumber());
+  },
+
+
+  /**
+   * @returns {TimeSpan}
+   */
   get bestInfinity() {
     return this.fromMilliseconds(() => player.records.bestInfinity.time);
   },
@@ -188,6 +212,20 @@ export const Time = {
   set thisEternityRealTime(timespan) {
     this.toMilliseconds(timespan, value => player.records.thisEternity.realTime = value);
   },
+
+  /**
+   * @returns {TimeSpan}
+   */
+  get thisEternityTrueTime() {
+    return this.fromMilliseconds(() => new Decimal(player.records.thisEternity.trueTime));
+  },
+  /**
+   * @param {TimeSpan} timespan
+   */
+  set thisEternityTrueTime(timespan) {
+    this.toMilliseconds(timespan, value => player.records.thisEternity.trueTime = value.toNumber());
+  },
+
 
   /**
    * @returns {TimeSpan}
@@ -287,14 +325,6 @@ export const Time = {
    */
   get infinityChallengeSum() {
     return this.fromMilliseconds(() => GameCache.infinityChallengeTimeSum.value);
-  },
-
-  get lastAutoEC(){
-  return this.fromMilliseconds(() => new Decimal(player.reality.lastAutoEC));
-  },
-  
-  get laitelaFastestCompletion(){
-  return this.fromMilliseconds(() => player.celestials.laitela.fastestCompletion);
   },
   
   get bestMetaRealTime() {

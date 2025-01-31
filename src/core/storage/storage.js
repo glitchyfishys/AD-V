@@ -1,10 +1,12 @@
-import * as ADNotations from "@antimatter-dimensions/notations";
+import * as ADNotations from "adnot-beport-small";
 
 import { DEV } from "@/env";
 import { devMigrations } from "./dev-migrations";
 import { migrations } from "./migrations";
 
 import { deepmergeAll } from "@/utility/deepmerge";
+
+window.deepmergeAll = deepmergeAll;
 
 export const BACKUP_SLOT_TYPE = {
   ONLINE: 0,
@@ -337,7 +339,7 @@ export const GameStorage = {
   // since these may cause the backup timer to be significantly behind
   resetBackupTimer() {
     const latestBackupTime = Object.values(this.lastBackupTimes).map(t => t && t.backupTimer).max();
-    player.backupTimer = Math.max(this.oldBackupTimer, player.backupTimer, latestBackupTime);
+    player.backupTimer = Math.max(this.oldBackupTimer, player.backupTimer, latestBackupTime.toNumber());
   },
 
   // Saves the current game state to the first reserve slot it finds
@@ -421,6 +423,7 @@ export const GameStorage = {
     Cloud.resetTempState();
   },
 
+  // eslint-disable-next-line complexity
   loadPlayerObject(playerObject) {
     this.saved = 0;
 
@@ -456,9 +459,35 @@ export const GameStorage = {
       if (DEV && player.options.testVersion !== undefined) {
         devMigrations.patch(player);
       }
-
-      // Post-reality migrations are separated from pre-reality because they need to happen after any dev migrations,
-      // which themselves must happen after the deepmerge
+      
+      if (player.version >= 27) {
+        const fixGlyph = glyph => {
+          glyph.level = new Decimal(glyph.level);
+          glyph.rawLevel = new Decimal(glyph.rawLevel);
+          glyph.strength = new Decimal(glyph.strength);
+          // eslint-disable-next-line consistent-return
+          return glyph;
+        };
+        player.celestials.teresa.bestAMSet = player.celestials.teresa.bestAMSet.map(n => fixGlyph(n));
+        player.celestials.v.runGlyphs = player.celestials.v.runGlyphs.map(n => n.map(g => fixGlyph(g)));
+        player.reality.glyphs.active = player.reality.glyphs.active.map(n => fixGlyph(n));
+        player.reality.glyphs.inventory = player.reality.glyphs.inventory.map(n => fixGlyph(n));
+        for (let i = 0; i < 7; i++) {
+          player.reality.glyphs.sets[i].glyphs = player.reality.glyphs.sets[i].glyphs.map(n => fixGlyph(n));
+        }
+        player.records.bestReality.RMSet = player.records.bestReality.RMSet?.map(n => fixGlyph(n));
+        player.records.bestReality.RMminSet = player.records.bestReality.RMminSet?.map(n => fixGlyph(n));
+        player.records.bestReality.glyphLevelSet = player.records.bestReality.glyphLevelSet?.map(n => fixGlyph(n));
+        player.records.bestReality.imCapSet = player.records.bestReality.imCapSet?.map(n => fixGlyph(n));
+        player.records.bestReality.laitelaSet = player.records.bestReality.laitelaSet?.map(n => fixGlyph(n));
+        player.records.bestReality.speedSet = player.records.bestReality.speedSet?.map(n => fixGlyph(n));
+      }
+      for (const item in player.reality.glyphs.filter.types) {
+        player.reality.glyphs.filter.types[item].rarity = new Decimal(player.reality.glyphs.filter.types[item].rarity);
+        // eslint-disable-next-line max-len
+        // Eplayer.reality.glyphs.filter.types[item].score = new Decimal(player.reality.glyphs.filter.types[item].score);
+      }
+      
       player = migrations.patchPostReality(player);
     }
 
@@ -537,11 +566,11 @@ export const GameStorage = {
     // manually above
     GameIntervals.restart();
     GameStorage.ignoreBackupTimer = false;
-    Enslaved.nextTickDiff = player.options.updateRate;
+    Enslaved.nextTickDiff = new Decimal(player.options.updateRate);
     // The condition for this secret achievement is only checked when the player is actively storing real time, either
     // when online or simulating time. When only storing offline, the condition is never actually entered in the
     // gameLoop due to the option technically being false, so we need to check it on-load too.
-    if (player.celestials.enslaved.storedReal > (24 * 60 * 60 * 1000)) SecretAchievement(46).unlock();
+    if (player.celestials.enslaved.storedReal.gte(24 * 3600000)) SecretAchievement(46).unlock();
     GameUI.update();
 
     for (const resource of AlchemyResources.all) {

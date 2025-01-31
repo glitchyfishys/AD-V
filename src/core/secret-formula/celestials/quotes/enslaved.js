@@ -1,3 +1,5 @@
+const celBackground = cel => [[cel, 0]];
+
 export const enslavedQuotes = {
   initial: {
     id: 0,
@@ -42,6 +44,8 @@ export const enslavedQuotes = {
   completeReality: {
     id: 5,
     lines: [
+      {text: "Huh there's one here too?", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
+      {text: "Is there one in each Reality?", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
       "All... fragments... clones... freed.",
       "We have given... tools... of our imprisoning. Use them...",
       "Freedom from torture... is torture itself.",

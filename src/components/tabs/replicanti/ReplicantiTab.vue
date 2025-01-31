@@ -1,9 +1,12 @@
 <script>
+import { Replicanti } from "../../../core/replicanti";
+
 import wordShift from "@/core/word-shift";
 
 import ReplicantiUpgradeButton, { ReplicantiUpgradeButtonSetup } from "./ReplicantiUpgradeButton";
 import PrimaryButton from "@/components/PrimaryButton";
 import ReplicantiGainText from "./ReplicantiGainText";
+
 import ReplicantiGalaxyButton from "./ReplicantiGalaxyButton";
 
 export default {
@@ -40,7 +43,7 @@ export default {
       unlockCost: new Decimal(),
       scrambledText: "",
       maxReplicanti: new Decimal(),
-      estimateToMax: new Decimal(1),
+      estimateToMax: 0,
     };
   },
   computed: {
@@ -63,7 +66,7 @@ export default {
           upgrade.isCapped
         ) {
           // Checking isCapped() prevents text overflow when formatted as "__ ➜ __"
-          return TimeSpan.fromMilliseconds(intervalNum).toStringShort(false);
+          return TimeSpan.fromMilliseconds(new Decimal(intervalNum)).toStringShort(false);
         }
         if (actualInterval.lt(0.01)) return `< ${format(0.01, 2, 2)}ms`;
         if (actualInterval.gt(1000))
@@ -84,8 +87,8 @@ export default {
         value => {
           let description = `Max Replicanti Galaxies: `;
           const extra = upgrade.extra;
-          if (extra > 0) {
-            const total = value + extra;
+          if (extra.gt(0)) {
+            const total = extra.add(value);
             description += `<br>${formatInt(value)} + ${formatInt(extra)} = ${formatInt(total)}`;
           } else {
             description += formatInt(value);
@@ -121,7 +124,7 @@ export default {
       if (this.amount.lte(this.replicantiCap)) return null;
       return this.estimateToMax.lt(0.01)
         ? "Currently Increasing"
-        : TimeSpan.fromSeconds(this.estimateToMax.toNumber()).toStringShort();
+        : TimeSpan.fromSeconds(this.estimateToMax).toStringShort();
     }
   },
   methods: {
@@ -137,23 +140,22 @@ export default {
       if (this.isInEC8) {
         this.ec8Purchases = player.eterc8repl;
       }
-      this.amount.copyFrom(Currency.replicanti);
+      this.amount.copyFrom(Replicanti.amount);
       this.mult.copyFrom(replicantiMult());
       this.hasTDMult = DilationUpgrade.tdMultReplicanti.isBought;
       this.multTD.copyFrom(DilationUpgrade.tdMultReplicanti.effectValue);
-      this.hasDTMult = getAdjustedGlyphEffect("replicationdtgain") !== 0 && !Pelle.isDoomed;
-      this.multDT = Math.clampMin(
-        Decimal.log10(Currency.replicanti.value) *
-          getAdjustedGlyphEffect("replicationdtgain"),
+      this.hasDTMult = getAdjustedGlyphEffect("replicationdtgain").neq(0) && !Pelle.isDoomed;
+      this.multDT = Decimal.max(
+        Decimal.log10(Replicanti.amount).times(getAdjustedGlyphEffect("replicationdtgain")),
         1
       );
-      this.hasIPMult = AlchemyResource.exponential.amount > 0 && !this.isDoomed;
-      this.multIP = Currency.replicanti.value.powEffectOf(AlchemyResource.exponential);
+      this.hasIPMult = AlchemyResource.exponential.amount.gt(0) && !this.isDoomed;
+      this.multIP = Replicanti.amount.powEffectOf(AlchemyResource.exponential);
       this.isUncapped = PelleRifts.vacuum.milestones[1].canBeApplied;
       this.hasRaisedCap = EffarigUnlock.infinity.isUnlocked && !this.isUncapped;
       this.replicantiCap.copyFrom(replicantiCap());
       if (this.hasRaisedCap) {
-        const mult = this.replicantiCap.div(Decimal.NUMBER_MAX_VALUE);
+        const mult = this.replicantiCap.div(Number.MAX_VALUE);
         this.capMultText = TimeStudy(31).canBeApplied
           ? `Base: ${formatX(mult.pow(1 / TimeStudy(31).effectValue), 2)}; after TS31: ${formatX(mult, 2)}`
           : formatX(mult, 2);
@@ -161,12 +163,12 @@ export default {
       this.distantRG = ReplicantiUpgrade.galaxies.distantRGStart;
       this.remoteRG = ReplicantiUpgrade.galaxies.remoteRGStart;
       this.effarigInfinityBonusRG = Effarig.bonusRG;
-      this.nextEffarigRGThreshold = Decimal.NUMBER_MAX_VALUE.pow(
-        Effarig.bonusRG + 2
+      this.nextEffarigRGThreshold = new Decimal(Number.MAX_VALUE).pow(
+        Effarig.bonusRG.add(2)
       );
       this.canSeeGalaxyButton =
-        Replicanti.galaxies.max >= 1 || PlayerProgress.eternityUnlocked();
-      this.maxReplicanti.copyFrom(Currency.replicanti.maxReplicanti);
+        Replicanti.galaxies.max.gte(1) || PlayerProgress.eternityUnlocked();
+      this.maxReplicanti.copyFrom(player.records.thisReality.maxReplicanti);
       this.estimateToMax = this.calculateEstimate();
     },
     vacuumText() {
@@ -175,9 +177,9 @@ export default {
     // This is copied out of a short segment of ReplicantiGainText with comments and unneeded variables stripped
     calculateEstimate() {
       const updateRateMs = player.options.updateRate;
-      const logGainFactorPerTick = Decimal.divide(getGameSpeedupForDisplay().mul(updateRateMs *
-        (Math.log(player.replicanti.chance + 1))), getReplicantiInterval());
-      const postScale = Math.log10(ReplicantiGrowth.scaleFactor) / ReplicantiGrowth.scaleLog10;
+      const logGainFactorPerTick = player.replicanti.chance.add(1).ln().mul(updateRateMs)
+        .mul(getGameSpeedupForDisplay()).div(getReplicantiInterval());
+      const postScale = Decimal.log10(ReplicantiGrowth.scaleFactor).div(ReplicantiGrowth.scaleLog10);
       const nextMilestone = this.maxReplicanti;
       const coeff = Decimal.divide(updateRateMs / 1000, logGainFactorPerTick.times(postScale));
       return coeff.times(nextMilestone.divide(this.amount).pow(postScale).minus(1));

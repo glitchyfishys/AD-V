@@ -573,7 +573,7 @@ export const tabs = [
   {
     key: "meta",
     name: "Meta",
-    hideAt: 2.3,
+    hideAt: 2.1,
     UIClass: "o-tab-btn--meta",
     condition: () => PlayerProgress.metaUnlocked(),
     id: 12,
@@ -593,6 +593,15 @@ export const tabs = [
         symbol: "φ",
         component: "metaFabricatorTab",
         id: 1,
+        hidable: true
+      },
+      {
+        key: "CanteTab",
+        name: "Cante",
+        symbol: "ξ",
+        condition: () => Ra.unlocks.canteUnlock.isUnlocked,
+        component: "CanteTab",
+        id: 3,
         hidable: true
       },
     ],

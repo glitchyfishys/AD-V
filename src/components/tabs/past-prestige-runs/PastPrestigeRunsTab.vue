@@ -24,7 +24,7 @@ export default {
           getRuns: () => player.records.recentRealities,
           extra: ["Glyph Level", "Relic Shards"],
           showExtra: [() => true, () => TeresaUnlocks.effarig.canBeApplied],
-          formatExtra: [x => format(x,2), x => format(x, 2)],
+          formatExtra: [x => formatInt(x), x => format(x, 2)],
           allowRate: [false, true],
           rateString: ["", "Relic Shard Rate"],
         },

@@ -13,7 +13,7 @@ export default {
   },
   computed: {
     willHardReset() {
-      return this.input === "Shrek is love, Shrek is life";
+      return this.input === "This mod is so perfected in balancing that i want to play again";
     },
     hasExtraNG() {
       return player.records.fullGameCompletions > 0;
@@ -64,6 +64,7 @@ export default {
       ref="input"
       v-model="input"
       type="text"
+      onpaste="return false;"
       class="c-modal-input c-modal-hard-reset__input"
       @keyup.esc="emitClose"
     >

@@ -21,8 +21,8 @@ export default {
       isCapped: false,
       multiplier: new Decimal(0),
       amount: new Decimal(0),
-      bought: 0,
-      boughtBefore10: 0,
+      bought: new Decimal(0),
+      boughtBefore10: new Decimal(0),
       rateOfChange: new Decimal(0),
       singleCost: new Decimal(0),
       until10Cost: new Decimal(0),
@@ -61,7 +61,7 @@ export default {
       return `${prefix} ${format(this.until10Cost)} ${suffix}`;
     },
     continuumString() {
-      if (this.continuumValue >= 1e6) return format(this.continuumValue, 2);
+      if (this.continuumValue.gte(1e6)) return format(this.continuumValue, 2);
       return formatFloat(this.continuumValue, 2);
     },
     showRow() {
@@ -70,7 +70,7 @@ export default {
     boughtTooltip() {
       if (this.isCapped) return `Nameless prevents the purchase of more than ${format(1)} 8th Antimatter Dimension`;
       if (this.isContinuumActive) return "Continuum produces all your Antimatter Dimensions";
-      return `Purchased ${quantify("time", this.bought)}`;
+      return `Purchased ${quantifyInt("time", this.bought)}`;
     },
     costUnit() {
       return `${AntimatterDimension(this.tier - 2).shortDisplayName} AD`;
@@ -97,12 +97,11 @@ export default {
       if (tier > DimBoost.maxDimensionsUnlockable) return;
       const dimension = AntimatterDimension(tier);
       this.isUnlocked = dimension.isAvailableForPurchase;
-      this.isCapped = tier === 8 && Enslaved.isRunning && dimension.bought >= 1;
+      this.isCapped = tier === 8 && Enslaved.isRunning && dimension.bought.gte(1);
       this.multiplier.copyFrom(dimension.multiplier);
       this.amount.copyFrom(dimension.totalAmount);
-      this.totalAmount = dimension.totalAmount;
-      this.bought = dimension.bought;
-      this.boughtBefore10 = dimension.boughtBefore10;
+      this.bought.copyFrom(dimension.bought);
+      this.boughtBefore10.copyFrom(dimension.boughtBefore10);
       this.singleCost.copyFrom(dimension.cost);
       this.until10Cost.copyFrom(dimension.costUntil10);
       if (tier < 8) {
@@ -113,7 +112,7 @@ export default {
       this.isContinuumActive = Laitela.continuumActive;
       if (this.isContinuumActive) this.continuumValue = dimension.continuumValue;
       this.isShown =
-        (DimBoost.totalBoosts > 0 && DimBoost.totalBoosts + 3 >= tier) || PlayerProgress.infinityUnlocked();
+        (DimBoost.totalBoosts.gt(0) && DimBoost.totalBoosts.add(3).gte(tier)) || PlayerProgress.infinityUnlocked();
       this.isCostsAD = NormalChallenge(6).isRunning && tier > 2 && !this.isContinuumActive;
       this.hasTutorial = (tier === 1 && Tutorial.isActive(TUTORIAL_STATE.DIM1)) ||
         (tier === 2 && Tutorial.isActive(TUTORIAL_STATE.DIM2));
@@ -127,7 +126,7 @@ export default {
       buyManyDimension(this.tier);
     },
     showCostTitle(value) {
-      return value.exponent < 1000000;
+      return value.max(1).log10().lte(1e6);
     },
     isLongText(str) {
       return str.length > 20;

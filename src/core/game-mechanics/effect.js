@@ -139,7 +139,7 @@ export class Effect {
    * @returns {number|Decimal}
    */
   effectOrDefault(defaultValue) {
-    return this.canBeApplied ? this.effectValue : defaultValue;
+    return (this.canBeApplied && !Decimal.isNaN(this.effectValue)) ? this.effectValue : defaultValue;
   }
 
   applyEffect(applyFn) {

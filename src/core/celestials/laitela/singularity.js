@@ -1,3 +1,5 @@
+import { DC } from "../../constants";
+
 import { GameMechanicState } from "../../game-mechanics";
 
 import { deepmergeAll } from "@/utility/deepmerge";
@@ -37,35 +39,36 @@ class SingularityMilestoneState extends GameMechanicState {
 
   nerfCompletions(completions) {
     const softcap = this.increaseThreshold;
-    if (!softcap || (completions < softcap)) return completions;
-    return softcap + (completions - softcap) / 3;
+    if (!softcap || (completions.lt(softcap))) return completions;
+    return (completions.sub(softcap)).div(3).add(softcap);
   }
 
   unnerfCompletions(completions) {
     const softcap = this.increaseThreshold;
-    if (!softcap || (completions < softcap)) return completions;
-    return softcap + (completions - softcap) * 3;
+    if (!softcap || (completions.lt(softcap))) return completions;
+    return (completions.sub(softcap)).times(3).add(softcap);
   }
 
   get previousGoal() {
-    if (this.isUnique) return new Decimal(1);
-    if (!this.isUnlocked) return new Decimal(0);
-    return Decimal.pow(this.repeat, this.unnerfCompletions(this.completions) - 1).times(this.start);
+    if (this.isUnique) return DC.D1;
+    if (!this.isUnlocked) return DC.D0;
+    return Decimal.pow(this.repeat, this.unnerfCompletions(this.completions).sub(1)).times(this.start);
   }
 
   get nextGoal() {
-    if (this.isUnique) return this.start;
-    return Decimal.pow(this.repeat, this.unnerfCompletions(this.completions + 1) - 1).times(this.start);
+    if (this.isUnique) return new Decimal(this.start);
+    return Decimal.pow(this.repeat, this.unnerfCompletions(this.completions.add(1)).sub(1)).times(this.start);
   }
 
   get rawCompletions() {
-    if (this.isUnique) return this.isUnlocked ? 1 : 0;
-    if (!this.isUnlocked) return 0;
-    return 1 + (Decimal.log(Currency.singularities.value, Math.E) - Decimal.log(this.start, Math.E)) / Decimal.log(this.repeat, Math.E);
+    if (this.isUnique) return this.isUnlocked ? DC.D1 : DC.D0;
+    if (!this.isUnlocked) return DC.D0;
+    return (Decimal.log10(Currency.singularities.value).sub(Decimal.log10(this.start)))
+      .div(Decimal.log10(this.repeat)).add(1);
   }
 
   get completions() {
-    return Math.min(Math.floor(this.nerfCompletions(this.rawCompletions)), this.limit);
+    return Decimal.min(Decimal.floor(this.nerfCompletions(this.rawCompletions)), this.limit);
   }
 
   get remainingSingularities() {
@@ -73,21 +76,21 @@ class SingularityMilestoneState extends GameMechanicState {
   }
 
   get progressToNext() {
-    const prog = Currency.singularities.value.sub(this.previousGoal).div(this.nextGoal).toNumber();
-    return formatPercents(Math.clampMax(prog, 1));
+    const prog = Currency.singularities.value.minus(this.previousGoal).div(this.nextGoal);
+    return formatPercents(Decimal.clampMax(prog, 1));
   }
 
   get isMaxed() {
-    return (this.isUnique && this.isUnlocked) || (this.completions >= this.limit);
+    return (this.isUnique && this.isUnlocked) || (this.completions.gte(this.limit));
   }
 
   get effectDisplay() {
-    if (Decimal.lt(this.effectValue, Decimal.NUMBER_MAX_VALUE)) return this.config.effectFormat(this.effectValue);
+    if (Decimal.isFinite(this.effectValue)) return this.config.effectFormat(this.effectValue);
     return "N/A";
   }
 
   get nextEffectDisplay() {
-    return this.config.effectFormat(this._rawEffect(this.completions + 1));
+    return this.config.effectFormat(this._rawEffect(this.completions.add(1)));
   }
 
   get description() {
@@ -109,7 +112,7 @@ export const SingularityMilestones = {
   lastNotified: player.celestials.laitela.lastCheckedMilestones,
 
   get sorted() {
-    return this.all.sort((a, b) => a.remainingSingularities.sub(b.remainingSingularities).toNumber());
+    return this.all.sort((a, b) => Decimal.compare(a.remainingSingularities, b.remainingSingularities));
   },
 
   sortedForCompletions(moveNewToTop) {
@@ -122,8 +125,8 @@ export const SingularityMilestones = {
       case SINGULARITY_MILESTONE_SORT.SINGULARITIES_TO_NEXT:
         sortFn = m => {
           // If it's maxed, we order based on the final goal value - higher goals are sorted later
-          if (m.isMaxed) return 1 + Decimal.log10(m.isUnique ? m.nextGoal : m.previousGoal) / 1000;
-          return Decimal.log10(m.remainingSingularities) / 100;
+          if (m.isMaxed) return Decimal.log10(m.isUnique ? m.nextGoal : m.previousGoal).add(1);
+          return Decimal.log10(m.remainingSingularities).div(100);
         };
         break;
       case SINGULARITY_MILESTONE_SORT.CURRENT_COMPLETIONS:
@@ -131,33 +134,34 @@ export const SingularityMilestones = {
         sortFn = m => {
           // For never-completed repeatable milestones, this is zero and will cause NaN bugs if we don't set it to 1
           const prev = Decimal.clampMin(m.previousGoal, 1);
-          const part = Decimal.clamp(Decimal.log(Currency.singularities.value.div(prev), Math.E) / Decimal.log(m.nextGoal.div(prev)), 0, 1).toNumber();
-          return (m.completions + part) / 20;
+          // eslint-disable-next-line max-len
+          const part = Decimal.clamp(Currency.singularities.value.div(prev).max(1).log10().div(m.nextGoal.div(prev).max(1).log10()), 0, 1);
+          return (m.completions.add(part)).div(20);
         };
         break;
       case SINGULARITY_MILESTONE_SORT.PERCENT_COMPLETIONS:
         // Orders infinite milestones based on completion count, putting them after all limited ones even if
         // they're completed
         sortFn = m => {
-          const limit = Decimal.lte(m.limit, Decimal.NUMBER_MAX_VALUE) ? m.limit : 100;
-          const currComp = Decimal.log(Currency.singularities.value.div(m.previousGoal)) /
-            Decimal.log(m.nextGoal.div(m.previousGoal));
-          return Math.clampMax((m.completions + currComp) / limit, 1) + (Decimal.lte(m.limit, Decimal.NUMBER_MAX_VALUE) ? 0 : 1);
+          const limit = Number.isFinite(m.limit) ? m.limit : 100;
+          const currComp = Currency.singularities.value.div(m.previousGoal).max(1).log10().div(
+            Decimal.log10(m.nextGoal.div(m.previousGoal)));
+          return Decimal.clampMax(currComp.add(m.completions).div(limit), 1).add(Number.isFinite(m.limit) ? 0 : 1);
         };
         break;
       case SINGULARITY_MILESTONE_SORT.FINAL_COMPLETION:
         // Sorts infinite milestones as if they end at 50 steps; for any given number of completions, this
         // treats infinite milestones with larger steps as if they complete at a higher value
         sortFn = m => {
-          const limit = Decimal.lte(m.limit, Decimal.NUMBER_MAX_VALUE) ? m.limit : 50;
-          return Decimal.log10(Decimal.pow(m.config.repeat, limit - 1).times(m.config.start)) / 100;
+          const limit = Number.isFinite(m.limit) ? m.limit : 50;
+          return Decimal.mul(m.config.start, Decimal.pow(m.config.repeat, limit - 1)).max(1).log10().div(100);
         };
         break;
       case SINGULARITY_MILESTONE_SORT.MOST_RECENT:
         sortFn = m => {
-          if (!m.isUnlocked) return 1 + Decimal.log10(m.start) / 1000;
+          if (!m.isUnlocked) return Decimal.log10(m.start).div(1000).add(1);
           // For unique milestones, previousGoal is actually 1 and nextGoal contains the completion amount
-          return Decimal.log10(m.isUnique ? m.nextGoal : m.previousGoal) / 100;
+          return Decimal.log10(m.isUnique ? m.nextGoal : m.previousGoal).div(100);
         };
         break;
       default:
@@ -182,9 +186,10 @@ export const SingularityMilestones = {
     }
 
     // Compose the functions together; possibly reverse the final order and bring new milestones to the top
-    const isNew = m => ((m.previousGoal.lt(player.celestials.laitela.lastCheckedMilestones) && moveNewToTop) ? 20 : 0);
-    const compFn = m => (m.isMaxed ? completedVal : 0) + (options.sortOrder ? sortFn(m) : -(sortFn(m)- isNew(m)));
-    return this.sorted.sort((a, b) => compFn(b) - compFn(a));
+    const isNew = m => ((m.previousGoal.gt(player.celestials.laitela.lastCheckedMilestones) && moveNewToTop) ? 20 : 0);
+    // eslint-disable-next-line max-len
+    const compFn = m => Decimal.add(options.sortOrder ? sortFn(m) : sortFn(m).neg(), isNew(m) + (m.isMaxed ? completedVal : 0));
+    return this.sorted.sort((a, b) => Decimal.compare(compFn(a), compFn(b)));
   },
 
   get nextMilestoneGroup() {
@@ -194,11 +199,18 @@ export const SingularityMilestones = {
   get unseenMilestones() {
     const laitela = player.celestials.laitela;
     return SingularityMilestoneThresholds
-      .filter(s => s.gt(laitela.lastCheckedMilestones) && Currency.singularities.gte(s));
+      .filter(s => laitela.lastCheckedMilestones.lt(s) && Currency.singularities.gte(s));
   },
 
+  // This code is stupid and forces us to do this bs
+  dumbgt(x, y) {
+    return new Decimal(x).gt(new Decimal(y));
+  },
+
+
   get unnotifiedMilestones() {
-    return SingularityMilestoneThresholds.filter(s => s.gt(this.lastNotified) && Currency.singularities.gte(s));
+    // eslint-disable-next-line max-len
+    return SingularityMilestoneThresholds.filter(s => this.dumbgt(s, this.lastNotified) && Currency.singularities.gte(s));
   }
 };
 
@@ -208,62 +220,81 @@ const SingularityMilestoneThresholds = (function() {
     .map(m => Array.range(0, Math.min(50, m.limit))
       .filter(r => !m.increaseThreshold || r <= m.increaseThreshold ||
         (r > m.increaseThreshold && ((r - m.increaseThreshold) % 3) === 2))
-      .map(r => Decimal.pow(m.repeat, r).times(m.start))).flat(Infinity);
+      .map(r => m.start * Math.pow(m.repeat, r)))
+    .flat(Infinity)
+    .filter(n => n < 1e100)
+    .sort((a, b) => a - b);
 }());
 
 export const Singularity = {
   get cap() {
-    return Decimal.pow(10, player.celestials.laitela.singularityCapIncreases).times(200);
+    return Decimal.pow10(player.celestials.laitela.singularityCapIncreases).mul(200);
   },
 
   get gainPerCapIncrease() {
-    return SingularityMilestone.improvedSingularityCap.effectOrDefault(11);
+    return SingularityMilestone.improvedSingularityCap.effectOrDefault(new Decimal(11));
   },
 
   get singularitiesGained() {
-    let gain = Decimal.pow(this.gainPerCapIncrease, player.celestials.laitela.singularityCapIncreases).times(
-      SingularityMilestone.singularityMult.effectOrDefault(1)).times(
-      (1 + ImaginaryUpgrade(10).effectOrDefault(0))).times(realityUGs.all[11].effectOrDefault(1)).times(GlitchRealityUpgrades.all[3].effectOrDefault(1));
+    let gain =  Decimal.floor(Decimal.pow(this.gainPerCapIncrease, player.celestials.laitela.singularityCapIncreases)
+      .mul(SingularityMilestone.singularityMult.effectOrDefault(DC.D1))
+      .mul(ImaginaryUpgrade(10).effectOrDefault(DC.D0).add(1))).times(realityUGs.all[11].effectOrDefault(1)).times(GlitchRealityUpgrades.all[3].effectOrDefault(1));
     
-    if(GlitchRealityUpgrades.all[11].isBought) gain = gain.pow(1.25);
-    
-    return gain.floor();
+      if(GlitchRealityUpgrades.all[11].isBought) gain = gain.pow(1.25);
+      
+      return gain.floor();
   },
 
   // Time (in seconds) to go from 0 DE to the condensing requirement
   get timePerCondense() {
-    return this.cap.div(Currency.darkEnergy.productionPerSecond).toNumber();
+    return this.cap.div(Currency.darkEnergy.productionPerSecond);
   },
 
   // Time (in seconds) to reach the condensing requirement from *current* DE
   get timeUntilCap() {
-    return this.cap.sub(Currency.darkEnergy.value).div(Currency.darkEnergy.productionPerSecond);
+    return this.cap.minus(Currency.darkEnergy.value).div(Currency.darkEnergy.productionPerSecond);
   },
 
   // Total additional time auto-condense will wait after reaching the condensing requirement
   get timeDelayFromAuto() {
-    return this.timePerCondense * (SingularityMilestone.autoCondense.effectOrDefault(Infinity) - 1);
+    return this.timePerCondense.times(SingularityMilestone.autoCondense.effectOrDefault(Infinity) - 1);
   },
 
   get capIsReached() {
     return Currency.darkEnergy.gte(this.cap);
   },
 
-  increaseCap(t = false) {
-  const cap = MetaFabricatorUpgrades.all[3].effectOrDefault(new Decimal(1)).mul(1000).toNumber();
-  if (player.celestials.laitela.singularityCapIncreases >= cap ) return;
+  get maxCap(){
+    return MetaFabricatorUpgrades.all[3].effectOrDefault(new Decimal(1)).mul(1000)
+  },
+
+  increaseCap(t =false) {
+    const cap = this.maxCap;
+  if (player.celestials.laitela.singularityCapIncreases.gte(cap) ) return;
     if(t){
-      player.celestials.laitela.singularityCapIncreases = Math.min(Math.floor(Currency.darkEnergy.productionPerSecond.div(200).log10()), cap);
+      if(Currency.darkEnergy.productionPerSecond.gt(0)) player.celestials.laitela.singularityCapIncreases = Currency.darkEnergy.productionPerSecond.div(200).log10().floor().min(cap);
+    }
+    else if (player.celestials.laitela.singularityCapIncreases.gt(5e11)) {
+      player.celestial.laitela.singularityCapIncreases
+        .add(Decimal.pow10(player.celestial.laitela.singularityCapIncreases.log(10).sub(10).floor()));
     }
     else{
-      player.celestials.laitela.singularityCapIncreases++;
+      player.celestials.laitela.singularityCapIncreases = player.celestials.laitela.singularityCapIncreases.add(1);
     }
   },
 
-  decreaseCap(t = false) {
-    if (player.celestials.laitela.singularityCapIncreases === 0) return;
-    if(!t) player.celestials.laitela.singularityCapIncreases--;
-    else  player.celestials.laitela.singularityCapIncreases = 0;
+  decreaseCap(t =false) {
+    if (player.celestials.laitela.singularityCapIncreases.eq(0)) return;
+    if(!t){
+      if (player.celestials.laitela.singularityCapIncreases.gt(5e11)) {
+        player.celestial.laitela.singularityCapIncreases
+        .sub(Decimal.pow10(player.celestial.laitela.singularityCapIncreases.log(10).sub(10).floor()));
+      }
+      else{
+        player.celestials.laitela.singularityCapIncreases = player.celestials.laitela.singularityCapIncreases.sub(1);
+      }
+    }
+    else  player.celestials.laitela.singularityCapIncreases = DC.D0;
   },
 
   perform() {
@@ -290,6 +321,7 @@ EventHub.logic.on(GAME_EVENT.SINGULARITY_RESET_AFTER, () => {
   const newMilestones = SingularityMilestones.unnotifiedMilestones.length;
   if (newMilestones === 0) return;
   if (newMilestones === 1) GameUI.notify.blackHole(`You reached a Singularity milestone!`);
+  else if (newMilestones > 100) GameUI.notify.blackHole(`You reached over 100 Singularity milestones!`);
   else GameUI.notify.blackHole(`You reached ${formatInt(newMilestones)} Singularity milestones!`);
   SingularityMilestones.lastNotified = Currency.singularities.value;
 });

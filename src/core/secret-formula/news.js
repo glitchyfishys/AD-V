@@ -1256,7 +1256,7 @@ export const news = [
       fortunately, we've developed a reverse-containment cell, meaning it's everywhere except here. Our brain has
       a protection system, that specifically filters out any information regarding this number, that's how we've
       been able to survive for this long, and why others like us went extinct in the past, but the number has been
-      getting stronger, slowly getting closer to breaking our protection. We've temporary stopped the number from
+      getting stronger, slowly getting closer to breaking our protection. We've temporarily stopped the number from
       slipping into our memory by using the world-wide memory manipulator located in this room to keep making
       everyone think that 9 comes after 8 with a side effect that makes everyone think that 9 is evil, but this
       won't last forever, as the number will keep getting stronger, and will eventually overpower the memory
@@ -1312,7 +1312,7 @@ export const news = [
     id: "a230",
     get text() {
       return `You started playing this game nearly
-        ${TimeSpan.fromMilliseconds(Date.now() - player.records.gameCreatedTime).toString()}
+        ${TimeSpan.fromMilliseconds(new Decimal(Date.now() - player.records.gameCreatedTime)).toString()}
         ago. Thank you for playing!`;
     },
     dynamic: true
@@ -1654,7 +1654,7 @@ export const news = [
   {
     id: "a274",
     text:
-      `A large number of mathematicians walk into a bar. They each order 10 times as many beers as the previous.
+      `A large number of mathematicans walk into a bar. They each order 10 times as many beers as the previous.
       The bartender says "My my, that's an order of magnitude!".`
   },
   {
@@ -2170,14 +2170,14 @@ export const news = [
   {
     id: "a343",
     get text() {
-      const fakeProgress = Math.pow(player.records.realTimePlayed, 25);
+      const fakeProgress = Decimal.pow(player.records.realTimePlayed, 25);
       // Caps in ~68 years of real playtime then turns into "Infinite%"
       return `Global Challenge - across all AD players, accumulate ${format(Number.MAX_VALUE, 2)} contest-paperclips
         (noted by the
         square ends), to receive an event-exclusive metal bagpipe, capable of giving +2 AM/s, as well as an extra
         tickspeed while above ${format(1e200)} tickspeed upgrades! Current global progress -
         ${format(fakeProgress)}/${format(Number.MAX_VALUE, 2)}
-        (${formatPercents(Math.log10(fakeProgress) / Math.log10(Number.MAX_VALUE), 3)})`;
+        (${formatPercents(Decimal.log10(fakeProgress).div(Decimal.log10(Number.MAX_VALUE)), 3)})`;
     }
   },
   {
@@ -2574,7 +2574,7 @@ export const news = [
     id: "a388",
     text:
       `In light of recent events, we'd like to issue an official statement. Antimatter Dimensions™ is in no way
-      affiliated with Jimmy's Causality Violating Brainworms™. We do not endorse, no were we involved in their creation
+      affiliated with Jimmy's Causality Violating Brainworms™. We do not endorse, nor were we involved in their creation
       of the product which was involved in several catastrophic dimension-destabilising and reality-toppling incidents.
       We almost certainly did not sign a contract at 5:30:26 UTC on 08/12/1994 after discussing how we could benefit
       from destabilising and warping dimensions. There was no industrial zone constructed in the 5th Orion Arm of the
@@ -2596,17 +2596,17 @@ export const news = [
   {
     id: "l1",
     text: "You just made your 1,000,000,000,000,000th antimatter. This one tastes like chicken.",
-    get unlocked() { return Currency.antimatter.exponent === 15; }
+    get unlocked() { return Currency.antimatter.value.max(1).log10().eq(15); }
   },
   {
     id: "l2",
     text: "Nerf the galaxies please.",
-    get unlocked() { return player.galaxies === 2 || Currency.infinities.gt(0); }
+    get unlocked() { return player.galaxies.eq(2) || Currency.infinities.gt(0); }
   },
   {
     id: "l3",
     text: "What do you mean, more than two dimensions??? We're on a screen, clearly there are only 2 dimensions.",
-    get unlocked() { return AntimatterDimension(3).amount.gt(0) || DimBoost.totalBoosts > 0; }
+    get unlocked() { return AntimatterDimension(3).amount.gt(0) || DimBoost.totalBoosts.gt(0); }
   },
   {
     id: "l4",
@@ -2621,38 +2621,38 @@ export const news = [
   {
     id: "l6",
     text:
-      `Antimatter people seem to be even more afraid of 13 then we are. They destroyed
+      `Antimatter people seem to be even more afraid of 13 than we are. They destroyed
       entire galaxies just to remove 13 from their percents.`,
-    get unlocked() { return player.galaxies > 0 || Currency.infinities.gt(0); }
+    get unlocked() { return player.galaxies.gt(0) || Currency.infinities.gt(0); }
   },
   {
     id: "l7",
     text: "To understand dimensional sacrifice, you do actually need a PhD in theoretical physics. Sorry!",
-    get unlocked() { return player.sacrificed.e >= 10 || DimBoost.totalBoosts >= 6; }
+    get unlocked() { return player.sacrificed.max(1).log10().gt(10) || DimBoost.totalBoosts.gte(6); }
   },
   {
     id: "l8",
     text: "A new group for the standardisation of numbers have come forward with a novel new format involving emoji's.",
-    get unlocked() { return player.requirementChecks.permanent.emojiGalaxies > 0; }
+    get unlocked() { return player.requirementChecks.permanent.emojiGalaxies.gt(0); }
   },
   {
     id: "l9",
     text: "Antimatter ice cream stand has recently opened- they have octillions of flavors!",
-    get unlocked() { return player.records.totalAntimatter.e >= 27; }
+    get unlocked() { return player.records.totalAntimatter.max(1).log10().gt(27); }
   },
   {
     id: "l10",
     text:
       `The Heavenly Pelle has generated too much antimatter and needed to create another galaxy.
       This one can be seen in the southwestern sky.`,
-    get unlocked() { return player.galaxies > 0 || Currency.infinities.gt(0); }
+    get unlocked() { return player.galaxies.gt(0) || Currency.infinities.gt(0); }
   },
   {
     id: "l11",
     text: "9th Dimension is a lie.",
     get unlocked() {
-      return DimBoost.totalBoosts >= 5 ||
-      player.galaxies > 0 ||
+      return DimBoost.totalBoosts.gte(5) ||
+      player.galaxies.gt(0) ||
       PlayerProgress.infinityUnlocked();
     }
   },
@@ -2660,8 +2660,8 @@ export const news = [
     id: "l12",
     text: "The square root of 9 is 3, therefore the 9th dimension can't exist.",
     get unlocked() {
-      return DimBoost.totalBoosts >= 5 ||
-      player.galaxies > 0 ||
+      return DimBoost.totalBoosts.gte(5) ||
+      player.galaxies.gt(0) ||
       PlayerProgress.infinityUnlocked();
     }
   },
@@ -2669,8 +2669,8 @@ export const news = [
     id: "l13",
     text: "You got assimilated by the 9th dimension? Just call your doctor for mental illness!",
     get unlocked() {
-      return DimBoost.totalBoosts >= 5 ||
-      player.galaxies > 0 ||
+      return DimBoost.totalBoosts.gte(5) ||
+      player.galaxies.gt(0) ||
       PlayerProgress.infinityUnlocked();
     }
   },
@@ -2678,8 +2678,8 @@ export const news = [
     id: "l14",
     text: "Why is there no 9th dimension? Because 7 8 9.",
     get unlocked() {
-      return DimBoost.totalBoosts >= 5 ||
-      player.galaxies > 0 ||
+      return DimBoost.totalBoosts.gte(5) ||
+      player.galaxies.gt(0) ||
       PlayerProgress.infinityUnlocked();
     }
   },
@@ -2687,8 +2687,8 @@ export const news = [
     id: "l15",
     text: "The 9th dimension cannot exist because the Nein-speaking nazis died in WW2.",
     get unlocked() {
-      return DimBoost.totalBoosts >= 5 ||
-      player.galaxies > 0 ||
+      return DimBoost.totalBoosts.gte(5) ||
+      player.galaxies.gt(0) ||
       PlayerProgress.infinityUnlocked();
     }
   },
@@ -2698,8 +2698,8 @@ export const news = [
       `If you break the fourth wall... well, there's still the fifth, sixth, seventh, and eighth to get through
       before you encounter bad things, so you should be fine`,
     get unlocked() {
-      return DimBoost.totalBoosts >= 5 ||
-      player.galaxies > 0 ||
+      return DimBoost.totalBoosts.gte(5) ||
+      player.galaxies.gt(0) ||
       PlayerProgress.infinityUnlocked();
     }
   },
@@ -2711,8 +2711,8 @@ export const news = [
       no one on the Discord can be on dimension 9. Only then can he rest, for up to 6 hours, before waking up
       forcefully to avoid getting the offline achievement.`,
     get unlocked() {
-      return DimBoost.totalBoosts >= 5 ||
-      player.galaxies > 0 ||
+      return DimBoost.totalBoosts.gte(5) ||
+      player.galaxies.gt(0) ||
       PlayerProgress.infinityUnlocked();
     }
   },
@@ -2720,8 +2720,8 @@ export const news = [
     id: "l18",
     text: "If the 9th dimension is all evil, then is 3 the root of all evil?",
     get unlocked() {
-      return DimBoost.totalBoosts >= 5 ||
-      player.galaxies > 0 ||
+      return DimBoost.totalBoosts.gte(5) ||
+      player.galaxies.gt(0) ||
       PlayerProgress.infinityUnlocked();
     }
   },
@@ -2731,8 +2731,8 @@ export const news = [
       `I'll have 1e29 number 9s, a number 1e9 large, a number 6 with extra replicanti, a number 1e7, two 4e5s,
       one with matter, and a large time vortex.`,
     get unlocked() {
-      return DimBoost.totalBoosts >= 5 ||
-      player.galaxies > 0 ||
+      return DimBoost.totalBoosts.gte(5) ||
+      player.galaxies.gt(0) ||
       PlayerProgress.infinityUnlocked();
     }
   },
@@ -2749,7 +2749,7 @@ export const news = [
   {
     id: "l22",
     text: "Anti Emoji Movie a huge hit!",
-    get unlocked() { return player.requirementChecks.permanent.emojiGalaxies >= 5; }
+    get unlocked() { return player.requirementChecks.permanent.emojiGalaxies.gte(5); }
   },
   {
     id: "l23",
@@ -2769,7 +2769,7 @@ export const news = [
   {
     id: "l26",
     text:
-      `Thanos is gonna be super disappointed when he shows up with a fully powered Infinity gauntlet, and Hevi
+      `Thanos is gonna be super dissapointed when he shows up with a fully powered Infinity gauntlet, and Hevi
       has a fully powered Eternity gauntlet.`,
     get unlocked() { return PlayerProgress.eternityUnlocked(); }
   },
@@ -2777,19 +2777,19 @@ export const news = [
     id: "l27",
     text:
       "New strange material was been found. It seems to grow exponentially, but only helps with antimatter production.",
-    get unlocked() { return PlayerProgress.replicantiUnlocked() && player.replicanti.chance === 0.01; }
+    get unlocked() { return PlayerProgress.replicantiUnlocked() && player.replicanti.chance.eq(0.01); }
   },
   {
     id: "l28",
     text: "It seems this \"replicanti\" stuff won't be growing any faster now.",
-    get unlocked() { return player.replicanti.chance === 1 && player.replicanti.interval === 1; }
+    get unlocked() { return player.replicanti.chance.eq(1) && player.replicanti.interval.eq(1); }
   },
   {
     id: "l29",
     text:
       `If you wrote down 3 numbers a second, it would take you less time to write down your antimatter
       amount than it would Hevipelle to update the game.`,
-    get unlocked() { return Currency.antimatter.exponent >= 100000; }
+    get unlocked() { return Currency.antimatter.value.add(1).log10().gte(100000); }
   },
   {
     id: "l30",
@@ -2838,7 +2838,7 @@ export const news = [
   },
   {
     id: "l39",
-    text: "Asian man tries to steal the trophy of fastest infinity of -1 seconds, AND HE DOES IT!",
+    text: "Asian man trys to steal the trophy of fastest infinity of -1 seconds, AND HE DOES IT!",
     get unlocked() { return NewsHandler.hasSeenNews("l1"); }
   },
   {
@@ -2864,17 +2864,17 @@ export const news = [
   {
     id: "l43",
     text: "You do know that you won't reach Infinity in -1 seconds, right?",
-    get unlocked() { return player.records.bestInfinity.time.lte(0.1); }
+    get unlocked() { return player.records.bestInfinity.time.eq(0.1); }
   },
   {
     id: "l44",
     text: "Where does Antimatter Nemo live? In a NNnNeMI-NNnNe.",
-    get unlocked() { return player.records.totalAntimatter.e >= 3e6; }
+    get unlocked() { return player.records.totalAntimatter.max(1).log10().gte(3e6); }
   },
   {
     id: "l45",
     text: "Anti Emoji Movie MMMCMXCIX is a major hit!",
-    get unlocked() { return player.requirementChecks.permanent.emojiGalaxies >= 3999; }
+    get unlocked() { return player.requirementChecks.permanent.emojiGalaxies.gte(3999); }
   },
   {
     id: "l46",
@@ -2909,7 +2909,7 @@ export const news = [
   {
     id: "l52",
     text: "Timing is key.",
-    get unlocked() { return player.records.thisEternity.realTime < 10; }
+    get unlocked() { return player.records.thisEternity.realTime.lt(10); }
   },
   {
     id: "l53",
@@ -3016,7 +3016,7 @@ export const news = [
   {
     id: "l61",
     text:
-      `Millennials are killing the challenge industry, say antimatter experts; "Nowadays they start with
+      `Millenials are killing the challenge industry, say antimatter experts; "Nowadays they start with
       challenges completed and infinity broken; it's just not how it used to be".`,
     get unlocked() { return PlayerProgress.infinityUnlocked(); }
   },
@@ -3125,7 +3125,7 @@ export const news = [
         `<span style='font-family: Barrio'>send 10,000 Support The Developer
         coins or you will never see RealiTV again.</span>`,
         "we break down exactly what went wrong in the black hole powering our city yesterday.",
-        "we go over our 10-day weather forecasts.",
+        "we go over our 10-day weather forcasts.",
         `YOU MUST PAY ${format(player.reality.realityMachines.times(10).max(10))}
         REALITY MACHINES TO CONTINUE VIEWING THIS PROGRAM.`,
         "we witness the release of the hypnodrones.",
@@ -3188,7 +3188,7 @@ export const news = [
       it can save you money in the long run - if you are forced to switch realities due to a celestial decision you
       can gain a portion of the tax you paid back from the IARS as a tax deduction, as well as make a deduction to
       pay for the arbiters who represent you. Of course, any [PLAYER REFERENCE NOT FOUND] worth their RM knows that
-      the real way to hide illegal profits of crime is in personalised pocket dimensions, hyperspliced waveform
+      the real way to hide illegal profits of crime is  in personalised pocket dimensions, hyperspliced waveform
       banks and nanoshells, which requires extensive R&D to implement. As such, reporting illegal AM gain is only
       recommended if you're too rich to hide your gains, but too poor to hide your gains.`,
     get unlocked() { return PlayerProgress.realityUnlocked(); }
@@ -3215,7 +3215,7 @@ export const news = [
       return `The Great Scribes of Antia have labored intensively for years. They were given a mammoth task from the
       gods; write out an incomprehensibly long number. These scribes took turns, each writing out a few numbers a
       second, writing day and night, for what seemed like an eternity. At last, after
-      ${TimeSpan.fromSeconds(Currency.antimatter.value.log10() / 3).toString()}, they finally accomplished
+      ${TimeSpan.fromSeconds(Currency.antimatter.value.max(1).log10().div(3)).toString()}, they finally accomplished
       the impossible. That week, when they went to worship their gods, they sent them a simple message: "What was
       the purpose? What made our years of labor significant?" The gods responded duly: "We wanted to know how long
       it would take to write out, for a statistic in our game."`;
@@ -3905,7 +3905,7 @@ export const news = [
   },
   {
     id: "ai150",
-    text: "Hello everyone, my name is Anti-Dio. I produce antimatter through a process you all know as \"antimatter decomposition\" you may recall this from my test report earlier this month I tested whether or not my ranch produces antimatter or not... everything was fine until that point, when I added a dash of lag to the equation, and it became a vicious cycle accelerating the rate at which antimatter is produced, which in turn accelerates the rate at which you all die. I've saved this by using a unique combination of genetic engineering and big data mining, I'm hoping to one day pull the trigger on a mechanimatter device that creates dimensions behind closed doors, but for now, this has all been a race to the bottom of which system producethiks, and in the end, we'll take a bite out of your (read error: allowed) pie. Goodbye."
+    text: "Hello everyone, my name is Anti-Dio. I produce antimatter through a process you all know as \"antimatter decomposition\" you may recall this from my test report earlier this month I tested wether or not my ranch produces antimatter or not... everything was fine until that point, when I added a dash of lag to the equation, and it became a vicious cycle accelerating the rate at which antimatter is produced, which in turn accelerates the rate at which you all die. I've saved this by using a unique combination of genetic engineering and big data mining, I'm hoping to one day pull the trigger on a mechanimatter device that creates dimensions behind closed doors, but for now, this has all been a race to the bottom of which system producethiks, and in the end, we'll take a bite out of your (read error: allowed) pie. Goodbye."
   },
   {
     id: "ai151",
@@ -5060,11 +5060,11 @@ export const news = [
   },
   {
     id: "ai437",
-    text: "Gee, all this antimatter is clogging up my kitchen and now I can't cook myself a meal! What to do: cook myself a meal that will last me until the next big antimatter event, when I can get my infinity point back? My infinity point is running out, and I can't get it to finish running, so I'm starving!"
+    text: "Gee, all this antimatter is clogging up my kitchen and now I can't cook myself a meal! What to do: cook myself a meal that will last me until the next big antimatter event, when I can get my infinity point back? My infinty point is running out, and I can't get it to finish running, so I'm starving!"
   },
   {
     id: "ai438",
-    text: "Brought to you by AAAD-Brand Repli-candy! Infinite candy for an infinity drool-worthy cold! Contains no milk, cookies or butter. One second to midnight."
+    text: "Brought to you by AAAD-Brand Repli-candy! Infinite candy for an infinty drool-worthy cold! Contains no milk, cookies or butter. One second to midnight."
   },
   {
     id: "ai439",
@@ -6212,7 +6212,7 @@ export const news = [
   },
   {
     id: "ai723",
-    text: "The number of dimensions in a 6th dimension is the sum of all the dimensions in a 7th dimension, so 6th of a 7th dimension are 6th of a 6th dimension."
+    text: "The number of dimensions in a 6th dimension is the sum of all the dimensions in a 7th dimension, so 6ths of a 7th dimension are 6ths of a 6th dimension."
   },
   {
     id: "ai724",

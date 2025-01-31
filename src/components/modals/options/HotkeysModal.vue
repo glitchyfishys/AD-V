@@ -8,7 +8,7 @@ export default {
   },
   data() {
     return {
-      updateIndices: [],
+      updateIndicies: [],
       visible: [],
       timeStudyUnlocked: false,
       glyphSacUnlocked: false,
@@ -44,7 +44,7 @@ export default {
     for (let i = 0; i < this.hotkeyCount; i++) {
       const visible = shortcuts[i].visible;
       if (typeof visible === "function") {
-        this.updateIndices.push(i);
+        this.updateIndicies.push(i);
       } else {
         this.visible[i] = visible;
       }
@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     update() {
-      for (const index of this.updateIndices) {
+      for (const index of this.updateIndicies) {
         this.$set(this.visible, index, shortcuts[index].visible());
       }
       const progress = PlayerProgress.current;

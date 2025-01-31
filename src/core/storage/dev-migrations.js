@@ -422,7 +422,7 @@ export const devMigrations = {
           eternityAutobuyer.amount = condition;
           break;
         case "time":
-          eternityAutobuyer.time = condition.lt(Decimal.NUMBER_MAX_VALUE)
+          eternityAutobuyer.time = condition.lt(DC.NUMMAX)
             ? condition.toNumber()
             : eternityAutobuyer.time;
           break;
@@ -892,8 +892,8 @@ export const devMigrations = {
         maxID1ThisReality: new Decimal(1),
         continuumThisReality: true,
       };
-      player.dilation.baseTachyonGalaxies = player.dilation.baseFreeGalaxies;
-      player.dilation.totalTachyonGalaxies = player.dilation.freeGalaxies;
+      player.dilation.baseTachyonGalaxies = new Decimal(player.dilation.baseFreeGalaxies);
+      player.dilation.totalTachyonGalaxies = new Decimal(player.dilation.freeGalaxies);
 
       delete player.replicanti.gal;
       delete player.reality.pp;

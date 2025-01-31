@@ -3,16 +3,16 @@ import { DC } from "../../constants";
 const rebuyableMul = props => {
   props.cost = () => getHybridCostScaling(
     player.meta.upgrades.rebuyable[props.id],
-    1e50,
-    props.initialCost,
-    props.costMult,
-    props.costMult / 10,
+    DC.E50,
+    new Decimal(props.initialCost),
+    new Decimal(props.costMult),
+    new Decimal(props.costMult / 10),
     DC.E309,
-    1e3,
-    props.initialCost * props.costMult
+    DC.E3,
+    new Decimal(props.initialCost * props.costMult)
   );
   const { effect } = props;
-  props.effect = () => Decimal.pow( effect, player.meta.upgrades.rebuyable[props.id]);
+  props.effect = () => Decimal.pow(effect, player.meta.upgrades.rebuyable[props.id]);
   props.description = () => props.textTemplate.replace("{value}", format(effect, 2, 2));
   props.formatEffect = value => formatX(value, 2, 1);
   props.formatCost = value => format(value, 2, 1);
@@ -22,16 +22,16 @@ const rebuyableMul = props => {
 const rebuyablePow = props => {
   props.cost = () => getHybridCostScaling(
     player.meta.upgrades.rebuyable[props.id],
-    1e50,
-    props.initialCost,
-    props.costMult,
-    props.costMult / 10,
+    DC.E50,
+    new Decimal(props.initialCost),
+    new Decimal(props.costMult),
+    new Decimal(props.costMult / 10),
     DC.E309,
-    1e3,
-    props.initialCost * props.costMult
+    DC.E3,
+    new Decimal(props.initialCost * props.costMult)
   );
   const { effect } = props;
-  props.effect = () => Decimal.mul( effect, player.meta.upgrades.rebuyable[props.id]).add(1).max(1);
+  props.effect = () => Decimal.mul(effect, player.meta.upgrades.rebuyable[props.id]).add(1).max(1);
   props.description = () => props.textTemplate.replace("{value}", format(effect, 2, 2));
   props.formatEffect = value => formatPow(value, 2, 1);
   props.formatCost = value => format(value, 2, 1);
@@ -52,7 +52,7 @@ export const metaFabricatorUpgrades = [
     id: 2,
     initialCost: 1,
     costMult: 9,
-    textTemplate: "ADs, IDs and TDs and a {value} power",
+    textTemplate: "ADs, IDs and TDs gain a +{value} power",
     effect: 0.3
   }),
   rebuyablePow({
@@ -60,7 +60,7 @@ export const metaFabricatorUpgrades = [
     id: 3,
     initialCost: 1,
     costMult: 30,
-    textTemplate: "You gain a {value} power to gamespeed",
+    textTemplate: "You gain a +{value} power to gamespeed",
     effect: 0.75
   }),
   rebuyableMul({
@@ -214,7 +214,7 @@ export const metaFabricatorUpgrades = [
     name: "Meta Charger",
     id: 21,
     cost: 1e6,
-    description: "Game more Metas based on Metas",
+    description: "Gain more Metas based on Metas",
     effect: () => Currency.metas.value.div(60).pow(0.5).add(1),
     formatEffect: value => format(value, 2, 2)
   },
@@ -239,7 +239,7 @@ export const metaFabricatorUpgrades = [
     name: "Some pointless stuff",
     id: 24,
     cost: 1e12,
-    description: "Unlock autobuyers for Singularity cap, Keep Charged Infinity upgrades and Ra memory level",
+    description: "Unlock autobuyers for Singularity cap, Keep Charged Infinity upgrades and Ra memory levels",
     effect: () => 1,
     formatEffect: value => "",
     noLabel: true

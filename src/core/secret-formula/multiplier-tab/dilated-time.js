@@ -15,13 +15,13 @@ export const DT = {
     multValue: () => getDilationGainPerSecond().times(getGameSpeedupForDisplay()),
     isActive: () => PlayerProgress.realityUnlocked() ||
       (PlayerProgress.dilationUnlocked() && getDilationGainPerSecond().gt(0)),
-    dilationEffect: () => (Enslaved.isRunning ? 0.85 : 1),
+    dilationEffect: () => (Enslaved.isRunning ? new Decimal(0.85) : DC.D1),
     isDilated: true,
     overlay: ["Ψ"],
   },
   achievement: {
     name: "Achievements",
-    multValue: () => Achievement(132).effectOrDefault(1) * Achievement(137).effectOrDefault(1),
+    multValue: () => Achievement(132).effectOrDefault(1).mul(Achievement(137).effectOrDefault(1)),
     isActive: () => (Achievement(132).canBeApplied || Achievement(137).canBeApplied) &&
       getDilationGainPerSecond().neq(0),
     icon: MultiplierTabIcons.ACHIEVEMENT,
@@ -51,7 +51,7 @@ export const DT = {
     multValue: () => {
       const dtMult = getAdjustedGlyphEffect("dilationDT").times(Pelle.specialGlyphEffect.dilation);
       const repliDT = Replicanti.areUnlocked
-        ? Math.clampMin(Decimal.log10(Replicanti.amount) * getAdjustedGlyphEffect("replicationdtgain"), 1)
+        ? Decimal.clampMin(Decimal.log10(Replicanti.amount).mul(getAdjustedGlyphEffect("replicationdtgain")), 1)
         : DC.D1;
       return dtMult.times(repliDT);
     },
@@ -78,8 +78,8 @@ export const DT = {
   },
   iap: {
     name: "Shop Tab Purchases",
-    multValue: () => new Decimal(ShopPurchase.dilatedTimePurchases.currentMult ** (Pelle.isDoomed ? 0.5 : 1)),
-    isActive: () => ShopPurchaseData.totalSTD > 0 && getDilationGainPerSecond().neq(0),
+    multValue: () => ShopPurchase.dilatedTimePurchases.currentMult.pow(Pelle.isDoomed ? 0.5 : 1),
+    isActive: () => player.IAP.STDcoins.gt(0) && getDilationGainPerSecond().neq(0),
     icon: MultiplierTabIcons.IAP,
   },
 

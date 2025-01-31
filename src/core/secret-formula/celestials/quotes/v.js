@@ -1,3 +1,5 @@
+const celBackground = cel => [[cel, 0]];
+
 export const vQuotes = {
   initial: {
     id: 0,
@@ -28,12 +30,14 @@ export const vQuotes = {
       "So fast...",
       "Do not think so much of yourself.",
       "This is just the beginning.",
+      {text: "It's weak here", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
+      {text: "But it's getting stronger", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
       "You will never be better than me.",
     ],
   },
   achievement1: {
     id: 4,
-    requirement: () => V.spaceTheorems >= 1,
+    requirement: () => V.spaceTheorems.gte(1),
     lines: [
       "Only one? Pathetic.",
       "Your accomplishments pale in comparison to mine.",
@@ -41,7 +45,7 @@ export const vQuotes = {
   },
   achievement6: {
     id: 5,
-    requirement: () => V.spaceTheorems >= 6,
+    requirement: () => V.spaceTheorems.gte(6),
     lines: [
       "This is nothing.",
       "Do not be so full of yourself.",
@@ -57,7 +61,7 @@ export const vQuotes = {
   },
   achievement12: {
     id: 7,
-    requirement: () => V.spaceTheorems >= 12,
+    requirement: () => V.spaceTheorems.gte(12),
     lines: [
       "How did you...",
       "This barely amounts to anything!",
@@ -66,7 +70,7 @@ export const vQuotes = {
   },
   achievement24: {
     id: 8,
-    requirement: () => V.spaceTheorems >= 24,
+    requirement: () => V.spaceTheorems.gte(24),
     lines: [
       "Impossible...",
       "After how difficult it was for me...",
@@ -82,11 +86,13 @@ export const vQuotes = {
   },
   allAchievements: {
     id: 10,
-    requirement: () => V.spaceTheorems >= 36,
+    requirement: () => V.spaceTheorems.gte(36),
     lines: [
       "I... how did you do it...",
+      {text: "They have to be getting stronger.", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
       "I worked so hard to get them...",
       "I am the greatest...",
+      {text: "This has to explain the corruptions.", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
       "No one is better than me...",
       "No one... no one... no on-",
     ],
@@ -103,7 +109,7 @@ export const vQuotes = {
   },
   extremeFinished: {
     id: 12,
-    requirement: () => V.spaceTheorems >= 230,
+    requirement: () => V.spaceTheorems.gte(230),
     lines: [
       {text: "Y-Y-You finished", tremble: true},
       {text: "oh no", tremble: true},

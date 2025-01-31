@@ -1,3 +1,5 @@
+import { isDecimal } from "../../../utility/type-check";
+
 export const END_STATE_MARKERS = {
   // Tab zalgoification starts as soon as endState > 0
   GAME_END: 1,
@@ -7,24 +9,26 @@ export const END_STATE_MARKERS = {
   SAVE_DISABLED: 4,
   END_NUMBERS: 4.2,
   CREDITS_START: 4.5,
-  SHOW_NEW_GAME: 13,
-  SPECTATE_GAME: 13.5,
+  SHOW_NEW_GAME: 13.5,
+  SPECTATE_GAME: 13.9,
+  // The song is 3:04 and the credits increment by 1 every 20 seconds. Needs changing if the song is changed.
+  SONG_END: 13.7,
   CREDITS_END: 14.5,
 };
 
 export const GameEnd = {
   get endState() {
-    if (this.removeAdditionalEnd && Pelle.isDoomed) return this.additionalEnd;
-    return Math.max((Math.log10(player.celestials.pelle.records.totalAntimatter.plus(1).log10() + 1) - 8.7) /
-      (Math.log10(1e300) - 8.7) + this.additionalEnd, 0);
+    if (this.removeAdditionalEnd || player.bypassEnd) return this.additionalEnd;
+    return Math.max(player.celestials.pelle.records.totalAntimatter.add(1).log10().add(1).log10().sub(8.7)
+      .div(Math.log10(1e100) - 8.7).min(1).toNumber() + this.additionalEnd, 0);
   },
 
   _additionalEnd: 0,
   get additionalEnd() {
-    return (player.isGameEnd || (this.removeAdditionalEnd && Pelle.isDoomed)) ? this._additionalEnd : 0;
+    return (player.isGameEnd || this.removeAdditionalEnd) ? this._additionalEnd : 0;
   },
   set additionalEnd(x) {
-    this._additionalEnd = (player.isGameEnd || (this.removeAdditionalEnd && Pelle.isDoomed)) ? x : 0;
+    this._additionalEnd = (player.isGameEnd || this.removeAdditionalEnd) ? x : 0;
   },
 
   removeAdditionalEnd: false,
@@ -32,9 +36,9 @@ export const GameEnd = {
   creditsClosed: false,
   creditsEverClosed: false,
 
-  gameLoop(diff) {
-    if(!Pelle.isDoomed) player.isGameEnd = false;
-    if ((this.removeAdditionalEnd && Pelle.isDoomed)) {
+  gameLoop(diffr) {
+    const diff = isDecimal(diffr) ? diffr.toNumber() : diffr;
+    if (this.removeAdditionalEnd) {
       this.additionalEnd -= Math.min(diff / 200, 0.5);
       if (this.additionalEnd < 4) {
         this.additionalEnd = 0;

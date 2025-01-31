@@ -1,3 +1,5 @@
+const celBackground = cel => [[cel, 0]];
+
 export const laitelaQuotes = {
   unlock: {
     id: 0,
@@ -39,7 +41,9 @@ export const laitelaQuotes = {
       "But maybe that matters not.",
       "It gives me no solace to ponder and look back.",
       "As all I can do is reminisce upon every possible action I could have taken.",
+      {text: "There's not a corruption here.", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
       "But I digress. We should tighten those chains.",
+      {text: "Is it because of destabilization?", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
     ]
   },
   firstSingularity: {
@@ -65,6 +69,8 @@ export const laitelaQuotes = {
       "It could not have been an accident.",
       "How did you manage to obtain it?",
       "Fascinating... I was never aware of this.",
+      {text: "It's very Weak here", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
+      {text: "But it's still here.", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
       "... was I?",
     ]
   },

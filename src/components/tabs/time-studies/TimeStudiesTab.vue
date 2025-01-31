@@ -1,5 +1,6 @@
 <script>
 import { STUDY_TREE_LAYOUT_TYPE, TimeStudyTreeLayout } from "./time-study-tree-layout";
+
 import DilationTimeStudy from "./DilationTimeStudy";
 import ECTimeStudy from "./ECTimeStudy";
 import EnslavedTimeStudy from "./EnslavedTimeStudy";
@@ -9,6 +10,7 @@ import PrimaryButton from "@/components/PrimaryButton";
 import SecretTimeStudy from "./SecretTimeStudy";
 import TimeStudyConnection from "./TimeStudyConnection";
 import TriadTimeStudy from "./TriadTimeStudy";
+
 export default {
   name: "TimeStudiesTab",
   components: {
@@ -31,7 +33,6 @@ export default {
       renderedConnectionCount: 0,
       isEnslaved: false,
       delayTimer: 0,
-      remaine: 60,
     };
   },
   computed: {
@@ -88,6 +89,7 @@ export default {
       }
     };
     incrementRenderedCount();
+
     // CSS controlling the fade in/out for the Enslaved study is an animation happening over the course of 1 second.
     // Removing it normally via key-switching ends up getting rid of it immediately without animating, which we do if it
     // wasn't purchased - otherwise it animates to the unbought state and then remove it after the animation finishes.
@@ -96,6 +98,7 @@ export default {
         ? Date.now()
         : 0;
     });
+
     // Scroll to top because time studies tab is rendered progressively
     // and we don't want the player to see empty space while it's loading.
     document.body.scrollTop = 0;
@@ -109,7 +112,6 @@ export default {
       this.layoutType = STUDY_TREE_LAYOUT_TYPE.current;
       this.vLevel = Ra.pets.v.level;
       this.isEnslaved = Enslaved.isRunning || Date.now() - this.delayTimer < 1000;
-      this.remaine = EternityChallenges.remainingCompletions;
     },
     studyComponent(study) {
       switch (study.type) {
@@ -127,11 +129,11 @@ export default {
         copyToClipboard(GameCache.currentStudyTree.value.exportString);
         GameUI.notify.info("Exported current Time Studies to your clipboard");
       }
-    },
-    
+    }
   }
-}
+};
 </script>
+
 <template>
   <div class="l-time-studies-tab">
     <div class="c-subtab-option-container">
@@ -153,7 +155,6 @@ export default {
       >
         Import tree
       </PrimaryButton>
-      
     </div>
     <div
       class="l-time-study-tree l-time-studies-tab__tree"

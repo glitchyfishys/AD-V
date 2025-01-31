@@ -170,7 +170,7 @@ createInCategory(AutomatorCurrency, "PendingCompletions", /pending[ \t]+completi
   $getter: () => {
     // If we are not in an EC, pretend like we have a ton of completions so any check for sufficient
     // completions returns true
-    if (!EternityChallenge.isRunning) return Decimal.NUMBER_MAX_VALUE;
+    if (!EternityChallenge.isRunning) return DC.NUMMAX;
     return EternityChallenge.current.gainedCompletionStatus.totalCompletions;
   }
 });
@@ -194,12 +194,12 @@ createInCategory(AutomatorCurrency, "FilterScore", /filter[ \t]+score/i, {
 createInCategory(AutomatorCurrency, "ST", /space[ \t]+theorems/i, {
   $autocomplete: "space theorems",
   $getter: () => V.availableST,
-  $unlocked: () => V.spaceTheorems > 0,
+  $unlocked: () => V.spaceTheorems.gt(0),
 });
 createInCategory(AutomatorCurrency, "TotalST", /total[ \t]+space[ \t]+theorems/i, {
   $autocomplete: "total space theorems",
   $getter: () => V.spaceTheorems,
-  $unlocked: () => V.spaceTheorems > 0,
+  $unlocked: () => V.spaceTheorems.gt(0),
 });
 
 for (let i = 1; i <= 12; ++i) {

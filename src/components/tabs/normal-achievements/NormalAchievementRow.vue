@@ -30,7 +30,7 @@ export default {
       };
     },
     inRow(){
-      return this.row.filter(x => x);
+      return this.row.filter(x => x != undefined);
     },
   },
   methods: {

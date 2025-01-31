@@ -10,11 +10,11 @@ export default {
     return {
       requirement: {
         tier: 1,
-        amount: 0
+        amount: new Decimal()
       },
       isBuyable: false,
-      purchasedBoosts: 0,
-      imaginaryBoosts: 0,
+      purchasedBoosts: new Decimal(),
+      imaginaryBoosts: new Decimal(),
       lockText: null,
       unlockedByBoost: null,
       creditsClosed: false,
@@ -30,12 +30,12 @@ export default {
     boostCountText() {
       if (this.requirementText) return this.requirementText;
       const parts = [this.purchasedBoosts];
-      if (this.imaginaryBoosts !== 0) {
+      if (this.imaginaryBoosts.neq(0)) {
         parts.push(this.imaginaryBoosts);
       }
-      const sum = parts.map(x => format(x, 2)).join(" + ");
+      const sum = parts.map(formatInt).join(" + ");
       if (parts.length >= 2) {
-        return `${sum} = ${format(parts.sum())}`;
+        return `${sum} = ${formatInt(parts.sum())}`;
       }
       return sum;
     },
@@ -51,14 +51,14 @@ export default {
     update() {
       const requirement = DimBoost.requirement;
       this.requirement.tier = requirement.tier;
-      this.requirement.amount = requirement.amount;
+      this.requirement.amount.copyFrom(requirement.amount);
       this.isBuyable = requirement.isSatisfied && DimBoost.canBeBought;
-      this.purchasedBoosts = DimBoost.purchasedBoosts;
-      this.imaginaryBoosts = DimBoost.imaginaryBoosts;
+      this.purchasedBoosts.copyFrom(DimBoost.purchasedBoosts);
+      this.imaginaryBoosts.copyFrom(DimBoost.imaginaryBoosts);
       this.lockText = DimBoost.lockText;
       this.unlockedByBoost = DimBoost.unlockedByBoost;
       this.creditsClosed = GameEnd.creditsClosed;
-      if (this.isDoomed) this.requirementText = format(this.purchasedBoosts);
+      if (this.isDoomed) this.requirementText = formatInt(this.purchasedBoosts);
       this.hasTutorial = Tutorial.isActive(TUTORIAL_STATE.DIMBOOST);
     },
     dimensionBoost(bulk) {
@@ -73,7 +73,7 @@ export default {
   <div class="c-dimension-row c-antimatter-dim-row c-antimatter-prestige-row">
     <div class="l-dim-row__prestige-text c-dim-row__label c-dim-row__label--amount">
       Dimension Boost ({{ boostCountText }}):
-      requires {{ format(requirement.amount, 2) }} {{ dimName }} Dimensions
+      requires {{ formatInt(requirement.amount) }} {{ dimName }} Dimensions
     </div>
     <PrimaryButton
       :enabled="isBuyable"

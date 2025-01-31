@@ -35,7 +35,8 @@ export default {
       this.isEnslaved = Enslaved.isRunning;
     },
     clicked() {
-      if(!preInfinityUGs.all[7].isBought && player.options.confirmations.glitchCL){
+      if(!preInfinityUGs.all[7].isBought && (player.options.confirmations.glitchCL && 
+ !PlayerProgress.metaUnlocked())){
         Modal.message.show(`you will fail glitch challenge ${preInfinityUGs.all[7].config.name} <br> which is to ${preInfinityUGs.all[7].config.requirement()}<br> maybe a challlenge can help? <br> you can disable this for <i>all</i> challenges in confirmations`);
       }
       if (this.isEnslaved) Enslaved.feelEternity();

@@ -8,16 +8,16 @@ export default {
       hasRealityStudy: false,
       machinesGained: new Decimal(),
       projectedRM: new Decimal(),
-      newIMCap: 0,
-      realityTime: 0,
-      glyphLevel: 0,
+      newIMCap: new Decimal(),
+      realityTime: new Decimal(),
+      glyphLevel: new Decimal(),
       nextGlyphPercent: 0,
-      nextMachineEP: 0,
+      nextMachineEP: new Decimal(),
       shardsGained: new Decimal(),
       currentShardsRate: new Decimal(),
       bestShardRate: new Decimal(),
       bestShardRateVal: new Decimal(),
-      ppGained: 0,
+      ppGained: new Decimal(),
       celestialRunText: ["", "", "", "", ""]
     };
   },
@@ -33,10 +33,10 @@ export default {
       if (this.machinesGained.gt(0) && this.machinesGained.lt(100)) {
         return `(Next at ${format(this.nextMachineEP, 2)} EP)`;
       }
-      if (this.machinesGained.eq(0) && this.newIMCap === 0) {
+      if (this.machinesGained.eq(0) && this.newIMCap.eq(0)) {
         return `(Projected: ${format(this.projectedRM, 2)} RM)`;
       }
-      if (this.newIMCap !== 0) {
+      if (this.newIMCap.neq(0)) {
         return `(iM Cap: ${formatMachines(0, this.newIMCap)})`;
       }
       if (this.machinesGained.lt(Number.MAX_VALUE)) {
@@ -45,7 +45,8 @@ export default {
       return "";
     },
     formatGlyphLevel() {
-      if (this.glyphLevel >= 10000) return `Glyph level: ${formatInt(this.glyphLevel)}`;
+      const cap = this.glyphLevel.min(Glyphs.levelCap)
+      if (this.glyphLevel.gte(1e4)) return `Glyph level: ${formatInt(this.glyphLevel)} ${ cap.neq(this.glyphLevel) ? `(caped)` : ''}`;
       return `Glyph level: ${formatInt(this.glyphLevel)} (${this.nextGlyphPercent} to next)`;
     },
     showShardsRate() {
@@ -66,9 +67,9 @@ export default {
     percentToNextGlyphLevelText() {
       const glyphState = getGlyphLevelInputs();
       let level = glyphState.actualLevel;
-      if (!isFinite(level)) level = 0;
-      const decimalPoints = this.glyphLevel > 1000 ? 0 : 1;
-      return `${formatPercents(Math.min(((level - Math.floor(level))), 0.999), decimalPoints)}`;
+      if (!level.isFinite()) level = new Decimal();
+      const decimalPoints = this.glyphLevel.gt(1e3) ? 0 : 1;
+      return `${formatPercents(level.sub(level.floor()).clampMax(0.999), decimalPoints)}`;
     },
     update() {
       this.hasRealityStudy = TimeStudy.reality.isBought;
@@ -81,28 +82,28 @@ export default {
       function EPforRM(rm) {
         const adjusted = Decimal.divide(rm, MachineHandler.realityMachineMultiplier);
         if (adjusted.lte(1)) return Decimal.pow10(4000);
-        if (adjusted.lte(10)) return Decimal.pow10(4000 / 27 * (adjusted.toNumber() + 26));
-        let result = Decimal.pow10(4000 * (adjusted.log10() / 3 + 1));
+        if (adjusted.lte(10)) return Decimal.pow10(adjusted.add(26).mul(4000).div(27));
+        let result = Decimal.pow10(adjusted.max(1).log10().div(3).add(1).mul(4e3));
         if (!PlayerProgress.realityUnlocked() && result.gte("1e8000")) {
           result = result.div("1e8000").pow(4).times("1e8000");
         }
         return result;
       }
 
-      const multiplier = simulatedRealityCount(false) + 1;
+      const multiplier = simulatedRealityCount(false).add(1);
       this.projectedRM = MachineHandler.gainedRealityMachines.times(multiplier)
         .clampMax(MachineHandler.hardcapRM);
       this.newIMCap = MachineHandler.projectedIMCap;
       this.machinesGained = this.projectedRM.clampMax(MachineHandler.distanceToRMCap);
-      this.realityTime = Time.thisRealityRealTime.totalMinutes;
-      this.glyphLevel = gainedGlyphLevel().actualLevel;
+      this.realityTime.copyFrom(Time.thisRealityRealTime.totalMinutes);
+      this.glyphLevel.copyFrom(gainedGlyphLevel().actualLevel);
       this.nextGlyphPercent = this.percentToNextGlyphLevelText();
-      this.nextMachineEP = EPforRM(this.machinesGained.plus(1));
-      this.ppGained = multiplier;
-      this.shardsGained = Effarig.shardsGained.mul(multiplier);
-      this.currentShardsRate = (this.shardsGained.div(Time.thisRealityRealTime.totalMinutes));
-      this.bestShardRate = player.records.thisReality.bestRSmin.mul(multiplier);
-      this.bestShardRateVal = player.records.thisReality.bestRSminVal.mul(multiplier);
+      this.nextMachineEP.copyFrom(EPforRM(this.machinesGained.plus(1)));
+      this.ppGained.copyFrom(multiplier);
+      this.shardsGained.copyFrom(Effarig.shardsGained.mul(multiplier));
+      this.currentShardsRate.copyFrom(this.shardsGained.div(Time.thisRealityRealTime.totalMinutes));
+      this.bestShardRate.copyFrom(multiplier.mul(player.records.thisReality.bestRSmin));
+      this.bestShardRateVal.copyFrom(multiplier.mul(player.records.thisReality.bestRSminVal));
 
       const teresaReward = this.formatScalingMultiplierText(
         "Glyph Sacrifice",
@@ -132,7 +133,7 @@ export default {
       if (Teresa.isRunning && Teresa.rewardMultiplier(Currency.antimatter.value).gt(Teresa.runRewardMultiplier)) {
         return true;
       }
-      return Currency.eternityPoints.value.exponent > 4000 &&
+      return Currency.eternityPoints.value.max(1).log10().gte(4000) &&
         ((Effarig.isRunning && !EffarigUnlock.reality.isUnlocked) || (Enslaved.isRunning && !Enslaved.isCompleted));
     }
   }
@@ -166,7 +167,7 @@ export default {
         >
           <div>Other resources gained:</div>
           <div>{{ quantifyInt("Perk Point", ppGained) }}</div>
-          <div v-if="!shardsGained.eq(0)">
+          <div v-if="shardsGained.neq(0)">
             {{ shardsGainedText }} ({{ format(currentShardsRate, 2) }}/min)
             <br>
             Peak: {{ format(bestShardRate, 2) }}/min at {{ format(bestShardRateVal, 2) }} RS

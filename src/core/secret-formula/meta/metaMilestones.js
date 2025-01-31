@@ -25,7 +25,7 @@ export const metaMilestones = {
     },
     glyphKeep: {
         event: GAME_EVENT.META_RESET_AFTER,
-        reward: () => `You keep Glyphs but their level is reset, Glitch Challenges and Achievements don't reset on Meta`,
+        reward: () => `You keep Glyphs but their level is reset, Glitch Challenges and Achievements don't reset on Meta, Infinity is always Broken`,
         effect: () => 1,
         condition: () => Currency.metas.gte(4),
         req: "4 Metas"
@@ -34,28 +34,28 @@ export const metaMilestones = {
         event: GAME_EVENT.META_RESET_AFTER,
         reward: () => `You gain ${formatX(MetaMilestone.metaSpeed.effectValue)} more MR based on your fastest Meta`,
         effect: () => Decimal.clampMin( Decimal.div(200, Time.bestMetaRealTime.totalMinutes), 1),
-        condition: () => Time.bestMetaRealTime.totalHours.lte(1),
+        condition: () => Time.bestMetaRealTime.totalHours.lte(new Decimal(1)),
         req: "BestMeta < 1h"
     },
     metaKeepEff: {
         event: GAME_EVENT.META_RESET_AFTER,
         reward: () => `You keep Effarig complete and blackholes are permanent on Metas`,
         effect: () => 1,
-        condition: () => Time.bestMetaRealTime.totalMinutes.lte(30),
+        condition: () => Time.bestMetaRealTime.totalMinutes.lte(new Decimal(30)),
         req: "BestMeta < 30m"
     },
     metaRaAndLai: {
         event: GAME_EVENT.META_RESET_AFTER,
         reward: () => `Keep Ra's glitch memory and lai'tela autobuyers`,
         effect: () => 10,
-        condition: () => Time.bestMetaRealTime.totalMinutes.lte(15),
+        condition: () => Time.bestMetaRealTime.totalMinutes.lte(new Decimal(15)),
         req: "BestMeta < 15m"
     },
     metaRealityAndGlitchGlyphAuto: {
         event: GAME_EVENT.META_RESET_AFTER,
         reward: () => `Reality and Glitch Glyphs auto update to the Alchemy cap on Reality`,
         effect: () => 1,
-        condition: () => Time.bestMetaRealTime.totalMinutes.lte(5),
+        condition: () => Time.bestMetaRealTime.totalMinutes.lte(new Decimal(5)),
         req: "BestMeta < 5m"
     },
 };

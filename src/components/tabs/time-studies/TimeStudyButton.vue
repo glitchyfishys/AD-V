@@ -32,7 +32,7 @@ export default {
       isUseless: false,
       isBought: false,
       isAvailableForPurchase: false,
-      STCost: 0,
+      STCost: new Decimal(),
       eternityChallengeRunning: false,
       isCompleteEC: false,
     };
@@ -106,27 +106,34 @@ export default {
       return this.eternityChallengeRunning ? "o-time-study-eternity-challenge--running" : "";
     },
     config() {
-      return { ...this.study.config, formatCost: value => (value >= 1e6 ? format(value) : formatInt(value)) };
+      return { ...this.study.config, formatCost: value => (value.gte(1e6) ? format(value) : formatInt(value)) };
     },
     showDefaultCostDisplay() {
-      const costCond = (this.showCost && !this.showStCost) || this.STCost === 0;
+      const costCond = (this.showCost && !this.showStCost) || this.STCost.eq(0);
       return !this.setup.isSmall && !this.doomedRealityStudy && costCond;
     },
+    isDisabledByEnslaved() {
+      return this.study.id === 192 && Enslaved.isRunning;
+    },
     customCostStr() {
-      const ttStr = this.setup.isSmall
-        ? `${formatInt(this.config.cost)} TT`
-        : quantifyInt("Time Theorem", this.config.cost);
+      let ttStr;
+      if (Decimal.lte(this.config.cost, 1e6)) {
+        ttStr = this.setup.isSmall
+          ? `${formatInt(this.config.cost)} TT`
+          : quantifyInt("Time Theorem", this.config.cost);
+      } else {
+        ttStr = this.setup.isSmall
+          ? `${format(this.config.cost)} TT`
+          : quantify("Time Theorem", this.config.cost);
+      }
       const stStr = this.setup.isSmall
         ? `${formatInt(this.STCost)} ST`
         : quantifyInt("Space Theorem", this.STCost);
 
       const costs = [];
-      if (this.config.cost) costs.push(ttStr);
+      if (this.config.cost.neq(0)) costs.push(ttStr);
       if (this.STCost && this.showStCost) costs.push(stStr);
       return costs.join(" + ");
-    },
-    isDisabledByEnslaved() {
-      return this.study.id === 192 && Enslaved.isRunning;
     },
     doomedRealityStudy() {
       return this.study.type === TIME_STUDY_TYPE.DILATION && this.study.id === 6 && Pelle.isDoomed;
@@ -146,7 +153,6 @@ export default {
       this.isCompleteEC = this.study.type === TIME_STUDY_TYPE.ETERNITY_CHALLENGE &&
         EternityChallenge(this.study.id).remainingCompletions === 0;
     },
-    
     handleClick() {
       if (this.specialClick === null || !this.study.isBought) this.study.purchase();
       else this.specialClick();

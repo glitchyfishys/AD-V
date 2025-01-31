@@ -30,16 +30,12 @@ export default {
 
 <template>
   <div>
-    
     <HeaderChallengeDisplay />
     <HeaderChallengeEffects />
     <HeaderPrestigeGroup />
-    
     <GameSpeedDisplay v-if="hasReality" />
     <br v-if="hasReality">
     <HeaderBlackHole />
-    <br>
-    Hi classic user, I would like to say that the classic UI gets updated last so some things don't display
   </div>
 </template>
 

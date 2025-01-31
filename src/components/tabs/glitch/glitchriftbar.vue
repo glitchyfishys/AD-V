@@ -29,7 +29,7 @@ export default {
   computed: {
     tooltipArrowStyle() {
       return {
-        borderTop: "0.55rem solid var(--color-pelle--base)"
+        borderTop: "0.55rem solid var(--color-glitch--base)"
       };
     }
   },
@@ -38,7 +38,7 @@ export default {
       const rift = this.rift;
       this.effects = rift.effects;
       this.isMaxed = rift.isMaxed;
-      this.percentage = rift.percentage;
+      this.percentage = new Decimal(rift.percentage);
       this.reducedTo = rift.reducedTo;
 
       this.selectedMilestoneResourceText = this.milestoneResourceText(this.selectedHoverMilestone);
@@ -59,7 +59,7 @@ export default {
       return `${formatInt(100 * value)}%`;
     },
     barOverlay() {
-      const overfill = this.percentage > 1;
+      const overfill = this.percentage.gt(1);
       return {
         "o-pelle-rift-bar-permanent": !overfill && this.hasEffectiveFill,
         "o-pelle-rift-bar-overfilled": overfill,
@@ -102,7 +102,7 @@ export default {
     ref="GlitchRiftBar"
     class="c-pelle-rift-bar"
     :class="{
-      'c-pelle-rift-bar-overfill-container': percentage > 1,
+      'c-pelle-rift-bar-overfill-container': percentage.gt(1),
     }"
     @mousemove="handleMilestoneRequirementTooltipDisplay"
   >
@@ -111,7 +111,7 @@ export default {
       <div
         class="o-pelle-rift-bar-fill"
         :style="{
-          width: `${Math.clampMax(percentage * 100, 100)}%`,
+          width: `${Math.clampMax(percentage.toNumber() * 100, 100)}%`,
         }"
       />
       <div

@@ -34,7 +34,7 @@ export const Quote = {
 // Gives an array specifying proportions of celestials to blend together on the modal, as a function of time, to
 // provide a smoother transition between different celestials to reduce potential photosensitivity issues
 function blendCel(cels) {
-  const totalTime = cels.map(cel => cel[1]).sum();
+  const totalTime = cels.map(cel => cel[1]).nSum();
   const tick = (Date.now() / 1000) % totalTime;
 
   // Blend the first blendTime seconds with the previous celestial and the last blendTime seconds with the next;
@@ -77,8 +77,11 @@ class QuoteLine {
     this._parent = parent;
     this._showCelestialName = line.showCelestialName ?? true;
     this._trembling = line.tremble ?? false;
+    this._glitched = line.glitched ?? false;
 
     this.name = line.name ?? undefined;
+
+    this.displayed = line.displayed ?? true;
 
 
     this._celestialArray = line.background
@@ -144,7 +147,15 @@ class QuoteLine {
   }
 
   get tremble() {
-    return this._trembling;
+    return typeof this._trembling == 'function' ?  this._trembling() : this._trembling;
+  }
+
+  get glitched() {
+    return  typeof this._glitched == 'function' ? this._glitched() : this._glitched;
+  }
+
+  get isDisplayed(){
+    return typeof this.displayed == 'function' ? this.displayed() : this.displayed;
   }
 
   get celestialName() {
@@ -220,5 +231,9 @@ export const Quotes = {
   glitch: mapGameDataToObject(
     GameDatabase.celestials.quotes.glitch,
     config => new CelQuotes(config, "glitch")
+  ),
+  cante: mapGameDataToObject(
+    GameDatabase.celestials.quotes.cante,
+    config => new CelQuotes(config, "cante")
   ),
 };

@@ -73,7 +73,7 @@ export function deepmergeAll(array, options) {
   if (!Array.isArray(array)) {
     throw new Error("first argument should be an array");
   }
-
+  
   if (!options) {
     // eslint-disable-next-line no-shadow
     const deepCloneMerge = (destinationArray, sourceArray, options) => sourceArray.map((element, index) => {

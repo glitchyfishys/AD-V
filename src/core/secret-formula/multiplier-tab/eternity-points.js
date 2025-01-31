@@ -13,7 +13,7 @@ export const EP = {
     // This effectively hides everything if the player can't actually gain any
     multValue: () => (Player.canEternity ? gainedEternityPoints() : 1),
     isActive: () => PlayerProgress.eternityUnlocked() || Player.canEternity,
-    dilationEffect: () => (Laitela.isRunning ? dilationPenalty(true) : 1),
+    dilationEffect: () => (Laitela.isRunning ? Decimal.mul(0.75, Effects.product(DilationUpgrade.dilationPenalty, GlitchSpeedUpgrade(1))) : DC.D1),
     isDilated: true,
     overlay: ["Δ", "<i class='fa-solid fa-layer-group' />"],
   },
@@ -22,7 +22,7 @@ export const EP = {
     isBase: true,
     fakeValue: DC.D5,
     multValue: () => DC.D5.pow(player.records.thisEternity.maxIP.plus(
-      gainedInfinityPoints()).log10() / (308 - PelleRifts.recursion.effectValue.toNumber()) - 0.7),
+      gainedInfinityPoints()).log10().div(Decimal.sub(308,PelleRifts.recursion.effectValue).sub(0.7))),
     isActive: () => PlayerProgress.eternityUnlocked(),
     icon: MultiplierTabIcons.CONVERT_FROM("IP"),
   },
@@ -37,10 +37,10 @@ export const EP = {
   divisor: {
     name: "Pelle - EP Formula Improvement",
     displayOverride: () => {
-      const div = 308 - PelleRifts.recursion.effectValue.toNumber();
+      const div = Decimal.sub(308,PelleRifts.recursion.effectValue);
       return `log(IP)/${formatInt(308)} ➜ log(IP)/${format(div, 2, 2)}`;
     },
-    powValue: () => 308 / (308 - PelleRifts.recursion.effectValue.toNumber()),
+    powValue: () => Decimal.div(308, Decimal.sub(308,PelleRifts.recursion.effectValue)),
     isActive: () => PelleRifts.recursion.canBeApplied,
     icon: MultiplierTabIcons.DIVISOR("EP"),
   },
@@ -85,19 +85,19 @@ export const EP = {
   iap: {
     name: "Shop Tab Purchases",
     multValue: () => ShopPurchase.EPPurchases.currentMult,
-    isActive: () => ShopPurchaseData.totalSTD > 0,
+    isActive: () => player.IAP.STDcoins.gt(0),
     icon: MultiplierTabIcons.IAP,
   },
 
   nerfTeresa: {
     name: "Teresa's Reality",
-    powValue: () => 0.55 * GlitchSpeedUpgrades.all[0].effectOrDefault(1),
+    powValue: () => Decimal.mul(GlitchSpeedUpgrades.all[0].effectOrDefault(1), 0.55),
     isActive: () => Teresa.isRunning,
     icon: MultiplierTabIcons.GENERIC_TERESA,
   },
   nerfV: {
     name: "V's Reality",
-    powValue: () => 0.5 * GlitchSpeedUpgrades.all[0].effectOrDefault(1),
+    powValue: () => Decimal.mul(GlitchSpeedUpgrades.all[0].effectOrDefault(1), 0.5),
     isActive: () => V.isRunning,
     icon: MultiplierTabIcons.GENERIC_V,
   },

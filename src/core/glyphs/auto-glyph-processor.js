@@ -1,3 +1,6 @@
+import { DC } from "../constants";
+import { Glyphs } from "./glyph-core";
+
 export const AutoGlyphProcessor = {
   get scoreMode() {
     return player.reality.glyphs.filter.select;
@@ -14,7 +17,7 @@ export const AutoGlyphProcessor = {
   get types() {
     return player.reality.glyphs.filter.types;
   },
-  // This exists to avoid unnecessary repeated object initialization in the filtering code
+  // This exists only to make a couple code sections cleaner.
   bitmaskIndexOffset(type) {
     switch (type) {
       case "time":
@@ -38,46 +41,42 @@ export const AutoGlyphProcessor = {
   // on only the glyph itself and not external factors.
   filterValue(glyph) {
     const typeCfg = this.types[glyph.type];
-    if (["companion", "reality", "glitch"].includes(glyph.type)) return Infinity;
-    if (glyph.type === "cursed") return -Infinity;
+    if (["companion", "reality", "glitch"].includes(glyph.type)) return new Decimal(Infinity);
+    if (glyph.type === "cursed") return new Decimal(-Infinity);
     switch (this.scoreMode) {
       case AUTO_GLYPH_SCORE.LOWEST_SACRIFICE:
         // Picked glyphs are never kept in this mode. Sacrifice cap needs to be checked since effarig caps
         // at a lower value than the others and we don't want to uselessly pick that to sacrifice all the time
-        return player.reality.glyphs.sac[glyph.type].gte(GlyphSacrifice[glyph.type].cap)
-          ? Decimal.NUMBER_MAX_VALUE.neg()
-          : player.reality.glyphs.sac[glyph.type].neg();
+        return player.reality.glyphs.sac[glyph.type].gte(GlyphInfo[glyph.type].sacrificeInfo.cap)
+          ? new Decimal(-Infinity)
+          : player.reality.glyphs.sac[glyph.type].mul(-1);
       case AUTO_GLYPH_SCORE.EFFECT_COUNT:
         // Effect count, plus a very small rarity term to break ties in favor of rarer glyphs
-        return strengthToRarity(glyph.strength) / 1000 + getGlyphEffectsFromBitmask(glyph.effects, glyph.type, 0)
-          .filter(effect => effect.isGenerated).length;
+        return strengthToRarity(glyph.strength).div(1e3).add(getGlyphEffectsFromArray(glyph.effects).length);
       case AUTO_GLYPH_SCORE.RARITY_THRESHOLD:
         return strengthToRarity(glyph.strength);
       case AUTO_GLYPH_SCORE.SPECIFIED_EFFECT: {
         // Value is equal to rarity but minus 200 for each missing effect. This makes all glyphs which don't
         // satisfy the requirements have a negative score and generally the worse a glyph misses the requirements,
         // the more negative of a score it will have
-        const glyphEffectCount = countValuesFromBitmask(glyph.effects);
+        const glyphEffectCount = glyph.effects.length;
         if (glyphEffectCount < typeCfg.effectCount) {
-          return strengthToRarity(glyph.strength) - 200 * (typeCfg.effectCount - glyphEffectCount);
+          return strengthToRarity(glyph.strength).sub(200 * (typeCfg.effectCount - glyphEffectCount));
         }
         // The missing effect count can be gotten by taking the full filter bitmask, removing only the bits which are
         // present on both the filter and the glyph, and then counting the bits up
         const missingEffects = countValuesFromBitmask(typeCfg.specifiedMask - (typeCfg.specifiedMask & glyph.effects));
-        return strengthToRarity(glyph.strength) - 200 * missingEffects;
+        return strengthToRarity(glyph.strength).sub(200 * missingEffects);
       }
       case AUTO_GLYPH_SCORE.EFFECT_SCORE: {
-        const effectList = getGlyphEffectsFromBitmask(glyph.effects, glyph.type, 0)
-          .filter(effect => effect.isGenerated)
-          .map(effect => effect.bitmaskIndex);
-        const offset = this.bitmaskIndexOffset(glyph.type);
+        const effectList = getGlyphEffectsFromArray(glyph.effects, 0, 0);
         // This ternary check is required to filter out any effects which may appear on the glyph which aren't normally
         // there in typical glyph generation. Ra-Nameless 25 is the only case where this happens, but this also has the
         // side-effect of making altered glyph generation in mods less likely to crash the game as well
         const effectScore = effectList
-          .map(e => (typeCfg.effectScores[e - offset] ? typeCfg.effectScores[e - offset] : 0))
+          .map(e => (typeCfg.effectScores[e] ? typeCfg.effectScores[e] : 0))
           .sum();
-        return strengthToRarity(glyph.strength) + effectScore;
+        return strengthToRarity(glyph.strength).add(effectScore);
       }
       // Picked glyphs are never kept in Alchemy modes.
       // Glyphs for non-unlocked or capped Alchemy Resources are assigned NEGATIVE_INFINITY
@@ -85,14 +84,14 @@ export const AutoGlyphProcessor = {
       case AUTO_GLYPH_SCORE.LOWEST_ALCHEMY: {
         const resource = AlchemyResource[glyph.type];
         const refinementGain = GlyphSacrificeHandler.glyphRefinementGain(glyph);
-        return (resource.isUnlocked && refinementGain > 0)
-          ? -resource.amount
-          : -Number.MAX_VALUE;
+        return resource.isUnlocked && refinementGain.gt(0)
+          ? resource.amount.neg()
+          : new Decimal(-Infinity);
       }
       case AUTO_GLYPH_SCORE.ALCHEMY_VALUE:
         return AlchemyResource[glyph.type].isUnlocked
           ? GlyphSacrificeHandler.glyphRefinementGain(glyph)
-          : -Number.MAX_VALUE;
+          : new Decimal(-Infinity);
       default:
         throw new Error("Unknown glyph score mode in score assignment");
     }
@@ -101,7 +100,7 @@ export const AutoGlyphProcessor = {
   thresholdValue(glyph) {
     // Glyph filter settings are undefined for companion/cursed/reality glyphs, so we return the lowest possible
     // value on the basis that we never want to automatically get rid of them
-    if (this.types[glyph.type] === undefined) return -Number.MAX_VALUE;
+    if (this.types[glyph.type] === undefined) return DC.BEMAX.neg();
     switch (this.scoreMode) {
       case AUTO_GLYPH_SCORE.EFFECT_COUNT:
         return player.reality.glyphs.filter.simple;
@@ -114,13 +113,13 @@ export const AutoGlyphProcessor = {
       case AUTO_GLYPH_SCORE.LOWEST_ALCHEMY:
       case AUTO_GLYPH_SCORE.ALCHEMY_VALUE:
         // These modes never keep glyphs and always refine/sacrifice
-        return Number.MAX_VALUE;
+        return DC.BEMAX;
       default:
         throw new Error("Unknown glyph score mode in threshold check");
     }
   },
   wouldKeep(glyph) {
-    return Decimal.gte(this.filterValue(glyph), this.thresholdValue(glyph));
+    return this.filterValue(glyph).gte(this.thresholdValue(glyph));
   },
   // Given a list of glyphs, pick the one with the highest score
   pick(glyphs) {
@@ -130,12 +129,12 @@ export const AutoGlyphProcessor = {
     const glyphScore = glyph => {
       const filter = this.filterValue(glyph);
       const threshold = this.thresholdValue(glyph);
-      return threshold === Number.MAX_VALUE ? filter : filter - threshold;
+      return Decimal.gte(threshold, Number.MAX_VALUE) ? filter : Decimal.sub(filter, threshold);
     };
 
     return glyphs
       .map(g => ({ glyph: g, score: glyphScore(g) }))
-      .reduce((x, y) => ( Decimal.gt(x.score, y.score) ? x : y))
+      .reduce((x, y) => (x.score.gt(y.score) ? x : y))
       .glyph;
   },
   getRidOfGlyph(glyph) {
@@ -204,9 +203,9 @@ export const AutoGlyphProcessor = {
 
 export function autoAdjustGlyphWeights() {
   const sources = getGlyphLevelSources();
-  const f = x => Math.pow(Math.clampMin(1, Math.log(5 * x)), 3 / 2);
+  const f = x => Decimal.pow(Decimal.clampMin(1, Decimal.log10(x.mul(5))), 3 / 2);
   const totalWeight = Object.values(sources).map(s => f(s.value)).sum();
-  const scaledWeight = key => 100 * f(sources[key].value) / totalWeight;
+  const scaledWeight = key => f(sources[key].value).div(totalWeight).mul(100).clampMax(100).toNumber();
 
   // Adjust all weights to be integer, while maintaining that they must sum to 100. We ensure it's within 1 on the
   // weights by flooring and then taking guesses on which ones would give the largest boost when adding the lost
@@ -238,39 +237,40 @@ function getGlyphLevelSources() {
     : Currency.eternityPoints.value;
   eternityPoints = Decimal.max(player.records.thisReality.maxEP, eternityPoints);
   const epCoeff = 0.016;
-  const epBase = Math.pow(Math.max(1, eternityPoints.pLog10()), 0.5) * epCoeff;
-  const replPow = 0.4 + getAdjustedGlyphEffect("replicationglyphlevel");
+  const epBase = Decimal.pow(Decimal.max(1, eternityPoints.add(1).log10()), 0.5).mul(epCoeff);
+  const replPow = getAdjustedGlyphEffect("replicationglyphlevel").add(0.4);
   const replCoeff = 0.025;
-  const replBase = Math.pow(Math.max(1, player.records.thisReality.maxReplicanti.log10()), replPow) * replCoeff;
-  const dtPow = 1.3 + getAdjustedGlyphEffect("realityDTglyph");
+  const replBase = Decimal.pow(Decimal.max(1, player.records.thisReality.maxReplicanti.max(1).log10()), replPow)
+    .mul(replCoeff);
+  const dtPow = Decimal.add(getAdjustedGlyphEffect("realityDTglyph"), 1.3);
   const dtCoeff = 0.025;
-  const dtBase = Math.pow(Math.max(1, player.records.thisReality.maxDT.pLog10()), dtPow) * dtCoeff;
-  const eterBase = Effects.max(1, RealityUpgrade(18));
+  const dtBase = Decimal.pow(Decimal.max(1, player.records.thisReality.maxDT.add(1).log10()), dtPow).mul(dtCoeff);
+  const eterBase = Effects.max(new Decimal(1), RealityUpgrade(18));
   return {
     ep: {
       name: "EP",
       value: epBase,
-      coeff: epCoeff,
-      exp: 0.5,
+      coeff: new Decimal(epCoeff),
+      exp: new Decimal(0.5),
     },
     repl: {
       name: "Replicanti",
       value: replBase,
-      coeff: replCoeff,
-      exp: replPow,
+      coeff: new Decimal(replCoeff),
+      exp: new Decimal(replPow),
     },
     dt: {
       name: "DT",
       value: dtBase,
-      coeff: dtCoeff,
-      exp: dtPow,
+      coeff: new Decimal(dtCoeff),
+      exp: new Decimal(dtPow),
     },
     eternities: {
       name: "Eternities",
       value: eterBase,
       // These are copied from Reality Upgrade 18's gameDB entry
-      coeff: 0.45,
-      exp: 0.5,
+      coeff: new Decimal(0.45),
+      exp: new Decimal(0.5),
     }
   };
 }
@@ -307,21 +307,20 @@ export function getGlyphLevelInputs() {
   const weights = player.celestials.effarig.glyphWeights;
   const adjustFactor = (source, weight) => {
     const input = source.value;
-    const powEffect = Math.pow(4 * weight, blendExp);
-    source.value = (input > 0 ? Math.pow(input * preScale, powEffect) / preScale : 0);
-    source.coeff = Math.pow(preScale, powEffect - 1) * Math.pow(source.coeff, powEffect);
-    source.exp *= powEffect;
+    const powEffect = Decimal.pow(4 * weight, blendExp);
+    source.value = (input.gt(0) ? Decimal.pow(input.mul(preScale), powEffect).div(preScale) : new Decimal());
+    source.coeff = Decimal.pow(preScale, powEffect.sub(1)).mul(Decimal.pow(source.coeff, powEffect));
+    source.exp = source.exp.mul(powEffect);
   };
   adjustFactor(sources.ep, weights.ep / 100);
   adjustFactor(sources.repl, weights.repl / 100);
   adjustFactor(sources.dt, weights.dt / 100);
   adjustFactor(sources.eternities, weights.eternities / 100);
-  const shardFactor = Ra.unlocks.relicShardGlyphLevelBoost.effectOrDefault(0);
-  let baseLevel = sources.ep.value * sources.repl.value * sources.dt.value * sources.eternities.value *
-    staticFactors.perkShop + shardFactor;
-
-  const singularityEffect = SingularityMilestone.glyphLevelFromSingularities.effectOrDefault(new Decimal(1));
-  baseLevel *= singularityEffect.toNumber();
+  const shardFactor = Ra.unlocks.relicShardGlyphLevelBoost.effectOrDefault(new Decimal());
+  let baseLevel = sources.ep.value.mul(sources.repl.value).mul(sources.dt.value).mul(sources.eternities.value)
+    .mul(staticFactors.perkShop).add(shardFactor);
+  const singularityEffect = SingularityMilestone.glyphLevelFromSingularities.effectOrDefault(1);
+  baseLevel = baseLevel.mul(singularityEffect);
 
   let scaledLevel = baseLevel;
   // The softcap starts at begin and rate determines how quickly level scales after the cap, turning a linear pre-cap
@@ -332,24 +331,24 @@ export function getGlyphLevelInputs() {
   // This is applied twice in a stacking way, using regular instability first and then again with hyperinstability
   // if the newly reduced level is still above the second threshold
   const instabilitySoftcap = (level, begin, rate) => {
-    if (level < begin) return level;
-    const excess = (level - begin) / rate;
-    return begin + 0.5 * rate * (Math.sqrt(1 + 4 * excess) - 1);
+    if (level.lt(begin)) return level;
+    const excess = (level.sub(begin)).div(rate);
+    return begin.plus(rate.div(2).times(Decimal.sqrt(excess.times(4).add(1)).sub(1)));
   };
-  scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.instability, MetaFabricatorUpgrade(15).isBought ? 1.5e5 : 500);
-  scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.hyperInstability, MetaFabricatorUpgrade(15).isBought ? 1e8 : 400);
-  scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.glitchInstability, 1e4);
-  scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.chaosInstability, 250);
-  scaledLevel = instabilitySoftcap(scaledLevel, 6e7, 50);
-  scaledLevel = instabilitySoftcap(scaledLevel, 7e7, 50);
-  scaledLevel = instabilitySoftcap(scaledLevel, 8e7, 50);
-  scaledLevel = instabilitySoftcap(scaledLevel, 9e7, 50);
-  scaledLevel = instabilitySoftcap(scaledLevel, 1e8, 5);
+  scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.instability, new Decimal (MetaFabricatorUpgrade(15).isBought ? 1.5e5 : 500));
+  scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.hyperInstability, new Decimal(MetaFabricatorUpgrade(15).isBought ? 1e8 : 400));
+  scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.glitchInstability, new Decimal(1e4));
+  scaledLevel = instabilitySoftcap(scaledLevel, staticFactors.chaosInstability, new Decimal(250));
+  scaledLevel = instabilitySoftcap(scaledLevel, new Decimal(6e7), new Decimal(50));
+  scaledLevel = instabilitySoftcap(scaledLevel, new Decimal(7e7), new Decimal(50));
+  scaledLevel = instabilitySoftcap(scaledLevel, new Decimal(8e7), new Decimal(50));
+  scaledLevel = instabilitySoftcap(scaledLevel, new Decimal(9e7), new Decimal(50));
+  scaledLevel = instabilitySoftcap(scaledLevel, new Decimal(1e8), new Decimal(5));
 
-  const scalePenalty = scaledLevel > 0 ? baseLevel / scaledLevel : 1;
-  const incAfterInstability = staticFactors.realityUpgrades + staticFactors.achievements;
-  baseLevel += incAfterInstability;
-  scaledLevel += incAfterInstability;
+  const scalePenalty = scaledLevel.gt(0) ? baseLevel.div(scaledLevel) : DC.D1;
+  const incAfterInstability = staticFactors.achievements.add(staticFactors.realityUpgrades);
+  baseLevel = baseLevel.add(incAfterInstability);
+  scaledLevel = scaledLevel.add(incAfterInstability).min(Glyphs.levelCap);
   return {
     ep: sources.ep,
     repl: sources.repl,
@@ -362,24 +361,22 @@ export function getGlyphLevelInputs() {
     shardFactor,
     singularityEffect,
     rawLevel: baseLevel,
-    actualLevel: Math.clamp(scaledLevel, 1, Glyphs.levelCap),
+    actualLevel: Decimal.max(1, scaledLevel),
   };
 }
 
 // Calculates glyph weights which don't change over the course of a reality unless particular events occur; this is
 // stored in the GameCache and only invalidated as needed
 export function staticGlyphWeights() {
-  const perkShop = Effects.max(1, PerkShopUpgrade.glyphLevel);
+  const perkShop = PerkShopUpgrade.glyphLevel.effectOrDefault(DC.D1);
   const instability = Glyphs.instabilityThreshold;
   const hyperInstability = Glyphs.hyperInstabilityThreshold;
   const glitchInstability = Glyphs.glitchInstabilityThreshold;
   const chaosInstability = Glyphs.chaosInstabilityThreshold;
-
-  const realityUpgrades = [Array.range(1, 5).every(x => RealityUpgrade(x).boughtAmount > 0)]
+  const realityUpgrades = [Array.range(1, 5).every(x => RealityUpgrade(x).boughtAmount.gt(0))]
     .concat(Array.range(1, 4).map(x => Array.range(1, 5).every(y => RealityUpgrade(5 * x + y).isBought)))
     .filter(x => x)
     .length;
-
   const achievements = Effects.sum(Achievement(148), Achievement(166));
   return {
     perkShop,

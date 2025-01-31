@@ -27,7 +27,7 @@ export default {
       isoverloaded: false,
       multiplier: new Decimal(0),
       amount: new Decimal(0),
-      bought: 0,
+      bought: new Decimal(0),
       rateOfChange: new Decimal(0),
       cost: new Decimal(0),
       isAvailableForPurchase: false,
@@ -70,12 +70,12 @@ export default {
       return this.buttonContents.length > 20;
     },
     showCostTitle() {
-      return this.cost.exponent < 1e6;
+      return this.cost.max(1).log10().lte(1e6);
     },
     timeEstimate() {
       if (!this.showTTCost || this.ttGen.eq(0)) return "";
       const time = Decimal.sub(this.ttCost, this.currTT).dividedBy(this.ttGen);
-      return time.gt(0) ? `Enough TT in ${TimeSpan.fromSeconds(time.toNumber()).toStringShort()}` : "";
+      return time.gt(0) ? `Enough TT in ${TimeSpan.fromSeconds(time).toStringShort()}` : "";
     }
   },
   watch: {
@@ -87,12 +87,12 @@ export default {
     update() {
       const tier = this.tier;
       const dimension = TimeDimension(tier);
-      this.isCapped = Enslaved.isRunning && dimension.bought > 0;
-      this.isoverloaded = dimension.bought >= 1e15;
+      this.isCapped = Enslaved.isRunning && dimension.bought.gt(0);
+      this.isoverloaded = dimension.bought.gte(1e15);
       this.isUnlocked = dimension.isUnlocked;
       this.multiplier.copyFrom(dimension.multiplier);
       this.amount.copyFrom(dimension.amount);
-      this.bought = dimension.bought;
+      this.bought.copyFrom(dimension.bought);
       if (tier < 8) {
         this.rateOfChange.copyFrom(dimension.rateOfChange);
       }

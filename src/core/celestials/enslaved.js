@@ -1,28 +1,30 @@
 import { BitUpgradeState } from "../game-mechanics";
 import { GameDatabase } from "../secret-formula/game-database";
 
+import { DC } from "../constants";
+
 import { Quotes } from "./quotes";
 
 export const ENSLAVED_UNLOCKS = {
   FREE_TICKSPEED_SOFTCAP: {
     id: 0,
-    price: TimeSpan.fromYears(1e35).totalMilliseconds,
+    price: TimeSpan.fromYears(new Decimal(1e35)).totalMilliseconds,
     secondaryRequirement: () => true,
     description: () => `Increase the softcap to Tickspeed upgrades from Time Dimensions by ${formatInt(1e5)}`,
   },
   RUN: {
     id: 1,
-    price: TimeSpan.fromYears(1e40).totalMilliseconds,
+    price: TimeSpan.fromYears(new Decimal(1e40)).totalMilliseconds,
     secondaryRequirement() {
-      const hasLevelRequirement = player.records.bestReality.glyphLevel >= 5000;
-      const hasRarityRequirement = strengthToRarity(player.records.bestReality.glyphStrength) >= 100;
+      const hasLevelRequirement = player.records.bestReality.glyphLevel.gte(5000);
+      const hasRarityRequirement = strengthToRarity(player.records.bestReality.glyphStrength).gte(100);
       return hasLevelRequirement && hasRarityRequirement;
     },
     description() {
-      const hasLevelRequirement = player.records.bestReality.glyphLevel >= 5000;
-      const hasRarityRequirement = strengthToRarity(player.records.bestReality.glyphStrength) >= 100;
+      const hasLevelRequirement = player.records.bestReality.glyphLevel.gte(5000);
+      const hasRarityRequirement = strengthToRarity(player.records.bestReality.glyphStrength).gte(100);
       return `Unlock The Nameless Ones' Reality (requires ${hasLevelRequirement ? "[✓]" : "[✗]"} a level
-      ${formatInt(5000)} Glyph and ${hasRarityRequirement ? "[✓]" : "[✗]"} a ${formatRarity(100)} rarity Glyph)`;
+      ${formatInt(5000)} Glyph and ${hasRarityRequirement ? "[✓]" : "[✗]"} a ${formatRarity(new Decimal(100))} rarity Glyph)`;
     }
   }
 };
@@ -35,9 +37,10 @@ export const Enslaved = {
   nextTickDiff: new Decimal(50),
   isReleaseTick: false,
   autoReleaseTick: 0,
-  autoReleaseSpeed: 0,
+  autoReleaseSpeed: DC.D0,
+  timeCap: DC.BEMAX,
   glyphLevelMin: 5000,
-  currentBlackHoleStoreAmountPerMs: 0,
+  currentBlackHoleStoreAmountPerMs: DC.D0,
   get tachyonNerf(){ return ((player.records.fullGameCompletions > 0) ? 0.32 : 0.3);},
   toggleStoreBlackHole() {
     if (!this.canModifyGameTimeStorage) return;
@@ -77,24 +80,24 @@ export const Enslaved = {
   },
   get storedRealTimeCap() {
     const addedCap = Ra.unlocks.improvedStoredTime.effects.realTimeCap.effectOrDefault(0);
-    return Math.min(1000 * 3600 * 8 + addedCap, 86400000);
+    return new Decimal(3600 * 1000 * 8).add(addedCap);
   },
   get isAutoReleasing() {
     return player.celestials.enslaved.isAutoReleasing && !BlackHoles.areNegative && !Pelle.isDisabled("blackhole");
   },
-  storeRealTime() {
+  storeRealTime(diffVal) {
     if (Pelle.isDoomed) return;
     const thisUpdate = Date.now();
-    const diff = Math.max(thisUpdate - player.lastUpdate, 0) * realityUGs.all[7].effectOrDefault(1);
+    const diff = new Decimal(diffVal === undefined ? Decimal.max(thisUpdate - player.lastUpdate, 0) : diffVal).mul(realityUGs.all[7].effectOrDefault(1));
     const efficiency = this.storedRealTimeEfficiency;
     const maxTime = this.storedRealTimeCap;
-    player.celestials.enslaved.storedReal += diff * efficiency;
-    if (player.celestials.enslaved.storedReal > maxTime) {
+    player.celestials.enslaved.storedReal = player.celestials.enslaved.storedReal.add(diff.mul(efficiency));
+    if (player.celestials.enslaved.storedReal.gt(maxTime)) {
       player.celestials.enslaved.isStoringReal = false;
       player.celestials.enslaved.storedReal = maxTime;
     }
     // More than 24 hours in milliseconds
-    if (player.celestials.enslaved.storedReal > (24 * 60 * 60 * 1000)) SecretAchievement(46).unlock();
+    if (player.celestials.enslaved.storedReal.gte(24 * 60 * 60 * 1000)) SecretAchievement(46).unlock();
     player.lastUpdate = thisUpdate;
   },
   autoStoreRealTime(diffMs) {
@@ -116,21 +119,21 @@ export const Enslaved = {
       if (!autoRelease) ImaginaryUpgrade(24).tryShowWarningModal("discharge your Black Hole");
       return;
     }
-    player.requirementChecks.reality.slowestBH = new Decimal(1);
+    player.requirementChecks.reality.slowestBH = DC.D1;
     let release = player.celestials.enslaved.stored;
     if (Enslaved.isRunning) {
       release = Enslaved.storedTimeInsideEnslaved(release);
-      if (Time.thisReality.totalYears.add(TimeSpan.fromMilliseconds(release).totalYears).gt(1)) {
+      if (Time.thisReality.totalYears.add(TimeSpan.fromMilliseconds(release).totalYears.gt(1))) {
         EnslavedProgress.storedTime.giveProgress();
       }
     }
     if (autoRelease) release = release.mul(0.01);
-    this.nextTickDiff = release;
+    this.nextTickDiff = Decimal.clampMax(release, this.timeCap);
     this.isReleaseTick = true;
     // Effective gamespeed from stored time assumes a "default" 50 ms update rate for consistency
     const effectiveGamespeed = release.div(50);
     player.celestials.ra.peakGamespeed = Decimal.max(player.celestials.ra.peakGamespeed, effectiveGamespeed);
-    this.autoReleaseSpeed = release.div(player.options.updateRate / 5);
+    this.autoReleaseSpeed = release.div(player.options.updateRate).div(5);
     player.celestials.enslaved.stored = player.celestials.enslaved.stored.mul(autoRelease ? 0.99 : 0);
   },
   has(info) {
@@ -180,17 +183,18 @@ export const Enslaved = {
     return EffarigUnlock.eternity.isUnlocked;
   },
   get realityBoostRatio() {
-    return Math.max(1, Math.floor(player.celestials.enslaved.storedReal / Math.max(1000, Time.thisRealityRealTime.totalMilliseconds.toNumber())));
+    return Decimal.max(1, Decimal.floor(player.celestials.enslaved.storedReal
+      .div(Decimal.max(1000, Time.thisRealityRealTime.totalMilliseconds))));
   },
   get canAmplify() {
-    return this.realityBoostRatio > 1 && !Pelle.isDoomed && !isInCelestialReality();
+    return this.realityBoostRatio.gt(1) && !Pelle.isDoomed && !isInCelestialReality();
   },
   storedTimeInsideEnslaved(stored) {
     if (stored.lte(1e3)) return stored;
-    return Decimal.pow(10, Math.pow(Decimal.log10(stored.div(1e3)), 0.55)).mul(1e3);
+    return Decimal.pow(10, Decimal.pow(Decimal.log10(stored.div(1e3)), 0.55)).times(1e3);
   },
   feelEternity() {
-    let cap = ((player.records.fullGameCompletions > 0) ? "1e308" : "1e66");
+    let cap = new Decimal((player.records.fullGameCompletions > 0) ? "1e308" : "1e66");
     if (this.feltEternity) {
       Modal.message.show(`You have already exposed this crack in the Reality. Time in this Eternity is being multiplied
         by your Eternity count, up to a maximum of ${formatX(cap)}.`,
@@ -209,15 +213,15 @@ export const Enslaved = {
     player.celestials.enslaved.feltEternity = value;
   },
   get nextHintCost() {
-    return TimeSpan.fromYears(1e40 * Math.pow(3, this.hintCostIncreases)).totalMilliseconds;
+    return TimeSpan.fromYears(new Decimal(1e40 * Math.pow(3, this.hintCostIncreases))).totalMilliseconds;
   },
   get hintCostIncreases() {
     const hintTime = player.celestials.enslaved.zeroHintTime - Date.now();
-    return Math.clampMin(hintTime / TimeSpan.fromDays(1).totalMilliseconds.toNumber(), 0);
+    return Math.clampMin(hintTime / TimeSpan.fromDays(new Decimal(1)).totalMilliseconds.toNumber(), 0);
   },
   spendTimeForHint() {
-    if (player.celestials.enslaved.stored < this.nextHintCost) return false;
-    player.celestials.enslaved.stored -= this.nextHintCost;
+    if (player.celestials.enslaved.stored.lt(this.nextHintCost)) return false;
+    player.celestials.enslaved.stored = player.celestials.enslaved.stored.sub(this.nextHintCost);
     if (Enslaved.hintCostIncreases === 0) {
       player.celestials.enslaved.zeroHintTime = Date.now() + TimeSpan.fromDays(1).totalMilliseconds.toNumber();
     } else {
@@ -230,9 +234,9 @@ export const Enslaved = {
   symbol: "\uf0c1",
 
   reset() {
-    player.celestials.enslaved.stored = new Decimal();
-    player.celestials.enslaved.storedReal = 0;
-    player.celestials.enslaved.tesseracts = 0;
+    player.celestials.enslaved.stored = DC.D0;
+    player.celestials.enslaved.storedReal = DC.D0;
+    player.celestials.enslaved.tesseracts = DC.D0;
     if(MetaFabricatorUpgrade(11).isBought) return;
     player.celestials.enslaved.completed = false;
     player.celestials.enslaved.unlocks = [];
@@ -265,7 +269,8 @@ class EnslavedProgressState extends BitUpgradeState {
   giveProgress() {
     // Bump the last hint time appropriately if the player found the hint
     if (this.hasHint && !this.hasProgress) {
-      player.celestials.enslaved.zeroHintTime -= Math.log(2) / Math.log(3) * TimeSpan.fromDays(1).totalMilliseconds.toNumber();
+      player.celestials.enslaved.zeroHintTime -= Math.log(2) /
+        Math.log(3) * TimeSpan.fromDays(1).totalMilliseconds.toNumber();
       GameUI.notify.success("You found a crack in The Nameless Ones' Reality!", 10000);
     }
     player.celestials.enslaved.progressBits |= (1 << this.id);
@@ -283,32 +288,31 @@ export const Tesseracts = {
   },
 
   get extra() {
-    const ex = this.bought * (SingularityMilestone.tesseractMultFromSingularities.effectOrDefault(1) - 1) + MetaFabricatorUpgrade(11).effectOrDefault(new Decimal()).toNumber();
-    if(ex > 20) return Math.min(ex - ((ex - 20) / 1.05), 35);
+    let ex = this.bought.times(DC.DM1.add(SingularityMilestone.tesseractMultFromSingularities.effectOrDefault(1))).add(MetaFabricatorUpgrade(11).effectOrDefault(DC.D0));
+    if(ex.gt(20)) ex = Decimal.min(ex.sub(ex.sub(20).div(1.05)), MetaFabricatorUpgrade(15).canBeApplied ? DC.BEMAX : 35);
+    if(ex.gt(150)) ex =  ex.div(ex.div(150).pow(0.85));
     return ex;
   },
+  // -1 + x = x - 1, so do this to reduce making more decimals than necessary
 
   get effectiveCount() {
-    return this.bought + this.extra;
+    return this.bought.add(this.extra);
   },
 
   buyTesseract() {
     if (!this.canBuyTesseract) return;
     if (GameEnd.creditsEverClosed) return;
-    player.celestials.enslaved.tesseracts++;
+    player.celestials.enslaved.tesseracts = player.celestials.enslaved.tesseracts.add(1);
   },
 
-  // This used to be a somewhat complicated function which spaced costs out super-exponentially, but the decision to
-  // hardcap all resources (as feasible) to e9e15 meant that in practice only the first 10 or so could actually be
-  // obtained. Changing the function to a hardcoded array is better for understanding the code since it's small.
-  // Note that costs go a bit past e9e15 because while AM is capped at e9e15, most other resources (including IP)
-  // aren't and can go a tiny bit past it.
-  // The formula is a hardcoded 2, 4, 6 followed by successive multiplication by 2x, 4x, 6x, and so on.
-  BASE_COSTS: [2, 4, 6, 12, 48, 288, 2304, 23040, 276480, 3870720, 61931520, 1114767360],
+  // This used to be an array, but tess costs are just a super easy thing to calculate in BE so i dont care
+
   costs(index) {
-    // In practice this should never happen, but have it just to be safe
-    if (index >= this.BASE_COSTS.length) return Decimal.pow10(Number.MAX_VALUE);
-    return Decimal.pow10(1e7 * this.BASE_COSTS[Math.floor(index)]);
+    // eslint-disable-next-line no-param-reassign
+    index = index.add(DC.D1);
+    if (index.lte(3)) return Decimal.pow10(index.times(2e7));
+    if(index.gt(12)) index = index.add(137);
+    return Decimal.pow10((index.sub(3)).factorial().times(Decimal.pow(2, index.sub(3))).times(6e7));
   },
 
   get nextCost() {
@@ -320,13 +324,13 @@ export const Tesseracts = {
   },
 
   capIncrease(count = this.bought) {
-    const totalCount = count * Math.min(SingularityMilestone.tesseractMultFromSingularities.effectOrDefault(1), 4.5);
-    const base = totalCount < 1 ? 0 : 250e3 * Math.pow(2, totalCount);
-    return base * (AlchemyResource.boundless.effectValue + 1);
+    const totalCount = count.times(SingularityMilestone.tesseractMultFromSingularities.effectOrDefault(DC.D1).min(4.5));
+    const base = totalCount.lt(1) ? DC.D0 : Decimal.pow(2, totalCount).times(2.5e5);
+    return base.times(DC.D1.add(AlchemyResource.boundless.effectValue));
   },
 
   get nextTesseractIncrease() {
-    return this.capIncrease(this.bought + 1) - this.capIncrease(this.bought);
+    return this.capIncrease(this.bought.add(1)).sub(this.capIncrease(this.bought));
   },
 };
 

@@ -1,12 +1,12 @@
 <script>
 import wordShift from "@/core/word-shift";
 
-import CustomizableTooltip from "@/components/CustomizeableTooltip";
+import CustomizeableTooltip from "@/components/CustomizeableTooltip";
 
 export default {
   name: "PelleRiftBar",
   components: {
-    CustomizableTooltip
+    CustomizeableTooltip
   },
   props: {
     rift: {
@@ -161,7 +161,7 @@ export default {
       {{ formatPercents(percentage, 3) }}
       <span v-if="!isMaxed">({{ isActive ? "Filling" : "Idle" }})</span>
     </div>
-    <CustomizableTooltip
+    <CustomizeableTooltip
       class="o-pelle-rift-bar-milestone-hover-container"
       :tooltip-class="tooltipContentClass()"
       :tooltip-arrow-style="tooltipArrowStyle"
@@ -174,7 +174,7 @@ export default {
         <br>
         {{ selectedMilestoneDescriptionText }}
       </template>
-    </CustomizableTooltip>
+    </CustomizeableTooltip>
   </div>
 </template>
 

@@ -16,6 +16,10 @@ export default {
       type: Boolean,
       required: true
     },
+    glitched: {
+      type: Boolean,
+      required: true
+    },
   },
   computed: {
     modalClass() {
@@ -27,16 +31,24 @@ export default {
   methods: {
     styleObject(celEntry, opac, isText) {
       const baseCol = `var(--color-${celEntry[0]}--base)`;
+      const missing = this.glitched ?
+        {
+          backgroundImage: 'var(--color-missing)',
+          backgroundSize: '20px 20px',
+        } : {}
+      
       if (celEntry[0] === "laitela") {
         return {
           color: `var(--color-${celEntry[0]}--accent)`,
           background: isText ? undefined : baseCol,
-          opacity: opac * celEntry[1]
+          opacity: opac * celEntry[1],
+          ...missing
         };
       }
       return {
         color: baseCol,
-        opacity: opac * celEntry[1]
+        opacity: opac * celEntry[1],
+        ...missing
       };
     },
   },

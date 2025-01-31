@@ -1,3 +1,5 @@
+import { DC } from "../constants";
+
 import { UpgradeableAutobuyerState } from "./autobuyer";
 
 export class GalaxyAutobuyerState extends UpgradeableAutobuyerState {
@@ -52,7 +54,7 @@ export class GalaxyAutobuyerState extends UpgradeableAutobuyerState {
 
   get interval() {
     return this.isBuyMaxUnlocked
-      ? TimeSpan.fromSeconds(this.buyMaxInterval).totalMilliseconds.toNumber()
+      ? TimeSpan.fromSeconds(new Decimal(this.buyMaxInterval)).totalMilliseconds.toNumber()
       : super.interval;
   }
 
@@ -66,7 +68,7 @@ export class GalaxyAutobuyerState extends UpgradeableAutobuyerState {
 
   tick() {
     super.tick();
-    const limit = this.limitGalaxies ? this.maxGalaxies : Number.MAX_VALUE;
+    const limit = this.limitGalaxies ? this.maxGalaxies : DC.BEMAX;
     requestGalaxyReset(this.isBuyMaxUnlocked, limit);
   }
 }

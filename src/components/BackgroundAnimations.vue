@@ -1,24 +1,30 @@
 <script>
 import BlobSnowflakes from "@/components/BlobSnowflakes";
 import TachyonParticles from "@/components/tabs/time-dilation/TachyonParticles";
+import MetaReset from "@/components/MetaReset";
 
 export default {
   name: "BackgroundAnimations",
   components: {
     BlobSnowflakes,
-    TachyonParticles
+    TachyonParticles,
+    MetaReset
   },
   data() {
     return {
-      blob: false,
-      animateTachyons: false
+      animations: {
+        blob: false,
+        animateTachyons: false,
+        metaReset: false
+      }
     };
   },
   methods: {
     update() {
-      this.blob = Theme.currentName() === "S11";
-      this.animateTachyons = player.options.animations.tachyonParticles &&
+      this.animations.blob = Theme.currentName() === "S11";
+      this.animations.animateTachyons = player.options.animations.tachyonParticles &&
         Tabs.current[this.$viewModel.subtab].name === "Time Dilation";
+      this.animations.metaReset = MetaAnimation;
     }
   },
 };
@@ -29,8 +35,9 @@ export default {
     id="ui-background-animations"
     class="l-background-animations"
   >
-    <BlobSnowflakes v-if="blob" />
-    <TachyonParticles v-if="animateTachyons" />
+    <BlobSnowflakes v-if="animations.blob" />
+    <TachyonParticles v-if="animations.animateTachyons" />
+    <MetaReset v-if="animations.metaReset"/>
   </div>
 </template>
 

@@ -18,16 +18,16 @@ export default {
       isCapped: false,
       multiplier: new Decimal(0),
       amount: new Decimal(0),
-      bought: 0,
-      boughtBefore10: 0,
+      bought: new Decimal(0),
+      boughtBefore10: new Decimal(0),
       rateOfChange: new Decimal(0),
       singleCost: new Decimal(0),
       until10Cost: new Decimal(0),
       isAffordable: false,
       buyUntil10: true,
-      howManyCanBuy: 0,
+      howManyCanBuy: new Decimal(0),
       isContinuumActive: false,
-      continuumValue: 0,
+      continuumValue: new Decimal(0),
       isShown: false,
       isCostsAD: false,
       amountDisplay: "",
@@ -43,7 +43,7 @@ export default {
       return this.buyUntil10 ? format(this.until10Cost) : format(this.singleCost);
     },
     continuumString() {
-      if (this.continuumValue >= 1e6) return format(this.continuumValue, 2);
+      if (this.continuumValue.gte(1e6)) return format(this.continuumValue, 2);
       return formatFloat(this.continuumValue, 2);
     },
     showRow() {
@@ -52,7 +52,7 @@ export default {
     boughtTooltip() {
       if (this.isCapped) return `Nameless prevents the purchase of more than ${format(1)} 8th Antimatter Dimension`;
       if (this.isContinuumActive) return "Continuum produces all your Antimatter Dimensions";
-      return `Purchased ${quantify("time", this.bought)}`;
+      return `Purchased ${quantifyInt("time", this.bought)}`;
     },
     costUnit() {
       return `${AntimatterDimension(this.tier - 2).shortDisplayName} AD`;
@@ -84,38 +84,38 @@ export default {
 
       const allow = (Enslaved.isRunning && !Glitch.isRunning) || Glitch.augmentEffectActive(3);
       
-      this.isCapped = tier === 8 && allow && dimension.bought >= 1;
+      this.isCapped = tier === 8 && allow && dimension.bought.gte(1);
       this.multiplier.copyFrom(AntimatterDimension(tier).multiplier);
       this.amount.copyFrom(dimension.totalAmount);
-      this.bought = dimension.bought;
-      this.boughtBefore10 = dimension.boughtBefore10;
-      this.howManyCanBuy = buyUntil10 ? dimension.howManyCanBuy : Math.min(dimension.howManyCanBuy, 1);
+      this.bought.copyFrom(dimension.bought);
+      this.boughtBefore10.copyFrom(dimension.boughtBefore10);
+      this.howManyCanBuy.copyFrom(buyUntil10 ? dimension.howManyCanBuy : Decimal.min(dimension.howManyCanBuy, 1));
       this.singleCost.copyFrom(dimension.cost);
-      this.until10Cost.copyFrom(dimension.cost.times(Math.max(dimension.howManyCanBuy, 1)));
+      this.until10Cost.copyFrom(dimension.cost.times(Decimal.max(dimension.howManyCanBuy, 1)));
       if (tier < 8) {
         this.rateOfChange.copyFrom(dimension.rateOfChange);
       }
       this.isAffordable = dimension.isAffordable;
       this.buyUntil10 = buyUntil10;
       this.isContinuumActive = Laitela.continuumActive;
-      if (this.isContinuumActive) this.continuumValue = dimension.continuumValue;
+      if (this.isContinuumActive) this.continuumValue.copyFrom(dimension.continuumValue);
       this.isShown =
-        (DimBoost.totalBoosts > 0 && DimBoost.totalBoosts + 3 >= tier) || PlayerProgress.infinityUnlocked();
+        (DimBoost.totalBoosts.gt(0) && DimBoost.totalBoosts.add(3).gte(tier)) || PlayerProgress.infinityUnlocked();
       this.isCostsAD = NormalChallenge(6).isRunning && tier > 2 && !this.isContinuumActive;
-      this.amountDisplay = this.tier < 8 ? format(this.amount, 2) : format(this.amount,2);
+      this.amountDisplay = this.tier < 8 ? format(this.amount, 2) : formatInt(this.amount);
       this.hasTutorial = (tier === 1 && Tutorial.isActive(TUTORIAL_STATE.DIM1)) ||
         (tier === 2 && Tutorial.isActive(TUTORIAL_STATE.DIM2));
     },
     buy() {
       if (this.isContinuumActive) return;
-      if (this.howManyCanBuy === 1) {
+      if (this.howManyCanBuy.eq(1)) {
         buyOneDimension(this.tier);
       } else {
         buyAsManyAsYouCanBuy(this.tier);
       }
     },
     showCostTitle(value) {
-      return value.exponent < 1000000;
+      return value.lt("1e1000000");
     },
     buttonClass() {
       return {
@@ -173,11 +173,11 @@ export default {
         >
           <div
             class="fill-purchased"
-            :style="{ 'width': boughtBefore10*10 + '%' }"
+            :style="{ 'width': boughtBefore10.toNumber()*10 + '%' }"
           />
           <div
             class="fill-possible"
-            :style="{ 'width': howManyCanBuy*10 + '%' }"
+            :style="{ 'width': howManyCanBuy.toNumber()*10 + '%' }"
           />
         </div>
       </button>

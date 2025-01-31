@@ -18,7 +18,7 @@ export default {
       pauseText: "",
       canCharge: false,
       isCharging: false,
-      storedTime: 0,
+      storedTime: new Decimal(),
       canAutoRelease: false,
       isAutoReleasing: false,
     };
@@ -50,7 +50,7 @@ export default {
       this.pauseText = this.pauseButtonText();
       this.canCharge = Enslaved.isUnlocked;
       this.isCharging = Enslaved.isStoringGameTime;
-      this.storedTime = new Decimal(player.celestials.enslaved.stored);
+      this.storedTime.copyFrom(player.celestials.enslaved.stored);
       this.canAutoRelease = Ra.unlocks.autoPulseTime.canBeApplied;
       this.isAutoReleasing = player.celestials.enslaved.isAutoReleasing;
     },
@@ -58,7 +58,7 @@ export default {
       if (BlackHoles.arePaused && player.blackHoleNegative.lt(1)) return "Uninvert BH";
       if (BlackHoles.arePaused) return "Unpause BH";
       const accel = BlackHoles.unpauseAccelerationFactor;
-      if (accel !== 1) return `${formatPercents(accel, 1)} speed`;
+      if (accel.lt(1)) return `${formatPercents(new Decimal(accel), 1)} speed`;
       if (player.blackHoleNegative.lt(1)) return "Invert BH";
       return "Pause BH";
     },

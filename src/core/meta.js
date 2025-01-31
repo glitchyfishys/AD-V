@@ -1,4 +1,5 @@
- import { DC } from "./constants"
+import { DC } from "./constants"
+window.MetaAnimation = false;
 
 export function isMetaAvailable() {
   return Player.canMeta;
@@ -31,23 +32,14 @@ export function processManualMeta() {
 }
 
 export function runMetaAnimation() {
+  MetaAnimation = true;
   document.getElementById("ui").style.userSelect = "none";
-  document.getElementById("ui").style.animation = "a-metaze 10s 1";
-  document.getElementById("realityanimbg").style.animation = "a-metazebg 10s 1";
-  document.getElementById("realityanimbg").style.display = "block";
-  if (Theme.current().isDark()) document.getElementById("realityanimbg").style.filter = "invert(1)";
-  else document.getElementById("realityanimbg").style.filter = "";
-  setTimeout(() => {
-    document.getElementById("realityanimbg").play();
-    document.getElementById("realityanimbg").currentTime = 0;
-    document.getElementById("realityanimbg").play();
-  }, 2000);
+  document.getElementById("ui").style.pointerEvents = "none";
+
   setTimeout(() => {
     document.getElementById("ui").style.userSelect = "auto";
-    document.getElementById("ui").style.animation = "";
-    document.getElementById("realityanimbg").style.animation = "";
-    document.getElementById("realityanimbg").style.display = "none";
-
+    document.getElementById("ui").style.pointerEvents = "";
+    MetaAnimation = false;
   }, 10000);
 }
 
@@ -57,14 +49,16 @@ function updateMetaRecords() {
   if (player.records.bestMeta.MRmin.lt(thisRunMRmin)) player.records.bestMeta.MRmin = thisRunMRmin;
   
   player.records.bestMeta.time = Decimal.min(tm.time, player.records.bestMeta.time);
-  player.records.bestMeta.realTime = Math.min(tm.realTime, player.records.bestMeta.realTime);
+  player.records.bestMeta.realTime = Decimal.min(tm.realTime, player.records.bestMeta.realTime);
+  player.records.bestMeta.trueTime = Math.min(tm.trueTime, player.records.bestMeta.trueTime);
 
 
   tm.maxAM = DC.D0;
   tm.bestMRmin = DC.D0;
   tm.bestMRminVal = DC.D0;
   tm.time = DC.D0;
-  tm.realTime = 0;
+  tm.realTime = DC.D0;
+  tm.trueTime = 0;
 
 }
 
@@ -100,14 +94,6 @@ export function finishProcessMeta() {
   InfinityChallenges.clearCompletions();
   player.eternityChalls = {};
 
-  player.reality.automator.state.forceRestart = false;
-  if (player.options.automatorEvents.clearOnReality) AutomatorData.clearEventLog();
-  if (Player.automatorUnlocked && AutomatorBackend.state.forceRestart) {
-    // Make sure to restart the current script instead of using the editor script - the editor script might
-    // not be a valid script to run; this at best stops it from running and at worst causes a crash
-    AutomatorBackend.start(AutomatorBackend.state.topLevelScript);
-  }
-
   Teresa.reset();
   Effarig.reset();
   Enslaved.reset();
@@ -124,17 +110,17 @@ export function finishProcessMeta() {
 
   Currency.infinities.reset();
   Currency.infinitiesBanked.reset();
-  player.records.bestInfinity.time = new Decimal(999999999999);
-  player.records.bestInfinity.realTime = 999999999999;
-  player.records.thisInfinity.time =  new Decimal();
-  player.records.thisInfinity.lastBuyTime = new Decimal();
-  player.records.thisInfinity.realTime = 0;
-  player.dimensionBoosts = 0;
-  player.galaxies = 0;
+  player.records.bestInfinity.time = DC.BEMAX;
+  player.records.bestInfinity.realTime = DC.BEMAX;
+  player.records.thisInfinity.time =  DC.D0;
+  player.records.thisInfinity.lastBuyTime = DC.D0;
+  player.records.thisInfinity.realTime = DC.D0;
+  player.dimensionBoosts = DC.D0;
+  player.galaxies = DC.D0;
   player.partInfinityPoint = 0;
   player.partInfinitied = 0;
-  player.break = false;
-  player.IPMultPurchases = 0;
+  if(!MetaMilestone.glyphKeep.isReached) player.break = false;
+  player.IPMultPurchases = DC.D0;
   Currency.infinityPower.reset();
   Currency.timeShards.reset();
   Replicanti.reset(true);
@@ -144,18 +130,16 @@ export function finishProcessMeta() {
   // This has to be reset before Currency.eternities to make the bumpLimit logic work correctly
   EternityUpgrade.epMult.reset();
   Currency.eternities.reset();
-  player.records.thisEternity.time = new Decimal();
-  player.records.thisEternity.realTime = 0;
-  player.records.bestEternity.time = new Decimal(999999999999);
-  player.records.bestEternity.realTime = 999999999999;
+  player.records.thisEternity.time = DC.D0;
+  player.records.thisEternity.realTime = DC.D0;
+  player.records.bestEternity.time = DC.BEMAX;
+  player.records.bestEternity.realTime = DC.BEMAX;
   player.eternityUpgrades.clear();
-  player.totalTickGained = 0;
+  player.totalTickGained = DC.D0;
   player.eternityChalls = {};
-  player.reality.unlockedEC = 0;
-  player.reality.lastAutoEC = DC.D0;
   player.challenge.eternity.current = 0;
-  player.challenge.eternity.unlocked = 0;
-  player.challenge.eternity.requirementBits = 0;
+  player.challenge.eternity.unlocked = DC.D0;
+  player.challenge.eternity.requirementBits = DC.D0;
   player.respec = false;
   player.eterc8ids = 50;
   player.eterc8repl = 40;
@@ -169,18 +153,18 @@ export function finishProcessMeta() {
   
   player.dilation.upgrades.clear();
   player.dilation.rebuyables = {
-    1: 0,
-    2: 0,
-    3: 0,
-    11: 0,
-    12: 0,
-    13: 0
+    1: DC.D0,
+    2: DC.D0,
+    3: DC.D0,
+    11: DC.D0,
+    12: DC.D0,
+    13: DC.D0
   };
   
   Currency.tachyonParticles.reset();
   player.dilation.nextThreshold = DC.E3;
-  player.dilation.baseTachyonGalaxies = 0;
-  player.dilation.totalTachyonGalaxies = 0;
+  player.dilation.baseTachyonGalaxies = DC.D0;
+  player.dilation.totalTachyonGalaxies = DC.D0;
   Currency.dilatedTime.reset();
 
   player.records.thisInfinity.maxAM = DC.D0;
@@ -192,7 +176,7 @@ export function finishProcessMeta() {
   Currency.antimatter.reset();
   Enslaved.autoReleaseTick = 0;
   player.celestials.enslaved.hasSecretStudy = false;
-  player.celestials.laitela.entropy = 0;
+  player.celestials.laitela.entropy = DC.D0;
 
   playerInfinityUpgradesOnReset();
   resetInfinityRuns();
@@ -217,7 +201,8 @@ export function finishProcessMeta() {
 
   player.records.thisMeta = {
     time: DC.D0,
-    realTime: 0,
+    realTime: DC.D0,
+    trueTime: 0,
     maxAM: DC.D0,
     MR: DC.D0,
     bestMRmin: DC.D0,
@@ -246,13 +231,15 @@ function resetReality(){
   
   player.records.thisReality.time = DC.D0;
   player.records.bestReality.time = DC.D0;
-  player.records.thisReality.realTime = 0;
-  player.records.bestReality.realTime = 0;
+  player.records.thisReality.realTime = DC.D0;
+  player.records.thisReality.trueTime = 0;
+  player.records.bestReality.realTime = DC.D0;
+  player.records.bestReality.trueTime = 0;
   player.records.thisReality.maxReplicanti = DC.D0;
 
   R.maxRM = DC.D0;
-  R.iMCap = 0;
-  R.imaginaryMachines = 0;
+  R.iMCap = DC.D0;
+  R.imaginaryMachines = DC.D0;
   R.maxRM = DC.D0;
   R.maxRM = DC.D0;
 
@@ -268,8 +255,8 @@ function resetReality(){
   }
   const companions = JSON.stringify(Glyphs.allGlyphs.filter(g => g.type === "companion"));
   if(MetaMilestone.glyphKeep.isReached){
-    G.active.forEach(g => g.level = 1);
-    G.inventory.filter(g => g.type != "cursed").forEach(g => g.level = 1);
+    G.active.forEach(g => g.level = DC.D1);
+    G.inventory.filter(g => g.type != "cursed").forEach(g => g.level = DC.D1);
   } else {
     G.active = [];
     G.inventory = [];
@@ -284,24 +271,24 @@ function resetReality(){
   R.seed = 1;
   
   R.rebuyables = {
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0,
+    1: DC.D0,
+    2: DC.D0,
+    3: DC.D0,
+    4: DC.D0,
+    5: DC.D0,
   }
   
   R.imaginaryRebuyables = {
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0,
-    6: 0,
-    7: 0,
-    8: 0,
-    9: 0,
-    10: 0,
+    1: DC.D0,
+    2: DC.D0,
+    3: DC.D0,
+    4: DC.D0,
+    5: DC.D0,
+    6: DC.D0,
+    7: DC.D0,
+    8: DC.D0,
+    9: DC.D0,
+    10: DC.D0,
   }
   
   if(!MetaMilestone.realityStart.isReached) R.upgReqs = 0;
@@ -317,7 +304,7 @@ function resetReality(){
   if(!MetaFabricatorUpgrade(18).isBought) R.perks = new Set();
   R.perks.add(0);
   R.respec = false;
-  R.perkPoints = 0;
+  R.perkPoints = DC.D0;
   R.unlockedEC = 0;
   R.lastAutoEC = DC.D0;
 
@@ -329,13 +316,13 @@ function resetReality(){
   Currency.realityMachines.reset();
 
   player.blackHole.forEach(bh => {
-    bh.intervalUpgrades = MetaMilestone.metaKeepEff.isReached ? 50 : 0;
-    bh.powerUpgrades = 0;
-    bh.durationUpgrades = MetaMilestone.metaKeepEff.isReached ? 50 : 0;
-    bh.phase = 0;
+    bh.intervalUpgrades = MetaMilestone.metaKeepEff.isReached ? DC.D1.mul(50) : DC.D0;
+    bh.powerUpgrades = DC.D0;
+    bh.durationUpgrades = MetaMilestone.metaKeepEff.isReached ? DC.D1.mul(50) : DC.D0;
+    bh.phase = DC.D0;
     bh.active = false;
     bh.unlocked = MetaMilestone.metaKeepEff.isReached ? true : false;
-    bh.activations = 0;
+    bh.activations = DC.D0;
   })
 
   player.blackHolePause = false;
@@ -345,7 +332,8 @@ function resetReality(){
   
   player.records.thisReality = {
     time: DC.D0,
-    realTime: 0,
+    realTime: DC.D0,
+    trueTime: 0,
     maxAM: DC.D0,
     maxIP: DC.D0,
     maxEP: DC.D0,
@@ -359,12 +347,13 @@ function resetReality(){
   player.records.bestReality = {
     time: Decimal.NUMBER_MAX_VALUE,
     realTime: Number.MAX_VALUE,
-    glyphStrength: 0,
+    trueTime: 0,
+    glyphStrength: DC.D0,
     RM: DC.D0,
     RMSet: [],
     RMmin: DC.D0,
     RMminSet: [],
-    glyphLevel: 0,
+    glyphLevel: DC.D0,
     glyphLevelSet: [],
     bestEP: DC.D0,
     bestEPSet: [],
@@ -381,5 +370,12 @@ function lockAchievementsOnMeta() {
   }
 }
 
-// i knew you would come here, i'll just say AD-V has a story?
-// Vulnerate: to cause damage; is the meaning of AD-V; it is not about the celestial V
+/*
+vaticiny:	a prophecy
+vast: very big or infinite
+volition: the act of making a choice
+vetanda:	forbidden things
+vetust:	very ancient
+vis:  power, force, or strength
+vulnerate:	to wound or harm
+*/

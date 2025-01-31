@@ -17,12 +17,12 @@ export default {
     possessiveForm() {
     if(player.options.themeModern == "S15") return `Teresa's`;
     if(player.options.themeModern == "S16") return `Effarig's`;
-      if(player.options.themeModern == "S17") return `The Nameless Ones'`;
-      if(player.options.themeModern == "S18") return `Lai'tela's`;
-      if(player.options.themeModern == "S19") return `Pelle's`;
+    if(player.options.themeModern == "S17") return `The Nameless Ones'`;
+    if(player.options.themeModern == "S18") return `Lai'tela's`;
+    if(player.options.themeModern == "S19") return `Pelle's`;
     if(player.options.themeModern == "S13") return `V's`;
     if(player.options.themeModern == "S14") return `Ra's`;
-    return this.celestial == "glitch" ? "Glitch" : Celestials[this.celestial].possessiveName;
+    return Celestials[this.celestial].possessiveName;
     },
     color() {
       return `var(--color-${this.sCelestial()}--base)`;

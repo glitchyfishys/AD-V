@@ -43,8 +43,11 @@ export default {
     };
   },
   computed: {
-    totalLines() {
-      return this.quote.totalLines;
+    displayedLines(){
+      return this.quote._lines.filter(x => x.isDisplayed);
+    },
+    totalLines(){
+      return this.displayedLines.length;
     },
     currentLine: {
       get() {

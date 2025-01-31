@@ -1,8 +1,9 @@
+import { DC } from "../constants";
 // This actually deals with both sacrifice and refining, but I wasn't 100% sure what to call it
 export const GlyphSacrificeHandler = {
   // Anything scaling on sacrifice caps at this value, even though the actual sacrifice values can go higher
   get maxSacrificeForEffects() {
-    return Achievement(192).isUnlocked ? new Decimal("1e1E10") : Decimal.min(GlitchRealityUpgrades.all[1].effectOrDefault(new Decimal(1)).mul(1e100), 1e300);
+    return Achievement(192).isUnlocked ? DC.BEMAX : GlitchRealityUpgrades.all[1].effectOrDefault(DC.D1).mul(1e100);
     },
   // This is used for glyph UI-related things in a few places, but is handled here as a getter which is only called
   // sparingly - that is, whenever the cache is invalidated after a glyph is sacrificed. Thus it only gets recalculated
@@ -11,8 +12,10 @@ export const GlyphSacrificeHandler = {
     // We check elsewhere for this equalling zero to determine if the player has ever sacrificed. Technically this
     // should check for -Infinity, but the clampMin works in practice because the minimum possible sacrifice
     // value is greater than 1 for even the weakest possible glyph
-    return BASIC_GLYPH_TYPES.reduce(
-      (tot, type) => Decimal.add(tot, Decimal.log10(Decimal.clampMin(player.reality.glyphs.sac[type], 1))), 0);
+    return GlyphInfo.basicGlyphTypes.reduce(
+      (tot, type) => ((tot instanceof Decimal)
+        ? tot.add(Decimal.log10(Decimal.max(player.reality.glyphs.sac[type], 1), 0))
+        : (Decimal.log10(Decimal.max(player.reality.glyphs.sac[type], 1)), 0)));
   },
   get canSacrifice() {
     return RealityUpgrade(19).isBought;
@@ -43,14 +46,14 @@ export const GlyphSacrificeHandler = {
     else Modal.glyphDelete.show({ idx: glyph.idx });
   },
   glyphSacrificeGain(glyph) {
-    if (!this.canSacrifice || Pelle.isDoomed) return new Decimal(0);
-    if (glyph.type === "reality") return new Decimal(0.01 * glyph.level * Achievement(171).effectOrDefault(1));
-    if (glyph.type === "glitch") return new Decimal(0.05 * glyph.level * Achievement(171).effectOrDefault(1));
+    if (!this.canSacrifice || Pelle.isDoomed) return DC.D0;
+    if (glyph.type === "reality") return new Decimal(glyph.level).mul(Achievement(171).effectOrDefault(1)).div(100);
+    if (glyph.type === "glitch") return new Decimal(glyph.level).mul(Achievement(171).effectOrDefault(1)).div(10000);
     const pre10kFactor = Decimal.pow(Decimal.clampMax(glyph.level, 10000).add(10), 2.5);
-    const post10kFactor = Decimal.clampMin(glyph.level - 10000, 0).div(100).add(1);
+    const post10kFactor = Decimal.clampMin(Decimal.sub(glyph.level, 1e4), 0).div(100).add(1);
     const power = Ra.unlocks.maxGlyphRarityAndShardSacrificeBoost.effectOrDefault(1);
-    return Decimal.pow(pre10kFactor.mul(post10kFactor).mul(glyph.strength).mul(
-      Teresa.runRewardMultiplier.mul(Achievement(171).effectOrDefault(1))), power);
+    return Decimal.pow(pre10kFactor.mul(post10kFactor).mul(glyph.strength)
+      .mul(Teresa.runRewardMultiplier).mul(Achievement(171).effectOrDefault(1)), power);
   },
   sacrificeGlyph(glyph, force = false) {
     if (Pelle.isDoomed) return;
@@ -68,29 +71,29 @@ export const GlyphSacrificeHandler = {
     EventHub.dispatch(GAME_EVENT.GLYPH_SACRIFICED, glyph);
   },
   glyphAlchemyResource(glyph) {
-    const type = GlyphTypes[glyph.type];
+    const type = GlyphInfo[glyph.type];
     return AlchemyResources.all[type.alchemyResource];
   },
   // Scaling function to make refinement value ramp up with higher glyph levels
   levelRefinementValue(level) {
-    return Math.pow(level, 3) / 1e8;
+    return Decimal.pow(level, 3).div(1e8);
   },
   // Refined glyphs give this proportion of their maximum attainable value from their level
   glyphRefinementEfficiency: 0.05,
   glyphRawRefinementGain(glyph) {
-    if (!Ra.unlocks.unlockGlyphAlchemy.canBeApplied) return 0;
+    if (!Ra.unlocks.unlockGlyphAlchemy.canBeApplied) return DC.D0;
     const glyphMaxValue = this.levelRefinementValue(glyph.level);
-    const rarityModifier = strengthToRarity(glyph.strength) / 100;
-    return this.glyphRefinementEfficiency * glyphMaxValue * rarityModifier;
+    const rarityModifier = strengthToRarity(glyph.strength).div(100);
+    return glyphMaxValue.mul(this.glyphRefinementEfficiency).mul(rarityModifier);
   },
   glyphRefinementGain(glyph) {
-    if (!Ra.unlocks.unlockGlyphAlchemy.canBeApplied || !generatedTypes.includes(glyph.type)) return 0;
+    if (!Ra.unlocks.unlockGlyphAlchemy.canBeApplied || !generatedTypes.includes(glyph.type)) return DC.D0;
     const resource = this.glyphAlchemyResource(glyph);
-    if (!resource.isUnlocked) return 0;
+    if (!resource.isUnlocked) return DC.D0;
     const glyphActualValue = this.glyphRawRefinementGain(glyph);
-    if (resource.cap === 0) return glyphActualValue;
-    const amountUntilCap = this.glyphEffectiveCap(glyph) - resource.amount;
-    return Math.clamp(amountUntilCap, 0, glyphActualValue);
+    if (resource.cap.eq(DC.D0)) return glyphActualValue;
+    const amountUntilCap = this.glyphEffectiveCap(glyph).sub(resource.amount);
+    return Decimal.clamp(amountUntilCap, 0, glyphActualValue);
   },
   // The glyph that is being refined can increase the cap, which means the effective cap
   // will be the current resource cap or the cap after this glyph is refined, whichever is higher.
@@ -98,11 +101,11 @@ export const GlyphSacrificeHandler = {
     const resource = this.glyphAlchemyResource(glyph);
     const currentCap = resource.cap;
     const capAfterRefinement = this.highestRefinementValue(glyph);
-    const higherCap = Math.clampMin(currentCap, capAfterRefinement);
-    return Math.clampMax(higherCap, Ra.alchemyResourceCap);
+    const higherCap = Decimal.clampMin(currentCap, capAfterRefinement);
+    return Decimal.clampMax(higherCap, Ra.alchemyResourceCap);
   },
   highestRefinementValue(glyph) {
-    return this.glyphRawRefinementGain(glyph) / this.glyphRefinementEfficiency;
+    return this.glyphRawRefinementGain(glyph).div(this.glyphRefinementEfficiency);
   },
   attemptRefineGlyph(glyph, force) {
     if (glyph.type === "reality") return;
@@ -112,8 +115,8 @@ export const GlyphSacrificeHandler = {
     }
     const decoherence = AlchemyResource.decoherence.isUnlocked;
     if (!Ra.unlocks.unlockGlyphAlchemy.canBeApplied ||
-        (this.glyphRefinementGain(glyph) === 0 && !decoherence) ||
-        (decoherence && AlchemyResources.base.every(x => x.data.amount >= Ra.alchemyResourceCap))) {
+        (this.glyphRefinementGain(glyph).eq(DC.D0) && !decoherence) ||
+        (decoherence && AlchemyResources.base.every(x => x.data.amount.gte(Ra.alchemyResourceCap)))) {
       this.sacrificeGlyph(glyph, force);
       return;
     }
@@ -122,13 +125,9 @@ export const GlyphSacrificeHandler = {
       this.refineGlyph(glyph);
       return;
     }
-    const resource = this.glyphAlchemyResource(glyph);
+
     Modal.glyphRefine.show({
       idx: glyph.idx,
-      resourceName: resource.name,
-      resourceAmount: resource.amount,
-      gain: this.glyphRefinementGain(glyph),
-      cap: resource.cap
     });
 
   },
@@ -136,7 +135,7 @@ export const GlyphSacrificeHandler = {
     if (Pelle.isDoomed) return;
     const resource = this.glyphAlchemyResource(glyph);
     // This technically completely trashes the glyph for no rewards if not unlocked, but this will only happen ever
-    // if the player specifically tries to do so (in which case they're made aware that it's useless) or if the
+    // if the player specificially tries to do so (in which case they're made aware that it's useless) or if the
     // Reality choices contain *only* locked glyph choices. That's a rare enough edge case that I think it's okay
     // to just delete it instead of complicating the program flow more than it already is by attempting sacrifice.
     if (!resource.isUnlocked) {
@@ -145,14 +144,14 @@ export const GlyphSacrificeHandler = {
     }
     const rawRefinementGain = this.glyphRawRefinementGain(glyph);
     const refinementGain = this.glyphRefinementGain(glyph);
-    resource.amount += refinementGain;
-    const decoherenceGain = rawRefinementGain * AlchemyResource.decoherence.effectValue;
-    for (const glyphTypeName of ALCHEMY_BASIC_GLYPH_TYPES) {
+    resource.amount = resource.amount.add(refinementGain);
+    const decoherenceGain = rawRefinementGain.mul(AlchemyResource.decoherence.effectValue);
+    for (const glyphTypeName of GlyphInfo.alchemyGlyphTypes) {
       if (glyphTypeName !== glyph.type) {
-        const glyphType = GlyphTypes[glyphTypeName];
+        const glyphType = GlyphInfo[glyphTypeName];
         const otherResource = AlchemyResources.all[glyphType.alchemyResource];
-        const maxResource = Math.max(otherResource.cap, otherResource.amount);
-        otherResource.amount = Math.clampMax(otherResource.amount + decoherenceGain, maxResource);
+        const maxResource = Decimal.max(otherResource.cap, otherResource.amount);
+        otherResource.amount = Decimal.clampMax(otherResource.amount.add(decoherenceGain), maxResource);
       }
     }
     if (resource.isBaseResource) {

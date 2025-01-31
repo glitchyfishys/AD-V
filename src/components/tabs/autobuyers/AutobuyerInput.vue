@@ -74,16 +74,16 @@ export default {
         SecretAchievement(28).unlock();
       }
       if (this.isValid) {
+        // eslint-disable-next-line vue/no-mutating-props
         this.autobuyer[this.property] = this.typeFunctions.copyValue(this.actualValue);
       } else {
         this.updateActualValue();
       }
       this.updateDisplayValue();
       this.isValid = true;
-
       this.isFocused = false;
       event.target.blur();
-    },
+    }
   }
 };
 
@@ -99,21 +99,15 @@ export const AutobuyerInputFunctions = {
         if (/^e\d*[.]?\d+$/u.test(input.replaceAll(",", ""))) {
           // Logarithm Notation
           decimal = Decimal.pow10(parseFloat(input.replaceAll(",", "").slice(1)));
-        } else if (/^\d*[.]?\d+(e\d+)?$/u.test(input.replaceAll(",", ""))) {
-          // Scientific notation; internals of break-infinity will gladly strip extraneous letters before parsing, but
+        } else {
+          // Scientific notation; internals of break-eternity will gladly strip extraneous letters before parsing, but
           // since this is largely uncommunicated to the user, we instead explicitly check for formatting and reject
           // anything that doesn't fit as invalid
+
+          // I am lazy so we are going down the "abuse this fact and not write code" path
           decimal = Decimal.fromString(input.replaceAll(",", ""));
-        } else if (/^\d*[.]?\d+(e\d*[.]?\d+)?$/u.test(input.replaceAll(",", ""))) {
-          // "Mixed scientific notation" - inputs such as "2.33e41.2" cause buggy behavior when fed directly into
-          // Decimal.fromString, so we parse out the mantissa and exponent separately before combining them
-          const regex = /(?<mantissa>\d*[.]?\d+)e(?<exponent>\d*[.]?\d+)/u;
-          const match = input.replaceAll(",", "").match(regex);
-          decimal = Decimal.pow10(Math.log10(Number(match.groups.mantissa)) + Number(match.groups.exponent));
-        } else {
-          return undefined;
         }
-        return isNaN(decimal.mantissa) || isNaN(decimal.exponent) ? undefined : decimal;
+        return isNaN(decimal.mag) || isNaN(decimal.layer) || isNaN(decimal.sign) ? undefined : decimal;
       } catch (e) {
         return undefined;
       }

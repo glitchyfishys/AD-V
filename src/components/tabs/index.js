@@ -57,6 +57,7 @@ import ChaosDimensionsTab from "./chaos-dimensions/ChaosDimensionsTab";
 
 import MetaFabricatorTab from "./meta/MetaFabricatorTab";
 import MetaMilestonesTab from "./meta/MetaMilestonesTab";
+import CanteTab from "./celestial-cante/CanteTab";
 
 
 const TabComponents = {
@@ -110,7 +111,8 @@ const TabComponents = {
   GlitchTab,
   ChaosDimensionsTab, // meta
   MetaFabricatorTab,
-  MetaMilestonesTab
+  MetaMilestonesTab,
+  CanteTab
 };
 
 export default TabComponents;

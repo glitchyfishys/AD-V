@@ -25,10 +25,10 @@ export const eternityMilestones = {
   autoEP: {
     eternities: 6,
     reward: () => {
-      const EPmin = getOfflineEPGain(TimeSpan.fromMinutes(1).totalMilliseconds.toNumber());
-      const em200 = getEternitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds.toNumber(),
+      const EPmin = getOfflineEPGain(TimeSpan.fromMinutes(1).totalMilliseconds);
+      const em200 = getEternitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds,
         EternityMilestone.autoEternities.isReached).gt(0);
-      const em1000 = getInfinitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds.toNumber(),
+      const em1000 = getInfinitiedMilestoneReward(TimeSpan.fromHours(1).totalMilliseconds,
         EternityMilestone.autoInfinities.isReached).gt(0);
       if (!player.options.offlineProgress) return `This milestone would give offline EP generation, but offline progress
         is currently disabled`;
@@ -115,7 +115,7 @@ export const eternityMilestones = {
     eternities: 25,
     reward: "You automatically unlock Infinity Dimensions upon reaching them"
   },
-  unlockAllAD: {
+  unlockAllND: {
     eternities: 30,
     reward: "Start with all Antimatter Dimensions available for purchase"
   },
@@ -165,7 +165,7 @@ export const eternityMilestones = {
       ? `Must be outside of all Challenges and Dilation, and the Eternity Autobuyer must be set to Eternity at zero EP.
         This milestone's effect is capped at ${formatInt(33)}ms.`
       : ""),
-      pelleUseless: true
+    pelleUseless: true
   },
   autoInfinities: {
     eternities: 1000,
@@ -181,9 +181,9 @@ export const eternityMilestones = {
     },
     activeCondition: () => (player.options.offlineProgress
       ? `Must be outside of Normal/Infinity Challenges and outside of EC4 and EC12,
-        the Big Crunch Autobuyer must be turned on and set to time mode with less than ${formatInt(60)} seconds,
+        the Big Crunch Autobuyer must be turned on and set to time mode with ${formatInt(5)} seconds or less,
         and the Eternity Autobuyer must be turned off.`
       : ""),
-      pelleUseless: true
+    pelleUseless: true
   }
 };

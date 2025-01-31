@@ -22,7 +22,7 @@ import { GameKeyboard } from "./keyboard";
 // for the other modifier keys (#3093).
 
 // Free keys:
-// i, j, k, n, o, p, q, v, w, x
+// i, j, k, n, o, p, q, w, x
 
 
 export const shortcuts = [
@@ -315,6 +315,7 @@ export const shortcuts = [
     name: "Fullscreen",
     keys: ["F10"],
     type: "bind",
+    // eslint-disable-next-line no-empty-function
     function: () => {},
     visible: () => false
   },

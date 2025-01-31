@@ -7,7 +7,7 @@ NormalTimeStudies.pathList = [
   { path: TIME_STUDY_PATH.INFINITY_DIM, studies: [72, 82, 92, 102], name: "Infinity Dims" },
   { path: TIME_STUDY_PATH.TIME_DIM, studies: [73, 83, 93, 103], name: "Time Dims" },
   { path: TIME_STUDY_PATH.ACTIVE, studies: [121, 131, 141], name: "Active" },
-  { path: TIME_STUDY_PATH.PASSIVE, studies: [122, 132, 142], name: "Hybrid" },
+  { path: TIME_STUDY_PATH.PASSIVE, studies: [122, 132, 142], name: "Amalgam" },
   { path: TIME_STUDY_PATH.IDLE, studies: [123, 133, 143], name: "Idle" },
   { path: TIME_STUDY_PATH.LIGHT, studies: [221, 223, 225, 227, 231, 233], name: "Light" },
   { path: TIME_STUDY_PATH.DARK, studies: [222, 224, 226, 228, 232, 234], name: "Dark" }
@@ -38,7 +38,7 @@ export class NormalTimeStudyState extends TimeStudyState {
   // The requiresST prop is an array containing IDs indicating other studies which, if ANY in the array are purchased,
   // will cause the study to also cost space theorems. This array is effectively assumed to be empty if not present.
   costsST() {
-    return this.config.requiresST && this.config.requiresST.some(s => typeof s == "function" ? s() : TimeStudy(s).isBought);
+    return this.config.requiresST && this.config.requiresST.some(s => typeof s == 'function' ? s() : TimeStudy(s).isBought );
   }
 
   checkRequirement() {
@@ -64,7 +64,7 @@ export class NormalTimeStudyState extends TimeStudyState {
   // This checks for and forbids buying studies due to being part of a set which can't normally be bought
   // together (eg. active/passive/idle and light/dark) unless the player has the requisite ST.
   checkSetRequirement() {
-    return this.costsST() ? !Pelle.isDisabled("V") && (V.availableST >= this.STCost) : true;
+    return this.costsST() ? !Pelle.isDisabled("V") && (V.availableST.gte(this.STCost)) : true;
   }
 
   get canBeBought() {
@@ -82,7 +82,7 @@ export class NormalTimeStudyState extends TimeStudyState {
       if (!auto) ImaginaryUpgrade(19).tryShowWarningModal();
       return false;
     }
-    if (this.costsST()) player.celestials.v.STSpent += this.STCost;
+    if (this.costsST()) player.celestials.v.STSpent = player.celestials.v.STSpent.add(this.STCost);
     player.timestudy.studies.push(this.id);
     player.requirementChecks.reality.maxStudies = Math.clampMin(player.requirementChecks.reality.maxStudies,
       player.timestudy.studies.length);

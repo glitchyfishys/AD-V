@@ -14,17 +14,17 @@ export default {
   data() {
     return {
       amount: new Decimal(),
-      effectValue: new Decimal(),
+      effectValue: 0,
       isColored: true,
       willSacrifice: false,
     };
   },
   computed: {
     typeConfig() {
-      return GlyphTypes[this.type];
+      return GlyphInfo[this.type];
     },
     sacConfig() {
-      return GlyphSacrifice[this.type].config;
+      return GlyphInfo[this.type].sacrificeInfo;
     },
     style() {
       if (!this.isColored) return { };
@@ -66,7 +66,7 @@ export default {
       return format(this.currentSacrifice.sacrificeValue, 2, 2);
     },
     formatTotalAmount() {
-      return format(this.currentSacrifice.sacrificeValue.add(this.amount), 2, 2);
+      return format(this.amount.add(this.currentSacrifice.sacrificeValue), 2, 2);
     },
   },
   created() {
@@ -77,7 +77,7 @@ export default {
   methods: {
     update() {
       this.amount.copyFrom(player.reality.glyphs.sac[this.type]);
-      this.effectValue = GlyphSacrifice[this.type].effectValue;
+      this.effectValue = GlyphInfo[this.type].sacrificeInfo.effect();
       this.isColored = player.options.glyphTextColors;
       this.willSacrifice = AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.SACRIFICE ||
         (AutoGlyphProcessor.sacMode === AUTO_GLYPH_REJECT.REFINE_TO_CAP &&

@@ -45,7 +45,7 @@ export const glitchQuotes = {
       "You have no idea how much room they take up"
     ],
   },
-    infinity: {
+  infinity: {
     id: 4,
     lines: [
       "So fast",
@@ -103,6 +103,8 @@ export const glitchQuotes = {
       { text: "You would need this $1 to $2 HIM.", 1: Power, 2: Destroy },
       "Also you may have notice me saying \"HIM\" a lot he's one of the most powerful celestials, I can't say his name here",
       "I must be careful, I have been a bit strange",
+      {text: "My Reality has got corrupted... i made it safe.", displayed: () => CanteUpgrades.all[19].isUnlocked, glitched: true},
+      {text: "Why didn't it work... is it just that strong?", displayed: () => CanteUpgrades.all[19].isUnlocked, glitched: true},
       "Huh? these upgrades are broken, take your time to fix them I'll be waiting"
     ],
   },

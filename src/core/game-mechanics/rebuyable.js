@@ -1,3 +1,5 @@
+import { isNumber } from "../../utility/type-check";
+
 import { GameMechanicState } from "./game-mechanic";
 
 /**
@@ -40,7 +42,7 @@ export class RebuyableMechanicState extends GameMechanicState {
   set boughtAmount(value) { throw new NotImplementedError(); }
 
   get isEffectActive() {
-    return this.boughtAmount > 0;
+    return isNumber(this.boughtAmount) ? this.boughtAmount > 0 : this.boughtAmount.gt(0);
   }
 
   get canBeBought() {
@@ -50,8 +52,8 @@ export class RebuyableMechanicState extends GameMechanicState {
   purchase() {
     if (!this.canBeBought) return false;
     if (GameEnd.creditsEverClosed) return false;
-    this.currency.subtract(this.cost);
-    this.boughtAmount++;
+    if(this.currency.lt('ee15')) this.currency.subtract(this.cost);
+    this.boughtAmount = isNumber(this.boughtAmount) ? this.boughtAmount + 1 : this.boughtAmount.add(1);
     this.onPurchased();
     GameUI.update();
     return true;

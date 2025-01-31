@@ -1,12 +1,12 @@
-
+import { DC } from "../constants";
 // NOTE: IF ANY COSTS ARE CHANGED HERE, THEY ALSO NEED TO BE CHANGED ON THE BACKEND TOO
 export const shopPurchases = {
   dimPurchases: {
     key: "dimPurchases",
     cost: 15,
     description: "Double all your Antimatter Dimension multipliers. Forever.",
-    multiplier: purchases => Math.min(Math.pow(2, purchases), Number.MAX_VALUE),
-    formatEffect: x => `×${x > 1000 ? Notation.scientific.formatDecimal(new Decimal(x), 2) : x.toFixed(0)}`,
+    multiplier: purchases => Decimal.pow(2, purchases),
+    formatEffect: x => `×${x.gt(1000) ? Notation.scientific.formatDecimal(new Decimal(x), 2) : x.toFixed(0)}`,
   },
   allDimPurchases: {
     key: "allDimPurchases",
@@ -17,14 +17,14 @@ export const shopPurchases = {
       if (PlayerProgress.eternityUnlocked()) dims.push("Time");
       return `Double ALL Dimension multipliers (${makeEnumeration(dims)}; multiplicative until 32x). Forever.`;
     },
-    multiplier: purchases => (purchases > 4 ? 32 + (purchases - 5) * 2 : Math.pow(2, purchases)),
+    multiplier: purchases => (purchases.gt(4) ? Decimal.add(32,purchases.sub(5).mul(2)) : Decimal.pow(2, purchases)),
     formatEffect: x => `×${x.toFixed(0)}`,
   },
   IPPurchases: {
     key: "IPPurchases",
     cost: 20,
     description: "Double your Infinity Point gain from all sources. (additive)",
-    multiplier: purchases => (purchases === 0 ? 1 : 2 * purchases),
+    multiplier: purchases => (purchases.eq(0) ? DC.D1 : purchases.mul(2)),
     formatEffect: x => `×${x.toFixed(0)}`,
     isUnlocked: () => PlayerProgress.infinityUnlocked(),
     lockText: "Infinity",
@@ -33,7 +33,7 @@ export const shopPurchases = {
     key: "replicantiPurchases",
     cost: 30,
     description: "Increase your Replicanti gain by 50%. (additive)",
-    multiplier: purchases => (purchases === 0 ? 1 : 1 + 0.5 * purchases),
+    multiplier: purchases => (purchases.eq(0) ? DC.D1 : purchases.mul(0.5).add(1)),
     formatEffect: x => `×${x.toFixed(1)}`,
     isUnlocked: () => Replicanti.areUnlocked || PlayerProgress.eternityUnlocked(),
     lockText: "Replicanti",
@@ -42,7 +42,7 @@ export const shopPurchases = {
     key: "EPPurchases",
     cost: 25,
     description: "Triple your Eternity Point gain from all sources. (additive)",
-    multiplier: purchases => (purchases === 0 ? 1 : 3 * purchases),
+    multiplier: purchases => (purchases.eq(0) ? DC.D1 : purchases.mul(3)),
     formatEffect: x => `×${x.toFixed(0)}`,
     isUnlocked: () => PlayerProgress.eternityUnlocked(),
     lockText: "Eternity",
@@ -51,7 +51,7 @@ export const shopPurchases = {
     key: "dilatedTimePurchases",
     cost: 20,
     description: "Increase your Dilated Time gain by 50%. (additive)",
-    multiplier: purchases => (purchases === 0 ? 1 : 1 + 0.5 * purchases),
+    multiplier: purchases => (purchases.eq(0) ? DC.D1 : purchases.mul(0.5).add(1)),
     formatEffect: x => `×${x.toFixed(1)}`,
     isUnlocked: () => PlayerProgress.dilationUnlocked() || PlayerProgress.realityUnlocked(),
     lockText: "Dilation",
@@ -60,7 +60,7 @@ export const shopPurchases = {
     key: "RMPurchases",
     cost: 30,
     description: "Increase your Reality Machine gain by 100%. (additive)",
-    multiplier: purchases => purchases + 1,
+    multiplier: purchases => purchases.add(1),
     formatEffect: x => `×${x.toFixed(0)}`,
     isUnlocked: () => PlayerProgress.realityUnlocked(),
     lockText: "Reality",
@@ -124,8 +124,8 @@ export const shopPurchases = {
   glitchChall: {
     key: "glitchChall",
     cost: () => {
-      if(eternityUGs.allBought) return 95;
-      if(breakInfinityUGs.allBought) return 35;
+      if(eternityUGs.allBought) return 50;
+      if(breakInfinityUGs.allBought) return 20;
       if(preInfinityUGs.allBought) return 10;
       return 5;
     },
@@ -178,10 +178,10 @@ export const shopPurchases = {
 
       if(!unlocked){
         GameUI.notify.error("could not unlock anything (STDs are returned)");
-        if(realityUGs.allBought) player.IAP.STDcoins += 70;
-        if(eternityUGs.allBought) player.IAP.STDcoins += 15;
-        if(breakInfinityUGs.allBought) player.IAP.STDcoins += 5;
-        if(preInfinityUGs.allBought) player.IAP.STDcoins += 5;
+        if(realityUGs.allBought) player.IAP.STDcoins = player.IAP.STDcoins.add(50);
+        if(eternityUGs.allBought) player.IAP.STDcoins = player.IAP.STDcoins.add(20);
+        if(breakInfinityUGs.allBought) player.IAP.STDcoins = player.IAP.STDcoins.add(10);
+        if(preInfinityUGs.allBought) player.IAP.STDcoins = player.IAP.STDcoins.add(5);
       }
     }
   },

@@ -20,7 +20,7 @@ export default {
     update() {
       this.cores = format(Currency.chaosCores.value,2);
       this.gain = Glitch.riftToCoreGain;
-      this.RFGain = format(Currency.chaosCores.value.mul(Currency.chaosCores.value.log(2)).pow(5), 2);
+      this.RFGain = format(Currency.chaosCores.value.mul(Currency.chaosCores.value.add(2).log(2)).pow(5).max(1), 2);
     },
     riftToCore() {
       Glitch.riftToCore();

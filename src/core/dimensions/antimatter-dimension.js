@@ -12,7 +12,7 @@ export function antimatterDimensionCommonMultiplier() {
   multiplier = multiplier.times(ShopPurchase.allDimPurchases.currentMult);
 
   if (!EternityChallenge(9).isRunning) {
-    multiplier = multiplier.times(Currency.infinityPower.value.pow(InfinityDimensions.powerConversionRate).clamp(1, "1e1E300"));
+    multiplier = multiplier.times(Currency.infinityPower.value.pow(InfinityDimensions.powerConversionRate).max(1));
   }
   multiplier = multiplier.timesEffectsOf(
     BreakInfinityUpgrade.totalAMMult,
@@ -49,7 +49,7 @@ export function antimatterDimensionCommonMultiplier() {
   multiplier = multiplier.dividedByEffectOf(InfinityChallenge(6));
   multiplier = multiplier.times(getAdjustedGlyphEffect("powermult"));
   multiplier = multiplier.times(Currency.realityMachines.value.powEffectOf(AlchemyResource.force));
-  
+
   if (Pelle.isDoomed) multiplier = multiplier.dividedBy(10);
 
   return multiplier;
@@ -61,7 +61,7 @@ export function getDimensionFinalMultiplierUncached(tier) {
   if (EternityChallenge(11).isRunning) {
     let multiplier = Currency.infinityPower.value.pow(
       InfinityDimensions.powerConversionRate
-    ).max(1).times(DimBoost.multiplierToADTier(tier));
+    ).max(1).times(DimBoost.multiplierToNDTier(tier));
 
     if (V.isRunningExtreme) {
       multiplier = multiplier.pow(0.001);
@@ -73,17 +73,16 @@ export function getDimensionFinalMultiplierUncached(tier) {
 
   let multiplier = DC.D1;
 
-  multiplier = applyADMultipliers(multiplier, tier);
-  multiplier = applyADPowers(multiplier, tier);
+  multiplier = applyNDMultipliers(multiplier, tier);
+  multiplier = applyNDPowers(multiplier, tier);
 
   const glyphDilationPowMultiplier = getAdjustedGlyphEffect("dilationpow");
-  
   if (player.dilation.active || PelleStrikes.dilation.hasStrike) {
     multiplier = dilatedValueOf(multiplier.pow(glyphDilationPowMultiplier));
   } else if (Enslaved.isRunning) {
     multiplier = dilatedValueOf(multiplier);
   }
-  multiplier = multiplier.timesEffectOf(DilationUpgrade.adMultDT);
+  multiplier = multiplier.timesEffectOf(DilationUpgrade.ndMultDT);
 
   if (Effarig.isRunning) {
     multiplier = Effarig.multiplier(multiplier);
@@ -97,20 +96,19 @@ export function getDimensionFinalMultiplierUncached(tier) {
     multiplier = multiplier.pow(Glitch.ADnerf);
   }
   
-  let mul = GlitchRealityUpgrades.all[4].effectOrDefault(new Decimal(1)).pow(GlitchRealityUpgrades.all[12].isBought ? 2 : 1).pow(1 / Glitch.decay);
+  let mul = GlitchRealityUpgrades.all[4].effectOrDefault(DC.D1).pow(GlitchRealityUpgrades.all[12].isBought ? 2 : 1).pow(Glitch.decay.recip());
 
-  if (Glitch.isRunning && !GlitchRealityUpgrades.all[4].isBought) multiplier = multiplier.mul(1e10);
-
+  if (Glitch.isRunning && !GlitchRealityUpgrades.all[4].isBought) multiplier = multiplier.mul(1e20);
+  
   multiplier = multiplier.pow(GlitchRealityUpgrades.all[15].effectOrDefault(1));
   
   if (V.isRunningExtreme) {
     multiplier = multiplier.pow(0.001);
   }
-
-  if(Pelle.isDoomed) mul = mul.pow((1 / ((1e60 / Math.min(Currency.realityShards.value.toNumber(),1e60)) ** 0.16)));
+  if(Pelle.isDoomed) mul = mul.pow(Decimal.div(1e60, Currency.realityShards.value.add(1).min(1e60).pow(0.16)));
   
   if(player.dilation.active && Pelle.isDoomed) mul = dilatedValueOf(mul);
-
+  
   if(!V.isRunningExtreme) multiplier = multiplier.mul(mul);
   
   multiplier = multiplier.pow(V.rageDimPower);
@@ -121,32 +119,32 @@ export function getDimensionFinalMultiplierUncached(tier) {
     multiplier = multiplier.pow(1.05);
   }
 
-  if(multiplier.gt("1e1E26") && !MetaFabricatorUpgrade(15).isBought) multiplier = multiplier.pow( 1 / Math.sqrt(multiplier.log10() / 1e26) );
-  if(multiplier.gt("1e1E30")) multiplier = multiplier.pow( 1 / ((multiplier.log10() / 1e30) ** 0.85) );
+  multiplier = multiplier.pow(Achievement(205).effectOrDefault(DC.D1));
+
+  if(multiplier.gt("1e1E26") && !MetaFabricatorUpgrade(15).isBought) multiplier = multiplier.pow( multiplier.log10().div(1e26).pow(0.5).recip() );
+  if(multiplier.gt("1e1E30")) multiplier = multiplier.pow( multiplier.log10().div(1e30).pow(0.85).recip() );
 
   multiplier = multiplier.pow(Ra.unlocks.repAD.effectOrDefault(1));
   
-  if(multiplier.gt("1e1E50")) multiplier = multiplier.pow( 1 / ((multiplier.log10() / 1e50) ** 0.3) );
-  if(multiplier.gt("1e1E100")) multiplier = multiplier.pow( 1 / ((multiplier.log10() / 1e100) ** 0.35) );
-  if(multiplier.gt("1e1E200")) multiplier = multiplier.pow( 1 / ((multiplier.log10() / 1e200) ** 0.5) );
+  if(multiplier.gt("ee50")) multiplier = multiplier.pow( multiplier.log10().div(1e50).pow(0.3).recip() );
+  if(multiplier.gt("1e1E100")) multiplier = multiplier.pow( multiplier.log10().div(1e100).pow(0.35).recip() );
+  if(multiplier.gt("1e1E200")) multiplier = multiplier.pow( multiplier.log10().div(1e200).pow(0.5).recip() );
   
   return multiplier;
 }
 
-function applyADMultipliers(mult, tier) {
+function applyNDMultipliers(mult, tier) {
   let multiplier = mult.times(GameCache.antimatterDimensionCommonMultiplier.value);
 
   let buy10Value;
   if (Laitela.continuumActive) {
     buy10Value = AntimatterDimension(tier).continuumValue;
   } else {
-    buy10Value = Math.floor(AntimatterDimension(tier).bought / 10);
+    buy10Value = Decimal.floor(AntimatterDimension(tier).bought.div(10));
   }
 
-  if(buy10Value > 1e18) buy10Value = buy10Value / (buy10Value / 1e18) ** (MetaFabricatorUpgrade(15).isBought ? 0.45 : 0.9);
-
   multiplier = multiplier.times(Decimal.pow(AntimatterDimensions.buyTenMultiplier, buy10Value));
-  multiplier = multiplier.times(DimBoost.multiplierToADTier(tier));
+  multiplier = multiplier.times(DimBoost.multiplierToNDTier(tier));
 
   let infinitiedMult = DC.D1.timesEffectsOf(
     AntimatterDimension(tier).infinityUpgrade,
@@ -173,7 +171,6 @@ function applyADMultipliers(mult, tier) {
     multiplier = multiplier.times(Sacrifice.totalBoost);
     multiplier = multiplier.times(GlitchRifts.alpha.milestones[1].effectOrDefault(1));
   }
-
   multiplier = multiplier.timesEffectsOf(
     tier === 8 ? Achievement(23) : null,
     tier < 8 ? Achievement(34) : null,
@@ -185,15 +182,15 @@ function applyADMultipliers(mult, tier) {
   if (Achievement(43).isUnlocked) {
     multiplier = multiplier.times(1 + tier / 100);
   }
-
+  
   multiplier = multiplier.clampMin(1);
-
+  
   return multiplier;
 }
 
-function applyADPowers(mult, tier) {
+function applyNDPowers(mult, tier) {
   let multiplier = mult;
-  const glyphPowMultiplier = getAdjustedGlyphEffect("powerpow");
+  const glyphPowMultiplier = new Decimal(getAdjustedGlyphEffect("powerpow"));
   const glyphEffarigPowMultiplier = getAdjustedGlyphEffect("effarigdimensions");
 
   if (InfinityChallenge(4).isRunning && player.postC4Tier !== tier) {
@@ -205,7 +202,7 @@ function applyADPowers(mult, tier) {
 
   multiplier = multiplier.pow(MetaFabricatorUpgrades.all[1].effectOrDefault(1));
 
-  multiplier = multiplier.pow(glyphPowMultiplier * glyphEffarigPowMultiplier * Ra.momentumValue);
+  multiplier = multiplier.pow(glyphPowMultiplier.times(glyphEffarigPowMultiplier).times(Ra.momentumValue));
 
   multiplier = multiplier
     .powEffectsOf(
@@ -237,13 +234,12 @@ function applyADPowers(mult, tier) {
 function onBuyDimension(tier) {
   if (tier === 1) Tutorial.turnOffEffect(TUTORIAL_STATE.DIM1);
   if (tier === 2) Tutorial.turnOffEffect(TUTORIAL_STATE.DIM2);
-  
   Achievement(10 + tier).unlock();
   Achievement(23).tryUnlock();
 
   if (player.speedrun.isActive && !player.speedrun.hasStarted) Speedrun.startTimer();
 
-  if (NormalChallenge(2).isRunning) player.chall2Pow = 0;
+  if (NormalChallenge(2).isRunning) player.chall2Pow = DC.D0;
   if (NormalChallenge(4).isRunning || InfinityChallenge(1).isRunning) {
     AntimatterDimensions.resetAmountUpToTier(tier - 1);
   }
@@ -260,17 +256,20 @@ export function buyOneDimension(tier) {
   const dimension = AntimatterDimension(tier);
   if (Laitela.continuumActive || !dimension.isAvailableForPurchase || !dimension.isAffordable) return false;
 
-  if ((!preInfinityUGs.all[3].config.hasFailed() && !preInfinityUGs.all[3].isBought) && player.options.confirmations.glitchCL && player.dimensionBoosts == 4 && player.galaxies == 0) {
+  if ((!preInfinityUGs.all[3].config.hasFailed() && !preInfinityUGs.all[3].isBought) && (player.options.confirmations.glitchCL && 
+ !PlayerProgress.metaUnlocked()) && player.dimensionBoosts.eq(4) && player.galaxies.eq(0)) {
     if(dimension.bought > 0) {
       Modal.message.show(`you will fail glitch challenge ${preInfinityUGs.all[3].config.name} <br> which is to ${preInfinityUGs.all[3].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
       return;
     }
   }
-  else if(((!preInfinityUGs.all[4].config.hasFailed() && !preInfinityUGs.all[4].isBought) && player.options.confirmations.glitchCL && tier != 1 && (tier == 2 ? AntimatterDimension(2).amount.gte(10) : true) && player.dimensionBoosts == 0 && player.galaxies == 1)){
+  else if(((!preInfinityUGs.all[4].config.hasFailed() && !preInfinityUGs.all[4].isBought) && (player.options.confirmations.glitchCL && 
+ !PlayerProgress.metaUnlocked()) && tier != 1 && (tier == 2 ? AntimatterDimension(2).amount.gte(10) : true) && player.dimensionBoosts.eq(0) && player.galaxies.eq(1))){
     Modal.message.show(`you will fail glitch challenge ${preInfinityUGs.all[4].config.name} <br> which is to ${preInfinityUGs.all[4].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
     return;
   }
-  else if(((!preInfinityUGs.all[5].config.hasFailed() && !preInfinityUGs.all[5].isBought) && player.options.confirmations.glitchCL && tier > 3 && (tier == 4 ? AntimatterDimension(4).amount.gte(20) : true) && player.dimensionBoosts == 0 && player.galaxies == 1)){
+  else if(((!preInfinityUGs.all[5].config.hasFailed() && !preInfinityUGs.all[5].isBought) && (player.options.confirmations.glitchCL && 
+ !PlayerProgress.metaUnlocked()) && tier > 3 && (tier == 4 ? AntimatterDimension(4).amount.gte(20) : true) && player.dimensionBoosts.eq(0) && player.galaxies.eq(1))){
     Modal.message.show(`you will fail glitch challenge ${preInfinityUGs.all[5].config.name} <br> which is to ${preInfinityUGs.all[5].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
     return;
   }
@@ -280,16 +279,16 @@ export function buyOneDimension(tier) {
   const allow = (Enslaved.isRunning && !Glitch.isRunning);
   const allowed = (allow || Glitch.augmentEffectActive(3));
   
-  if (tier === 8 && allowed && AntimatterDimension(8).bought >= 1) return false;
+  if (tier === 8 && allowed && AntimatterDimension(8).bought.gte(0)) return false;
 
-  dimension.currencyAmount = dimension.currencyAmount.minus(cost);
+  if(dimension.currencyAmount.lt('ee15')) dimension.currencyAmount = dimension.currencyAmount.minus(cost);
 
-  if (dimension.boughtBefore10 === 9) {
+  if (dimension.boughtBefore10.eq(9)) {
     dimension.challengeCostBump();
   }
 
   dimension.amount = dimension.amount.plus(1);
-  dimension.bought++;
+  dimension.bought = dimension.bought.add(1);
 
   if (tier === 1) {
     Achievement(28).tryUnlock();
@@ -305,15 +304,18 @@ export function buyManyDimension(tier) {
   if (Laitela.continuumActive || !dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) return false;
   const cost = dimension.costUntil10;
 
-  if ((!preInfinityUGs.all[3].config.hasFailed() && !preInfinityUGs.all[3].isBought) && player.options.confirmations.glitchCL && player.dimensionBoosts == 4 && player.galaxies == 0) {
+  if ((!preInfinityUGs.all[3].config.hasFailed() && !preInfinityUGs.all[3].isBought) && (player.options.confirmations.glitchCL && 
+ !PlayerProgress.metaUnlocked()) && player.dimensionBoosts.eq(4) && player.galaxies.eq(0)) {
     if(dimension.bought < 1) buyOneDimension(tier);
     return;
   }
-  else if(((!preInfinityUGs.all[4].config.hasFailed() && !preInfinityUGs.all[4].isBought) && player.options.confirmations.glitchCL && tier != 1 && (tier == 2 ? AntimatterDimension(2).amount.gte(10) : true) && player.dimensionBoosts == 0 && player.galaxies == 1)){
+  else if(((!preInfinityUGs.all[4].config.hasFailed() && !preInfinityUGs.all[4].isBought) && (player.options.confirmations.glitchCL && 
+ !PlayerProgress.metaUnlocked()) && tier != 1 && (tier == 2 ? AntimatterDimension(2).amount.gte(10) : true) && player.dimensionBoosts.eq(0) && player.galaxies.eq(1))){
     Modal.message.show(`you will fail glitch challenge ${preInfinityUGs.all[4].config.name} <br> which is to ${preInfinityUGs.all[4].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
     return;
   }
-  else if(((!preInfinityUGs.all[5].config.hasFailed() && !preInfinityUGs.all[5].isBought) && player.options.confirmations.glitchCL && tier > 3 && (tier == 4 ? AntimatterDimension(4).amount.gte(20) : true) && player.dimensionBoosts == 0 && player.galaxies == 1)){
+  else if(((!preInfinityUGs.all[5].config.hasFailed() && !preInfinityUGs.all[5].isBought) && (player.options.confirmations.glitchCL && 
+ !PlayerProgress.metaUnlocked()) && tier > 3 && (tier == 4 ? AntimatterDimension(4).amount.gte(20) : true) && player.dimensionBoosts.eq(0) && player.galaxies.eq(1))){
     Modal.message.show(`you will fail glitch challenge ${preInfinityUGs.all[5].config.name} <br> which is to ${preInfinityUGs.all[5].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
     return;
   }
@@ -324,12 +326,11 @@ export function buyManyDimension(tier) {
   
   if (tier === 8 && allowed) return buyOneDimension(8);
 
-  if(dimension.currencyAmount.e < 20) dimension.currencyAmount = dimension.currencyAmount.minus(cost);
+  if(dimension.currencyAmount.lt('ee15')) dimension.currencyAmount = dimension.currencyAmount.minus(cost).max(0);
   dimension.challengeCostBump();
   dimension.amount = dimension.amount.plus(dimension.remainingUntil10);
-  dimension.bought += dimension.remainingUntil10;
+  dimension.bought = dimension.bought.add(dimension.remainingUntil10);
 
-    
   onBuyDimension(tier);
 
   return true;
@@ -339,19 +340,21 @@ export function buyAsManyAsYouCanBuy(tier) {
   const dimension = AntimatterDimension(tier);
   if (Laitela.continuumActive || !dimension.isAvailableForPurchase || !dimension.isAffordable) return false;
   
-  if ((!preInfinityUGs.all[3].config.hasFailed() && !preInfinityUGs.all[3].isBought) && player.options.confirmations.glitchCL && player.dimensionBoosts == 4 && player.galaxies == 0) {
+  if ((!preInfinityUGs.all[3].config.hasFailed() && !preInfinityUGs.all[3].isBought) && (player.options.confirmations.glitchCL && 
+ !PlayerProgress.metaUnlocked()) && player.dimensionBoosts.eq(4) && player.galaxies.eq(0)) {
     if(dimension.bought < 1) buyOneDimension(tier);
     return;
   }
-  else if(((!preInfinityUGs.all[4].config.hasFailed() && !preInfinityUGs.all[4].isBought) && player.options.confirmations.glitchCL && tier != 1 && (tier == 2 ? AntimatterDimension(2).amount.gte(10) : true) && player.dimensionBoosts == 0 && player.galaxies == 1)){
+  else if(((!preInfinityUGs.all[4].config.hasFailed() && !preInfinityUGs.all[4].isBought) && (player.options.confirmations.glitchCL && 
+ !PlayerProgress.metaUnlocked()) && tier != 1 && (tier == 2 ? AntimatterDimension(2).amount.gte(10) : true) && player.dimensionBoosts.eq(0) && player.galaxies.eq(1))){
     Modal.message.show(`you will fail glitch challenge ${preInfinityUGs.all[4].config.name} <br> which is to ${preInfinityUGs.all[4].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
     return;
   }
-  else if(((!preInfinityUGs.all[5].config.hasFailed() && !preInfinityUGs.all[5].isBought) && player.options.confirmations.glitchCL && tier > 3 && (tier == 4 ? AntimatterDimension(4).amount.gte(20) : true) && player.dimensionBoosts == 0 && player.galaxies == 1)){
+  else if(((!preInfinityUGs.all[5].config.hasFailed() && !preInfinityUGs.all[5].isBought) && (player.options.confirmations.glitchCL && 
+ !PlayerProgress.metaUnlocked()) && tier > 3 && (tier == 4 ? AntimatterDimension(4).amount.gte(20) : true) && player.dimensionBoosts.eq(0) && player.galaxies.eq(1))){
     Modal.message.show(`you will fail glitch challenge ${preInfinityUGs.all[5].config.name} <br> which is to ${preInfinityUGs.all[5].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
     return;
   }
-  
 
   const howMany = dimension.howManyCanBuy;
   const cost = dimension.cost.times(howMany);
@@ -360,21 +363,20 @@ export function buyAsManyAsYouCanBuy(tier) {
   const allowed = (allow || Glitch.augmentEffectActive(3));
   
   if (tier === 8 && allowed) return buyOneDimension(8);
-  const adtotal = (dimension.bought + howMany);
+  const adtotal = dimension.bought.add(howMany);
   
-  if(dimension.currencyAmount.e < 1e15) dimension.currencyAmount = dimension.currencyAmount.minus(cost);
+  if(dimension.currencyAmount.lt('ee15')) dimension.currencyAmount = dimension.currencyAmount.minus(cost).max(0);
   dimension.challengeCostBump();
   
-  if(adtotal >= 1e18) {
-    howMany = Math.max(howMany / Math.log(howMany - 1e18), 1e18);
-    dimension.bought = howMany;
-    dimension.amount = new Decimal(howMany);
-  }else{
-    dimension.bought += howMany;
-    dimension.amount = dimension.amount.plus(howMany);
-  }
-  
+  if(adtotal.gte(1e18)) {
+    howMany = howMany.div(howMany.sub(1e18).log(Math.E)).max(1e18);
+    dimension.amount = dimension.amount.add(howMany);
+  dimension.bought = dimension.bought.add(howMany);
 
+  }else{
+    dimension.amount = dimension.amount.add(howMany);
+    dimension.bought = dimension.bought.add(howMany);
+  }
   onBuyDimension(tier);
 
   return true;
@@ -385,22 +387,25 @@ function buyUntilTen(tier) {
   if (Laitela.continuumActive) return;
   const dimension = AntimatterDimension(tier);
 
-  if ((!preInfinityUGs.all[3].config.hasFailed() && !preInfinityUGs.all[3].isBought) && player.options.confirmations.glitchCL && player.dimensionBoosts == 4 && player.galaxies == 0) {
-    if(dimension.bought < 1) buyOneDimension(tier);
+  if ((!preInfinityUGs.all[3].config.hasFailed() && !preInfinityUGs.all[3].isBought) && (player.options.confirmations.glitchCL && 
+ !PlayerProgress.metaUnlocked()) && player.dimensionBoosts.eq(4) && player.galaxies.eq(0)) {
+    if(dimension.bought.lt(1)) buyOneDimension(tier);
     return;
   }
-  else if((!preInfinityUGs.all[4].config.hasFailed() && !preInfinityUGs.all[4].isBought) && player.options.confirmations.glitchCL && tier != 1 && (tier == 2 ? AntimatterDimension(tier).amount.gte(10) : true) && player.dimensionBoosts == 0 && player.galaxies == 1){
+  else if((!preInfinityUGs.all[4].config.hasFailed() && !preInfinityUGs.all[4].isBought) && (player.options.confirmations.glitchCL && 
+ !PlayerProgress.metaUnlocked()) && tier != 1 && (tier == 2 ? AntimatterDimension(tier).amount.gte(10) : true) && player.dimensionBoosts.eq(0) && player.galaxies.eq(1)){
     Modal.message.show(`you will fail glitch challenge ${preInfinityUGs.all[4].config.name} <br> which is to ${preInfinityUGs.all[4].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
     return;
   }
-  else if(((!preInfinityUGs.all[5].config.hasFailed() && !preInfinityUGs.all[5].isBought) && player.options.confirmations.glitchCL && tier > 3 && (tier == 4 ? AntimatterDimension(4).amount.gte(20) : true) && player.dimensionBoosts == 0 && player.galaxies == 1)){
+  else if(((!preInfinityUGs.all[5].config.hasFailed() && !preInfinityUGs.all[5].isBought) && (player.options.confirmations.glitchCL && 
+ !PlayerProgress.metaUnlocked()) && tier > 3 && (tier == 4 ? AntimatterDimension(4).amount.gte(20) : true) && player.dimensionBoosts.eq(0) && player.galaxies.eq(1))){
     Modal.message.show(`you will fail glitch challenge ${preInfinityUGs.all[5].config.name} <br> which is to ${preInfinityUGs.all[5].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
     return;
   }
 
   dimension.challengeCostBump();
   dimension.amount = Decimal.round(dimension.amount.plus(dimension.remainingUntil10));
-  dimension.bought += dimension.remainingUntil10;
+  dimension.bought = dimension.bought.add(dimension.remainingUntil10);
   onBuyDimension(tier);
 }
 
@@ -422,27 +427,30 @@ export function buyMaxDimension(tier, bulk = Infinity) {
   const dimension = AntimatterDimension(tier);
   if (Laitela.continuumActive || !dimension.isAvailableForPurchase || !dimension.isAffordableUntil10) return;
 
-  if((!preInfinityUGs.all[4].config.hasFailed() && !preInfinityUGs.all[4].isBought) && player.options.confirmations.glitchCL && tier >= 2 && player.galaxies == 1){
+  if((!preInfinityUGs.all[4].config.hasFailed() && !preInfinityUGs.all[4].isBought) && (player.options.confirmations.glitchCL && 
+ !PlayerProgress.metaUnlocked()) && tier >= 2 && player.galaxies.eq(1)){
     if(tier > 2) return
-    if(dimension.bought >= 10) return;
-    Math.clampMax(dimension.bought,10);
-    bulk = 1 - dimension.bought/10;
+    if(dimension.bought.gte(10)) return;
+    Decimal.clampMax(dimension.bought,10);
+    bulk = Decimal.sub(1, dimension.bought.div(10));
   }
 
-  if((!preInfinityUGs.all[5].config.hasFailed() && !preInfinityUGs.all[5].isBought) && player.options.confirmations.glitchCL && tier >= 4 && player.galaxies == 1){
+  if((!preInfinityUGs.all[5].config.hasFailed() && !preInfinityUGs.all[5].isBought) && (player.options.confirmations.glitchCL && 
+ !PlayerProgress.metaUnlocked()) && tier >= 4 && player.galaxies.eq(1)){
     if(tier > 4) return
-    if(dimension.bought >= 20) return;
-    Math.clampMax(dimension.bought,20);
-    bulk = 2 - dimension.bought/10;
+    if(dimension.bought.gte(20)) return;
+    Decimal.clampMax(dimension.bought,20);
+    bulk = Decimal.sub(2, dimension.bought.div(10));
   }
   
-  if ((!preInfinityUGs.all[3].config.hasFailed() && !preInfinityUGs.all[3].isBought) && player.options.confirmations.glitchCL && player.dimensionBoosts == 4 && player.galaxies == 0) {
+  if ((!preInfinityUGs.all[3].config.hasFailed() && !preInfinityUGs.all[3].isBought) && (player.options.confirmations.glitchCL && 
+ !PlayerProgress.metaUnlocked()) && player.dimensionBoosts.eq(4) && player.galaxies.eq(0)) {
     if(dimension.bought < 1) buyOneDimension(tier);
     return;
   }
 
   const cost = dimension.costUntil10;
-  let bulkLeft = bulk;
+  let bulkLeft = new Decimal(bulk);
   const goal = Player.infinityGoal;
   if (dimension.cost.gt(goal) && Player.isInAntimatterChallenge) return;
 
@@ -456,49 +464,53 @@ export function buyMaxDimension(tier, bulk = Infinity) {
 
   // Buy any remaining until 10 before attempting to bulk-buy
   if (dimension.currencyAmount.gte(cost)) {
-    if(dimension.currencyAmount.e < 20) dimension.currencyAmount = dimension.currencyAmount.minus(cost);
+    if(dimension.currencyAmount.lt('ee15')) dimension.currencyAmount = dimension.currencyAmount.minus(cost).max(0);
     buyUntilTen(tier);
-    bulkLeft--;
+    bulkLeft = bulkLeft.sub(1);
   }
 
-  if (bulkLeft <= 0) return;
+  if (bulkLeft.lte(0)) return;
 
   // Buy in a while loop in order to properly trigger abnormal price increases
   if (NormalChallenge(9).isRunning || InfinityChallenge(5).isRunning) {
-    while (dimension.isAffordableUntil10 && dimension.cost.lt(goal) && bulkLeft > 0) {
+    while (dimension.isAffordableUntil10 && dimension.cost.lt(goal) && bulkLeft.gt(0)) {
       // We can use dimension.currencyAmount or Currency.antimatter here, they're the same,
       // but it seems safest to use dimension.currencyAmount for consistency.
-      if(dimension.currencyAmount.e < 20) dimension.currencyAmount = dimension.currencyAmount.minus(dimension.costUntil10);
+      if(dimension.currencyAmount.lt('ee15')) dimension.currencyAmount = dimension.currencyAmount.minus(dimension.costUntil10).max(0);
       buyUntilTen(tier);
-      bulkLeft--;
+      bulkLeft = bulkLeft.sub(1);
     }
     return;
   }
 
   // This is the bulk-buy math, explicitly ignored if abnormal cost increases are active
   const maxBought = dimension.costScale.getMaxBought(
-    Math.floor(dimension.bought / 10) + dimension.costBumps, dimension.currencyAmount, 10
+    Decimal.floor(dimension.bought.div(10)).add(dimension.costBumps), 
+    dimension.currencyAmount,
+    DC.E1
   );
   if (maxBought === null) {
     return;
   }
   let buying = maxBought.quantity;
-  if (buying > bulkLeft) buying = bulkLeft;
-  dimension.amount = dimension.amount.plus(10 * buying).round();
-  dimension.bought += 10 * buying;
-  if(dimension.currencyAmount.e < 20) dimension.currencyAmount = dimension.currencyAmount.minus(Decimal.pow10(maxBought.logPrice));
+  if (buying.gt(bulkLeft)) buying = new Decimal(bulkLeft);
+  dimension.amount = dimension.amount.plus(buying.times(10)).round();
+  dimension.bought = dimension.bought.add(buying.times(10));
+  if(dimension.currencyAmount.lt('ee15')) dimension.currencyAmount = dimension.currencyAmount.minus(Decimal.pow10(maxBought.logPrice)).max(0);
 }
 
 class AntimatterDimensionState extends DimensionState {
   constructor(tier) {
     super(() => player.dimensions.antimatter, tier);
-    const BASE_COSTS = [null, 10, 100, 1e4, 1e6, 1e9, 1e13, 1e18, 1e24];
+    const BASE_COSTS = [null, DC.E1, DC.E2, DC.E4, DC.E6, DC.E9, DC.E13, DC.E18, DC.E24];
     this._baseCost = BASE_COSTS[tier];
-    const BASE_COST_MULTIPLIERS = [null, 1e3, 1e4, 1e5, 1e6, 1e8, 1e10, 1e12, 1e15];
+    const BASE_COST_MULTIPLIERS = [null, DC.E3, DC.E4, DC.E5, DC.E6, DC.E8, DC.E10, DC.E12, DC.E15];
     this._baseCostMultiplier = BASE_COST_MULTIPLIERS[tier];
-    const C6_BASE_COSTS = [null, 10, 100, 100, 500, 2500, 2e4, 2e5, 4e6];
+    // eslint-disable-next-line max-len
+    const C6_BASE_COSTS = [null, DC.E1, DC.E2, DC.E2, DC.E2.times(5), DC.E3.times(2.5), DC.E4.times(2), DC.E5.times(2), DC.E6.times(4)];
     this._c6BaseCost = C6_BASE_COSTS[tier];
-    const C6_BASE_COST_MULTIPLIERS = [null, 1e3, 5e3, 1e4, 1.2e4, 1.8e4, 2.6e4, 3.2e4, 4.2e4];
+    // eslint-disable-next-line max-len
+    const C6_BASE_COST_MULTIPLIERS = [null, DC.E3, DC.E3.times(5), DC.E4, DC.E4.times(1.2), DC.E4.times(1.8), DC.E4.times(2.6), DC.E4.times(3.2), DC.E4.times(4.2)];
     this._c6BaseCostMultiplier = C6_BASE_COST_MULTIPLIERS[tier];
   }
 
@@ -509,8 +521,8 @@ class AntimatterDimensionState extends DimensionState {
     return new ExponentialCostScaling({
       baseCost: NormalChallenge(6).isRunning ? this._c6BaseCost : this._baseCost,
       baseIncrease: NormalChallenge(6).isRunning ? this._c6BaseCostMultiplier : this._baseCostMultiplier,
-      costScale: Player.dimensionMultDecrease,
-      scalingCostThreshold: Number.MAX_VALUE
+      costScale: new Decimal(Player.dimensionMultDecrease),
+      scalingCostThreshold: DC.NUMMAX
     });
   }
 
@@ -518,7 +530,7 @@ class AntimatterDimensionState extends DimensionState {
    * @returns {Decimal}
    */
   get cost() {
-    return this.costScale.calculateCost(Math.floor(this.bought / 10) + this.costBumps);
+    return this.costScale.calculateCost(this.bought.div(DC.E1).floor().add(this.costBumps));
   }
 
   /** @returns {number} */
@@ -530,14 +542,14 @@ class AntimatterDimensionState extends DimensionState {
    * @returns {number}
    */
   get boughtBefore10() {
-    return this.bought % 10;
+    return this.bought.mod(10);
   }
 
   /**
    * @returns {number}
    */
   get remainingUntil10() {
-    return 10 - this.boughtBefore10;
+    return DC.E1.sub(this.boughtBefore10);
   }
 
   /**
@@ -549,7 +561,7 @@ class AntimatterDimensionState extends DimensionState {
 
   get howManyCanBuy() {
     const ratio = this.currencyAmount.dividedBy(this.cost);
-    return Decimal.floor(Decimal.max(Decimal.min(ratio, 10 - this.boughtBefore10), 0)).toNumber();
+    return Decimal.floor(Decimal.max(Decimal.min(ratio, DC.E1.sub(this.boughtBefore10)), 0));
   }
 
   /**
@@ -629,27 +641,26 @@ class AntimatterDimensionState extends DimensionState {
    * @returns {number}
    */
   get continuumValue() {
-    if (!this.isAvailableForPurchase) return 0;
+    if (!this.isAvailableForPurchase) return DC.D0;
     // Nameless limits dim 8 purchases to 1 only
     // Continuum should be no different
     const allow = (Enslaved.isRunning && !Glitch.isRunning);
     const allowed = (allow || Glitch.augmentEffectActive(3));
     
-    if (this.tier === 8 && allowed) return 1;
+    if (this.tier === 8 && allowed) return DC.D1;
     // It's safe to use dimension.currencyAmount because this is
     // a dimension-only method (so don't just copy it over to tickspeed).
     // We need to use dimension.currencyAmount here because of different costs in NC6.
-    let amount = this.costScale.getContinuumValue(this.currencyAmount, 10) * Laitela.matterExtraPurchaseFactor;
-    
-    return amount;
+    const contVal = this.costScale.getContinuumValue(this.currencyAmount, DC.E1);
+    return contVal ? contVal.times(Laitela.matterExtraPurchaseFactor) : DC.D0;
   }
 
   /**
    * @returns {number}
    */
   get continuumAmount() {
-    if (!Laitela.continuumActive) return 0;
-    return Math.floor(10 * this.continuumValue);
+    if (!Laitela.continuumActive) return DC.D0;
+    return this.continuumValue.floor();
   }
 
   /**
@@ -667,7 +678,7 @@ class AntimatterDimensionState extends DimensionState {
    * @param {Decimal} value
    */
   get totalAmount() {
-    return this.amount.max(this.continuumAmount);
+    return this.amount.max(this.continuumAmount.mul(10));
   }
 
   /**
@@ -675,7 +686,7 @@ class AntimatterDimensionState extends DimensionState {
     */
   get isAffordable() {
     if (Laitela.continuumActive) return false;
-    if (!player.break && this.cost.gt(Decimal.NUMBER_MAX_VALUE)) return false;
+    if (!player.break && this.cost.gt(DC.NUMMAX)) return false;
     return this.cost.lte(this.currencyAmount);
   }
 
@@ -683,21 +694,21 @@ class AntimatterDimensionState extends DimensionState {
    * @returns {boolean}
    */
   get isAffordableUntil10() {
-    if (!player.break && this.cost.gt(Decimal.NUMBER_MAX_VALUE)) return false;
+    if (!player.break && this.cost.gt(DC.NUMMAX)) return false;
     return this.costUntil10.lte(this.currencyAmount);
   }
 
   get isAvailableForPurchase() {
-    if (!EternityMilestone.unlockAllAD.isReached && this.tier > DimBoost.totalBoosts + 4) return false;
+    if (!EternityMilestone.unlockAllND.isReached && DimBoost.totalBoosts.add(4).lt(this.tier)) return false;
     const hasPrevTier = this.tier === 1 || AntimatterDimension(this.tier - 1).totalAmount.gt(0);
-    if (!EternityMilestone.unlockAllAD.isReached && !hasPrevTier) return false;
+    if (!EternityMilestone.unlockAllND.isReached && !hasPrevTier) return false;
     return this.tier < 7 || !NormalChallenge(10).isRunning;
   }
 
   reset() {
     this.amount = DC.D0;
-    this.bought = 0;
-    this.costBumps = 0;
+    this.bought = DC.D0;
+    this.costBumps = DC.D0;
   }
 
   resetAmount() {
@@ -712,18 +723,18 @@ class AntimatterDimensionState extends DimensionState {
   multiplySameCosts() {
     for (const dimension of AntimatterDimensions.all.filter(dim => dim.tier !== this.tier)) {
       if (dimension.cost.e === this.cost.e) {
-        dimension.costBumps++;
+        dimension.costBumps = dimension.costBumps.add(1);
       }
     }
-    if (Tickspeed.cost.e === this.cost.e) player.chall9TickspeedCostBumps++;
+    if (Tickspeed.cost.e === this.cost.e) player.chall9TickspeedCostBumps = player.chall9TickspeedCostBumps.add(1);
   }
 
   multiplyIC5Costs() {
     for (const dimension of AntimatterDimensions.all.filter(dim => dim.tier !== this.tier)) {
       if (this.tier <= 4 && dimension.cost.lt(this.cost)) {
-        dimension.costBumps++;
+        dimension.costBumps = dimension.costBumps.add(1);
       } else if (this.tier >= 5 && dimension.cost.gt(this.cost)) {
-        dimension.costBumps++;
+        dimension.costBumps = dimension.costBumps.add(1);
       }
     }
   }
@@ -733,10 +744,11 @@ class AntimatterDimensionState extends DimensionState {
   }
 
   get cappedProductionInNormalChallenges() {
+    const postBI = false;
     const postBreak = (player.break && !NormalChallenge.isRunning) ||
-      InfinityChallenge.isRunning ||
-      Enslaved.isRunning;
-    return postBreak ? DC.LIMIT : DC.E315;
+      InfinityChallenge.isRunning || Enslaved.isRunning;
+    if (postBI && postBreak) return DC.BEMAX;
+    return postBreak ? DC.PREMETAMAX.pow(MetaFabricatorUpgrade(23).effectOrDefault(1)) : DC.E315;
   }
 
   get productionPerSecond() {
@@ -757,12 +769,11 @@ class AntimatterDimensionState extends DimensionState {
         production = production.times(player.chall3Pow);
       }
       if (production.gt(10)) {
-        const log10 = production.log10();
-        production = Decimal.pow10(Math.pow(log10, getAdjustedGlyphEffect("effarigantimatter")));
+        const log10 = production.max(1).log10();
+        production = Decimal.pow10(Decimal.pow(log10, getAdjustedGlyphEffect("effarigantimatter")));
       }
     }
     production = production.min(this.cappedProductionInNormalChallenges);
-    
     return production;
   }
 }
@@ -794,7 +805,7 @@ export const AntimatterDimensions = {
   },
 
   get buyTenMultiplier() {
-    if (NormalChallenge(7).isRunning) return DC.D2.min(1 + DimBoost.totalBoosts / 5);
+    if (NormalChallenge(7).isRunning) return DC.D2.min(DimBoost.totalBoosts.div(5).add(1));
 
     let mult = DC.D2.plusEffectsOf(
       Achievement(141).effects.buyTenMult,

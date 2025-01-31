@@ -35,7 +35,7 @@ export default {
     const matchedEntry = unlockedTabs.find(h2pTab => h2pTab.tab === subtab || h2pTab.tab === tab);
     this.activeTab = ui.view.h2pForcedTab || matchedEntry || unlockedTabs[0];
     ui.view.h2pForcedTab = undefined;
-    // Force-show the H2P info initially regardless of tab while the tooltip for the H2P button is still active
+    // Force-show the H2P info initally regardless of tab while the tooltip for the H2P button is still active
     if (Tutorial.emphasizeH2P()) this.activeTab = GameDatabase.h2p.tabs[0];
   },
   mounted() {

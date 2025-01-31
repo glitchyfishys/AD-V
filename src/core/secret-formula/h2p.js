@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import { DC } from "../constants";
 
 import { credits } from "@/core/secret-formula/credits";
@@ -80,7 +81,7 @@ offline for a while.
 <br>
 <br>
 You can also connect a Google Account to the game, allowing you to save your progress online. This allows you to play
-with the same save on any device which is also logged into the same account. Cloud saving is only compatable with other
+with the same save on any device which is also logged into the same account. Cloud saving is only compatible with other
 saves on the web or Steam versions of the game; saves from the Android app of the game will not be automatically linked
 via Cloud saving. Saving and loading from the Cloud will
 automatically overwrite the other save unless the other save is either older or has noticeably more progression, in
@@ -247,10 +248,17 @@ ${PlayerProgress.realityUnlocked() ? "- <b>BH</b>: Black Hole<br>" : ""}
 ${MachineHandler.isIMUnlocked ? "- <b>iM</b>: Imaginary Machine<br>" : ""}
 ${Laitela.isUnlocked ? "- <b>DM</b>: Dark Matter<br>" : ""}
 ${Laitela.isUnlocked ? "- <b>DE</b>: Dark Energy<br>" : ""}
+
+${Glitch.isUnlocked ? "- <b>RF</b>: Rift Force<br>" : ""}
+${GlitchSpeedUpgrade(4).isBought ? "- <b>CC</b>: Chaos Cores<br>" : ""}
+${Ra.unlocks.canteUnlock.isUnlocked ? "- <b>ArtM</b>: Artificial Matter<br>" : ""}
+${player.celestials.cante.purges > 0 ? "- <b>CM</b>: Chaotic Matter<br>" : ""}
+
+
 `,
       isUnlocked: () => true,
       tags: ["abbreviation", "shorten", "am", "ad", "ag", "ip", "nc", "ic", "id", "rg", "ep", "tt", "td", "ec", "tp",
-        "dt", "tg", "rm", "ap", "bh", "im", "dm", "de"],
+        "dt", "tg", "rm", "ap", "bh", "im", "dm", "de", 'artm', 'cm'],
       tab: ""
     }, {
       name: "Antimatter Dimensions",
@@ -1399,13 +1407,13 @@ lasted ${format(0.2, 2, 2)} seconds, you will use ${formatInt(200)} seconds to s
 You can toggle a setting to automatically store offline time as stored real time.
 <br>
 <br>
-Their first unlock costs ${format(TimeSpan.fromMilliseconds(ENSLAVED_UNLOCKS.FREE_TICKSPEED_SOFTCAP.price).totalYears)}
+Their first unlock costs ${format(TimeSpan.fromMilliseconds(new Decimal(ENSLAVED_UNLOCKS.FREE_TICKSPEED_SOFTCAP.price)).totalYears)}
 years of stored game time. It increases the softcap to Tickspeed Upgrades gained from Time Dimensions
 (the point at which their cost starts increasing faster)
 by ${format(1e5)} Tickspeed Upgrades.
 <br>
 <br>
-At ${format(TimeSpan.fromMilliseconds(ENSLAVED_UNLOCKS.RUN.price).totalYears)} years of stored game time, you are able
+At ${format(TimeSpan.fromMilliseconds(new Decimal(ENSLAVED_UNLOCKS.RUN.price)).totalYears)} years of stored game time, you are able
 to finally unlock their Reality. The reward for completing The Nameless Ones' Reality is
 ${Enslaved.isCompleted
     ? "unlocking Tesseracts, which have their own How To Play entry."
@@ -1835,7 +1843,6 @@ Rifts once the current cap has been reached.`,
       tab: "celestials/pelle"
     }, {
       name: "Glitch Challenges",
-      alias: "Glitch Challenges",
       tags: ["Glitch", "Challenges", "Celestial", "Rifts"],
       tab: "glitch/entropy",
       isUnlocked: () => true,
@@ -1860,6 +1867,24 @@ Rifts once the current cap has been reached.`,
       There are also milestone 4 for Metas and 4 for speed<br>
 
       Going Meta will reset Celestials and Achivements along with all of Reality
+      `,
+    },{
+      name: "Cante",
+      tags: ["Cante", "Recplicanor", "Celestial", "Artificial Matter", "Chaotic Matter"],
+      tab: "meta/cante",
+      isUnlocked: () => Cante.isUnlocked,
+      info: () => `
+      Cante is unlocked via Ra at level 150 <br>
+      Replicators have requierments but will stay unlokced <br>
+      The Replicator muliplier is how much is added <b>not</b> multiplied <br>
+      Cante has Replicators with can be reforged to make Artificial Matter <br>
+      Artificial Matter is used to make replicators faster and buy upgrades <br>
+      <br>
+      ${ Cante.purged ?
+        `Purging is like reforgeing but you get Chaotic Matter insted<br>
+        Chaotic Matter boost every Replicators base and per-purchase multiplier<br>
+        Chaotic Matter is only used for buying upgrades<br>` : ''
+      }
       `,
     }, {
       name: "Mod",
@@ -1902,13 +1927,13 @@ Rifts once the current cap has been reached.`,
       Sticky Header, The Prestige buttons and Currencys will scroll down with you <br>
       Complete ECs based on the amount of EP that you would have needed to complete that Challenge <br>
       Time study Export, Respec and Import are added to the side of the Time Theorem shop <br>
-      Shift clicking Reality upgrades, Black hole power upgrades bulk buy 25 <br>
+      Shift clicking rebuyable Reality upgrades, Black hole upgrades and Glitch rebuyable upgrades bulk buys 25 <br>
       Shift clicking the Infinity Prestige button will buy a Tesseract without switching tabs <br>
       STD coins are gained over time at one per 2.5 minutes <br>
       <br>
       Other: <br>
       News ticker speed can go upto 1000% <br>
-      Seven new secret themes <br>
+      One secret themes for each Celestial<br>
 `,
     }
   ]

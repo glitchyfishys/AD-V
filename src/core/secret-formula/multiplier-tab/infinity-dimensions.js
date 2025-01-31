@@ -26,10 +26,10 @@ export const ID = {
       ? InfinityDimension(dim).isProducing
       : (PlayerProgress.eternityUnlocked() || InfinityDimension(1).isProducing)),
     dilationEffect: () => {
-      const baseEff = player.dilation.active
-        ? dilationPenalty()
-        : 1;
-      return baseEff * (Effarig.isRunning ? Effarig.multDilation : 1);
+        const baseEff = (player.dilation.active || Enslaved.isRunning)
+          ? Decimal.mul(0.75, Effects.product(DilationUpgrade.dilationPenalty))
+          : DC.D1;
+        return baseEff.mul(Effarig.isRunning ? Effarig.multDilation : 1);
     },
     isDilated: true,
     overlay: ["∞", "<i class='fa-solid fa-cube' />"],
@@ -39,7 +39,7 @@ export const ID = {
     name: dim => (dim ? `Purchased ID ${dim}` : "Purchases"),
     multValue: dim => {
       const getMult = id => Decimal.pow(InfinityDimension(id).powerMultiplier,
-        Math.floor(InfinityDimension(id).baseAmount / 10));
+        Decimal.floor(InfinityDimension(id).baseAmount.div(10)));
       if (dim) return getMult(dim);
       return InfinityDimensions.all
         .filter(id => id.isProducing)
@@ -65,8 +65,8 @@ export const ID = {
     multValue: dim => {
       const getMult = id => {
         const purchases = id === 8
-          ? Math.floor(InfinityDimension(id).baseAmount / 10)
-          : Math.min(InfinityDimensions.HARDCAP_PURCHASES, Math.floor(InfinityDimension(id).baseAmount / 10));
+          ? Decimal.floor(InfinityDimension(id).baseAmount.div(10))
+          : Decimal.min(InfinityDimensions.HARDCAP_PURCHASES, Decimal.floor(InfinityDimension(id).baseAmount.div(10)));
         const baseMult = InfinityDimension(id)._powerMultiplier;
         return Decimal.pow(baseMult, purchases);
       };
@@ -84,9 +84,9 @@ export const ID = {
     multValue: dim => {
       const getMult = id => {
         if (id === 8) return DC.D1;
-        const purchases = Math.floor(InfinityDimension(id).baseAmount / 10);
+        const purchases = Decimal.floor(InfinityDimension(id).baseAmount.div(10));
         return Decimal.pow(InfinityDimension(id)._powerMultiplier,
-          Math.clampMin(purchases - InfinityDimensions.HARDCAP_PURCHASES, 0));
+        purchases.sub(InfinityDimensions.HARDCAP_PURCHASES).clampMin(0));
       };
       if (dim) return getMult(dim);
       return InfinityDimensions.all
@@ -94,15 +94,15 @@ export const ID = {
         .map(id => getMult(id.tier))
         .reduce((x, y) => x.times(y), DC.D1);
     },
-    isActive: () => Tesseracts.bought > 0,
+    isActive: () => Tesseracts.bought.gt(0),
     icon: MultiplierTabIcons.PURCHASE("tesseractID"),
   },
   infinityGlyphSacrifice: {
     name: "Infinity Glyph sacrifice",
     multValue: () => (InfinityDimension(8).isProducing
-      ? Decimal.pow(GlyphSacrifice.infinity.effectValue, Math.floor(InfinityDimension(8).baseAmount / 10))
+      ? Decimal.pow(GlyphInfo.infinity.sacrificeInfo.effect(), Decimal.floor(InfinityDimension(8).baseAmount.div(10)))
       : DC.D1),
-    isActive: () => GlyphSacrifice.infinity.effectValue.gt(1),
+    isActive: () => GlyphInfo.infinity.sacrificeInfo.effect().gt(1),
     icon: MultiplierTabIcons.SACRIFICE("infinity"),
   },
   powPurchase: {
@@ -228,7 +228,7 @@ export const ID = {
   glyph: {
     name: "Glyph Effects",
     multValue: () => 1,
-    powValue: () => getAdjustedGlyphEffect("infinitypow") * getAdjustedGlyphEffect("effarigdimensions"),
+    powValue: () => getAdjustedGlyphEffect("infinitypow").mul(getAdjustedGlyphEffect("effarigdimensions")),
     isActive: () => PlayerProgress.realityUnlocked(),
     icon: MultiplierTabIcons.GENERIC_GLYPH,
   },
@@ -236,14 +236,14 @@ export const ID = {
     name: "Glyph Alchemy",
     multValue: dim => Decimal.pow(AlchemyResource.dimensionality.effectOrDefault(1),
       dim ? 1 : MultiplierTabHelper.activeDimCount("ID")),
-    powValue: () => AlchemyResource.infinity.effectOrDefault(1) * Ra.momentumValue,
+    powValue: () => AlchemyResource.infinity.effectOrDefault(1).mul(Ra.momentumValue),
     isActive: () => Ra.unlocks.unlockGlyphAlchemy.canBeApplied,
     icon: MultiplierTabIcons.ALCHEMY,
   },
   imaginaryUpgrade: {
     name: "Imaginary Upgrade - Hyperbolic Apeirogon",
     multValue: dim => Decimal.pow(ImaginaryUpgrade(8).effectOrDefault(1),
-      dim ? 1 : MultiplierTabHelper.activeDimCount("ID")),
+      dim ? DC.D1 : MultiplierTabHelper.activeDimCount("ID")),
     isActive: () => ImaginaryUpgrade(8).canBeApplied,
     icon: MultiplierTabIcons.UPGRADE("imaginary"),
   },
@@ -266,7 +266,7 @@ export const ID = {
     name: "Shop Tab Purchases",
     multValue: dim => Decimal.pow(ShopPurchase.allDimPurchases.currentMult,
       dim ? 1 : MultiplierTabHelper.activeDimCount("ID")),
-    isActive: () => ShopPurchaseData.totalSTD > 0,
+    isActive: () => player.IAP.STDcoins.gt(0),
     icon: MultiplierTabIcons.IAP,
   },
 
@@ -292,7 +292,7 @@ export const ID = {
   nerfCursed: {
     name: "Cursed Glyphs",
     powValue: () => getAdjustedGlyphEffect("curseddimensions"),
-    isActive: () => getAdjustedGlyphEffect("curseddimensions") !== 1,
+    isActive: () => getAdjustedGlyphEffect("curseddimensions").neq(1),
     icon: MultiplierTabIcons.SPECIFIC_GLYPH("cursed"),
   },
   nerfPelle: {

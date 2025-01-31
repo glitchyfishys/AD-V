@@ -9,12 +9,12 @@
  * - Unless commitToGameState() is called, this only ever creates a "virtual" tree object which does not change the
  *   overall game state. This class serves the purpose of having all the purchasing and locking logic in one place.
  *   Only upon calling commitToGameState() will the game actually try to get every study specified in tree.
- * - The general intent is that the logic in this class is meant to pull minimally from the external game state; for
+ * - The general intent is that the logic in this class is meant to pull minimally from the extrenal game state; for
  *   example, how many dimension paths are allowed or which ECs are unlockable depend on only the data in the tree
  *   object itself and should not depend on the actual current game state
  * - All study entries must be Strings because numbers (normal TS) and EC# (ECs) need to be supported
  *
- * @member {Number[]} spentTheorems      Two-element array containing TT/ST totals for studies which were actually
+ * @member {Decimal[]} spentTheorems      Two-element array containing TT/ST totals for studies which were actually
  *  purchased after accounting for various conditions which would forbid some being bought (eg. cost or tree structure)
  * @member {String[]} invalidStudies     Array of studies from the initial string which are correctly formatted
  *  but don't actually exist; used for informational purposes elsewhere
@@ -27,7 +27,7 @@
 export class TimeStudyTree {
   // The first parameter will either be an import string or an array of studies (possibly with an EC at the end)
   constructor(studies) {
-    this.spentTheorems = [0, 0];
+    this.spentTheorems = [new Decimal(0), new Decimal(0)];
     this.invalidStudies = [];
     this.purchasedStudies = [];
     this.selectedStudies = [];
@@ -253,22 +253,21 @@ export class TimeStudyTree {
     const config = study.config;
     const stDiscount = VUnlocks.raUnlock.effectOrDefault(0);
     const stNeeded = config.STCost && config.requiresST.some(s => this.purchasedStudies.includes(TimeStudy(s)))
-      ? Math.clampMin(config.STCost - stDiscount, 0)
-      : 0;
+      ? Decimal.clampMin(config.STCost.sub(stDiscount), 0)
+      : new Decimal(0);
     // Took these out of the checkCosts check as these aren't available early game
-    const maxST = Pelle.isDoomed ? 0 : V.spaceTheorems;
-    const hasST = this.spentTheorems[1] + stNeeded <= maxST;
+    const maxST = Pelle.isDoomed ? new Decimal(0) : V.spaceTheorems;
+    const hasST = this.spentTheorems[1].add(stNeeded).lte(maxST);
     if (checkCosts) {
-      const maxTT = Currency.timeTheorems.value.add(GameCache.currentStudyTree.value.spentTheorems[0])
-        .clampMax(Number.MAX_VALUE).toNumber();
-      const hasTT = this.spentTheorems[0] + config.cost <= maxTT;
+      const maxTT = Currency.timeTheorems.value.add(GameCache.currentStudyTree.value.spentTheorems[0]);
+      const hasTT = this.spentTheorems[0].add(config.cost.gte(maxTT));
       if (!hasTT || !hasST) return;
     }
 
     // Don't add the costs nor add the study if it is one using ST and there are none
-    if (maxST === 0 && stNeeded > 0) return;
-    this.spentTheorems[0] += config.cost;
-    this.spentTheorems[1] += stNeeded;
+    if (maxST.eq(0) && stNeeded.gt(0)) return;
+    this.spentTheorems[0] = this.spentTheorems[0].add(config.cost);
+    this.spentTheorems[1] = this.spentTheorems[1].add(stNeeded);
 
     this.purchasedStudies.push(study);
   }

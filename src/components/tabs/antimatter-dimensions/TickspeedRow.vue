@@ -3,15 +3,15 @@ export default {
   name: "TickspeedRow",
   data() {
     return {
-      purchasedTickspeed: 0,
-      freeTickspeed: 0,
+      purchasedTickspeed: new Decimal(0),
+      freeTickspeed: new Decimal(0),
       isVisible: false,
       mult: new Decimal(0),
       cost: new Decimal(0),
       isAffordable: false,
       tickspeed: new Decimal(0),
       gameSpeedMult: 1,
-      galaxyCount: 0,
+      galaxyCount: new Decimal(),
       isContinuumActive: false,
       continuumValue: 0,
       hasTutorial: false,
@@ -28,7 +28,7 @@ export default {
     },
     multiplierDisplay() {
       if (InfinityChallenge(3).isRunning) return `Multiply all Antimatter Dimensions by
-        ${formatX(1.05 + this.galaxyCount * 0.005, 3, 3)}`;
+        ${formatX(this.galaxyCount.times(0.005).add(1.05))}`;
       const tickmult = this.mult;
       return `${formatX(tickmult.reciprocal(), 2, 3)} faster / upgrade.`;
     },
@@ -36,21 +36,21 @@ export default {
       return `Tickspeed: ${format(this.tickspeed, 2, 3)} / sec`;
     },
     continuumString() {
-      if (this.continuumValue >= 1e6) return format(this.continuumValue, 2);
+      if (this.continuumValue.gte(1e6)) return format(this.continuumValue, 2);
       return formatFloat(this.continuumValue, 2);
     },
     upgradeCount() {
       const purchased = this.purchasedTickspeed;
-      if (!this.freeTickspeed) return format(purchased) + "Purchased Upgrades";
-      if (purchased === 0 || this.isContinuumActive) return `${format(this.freeTickspeed)} Free Upgrades`;
-      return `${format(purchased)} Purchased + ${format(this.freeTickspeed, 2)} Free`;
+      if (!this.freeTickspeed) return quantifyInt("Purchased Upgrade", purchased);
+      if (purchased.eq(0) || this.isContinuumActive) return `${formatInt(this.freeTickspeed, 3)} Free Upgrades`;
+      return `${formatInt(purchased, 3)} Purchased + ${formatInt(this.freeTickspeed, 3)} Free`;
     }
   },
   methods: {
     update() {
       this.hasRealityButton = PlayerProgress.realityUnlocked() || TimeStudy.reality.isBought;
-      this.purchasedTickspeed = player.totalTickBought;
-      this.freeTickspeed = FreeTickspeed.amount;
+      this.purchasedTickspeed.copyFrom(player.totalTickBought);
+      this.freeTickspeed.copyFrom(FreeTickspeed.amount);
       this.isEC9 = EternityChallenge(9).isRunning;
       this.isVisible = Tickspeed.isUnlocked || this.isEC9;
       if (!this.isVisible) return;
@@ -59,7 +59,7 @@ export default {
       this.isAffordable = Tickspeed.isAvailableForPurchase && Tickspeed.isAffordable;
       this.tickspeed.copyFrom(Tickspeed.perSecond);
       this.gameSpeedMult = getGameSpeedupForDisplay();
-      this.galaxyCount = player.galaxies;
+      this.galaxyCount.copyFrom(player.galaxies);
       this.isContinuumActive = Laitela.continuumActive;
       if (this.isContinuumActive) this.continuumValue = Tickspeed.continuumValue;
       this.hasTutorial = Tutorial.isActive(TUTORIAL_STATE.TICKSPEED);

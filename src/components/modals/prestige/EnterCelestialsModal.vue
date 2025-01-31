@@ -28,7 +28,7 @@ export default {
     return {
       laitelaFastest: new Decimal(3600),
       teresaBestAM: new Decimal(),
-      teresaRunMult: 0,
+      teresaRunMult: new Decimal(),
       effarigDone: false,
       effarigLayer: "",
       enslavedDone: false,
@@ -45,21 +45,21 @@ export default {
       return description ? description() : "";
     },
     topLabel() {
-      return `${this.sName()} Reality`;
+      return `${this.name} Reality`;
     },
     message() {
-      return `Perform a Reality reset and enter ${this.sName()} Reality, in which:`;
+      return `Perform a Reality reset and enter ${this.name} Reality, in which:`;
     },
     extraLine() {
       switch (this.number) {
         case 0:
           return this.teresaBestAM.eq(1)
-            ? `You have not unlocked the reward for ${this.sName()} Reality yet. Unlocking the reward requires
+            ? `You have not unlocked the reward for ${this.name} Reality yet. Unlocking the reward requires
               purchasing the Reality study and completing the Reality for the first time.`
-            : `Your highest ${this.sName()} completion was for ${format(this.teresaBestAM, 2, 2)} antimatter,
+            : `Your highest ${this.name} completion was for ${format(this.teresaBestAM, 2, 2)} antimatter,
               gaining you a ${formatX(this.teresaRunMult, 2)} multiplier to Glyph Sacrifice power.`;
         case 1: return this.effarigDone
-          ? `${this.sCel()} is completed!`
+          ? `${this.name} is completed!`
           : `You are currently on the ${this.effarigLayer} Layer.`;
         case 2: return this.enslavedDone
           ? "Have... we... not helped enough..."
@@ -67,15 +67,21 @@ export default {
         case 3: {
           return this.isHarder ? "This Reality is Harder than normal" : "";
         }
-        case 4: return `Within ${this.sName()} Reality, some resources will generate Memory Chunks
+        case 4: return `Within ${this.name} Reality, some resources will generate Memory Chunks
           for Celestial Memories based on their amounts:`;
         case 5: return this.laitelaFastest.gte(300)
-          ? `You have not completed ${this.sCel()} at this tier.`
+          ? `You have not completed ${this.name} at this tier.`
           : `Your fastest completion on this tier is ${this.laitelaTime}.`;
         case 6: {
           let augments = makeEnumeration(Glitch.activeAugments);
           if(augments == "") augments = "Nothing";
-          return `start ${this.sName()} reality with ${augments} active?`;
+          return `start ${this.name} reality with ${augments} active?`;
+        }
+        case 7: {
+          return "Stop hacking";
+        }
+        case 8: {
+          return "Stop hacking";
         }
         default: throw new Error(`Attempted to start an Unknown Celestial in Celestial Modal Confirmation.`);
       }
@@ -84,28 +90,16 @@ export default {
   methods: {
     update() {
       this.teresaBestAM.copyFrom(player.celestials.teresa.bestRunAM);
-      this.teresaRunMult = Teresa.runRewardMultiplier;
+      this.teresaRunMult.copyFrom(Teresa.runRewardMultiplier);
       const effarigStage = Effarig.currentStage;
       this.effarigDone = effarigStage === EFFARIG_STAGES.COMPLETED;
       this.effarigLayer = [null, "Infinity", "Eternity", "Reality", "OVERDRIVE"][effarigStage];
       this.enslavedDone = Enslaved.isCompleted;
-      this.laitelaFastest = Time.laitelaFastestCompletion.totalMilliseconds;
+      this.laitelaFastest.copyFrom(player.celestials.laitela.fastestCompletion);
       this.laitelaTime = TimeSpan.fromSeconds(this.laitelaFastest).toStringShort();
     },
-    sName(){
-      if(player.options.themeModern == "S14") return `${( !this.name.includes("Ra")) ? "Ra-" + this.name : this.name}`;
-      if(player.options.themeModern == "S13") return `${( !this.name.includes("V")) ? "V-" + this.name : this.name}`;
-      return this.name;
-    },
-    sCel(){
-      if(player.options.themeModern == "S14") return "Ra";
-      if(player.options.themeModern == "S13") return "V";
-      return this.name;
-    },
     handleYesClick() {
-
       beginProcessReality(getRealityProps(true));
-      
       switch (this.number) {
         case 0: return Teresa.initializeRun();
         case 1: return Effarig.initializeRun();
@@ -119,7 +113,6 @@ export default {
         case 6: return Glitch.initializeRun();
         default: throw new Error(`Attempted to start an Unknown Celestial in Celestial Modal Confirmation.`);
       }
-
     },
   },
 };
@@ -176,6 +169,7 @@ export default {
   max-width: 45rem;
   text-align: left;
 }
+
 .c-modal-celestial__run-effects__line {
   display: flex;
   margin-bottom: 0.5rem;

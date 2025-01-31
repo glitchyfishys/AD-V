@@ -1,10 +1,12 @@
 <script>
+import GlitchEffect from "@/components/GlitchEffect.vue";
 import CelestialQuoteBackground from "./CelestialQuoteBackground";
 
 export default {
   name: "CelestialQuoteLine",
   components: {
-    CelestialQuoteBackground
+    CelestialQuoteBackground,
+    GlitchEffect
   },
   props: {
     quote: {
@@ -42,12 +44,18 @@ export default {
       celestialSymbols: [],
       celestials: [],
       celestialName: "",
-      tremble: false
+      tremble: false,
+      displayed: true
     };
   },
   computed: {
     line() {
-      return this.quote.line(this.currentLine);
+      let hidden = 0;
+      for (let x=0; x <= Math.min(this.currentLine + hidden, this.quote.totalLines); x++){
+        if(this.quote.line(x) == undefined) continue;
+        if(!this.quote.line(x).isDisplayed) hidden++;
+      }
+      return this.quote.line(this.currentLine + hidden);
     },
     leftClass() {
       return {
@@ -76,6 +84,8 @@ export default {
       this.celestials = line.celestials;
       this.celestialName = line.celestialName;
       this.tremble = line.tremble;
+      this.displayed = line.displayed;
+      this.glitched = line.glitched;
     },
     trembling(){
       if(!this.tremble) return {};
@@ -100,12 +110,19 @@ export default {
     :celestial-symbols="celestialSymbols"
     :celestials="celestials"
     :primary="primary"
+    :glitched="glitched"
+    v-if="displayed"
   >
     <span
       v-if="line.showCelestialName"
       class="c-modal-celestial-name"
     >
-      {{ celestialName }}
+      <GlitchEffect v-if="glitched">
+        {{ celestialName }}  
+      </GlitchEffect>
+      <span v-else>
+        {{ celestialName }}  
+      </span>
     </span>
 
     <i
@@ -113,8 +130,14 @@ export default {
       @click="$emit('progress-in', 'left')"
     />
 
-    <span class="l-modal-celestial-quote__text" :style="trembling()">
-      {{ message }}
+    <span class="l-modal-celestial-quote__text" :style="trembling() ">
+      <GlitchEffect v-if="glitched">
+        {{ message }}
+      </GlitchEffect>
+      <span v-else>
+        {{ message }}
+      </span>
+      
     </span>
 
     <i

@@ -1,5 +1,5 @@
 function rebuyableCost(initialCost, increment, id) {
-  return initialCost * Math.pow(increment, player.celestials.teresa.perkShop[id]);
+  return Decimal.mul(initialCost, Decimal.pow(increment, player.celestials.teresa.perkShop[id]));
 }
 function rebuyable(config) {
   const { id, otherReq, cap, costCap, description, formatEffect, formatCost } = config;
@@ -23,7 +23,7 @@ export const perkShop = {
     initialCost: 1000000,
     increment: 10,
     description: () => `Increase infinity Dimensions by a power of ${formatX(0.05, 2, 2)}`,
-    effect: bought =>  (1 + 0.05 * bought),
+    effect: bought =>  (bought.mul(0.05).add(1)),
     formatEffect: value => formatX(value, 2, 2),
     formatCost: value => format(value, 2, 2),
     costCap: () => (1000000000),
@@ -34,7 +34,7 @@ export const perkShop = {
     initialCost: 10000,
     increment: 1.22,
     description: () => `Increase max level of Glyphs by ${formatPercents((VUnlocks.glyphCap.isUnlocked ? 0.15 : 0.05), 2, 2)}`,
-    effect: bought =>  Math.pow(VUnlocks.glyphCap.isUnlocked ? 1.15 : 1.05, bought),
+    effect: bought =>  Decimal.pow(VUnlocks.glyphCap.isUnlocked ? 1.15 : 1.05, bought),
     formatEffect: value => formatX(value, 2, 2),
     formatCost: value => format(value, 2 , 2),
     costCap: () => (1e300),
@@ -45,18 +45,18 @@ export const perkShop = {
     initialCost: 1,
     increment: 2,
     description: () => `Increase pre-instability Glyph levels by ${formatPercents(0.05)}`,
-    effect: bought => Math.pow(1.05, bought),
+    effect: bought => Decimal.pow(1.05, bought),
     formatEffect: value => formatX(value, 2, 2),
     formatCost: value => format(value, 2),
     costCap: () => (Ra.unlocks.perkShopIncrease.canBeApplied ? 1048576 : 2048),
-    cap: () => (Ra.unlocks.perkShopIncrease.canBeApplied ? Math.pow(1.05, 20) : Math.pow(1.05, 11))
+    cap: () => (Ra.unlocks.perkShopIncrease.canBeApplied ? Decimal.pow(1.05, 20) : Decimal.pow(1.05, 11))
   }),
   rmMult: rebuyable({
     id: 1,
     initialCost: 1,
     increment: 2,
     description: "Double Reality Machine gain",
-    effect: bought => Math.pow(2, bought),
+    effect: bought => Decimal.pow(2, bought),
     formatEffect: value => formatX(value, 2),
     formatCost: value => format(value, 2),
     costCap: () => (Ra.unlocks.perkShopIncrease.canBeApplied ? 1048576 : 2048),
@@ -66,8 +66,8 @@ export const perkShop = {
     id: 2,
     initialCost: 100,
     increment: 2,
-    description: "Buy twice as many Dilation Upgrades at once.",
-    effect: bought => Math.pow(2, bought),
+    description: "Dilation autobuyers buy twice as many Dilation Upgrades at once.",
+    effect: bought => Decimal.pow(2, bought),
     formatEffect: value => formatX(value, 2),
     formatCost: value => format(value, 2),
     costCap: () => (Ra.unlocks.perkShopIncrease.canBeApplied ? 1638400 : 1600),
@@ -79,7 +79,7 @@ export const perkShop = {
     increment: 2,
     description: () => `Infinity Dimension, Time Dimension, Dilation,
       and Replicanti autobuyers are ${formatX(2)} faster.`,
-    effect: bought => Math.pow(2, bought),
+    effect: bought => Decimal.pow(2, bought).toNumber(),
     formatEffect: value => formatX(value, 2),
     formatCost: value => format(value, 2),
     costCap: () => (Ra.unlocks.perkShopIncrease.canBeApplied ? 64000 : 4000),

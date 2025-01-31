@@ -1,15 +1,16 @@
 <script>
 import CostDisplay from "@/components/CostDisplay";
-import CustomizableTooltip from "@/components/CustomizeableTooltip";
+import CustomizeableTooltip from "@/components/CustomizeableTooltip";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import PrimaryToggleButton from "../../PrimaryToggleButton.vue";
+import { Autobuyer } from "../../../core/globals";
 
 export default {
   name: "PelleUpgrade",
   components: {
     DescriptionDisplay,
     CostDisplay,
-    CustomizableTooltip,
+    CustomizeableTooltip,
     PrimaryToggleButton
   },
   props: {
@@ -29,17 +30,12 @@ export default {
       type: Boolean,
       required: false,
     },
-    isRebuyable: {
-      type: Boolean,
-      required: false,
-      default: false,
-    },
   },
   data() {
     return {
       canBuy: false,
       isBought: false,
-      purchases: 0,
+      purchases: new Decimal(0),
       currentTimeEstimate: new Decimal(0),
       projectedTimeEstimate: new Decimal(0),
       isCapped: false,
@@ -49,7 +45,6 @@ export default {
       notAffordable: false,
       isAutoUnlocked: false,
       isAutobuyerOn: false,
-      rebuyableId: 0,
     };
   },
   computed: {
@@ -62,7 +57,7 @@ export default {
       const formattedEffect = x => this.config.formatEffect(this.config.effect(x));
       const value = formattedEffect(this.purchases);
       const next = (!this.isCapped && this.hovering)
-        ? formattedEffect(this.purchases + 1)
+        ? formattedEffect(this.purchases.add(1))
         : undefined;
       return { prefix, value, next };
     },
@@ -91,8 +86,7 @@ export default {
   },
   watch: {
     isAutobuyerOn(newValue){
-      if(this.isRebuyable) Autobuyer.rebuyablePelle(this.rebuyableId).isActive = newValue;
-      else Autobuyer.galgenUpgrade(this.rebuyableId).isActive = newValue;
+      Autobuyer.galgenUpgrade(this.rebuyableId).isActive = newValue;
     }
   },
   methods: {
@@ -100,26 +94,22 @@ export default {
       this.canBuy = this.upgrade.canBeBought && !this.faded;
       this.isBought = this.upgrade.isBought;
       this.isCapped = this.upgrade.isCapped;
-      this.purchases = player.celestials.pelle.rebuyables[this.upgrade.config.id];
+      this.purchases.copyFrom(player.celestials.pelle.rebuyables[this.upgrade.config.id] ?? new Decimal(0));
       this.currentTimeEstimate = TimeSpan
         .fromSeconds(this.secondsUntilCost(this.galaxyGenerator ? GalaxyGenerator.gainPerSecond
-          : Pelle.realityShardGainPerSecond).toNumber())
-        .toTimeEstimate();
+          : Pelle.realityShardGainPerSecond)).toTimeEstimate();
       this.projectedTimeEstimate = TimeSpan
-        .fromSeconds(this.secondsUntilCost(Pelle.nextRealityShardGain).toNumber())
+        .fromSeconds(this.secondsUntilCost(Pelle.nextRealityShardGain))
         .toTimeEstimate();
-      this.hasRemnants = Pelle.cel.remnants > 0;
+      this.hasRemnants = Pelle.cel.remnants.gt(0);
       this.galaxyCap = GalaxyGenerator.generationCap;
       const genDB = GameDatabase.celestials.pelle.galaxyGeneratorUpgrades;
       this.notAffordable = (this.config === genDB.additive || this.config === genDB.multiplicative) &&
-        (Decimal.gt(this.upgrade.cost, this.galaxyCap - GalaxyGenerator.generatedGalaxies + player.galaxies));
-
-        let autobuyer = {isUnlocked: false, isActive: false};
-      if(this.isRebuyable){
-        const upgrades = ["antimatterDimensionMult", "timeSpeedMult", "glyphLevels", "infConversion", "galaxyPower"];
-        this.rebuyableId = upgrades.findIndex(id => id === this.upgrade.id)+1;
-        autobuyer = Autobuyer.rebuyablePelle(this.rebuyableId);
-      } else if(this.galaxyGenerator){
+        (Decimal.gt(this.upgrade.cost,
+          this.galaxyCap.sub(GalaxyGenerator.generatedGalaxies.add(player.galaxies))));
+          
+      let autobuyer = {isUnlocked: false, isActive: false};
+      if(this.galaxyGenerator){
         const upgrades = GalaxyGeneratorUpgrades.all.map(upgrade => upgrade.id);
         this.rebuyableId = upgrades.findIndex(id => id === this.upgrade.id)+1;
         autobuyer = Autobuyer.galgenUpgrade(this.rebuyableId);
@@ -128,7 +118,7 @@ export default {
       this.isAutobuyerOn = autobuyer.isActive;
     },
     secondsUntilCost(rate) {
-      const value = this.galaxyGenerator ? player.galaxies + GalaxyGenerator.galaxies : Currency.realityShards.value;
+      const value = this.galaxyGenerator ? player.galaxies.add(GalaxyGenerator.galaxies) : Currency.realityShards.value;
       return Decimal.sub(this.upgrade.cost, value).div(rate);
     },
   }
@@ -136,8 +126,8 @@ export default {
 </script>
 
 <template>
-  <div>
-  <button
+  <div class="l-spoon-btn-group">
+    <button
     class="c-pelle-upgrade"
     :class="{
       'c-pelle-upgrade--unavailable': !canBuy && !(isBought || isCapped),
@@ -149,7 +139,7 @@ export default {
     @mouseover="hovering = true"
     @mouseleave="hovering = false"
   >
-    <CustomizableTooltip
+    <CustomizeableTooltip
       :show="shouldEstimateImprovement"
       left="50%"
       top="0"
@@ -157,8 +147,8 @@ export default {
       <template #tooltipContent>
         {{ estimateImprovement }}
       </template>
-    </CustomizableTooltip>
-    <CustomizableTooltip
+    </CustomizeableTooltip>
+    <CustomizeableTooltip
       v-if="timeEstimate"
       left="50%"
       top="0"
@@ -167,7 +157,7 @@ export default {
       <template #tooltipContent>
         {{ timeEstimate }}
       </template>
-    </CustomizableTooltip>
+    </CustomizeableTooltip>
     <DescriptionDisplay :config="config" />
     <div class="l-pelle-upgrade-gap" />
     <div v-if="effectText">
@@ -189,15 +179,15 @@ export default {
       :config="config"
       :name="galaxyGenerator ? config.currencyLabel : 'Reality Shard'"
     />
-  </button>
-  <PrimaryToggleButton
-      v-if="(isRebuyable || galaxyGenerator) && isAutoUnlocked"
-      v-model="isAutobuyerOn"
-      label="Auto:"
-      class="l--spoon-btn-group__little-spoon"
-      style="margin-top: -.5rem; width: 18.5rem; margin-left: 0.3rem;"
+    </button>
+    <PrimaryToggleButton
+        v-if="(galaxyGenerator) && isAutoUnlocked"
+        v-model="isAutobuyerOn"
+        label="Auto:"
+        class="l--spoon-btn-group__little-spoon"
+        style="margin-top: -.5rem; width: 18.5rem; margin-left: 0.3rem;"
     />
-    </div>
+  </div>
 </template>
 
 <style scoped>

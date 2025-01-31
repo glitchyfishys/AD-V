@@ -64,7 +64,6 @@ export default {
     bulk(){
       for(let a=0; a < 20; a++) this.config.upgrade.purchase();
     }
-    
   }
 };
 </script>

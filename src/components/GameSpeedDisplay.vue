@@ -41,10 +41,10 @@ export default {
       this.hasSeenAlteredSpeed = PlayerProgress.seenAlteredSpeed();
       this.isStopped = Enslaved.isStoringRealTime;
       this.isEC12 = EternityChallenge(12).isRunning;
-      this.isPulsing = (!this.baseSpeed.eq(this.pulsedSpeed)) && Enslaved.canRelease(true);
+      this.isPulsing = this.baseSpeed.neq(this.pulsedSpeed) && Enslaved.canRelease(true);
     },
     formatNumber(num) {
-      if (num.gte(0.001) && num.lt(10000) && !num.eq(1)) {
+      if (num.gte(0.001) && num.lt(1e4) && num.neq(1)) {
         return format(num, 3, 3);
       }
       if (num.lt(0.001)) {

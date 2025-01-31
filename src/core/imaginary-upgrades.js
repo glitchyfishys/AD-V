@@ -139,6 +139,11 @@ class RebuyableImaginaryUpgradeState extends RebuyableMechanicState {
       GameCache.staticGlyphWeights.invalidate();
     }
   }
+
+  purchaseHybrid(){
+    const value = Decimal.log(this.currency.value.div(this.config.initialCost), this.config.costMult).add(1).floor();
+    this.boughtAmount = value;
+  }
 }
 
 ImaginaryUpgradeState.index = mapGameData(
@@ -154,8 +159,8 @@ export const ImaginaryUpgrades = {
   all: ImaginaryUpgradeState.index.compact(),
   get totalRebuyables() {
     const rebuyables = player.reality.imaginaryRebuyables;
-    let total = 0;
-    for (const i in rebuyables) total += rebuyables[i];
+    let total = DC.D0;
+    for (const i in rebuyables) total = total.add(rebuyables[i]);
     return total;
   },
   get totalSinglePurchase() {

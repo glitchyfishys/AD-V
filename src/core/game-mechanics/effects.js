@@ -1,28 +1,43 @@
+import { isDecimal } from "../../utility/type-check";
+
+import { DC } from "../constants";
+
 export const Effects = {
+  /**
+   * @param effectSources
+   * @return {Decimal}
+   */
+  sum(...effectSources) {
+    let result = DC.D0;
+    applyEffectsOf(effectSources, v => result = result.add(v));
+    return result;
+  },
   /**
    * @param effectSources
    * @return {Number}
    */
-  sum(...effectSources) {
+  nSum(...effectSources) {
     let result = 0;
     applyEffectsOf(effectSources, v => result += v);
     return result;
   },
   /**
    * @param effectSources
-   * @return {Number}
+   * @return {Decimal}
    */
   product(...effectSources) {
-    let result = 1;
-    applyEffectsOf(effectSources, v => result *= v);
+    let result = DC.D1;
+    applyEffectsOf(effectSources, v => result = result.times(v));
     return result;
   },
   /**
-   * @param {Number} defaultValue
+   * @param {Number | Decimal} defaultValue
    * @param effectSources
-   * @return {Number}
+   * @return {Decimal}
    */
   last(defaultValue, ...effectSources) {
+    // eslint-disable-next-line no-param-reassign
+    if (!isDecimal(defaultValue)) defaultValue = new Decimal(defaultValue);
     let result = defaultValue;
     let foundLast = false;
     const reversedSources = effectSources
@@ -39,13 +54,15 @@ export const Effects = {
     return result;
   },
   /**
-   * @param {Number} defaultValue
+   * @param {Number | Decimal} defaultValue
    * @param effectSources
-   * @return {Number}
+   * @return {Decimal}
    */
   max(defaultValue, ...effectSources) {
+    // eslint-disable-next-line no-param-reassign
+    if (!isDecimal(defaultValue)) defaultValue = new Decimal(defaultValue);
     let result = defaultValue;
-    applyEffectsOf(effectSources, v => result = Math.max(result, v));
+    applyEffectsOf(effectSources, v => result = Decimal.max(result, v));
     return result;
   },
   /**
@@ -53,7 +70,29 @@ export const Effects = {
    * @param effectSources
    * @return {Number}
    */
+  nMax(defaultValue, ...effectSources) {
+    let result = defaultValue;
+    applyEffectsOf(effectSources, v => result = Math.max(result, v));
+    return result;
+  },
+  /**
+   * @param {Number | Decimal} defaultValue
+   * @param effectSources
+   * @return {Decimal}
+   */
   min(defaultValue, ...effectSources) {
+    // eslint-disable-next-line no-param-reassign
+    if (!isDecimal(defaultValue)) defaultValue = new Decimal(defaultValue);
+    let result = defaultValue;
+    applyEffectsOf(effectSources, v => result = Decimal.min(result, v));
+    return result;
+  },
+  /**
+   * @param {Number} defaultValue
+   * @param effectSources
+   * @return {Number}
+   */
+  nMin(defaultValue, ...effectSources) {
     let result = defaultValue;
     applyEffectsOf(effectSources, v => result = Math.min(result, v));
     return result;
@@ -116,14 +155,10 @@ Decimal.prototype.timesEffectOf = function(effectSource) {
 Decimal.prototype.timesEffectsOf = function(...effectSources) {
   // Normalize is expensive; when we multiply many things together, it's faster
   // to get a big mantissa and then fix it at the end.
-  let resultMantissa = this.mantissa;
-  let resultExponent = this.exponent;
-  applyEffectsOf(effectSources, v => {
-    const decimal = typeof v === "number" ? new Decimal(v) : v;
-    resultMantissa *= decimal.mantissa;
-    resultExponent += decimal.exponent;
-  });
-  return Decimal.fromMantissaExponent(resultMantissa, resultExponent);
+  // eslint-disable-next-line consistent-this
+  let result = this;
+  applyEffectsOf(effectSources, v => result = result.times(v));
+  return result;
 };
 
 /**

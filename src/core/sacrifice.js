@@ -8,15 +8,15 @@ export class Sacrifice {
   }
 
   static get canSacrifice() {
-    return DimBoost.purchasedBoosts > 4 && !EternityChallenge(3).isRunning && this.nextBoost.gt(1) &&
+    return DimBoost.purchasedBoosts.gt(4) && !EternityChallenge(3).isRunning && this.nextBoost.gt(1) &&
       AntimatterDimension(8).totalAmount.gt(0) && Currency.antimatter.lt(Player.infinityLimit) &&
-      (!Enslaved.isRunning || GlitchRealityUpgrades.all[7].isBought);
+      !Enslaved.isRunning;
   }
 
   static get disabledCondition() {
     if (NormalChallenge(10).isRunning) return "8th Dimensions are disabled";
     if (EternityChallenge(3).isRunning) return "Eternity Challenge 3";
-    if (DimBoost.purchasedBoosts < 5) return `Requires ${formatInt(5)} Dimension Boosts`;
+    if (DimBoost.purchasedBoosts.lt(5)) return `Requires ${formatInt(5)} Dimension Boosts`;
     if (AntimatterDimension(8).totalAmount.eq(0)) return "No 8th Antimatter Dimensions";
     if (this.nextBoost.lte(1)) return `${formatX(1)} multiplier`;
     if (Player.isInAntimatterChallenge) return "Challenge goal reached";
@@ -56,41 +56,41 @@ export class Sacrifice {
   static get sacrificeExponent() {
     let base;
     // C8 seems weaker, but it actually follows its own formula which ends up being stronger based on how it stacks
-    if (NormalChallenge(8).isRunning) base = 1;
+    if (NormalChallenge(8).isRunning) base = DC.D1;
     // Pre-Reality this was 100; having ach32/57 results in 1.2x, which is brought back in line by changing to 120
-    else if (InfinityChallenge(2).isCompleted) base = 1 / 120;
-    else base = 2;
+    else if (InfinityChallenge(2).isCompleted) base = DC.D1.div(120);
+    else base = DC.D2;
 
     // All the factors which go into the multiplier have to combine this way in order to replicate legacy behavior
-    const preIC2 = 1 + Effects.sum(Achievement(32), Achievement(57));
-    const postIC2 = 1 + Effects.sum(Achievement(88), TimeStudy(228));
+    const preIC2 = Effects.sum(Achievement(32), Achievement(57)).add(1);
+    const postIC2 = Effects.sum(Achievement(88), TimeStudy(228)).add(1);
     const triad = TimeStudy(304).effectOrDefault(1);
 
-    return base * preIC2 * postIC2 * triad;
+    return base.mul(preIC2).mul(postIC2).mul(triad);
   }
 
   static get nextBoost() {
-    const ad1Amount = AntimatterDimension(1).amount;
-    if (ad1Amount.eq(0)) return DC.D1;
+    const nd1Amount = AntimatterDimension(1).amount;
+    if (nd1Amount.eq(0)) return DC.D1;
     const sacrificed = player.sacrificed.clampMin(1);
     let prePowerSacrificeMult;
     // Pre-reality update C8 works really weirdly - every sacrifice, the current sacrifice multiplier gets applied to
-    // AD8, then sacrificed amount is updated, and then the updated sacrifice multiplier then gets applied to a
-    // different variable that is only applied during C8. However since sacrifice only depends on sacrificed AD1, this
+    // ND8, then sacrificed amount is updated, and then the updated sacrifice multiplier then gets applied to a
+    // different variable that is only applied during C8. However since sacrifice only depends on sacrificed ND1, this
     // can actually be done in a single calculation in order to handle C8 in a less hacky way.
     if (NormalChallenge(8).isRunning) {
-      prePowerSacrificeMult = ad1Amount.pow(0.05).dividedBy(sacrificed.pow(0.04)).clampMin(1)
-        .times(ad1Amount.pow(0.05).dividedBy(sacrificed.plus(ad1Amount).pow(0.04)));
+      prePowerSacrificeMult = nd1Amount.pow(0.05).dividedBy(sacrificed.pow(0.04)).clampMin(1)
+        .times(nd1Amount.pow(0.05).dividedBy(sacrificed.plus(nd1Amount).pow(0.04)));
     } else if (InfinityChallenge(2).isCompleted) {
-      prePowerSacrificeMult = ad1Amount.dividedBy(sacrificed);
+      prePowerSacrificeMult = nd1Amount.dividedBy(sacrificed);
     } else {
-      prePowerSacrificeMult = new Decimal((ad1Amount.log10() / 10) / Math.max(sacrificed.log10() / 10, 1));
+      prePowerSacrificeMult = new Decimal((nd1Amount.max(1).log10().div(10)).div(Decimal.max(sacrificed.max(1).log10().div(10), 1)));
     }
 
     let total = prePowerSacrificeMult.clampMin(1).pow(this.sacrificeExponent);
 
     if(total.gte("1e1E16")) total = total.div(total.div("1e1E16").pow(MetaFabricatorUpgrade(15).isBought ? 0.6 : 0.9));
-    if(total.gte("1e1E50")) total = total.pow( 1 / ((total.log10() / 1e50) ** 0.95));
+    if(total.gte("ee50")) total = total.pow( total.log10().div(1e50).pow(0.95).recip());
 
     return total;
   }
@@ -108,13 +108,13 @@ export class Sacrifice {
     if (InfinityChallenge(2).isCompleted) {
       prePowerBoost = player.sacrificed;
     } else {
-      prePowerBoost = new Decimal(player.sacrificed.log10() / 10);
+      prePowerBoost = player.sacrificed.max(1).log10().div(10);
     }
 
     let postPowerSacrifice = prePowerBoost.clampMin(1).pow(this.sacrificeExponent);
 
     let softcap = postPowerSacrifice.div("1e1E16").pow(0.9);
-    player.sacrificed = player.sacrificed.min(MetaFabricatorUpgrade(15).isBought ? "1e1E50" : "1e1E27");
+    player.sacrificed = player.sacrificed.min(MetaFabricatorUpgrade(15).isBought ? "ee50" : "1e1E27");
     return postPowerSacrifice.gte("1e1E16") ? postPowerSacrifice.div(softcap) : postPowerSacrifice;
   }
 }
@@ -122,10 +122,10 @@ export class Sacrifice {
 export function sacrificeReset() {
   if (!Sacrifice.canSacrifice) return false;
   if ((!player.break || (!InfinityChallenge.isRunning && NormalChallenge.isRunning)) &&
-    Currency.antimatter.gt(Decimal.NUMBER_MAX_VALUE)) return false;
+    Currency.antimatter.gt(DC.NUMMAX)) return false;
   if (
     NormalChallenge(8).isRunning &&
-    (Sacrifice.totalBoost.gte(Decimal.NUMBER_MAX_VALUE))
+    (Sacrifice.totalBoost.gte(DC.NUMMAX))
   ) {
     return false;
   }

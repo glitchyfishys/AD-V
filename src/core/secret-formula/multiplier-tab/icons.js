@@ -1,4 +1,4 @@
-import { reality } from "@/core/secret-formula/reality";
+import { GlyphInfo } from "@/core/secret-formula/reality/core-glyph-info";
 
 /**
  * Every entry in this object is a styling specification for bars within the multiplier tab.
@@ -118,7 +118,7 @@ export const MultiplierTabIcons = {
   },
   DIMBOOST: {
     symbol: `<i class="fas fa-angles-up" />`,
-    color: reality.glyphTypes.power.color,
+    color: GlyphInfo.power.color,
   },
   TICKSPEED: {
     symbol: `<i class="fas fa-clock" />`,
@@ -162,8 +162,9 @@ export const MultiplierTabIcons = {
   },
   SPECIFIC_GLYPH(type) {
     return {
-      symbol: `<b>${reality.glyphTypes[type].symbol}</b>`,
-      color: reality.glyphTypes[type].color,
+      symbol: `<b>${GlyphInfo[type].regularGlyphSymbol}</b>`,
+      textColor: `${GlyphInfo[type].color == '#000000' ? 'white' : ''}`,
+      color: GlyphInfo[type].color,
     };
   },
   BLACK_HOLE: {

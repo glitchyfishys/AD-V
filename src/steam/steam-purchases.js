@@ -75,7 +75,7 @@ export function hasPendingPurchaseConfirmations() {
 
 async function syncIAP() {
   const userInventory = await PlayFab.GetUserInventory();
-  ShopPurchaseData.totalSTD = userInventory.VirtualCurrency?.ST ?? 0;
+  player.IAP.STDcoins = userInventory.VirtualCurrency?.ST ?? 0;
   for (const key of Object.keys(GameDatabase.shopPurchases)) {
     const item = userInventory.Inventory.find(x => x.ItemId === key);
     ShopPurchaseData[key] = item?.RemainingUses ?? 0;

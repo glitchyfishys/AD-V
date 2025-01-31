@@ -79,7 +79,7 @@ export const progressStages = [
     id: PROGRESS_STAGE.LATE_ETERNITY,
     name: "Late Eternity",
     hasReached: save => new Decimal(save.dilation.dilatedTime).gt(1e15),
-    suggestedResource: () => (new Decimal(player.eternityPoints).log10() > 4000
+    suggestedResource: () => (new Decimal(player.eternityPoints).log10().gt(4000)
       ? "Eternity Points and/or Dilated Time. Alternatively, you can unlock and perform your first Reality"
       : "Eternity Points and/or Dilated Time"
     ),
@@ -90,11 +90,11 @@ export const progressStages = [
   {
     id: PROGRESS_STAGE.EARLY_REALITY,
     name: "Reality",
-    hasReached: save => save.realities > 0,
+    hasReached: save => save.realities.gt(0),
     // For the first few realities, we give a bit of extra suggestion just in case the player ended up taking a break
     // and returned in the middle of a reality while they're still relatively slow
     suggestedResource: () => {
-      if (player.realities > 5) return "Reality Machines";
+      if (player.realities.gt(5)) return "Reality Machines";
       const suffix = "in your current Reality, and your Reality Machines in the long term";
       if (player.eternities.eq(0)) return `Infinity Points ${suffix}`;
       if (player.dilation.dilatedTime.eq(0)) return `Eternity Points ${suffix}`;
@@ -121,7 +121,7 @@ export const progressStages = [
     name: "The Nameless Ones (3rd Celestial)",
     hasReached: save => save.celestials?.enslaved?.quoteBits > 0,
     suggestedResource: "Reality Machines and Glyph Level",
-    subProgressValue: save => Math.sqrt((new Decimal(save.reality.realityMachines).log10() - 30) / 30),
+    subProgressValue: save => new Decimal(save.reality.realityMachines).log10().sub(30).div(30).sqrt().toNumber(),
   },
   {
     id: PROGRESS_STAGE.V,
@@ -150,7 +150,7 @@ export const progressStages = [
     name: "Lai'tela (6th Celestial)",
     hasReached: save => save.celestials?.laitela?.quoteBits > 0,
     suggestedResource: "Dark Matter and Singularities",
-    subProgressValue: save => new Decimal(save.celestials.laitela.darkMatter).log10() / 308.25,
+    subProgressValue: save => new Decimal(save.celestials.laitela.darkMatter).log10().div(308.25),
   },
   {
     id: PROGRESS_STAGE.PELLE,
@@ -164,6 +164,6 @@ export const progressStages = [
     name: "Glitch (8th Celestial)",
     hasReached: save => save.celestials?.glitch?.rifts?.epsilon?.reducedTo == 1,
     suggestedResource: "RiftForce and Glitch's Upgrades",
-    subProgressValue: save => Decimal.log10(1 + save.celestials.glitch.riftForce) / 444,
+    subProgressValue: save => Decimal.log10(1 + save.celestials.glitch.riftForce).div(444),
   },
 ];

@@ -24,7 +24,7 @@ export default {
         and ${quantify("Meta Relay", this.gainedMetaRelays, 2, 0)}.`;
     },
     startingResources() {
-      return `You will start your next Meta with nothing but the START Reality Perk`;
+      return `You will start your next Meta with nothing but the 'START' Reality Perk`;
     }
   },
   methods: {

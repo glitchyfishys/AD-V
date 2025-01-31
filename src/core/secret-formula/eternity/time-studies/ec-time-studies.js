@@ -3,7 +3,7 @@ import { DC } from "../../../constants";
 export const ecTimeStudies = [
   {
     id: 1,
-    cost: 30,
+    cost: new Decimal(30),
     requirement: [171],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     secondary: {
@@ -15,19 +15,19 @@ export const ecTimeStudies = [
   },
   {
     id: 2,
-    cost: 35,
+    cost: new Decimal(35),
     requirement: [171],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     secondary: {
       resource: "Tickspeed upgrades from Time Dimensions",
       current: () => player.totalTickGained,
-      required: completions => 1300 + Math.min(completions, 4) * 150,
+      required: completions => new Decimal(1300 + Math.min(completions, 4) * 150),
       formatValue: formatInt
     }
   },
   {
     id: 3,
-    cost: 40,
+    cost: new Decimal(40),
     requirement: [171],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     secondary: {
@@ -39,8 +39,8 @@ export const ecTimeStudies = [
   },
   {
     id: 4,
-    cost: 70,
-    requirement: [143, () => (realityUGs.all[4].effectOrDefault(0) == 1 && player.timestudy.studies.includes(141)), () => (realityUGs.all[4].effectOrDefault(0) == 1 && player.timestudy.studies.includes(142))],
+    cost: new Decimal(70),
+    requirement: [143],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     secondary: {
       resource: "Infinities",
@@ -51,31 +51,31 @@ export const ecTimeStudies = [
   },
   {
     id: 5,
-    cost: 130,
+    cost: new Decimal(130),
     requirement: [42],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     secondary: {
       resource: "Antimatter Galaxies",
       current: () => player.galaxies,
-      required: completions => 160 + Math.min(completions, 4) * 14,
+      required: completions => Decimal.min(completions, 4).times(14).add(160),
       formatValue: formatInt
     }
   },
   {
     id: 6,
-    cost: 85,
-    requirement: [ 121, () => TeresaUnlocks.EC6RequireActive.canBeApplied && player.timestudy.studies.includes(111)],
+    cost: new Decimal(85),
+    requirement: [121],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     secondary: {
       resource: "Replicanti Galaxies",
       current: () => player.replicanti.galaxies,
-      required: completions => 40 + Math.min(completions, 4) * 5,
-      formatValue: formatInt,
-    },
+      required: completions => Decimal.min(completions, 4).times(5).add(40),
+      formatValue: formatInt
+    }
   },
   {
     id: 7,
-    cost: 115,
+    cost: new Decimal(115),
     requirement: [111],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     secondary: {
@@ -87,8 +87,8 @@ export const ecTimeStudies = [
   },
   {
     id: 8,
-    cost: 115,
-    requirement: [123, () => (realityUGs.all[4].effectOrDefault(0) == 1 && player.timestudy.studies.includes(121)), () => (realityUGs.all[4].effectOrDefault(0) == 1 && player.timestudy.studies.includes(122))],
+    cost: new Decimal(115),
+    requirement: [123],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     secondary: {
       resource: "Infinity Points",
@@ -99,7 +99,7 @@ export const ecTimeStudies = [
   },
   {
     id: 9,
-    cost: 415,
+    cost: new Decimal(415),
     requirement: [151],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     secondary: {
@@ -111,7 +111,7 @@ export const ecTimeStudies = [
   },
   {
     id: 10,
-    cost: 550,
+    cost: new Decimal(550),
     requirement: [181],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     secondary: {
@@ -123,7 +123,7 @@ export const ecTimeStudies = [
   },
   {
     id: 11,
-    cost: 1,
+    cost: DC.D1,
     requirement: [231, 232],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     secondary: {
@@ -133,7 +133,7 @@ export const ecTimeStudies = [
   },
   {
     id: 12,
-    cost: 1,
+    cost: DC.D1,
     requirement: [233, 234],
     reqType: TS_REQUIREMENT_TYPE.AT_LEAST_ONE,
     secondary: {

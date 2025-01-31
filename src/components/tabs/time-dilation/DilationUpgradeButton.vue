@@ -1,6 +1,6 @@
 <script>
 import CostDisplay from "@/components/CostDisplay";
-import CustomizableTooltip from "@/components/CustomizeableTooltip";
+import CustomizeableTooltip from "@/components/CustomizeableTooltip";
 import DescriptionDisplay from "@/components/DescriptionDisplay";
 import EffectDisplay from "@/components/EffectDisplay";
 import PrimaryToggleButton from "@/components/PrimaryToggleButton";
@@ -12,7 +12,7 @@ export default {
     DescriptionDisplay,
     EffectDisplay,
     CostDisplay,
-    CustomizableTooltip
+    CustomizeableTooltip
   },
   props: {
     upgrade: {
@@ -36,11 +36,10 @@ export default {
       isAffordable: false,
       isAutoUnlocked: false,
       isAutobuyerOn: false,
-      boughtAmount: 0,
+      boughtAmount: new Decimal(),
       currentDT: new Decimal(0),
       currentDTGain: new Decimal(0),
       timeEstimate: "",
-      rebuyableBoost: false,
       isHovering: false,
       hideEstimate: false,
     };
@@ -48,6 +47,9 @@ export default {
   computed: {
     classObject() {
       if (this.isUseless) {
+        // A lot of people did not understand the old way of handling TP mult (3) so we now permanently disable it
+        // and adjust the rift formula to come up for the lack of purchasable upgrade. Therefore we mark both upgrades
+        // similar to the rest of the game - as strictly disabled.
         return {
           "o-dilation-upgrade o-pelle-disabled-pointer": true,
           "o-pelle-disabled o-dilation-upgrade--useless": this.upgrade.id === 7 || this.upgrade.id === 3,
@@ -63,9 +65,8 @@ export default {
       };
     },
     isUseless() {
-      const tp = this.upgrade.id === 3;
-      const ip = this.upgrade.id === 7;
-      return Pelle.isDoomed && (tp || ip);
+      const tpip = this.upgrade.id === 3 || this.upgrade.id === 7;
+      return Pelle.isDoomed && tpip;
     }
   },
   watch: {
@@ -84,7 +85,7 @@ export default {
         this.isAffordable = upgrade.isAffordable;
         this.isCapped = upgrade.isCapped;
         const autobuyer = Autobuyer.dilationUpgrade(upgrade.id);
-        this.boughtAmount = upgrade.boughtAmount;
+        this.boughtAmount.copyFrom(upgrade.boughtAmount);
         if (!autobuyer) return;
         this.isAutoUnlocked = autobuyer.isUnlocked;
         this.isAutobuyerOn = autobuyer.isActive;
@@ -105,11 +106,11 @@ export default {
       :ach-tooltip="timeEstimate"
       :class="classObject"
       @click="upgrade.purchase()"
-      @click.shift="upgrade.purchase(1e8)"
+      @click.shift="upgrade.purchase(1e300)"
       @mouseover="isHovering = true"
       @mouseleave="isHovering = false"
     >
-      <CustomizableTooltip
+      <CustomizeableTooltip
         v-if="timeEstimate"
         :show="showTooltip && !isHovering && !hideEstimate"
         left="50%"
@@ -118,7 +119,7 @@ export default {
         <template #tooltipContent>
           {{ timeEstimate }}
         </template>
-      </CustomizableTooltip>
+      </CustomizeableTooltip>
       <span>
         <DescriptionDisplay
           :config="upgrade.config"
@@ -126,7 +127,7 @@ export default {
           name="o-dilation-upgrade__description"
         />
         <EffectDisplay
-          :key="boughtAmount"
+          :key="boughtAmount.toNumber()"
           br
           :config="upgrade.config"
         />

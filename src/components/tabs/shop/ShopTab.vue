@@ -17,13 +17,10 @@ export default {
   },
   data() {
     return {
-      availableSTD: 0,
+      availableSTD: new Decimal(0),
       isLoading: false,
       IAPsEnabled: false,
       creditsClosed: false,
-      loggedIn: false,
-      username: "",
-      canRespec: false,
       respecTimeStr: "",
     };
   },
@@ -34,26 +31,13 @@ export default {
     enableText() {
       return `In-app Purchases: ${this.IAPsEnabled ? "Enabled" : "Disabled"}`;
     },
-    respecText() {
-      if (!this.canRespec) return "No respec available! (Purchase STDs or wait 15 min since your last one)";
-      return null;
-    },
-    hiddenName() {
-      return player.options.hideGoogleName;
-    }
   },
   methods: {
     update() {
-      this.availableSTD = Math.floor(player.IAP.STDcoins);
+      this.availableSTD = Decimal.floor(player.IAP.STDcoins);
       this.isLoading = Boolean(player.IAP.checkoutSession.id);
       this.IAPsEnabled = player.IAP.enabled;
       this.creditsClosed = GameEnd.creditsEverClosed;
-      this.loggedIn = Cloud.loggedIn;
-      this.username = Cloud.user?.displayName;
-      this.canRespec = ShopPurchaseData.canRespec;
-      if (!ShopPurchaseData.respecAvailable && !this.canRespec) {
-        this.respecTimeStr = ShopPurchaseData.timeUntilRespec.toStringShort();
-      }
     },
     showStore() {
       if (this.creditsClosed) return;
@@ -63,12 +47,8 @@ export default {
     onCancel() {
       Payments.cancelPurchase(false);
     },
-    respec() {
-      if (this.creditsClosed || !this.loggedIn || !this.canRespec) return;
-      ShopPurchaseData.respecRequest();
-    },
     toggleEnable() {
-      if (ShopPurchaseData.availableSTD < 0) return;
+      if (ShopPurchaseData.availableSTD.lt(0)) return;
       player.IAP.enabled = !player.IAP.enabled;
       if (ShopPurchaseData.isIAPEnabled) Speedrun.setSTDUse(true);
     },
@@ -76,7 +56,7 @@ export default {
       return {
         "o-primary-btn--subtab-option": true,
         "o-pelle-disabled-pointer": this.creditsClosed,
-        "o-primary-btn--disabled": !this.canRespec
+        "o-primary-btn--disabled": true
       };
     }
   },
@@ -98,16 +78,6 @@ export default {
       >
         {{ enableText }}
       </PrimaryButton>
-      <PrimaryButton
-        v-tooltip="respecText"
-        :class="respecClass()"
-        @click="respec()"
-      >
-        Respec Shop
-      </PrimaryButton>
-    </div>
-    <div v-if="!canRespec">
-      Time until respec available: {{ respecTimeStr }}
     </div>
     <div class="c-shop-header">
       <span>You have {{ availableSTD }}</span>

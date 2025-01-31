@@ -14,9 +14,7 @@ export default {
       isAutoUnlocked: false,
       isAffordable: false,
       multiplier: new Decimal(),
-      cost: new Decimal(),
-      amount: 0,
-      iscapped: false
+      cost: new Decimal()
     };
   },
   computed: {
@@ -25,9 +23,6 @@ export default {
     },
     autobuyer() {
       return Autobuyer.epMult;
-    },
-    hitlimit() {
-        return this.iscapped;
     },
     classObject() {
       if (this.isDoomed) {
@@ -40,9 +35,8 @@ export default {
       }
       return {
         "o-eternity-upgrade": true,
-        "o-eternity-upgrade--bought": this.iscapped,
-        "o-eternity-upgrade--available": this.isAffordable && !this.iscapped,
-        "o-eternity-upgrade--unavailable": !this.isAffordable,
+        "o-eternity-upgrade--available": this.isAffordable,
+        "o-eternity-upgrade--unavailable": !this.isAffordable
       };
     },
     isDoomed: () => Pelle.isDoomed,
@@ -60,8 +54,6 @@ export default {
       this.multiplier.copyFrom(upgrade.effectValue);
       this.cost.copyFrom(upgrade.cost);
       this.isAffordable = upgrade.isAffordable;
-      this.amount = player.epmultUpgrades;
-      this.iscapped = this.amount >= 1000000000;
     },
     purchaseUpgrade() {
       if (RealityUpgrade(15).isLockingMechanics) RealityUpgrade(15).tryShowWarningModal();
@@ -81,9 +73,6 @@ export default {
         Multiply Eternity Points from all sources by {{ formatX(5) }}
         <br>
         Currently: {{ formatX(multiplier, 2, 0) }}
-      </div>
-      <div v-if="hitlimit">
-        (capped at {{ format(1000000000) }} perchases)
       </div>
       <br>
       Cost: {{ quantify("Eternity Point", cost, 2, 0) }}

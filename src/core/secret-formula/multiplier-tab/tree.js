@@ -107,7 +107,7 @@ export const multiplierTabTree = {
 };
 
 // Gamespeed's two alternate displays are current and average gamespeed, distinguished by which of two
-// mutually-exclusive entries appear in the list. We explicitly modify props here as needed
+// mutually-exclusive entries appear in the list. We explicity modify props here as needed
 const allGamespeed = multiplierTabTree.gamespeed_total[0];
 multiplierTabTree.gamespeed_total[0] = [...allGamespeed].filter(key => key !== "gamespeed_blackHoleAvg");
 multiplierTabTree.gamespeed_total[1] = [...allGamespeed].filter(key => key !== "gamespeed_blackHoleCurr");

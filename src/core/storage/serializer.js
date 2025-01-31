@@ -2,29 +2,6 @@
 import pako from "pako/dist/pako.esm.mjs";
 /* eslint-enable import/extensions */
 
-// bigger saved numbers :yay:
-
-Decimal.prototype.toString = function () {
-  if (isNaN(this.m) || isNaN(this.e)) {
-    return "NaN";
-  }
-
-  if (this.e >= Infinity) {
-    return this.m > 0 ? "Infinity" : "-Infinity";
-  }
-
-  if (this.e <= -Infinity || this.m === 0) {
-    return "0";
-  }
-
-  if (this.e < 21 && this.e > -7) {
-    return this.toNumber().toString();
-  }
-
-  return this.m + "e" + (this.e >= 0 ? "+" : "") + this.e.toString().replace("e","E");
-};
-
-
 export const GameSaveSerializer = {
   serialize(save) {
     const json = JSON.stringify(save, this.jsonConverter);

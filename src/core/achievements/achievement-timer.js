@@ -1,17 +1,19 @@
+import { DC } from "../constants";
+
 class AchievementTimer {
   constructor(isRealTime) {
-    this.time = new Decimal();
+    this.time = DC.D0;
     this.realTime = isRealTime;
   }
 
   reset() {
-    this.time = new Decimal();
+    this.time = DC.D0;
   }
 
   advance() {
     const addedTime = this.realTime
-      ? Time.unscaledDeltaTime.totalSeconds
-      : Time.deltaTime;
+      ? Time.realDeltaTime.totalSeconds
+      : Time.trueDeltaTime.totalSeconds;
     this.time = this.time.add(addedTime);
   }
 

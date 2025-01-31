@@ -1,5 +1,6 @@
 import { BitUpgradeState, GameMechanicState } from "../game-mechanics";
 import { GameDatabase } from "../secret-formula/game-database";
+import { DC } from "../constants";
 
 import { SpeedrunMilestones } from "../speedrun";
 
@@ -33,7 +34,7 @@ class VRunUnlockState extends GameMechanicState {
 
   get isReduced() {
     if (player.celestials.v.goalReductionSteps[this.id] === 0) return false;
-    return (VUnlocks.shardReduction.canBeApplied && this.reduction > 0);
+    return (VUnlocks.shardReduction.canBeApplied && this.reduction.gt(0));
   }
 
   get reductionCost() {
@@ -56,13 +57,17 @@ class VRunUnlockState extends GameMechanicState {
 
   get reduction() {
     const value = this.conditionBaseValue;
-    return Math.clamp(this.config.shardReduction(this.tiersReduced), 0, this.config.maxShardReduction(value));
+    return Decimal.clamp(this.config.shardReduction(this.tiersReduced), 0, this.config.maxShardReduction(value));
   }
 
   get conditionValue() {
     let value = this.conditionBaseValue;
     if (!this.isReduced) return value;
-    value -= this.reduction;
+    if (value instanceof Decimal) {
+      value = value.sub(this.reduction);
+    } else {
+      value = Decimal.sub(value, this.reduction).toNumber();
+    }
     return value;
   }
 
@@ -77,13 +82,15 @@ class VRunUnlockState extends GameMechanicState {
   reset(){
     const V = player.celestials.v;
     V.runUnlocks[this.id] = 0;
-    V.runRecords[this.id] = this.id == 0 ? -10 : 0;
+    if(this.id == 0) V.runRecords[this.id] = -10;
+    else if (this.id == 6) V.runRecords[this.id] = 0;
+    else  V.runRecords[this.id] = DC.D0;
   }
 
   tryComplete() {
     const playerData = player.celestials.v;
     const value = this.config.currentValue();
-    if (this.config.condition(this.conditionValue) && Decimal.gte(value, playerData.runRecords[this.id])) {
+    if (this.config.condition() && Decimal.gte(value, playerData.runRecords[this.id])) {
       playerData.runRecords[this.id] = value;
       playerData.runGlyphs[this.id] = Glyphs.copyForRecords(Glyphs.active.filter(g => g !== null));
     }
@@ -166,7 +173,7 @@ export const VUnlocks = mapGameDataToObject(
 export const V = {
   displayName: "V",
   possessiveName: "V's",
-  spaceTheorems: 0,
+  spaceTheorems: DC.D0,
   checkForUnlocks() {
     for (const unl of VUnlocks.all) {
       if (unl === VUnlocks.vAchievementUnlock) continue;
@@ -177,7 +184,7 @@ export const V = {
       for (const unlock of VRunUnlocks.all) {
         unlock.tryComplete();
       }
-      if (this.spaceTheorems >= 36) SpeedrunMilestones(22).tryComplete();
+      if (this.spaceTheorems.gte(36)) SpeedrunMilestones(22).tryComplete();
     }
 
     if (VUnlocks.raUnlock.canBeApplied && !Ra.unlocks.autoTP.canBeApplied) {
@@ -209,7 +216,7 @@ export const V = {
       else if (i < 10) sum += player.celestials.v.runUnlocks[i] * 2;
       else sum += player.celestials.v.runUnlocks[i] * 5;
     }
-    this.spaceTheorems = sum + player.celestials.v.metaTheorems;
+    this.spaceTheorems = player.celestials.v.metaTheorems.add(sum);
   },
   reset() {
     const v = player.celestials.v;
@@ -222,12 +229,12 @@ export const V = {
       v.runGlyphs = [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []];
       v.runRecords = [-10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     }
-    v.metaTheorems = 0;
-    v.STSpent = 0;
-    this.spaceTheorems = 0;
+    v.metaTheorems = DC.D0;
+    v.STSpent = DC.D0;
+    this.spaceTheorems = DC.D0;
   },
   get availableST() {
-    return V.spaceTheorems - player.celestials.v.STSpent;
+    return V.spaceTheorems.sub(player.celestials.v.STSpent);
   },
   get isRunning() {
     return player.celestials.v.run;
@@ -242,14 +249,14 @@ export const V = {
     return GlitchSpeedUpgrade(4).isBought;
   },
   get isFullyCompleted() {
-    if(this.isExtreme) return this.spaceTheorems >= 150;
-    return this.spaceTheorems >= 110;
+    if(this.isExtreme) return this.spaceTheorems.gte(230);
+    return this.spaceTheorems.gte(110);
   },
   get rageDimPower() {
-    return Decimal.pow(1e-3 * MetaFabricatorUpgrades.all[4].effectOrDefault(new Decimal(1)).toNumber() , VRunUnlock(10).completions);
+    return MetaFabricatorUpgrades.all[4].effectOrDefault(DC.D1).mul(1e-3).pow(VRunUnlock(10).completions);
   },
   get rageTickPower() {
-    return Decimal.pow(1e-3 * MetaFabricatorUpgrades.all[4].effectOrDefault(new Decimal(1)).toNumber() , VRunUnlock(10).completions);
+    return MetaFabricatorUpgrades.all[4].effectOrDefault(DC.D1).mul(1e-3).pow(VRunUnlock(10).completions);
   },
   nextNormalReductionCost() {
     return 1000;

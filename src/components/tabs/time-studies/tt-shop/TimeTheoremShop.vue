@@ -15,23 +15,22 @@ export default {
   },
   data() {
     return {
-      respec: false,
-      theoremAmount: new Decimal(0),
-      theoremGeneration: new Decimal(0),
-      totalTimeTheorems: new Decimal(0),
+      theoremAmount: new Decimal(),
+      theoremGeneration: new Decimal(),
+      totalTimeTheorems: new Decimal(),
       shopMinimized: false,
       minimizeAvailable: false,
       hasTTAutobuyer: false,
       isAutobuyerOn: false,
       budget: {
-        am: new Decimal(0),
-        ip: new Decimal(0),
-        ep: new Decimal(0)
+        am: new Decimal(),
+        ip: new Decimal(),
+        ep: new Decimal()
       },
       costs: {
-        am: new Decimal(0),
-        ip: new Decimal(0),
-        ep: new Decimal(0)
+        am: new Decimal(),
+        ip: new Decimal(),
+        ep: new Decimal()
       },
       showST: false,
       STamount: 0,
@@ -49,7 +48,7 @@ export default {
         return format;
       }
       if (!(Teresa.isRunning || Enslaved.isRunning) &&
-        getAdjustedGlyphEffect("dilationTTgen") > 0 && !DilationUpgrade.ttGenerator.isBought) {
+        getAdjustedGlyphEffect("dilationTTgen").gt(0) && !DilationUpgrade.ttGenerator.isBought) {
         return formatFloat;
       }
       return formatInt;
@@ -57,7 +56,7 @@ export default {
     TTgenRateText() {
       if (this.theoremGeneration.lt(1 / 3600)) {
         return `one TT every ${TimeSpan.fromSeconds(
-          this.theoremGeneration.reciprocal().toNumber()).toStringShort(false)}`;
+          this.theoremGeneration.reciprocal()).toStringShort(false)}`;
       }
       if (this.theoremGeneration.lt(0.1)) {
         return `${format(this.theoremGeneration.times(3600), 2, 2)} TT/hour`;
@@ -150,7 +149,7 @@ export default {
       costs.am.copyFrom(TimeTheoremPurchaseType.am.cost);
       costs.ip.copyFrom(TimeTheoremPurchaseType.ip.cost);
       costs.ep.copyFrom(TimeTheoremPurchaseType.ep.cost);
-      this.showST = V.spaceTheorems > 0 && !Pelle.isDoomed;
+      this.showST = V.spaceTheorems.gt(0) && !Pelle.isDoomed;
       this.STamount = V.availableST;
       this.hasTTGen = this.theoremGeneration.gt(0);
       this.showTTGen = this.hasTTGen && (ui.view.shiftDown === this.invertTTgenDisplay);
@@ -158,7 +157,7 @@ export default {
     },
     toggleTTgen() {
       this.invertTTgenDisplay = !this.invertTTgenDisplay;
-    },
+    }
   },
 };
 </script>

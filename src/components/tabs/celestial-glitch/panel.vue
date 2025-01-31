@@ -7,7 +7,7 @@ export default {
     return {
       isRunning: false,
       tier: 0,
-      time: 0,
+      time: new Decimal(),
     };
   },
   computed: {
@@ -42,10 +42,6 @@ export default {
         "o-pelle-disabled-pointer": this.isDoomed
       };
     },
-    realitytime(){
-      return timeDisplayShort(this.time)
-    },
-    
   },
   watch: {
     autoRelease(newValue) {
@@ -56,7 +52,7 @@ export default {
     update() {
       this.isRunning = Glitch.isRunning;
       this.tier = Glitch.tier;
-      this.time = player.records.thisReality.realTime;
+      this.time = Time.thisRealityRealTime.toStringShort();
     },
     decay(){
       return Glitch.augmentEffectActive(9) ? `and a decay of 1 / ${format(Glitch.decay,2,2)} to ${player.options.themeModern == "S13" ? "V-Glitch": "Glitch"} reality nerfs`: "";
@@ -105,6 +101,6 @@ export default {
       run tier {{tier}} of {{sName}} Reality
     </p>
     <br><br>
-    <div v-if="isRunning"> time in this reality {{realitytime + " " + decay()}}</div>
+    <div v-if="isRunning"> time in this reality {{time + " " + decay()}}</div>
   </button>
 </template>

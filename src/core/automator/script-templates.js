@@ -40,7 +40,7 @@ export class ScriptTemplate {
   /**
    * Special formatting for numbers in templates; we can't use format() here because that will change based on the
    * player's current notation. This is generally desirable in the rest of the game, but in most notations will
-   * result in unparsable garbage here. Numbers are formatted assuming they're integers, and Decimals are formatted
+   * result in unparseable garbage here. Numbers are formatted assuming they're integers, and Decimals are formatted
    * with 2 decimal places (in scientific notation if above 1000)
    * @param {Number | Decimal} num  Number to format, disregarding current notation settings
    * @returns {String}  The properly-formatted number, in a reasonable-looking format valid for the automator
@@ -48,7 +48,8 @@ export class ScriptTemplate {
   format(num) {
     if (typeof num === "number") return Math.round(num);
     if (num.lte(1000)) return num.toNumber().toFixed(2);
-    return `${num.mantissa.toFixed(2)}e${num.exponent}`;
+    if (num.lte("e9e15")) return `${num.mantissa.toFixed(2)}e${num.exponent}`;
+    return `F${num.layer}E${num.mag.toFixed(5)}`;
   }
 
   /**

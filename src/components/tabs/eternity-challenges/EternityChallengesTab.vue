@@ -5,7 +5,6 @@ import ChallengeGrid from "@/components/ChallengeGrid";
 import ChallengeTabHeader from "@/components/ChallengeTabHeader";
 import EternityChallengeBox from "./EternityChallengeBox";
 import PrimaryButton from "@/components/PrimaryButton";
-import { Enslaved } from "../../../core/globals";
 
 export default {
   name: "EternityChallengesTab",
@@ -19,7 +18,7 @@ export default {
     return {
       unlockedCount: 0,
       showAllChallenges: false,
-      autoEC: TimeSpan.zero,
+      autoEC: false,
       isAutoECVisible: false,
       hasUpgradeLock: false,
       remainingECTiers: 0,
@@ -36,7 +35,7 @@ export default {
     challenges() {
       return EternityChallenges.all;
     },
-     upgradeLockNameText() {
+    upgradeLockNameText() {
       return RealityUpgrade(12).isLockingMechanics
         ? RealityUpgrade(12).name
         : ImaginaryUpgrade(15).name;
@@ -68,8 +67,9 @@ export default {
       this.remainingECTiers = remainingCompletions;
       if (remainingCompletions !== 0) {
         const autoECInterval = EternityChallenges.autoComplete.interval;
-        this.untilNextEC = new TimeSpan(Decimal.max(Decimal.sub(autoECInterval, Time.lastAutoEC.totalMilliseconds), 0));
-        this.untilAllEC.copyFrom(new TimeSpan(this.untilNextEC.totalMilliseconds.add(autoECInterval.mul(remainingCompletions - 1))) );
+        const untilNextEC = Decimal.max(autoECInterval.sub(player.reality.lastAutoEC), 0);
+        this.untilNextEC.setFrom(untilNextEC);
+        this.untilAllEC.setFrom(untilNextEC.add(autoECInterval.times(remainingCompletions - 1)));
       }
       this.hasECR = Perk.studyECRequirement.isBought;
       this.allowECcomplete = PlayerProgress.realityUnlocked();
@@ -82,8 +82,8 @@ export default {
         (this.showAllChallenges && PlayerProgress.realityUnlocked());
     },
     ECc(){
-      if(this.isDoomed) return GameUI.notify.error("You know why",3000)
-      if(this.isEnslaved) return GameUI.notify.error("Can't be used in The Nameless Ones' reality",3000)
+      if(this.isDoomed) return GameUI.notify.error("You know why",3000);
+      if(this.isEnslaved) return GameUI.notify.error("Can't be used in The Nameless Ones' reality",3000);
       if(Effarig.isRunning && Effarig.currentStage < 4) return GameUI.notify.error("Can't be used in the Effarig's Reality, until the Reality layer is complete",3000)
       let h=0;
       for(let i=1; i <= 12; i++){

@@ -68,13 +68,13 @@ export default {
       return this.item.name.includes("BlackHole");
     },
     formatBlackHoleActivations() {
-      const activations = this.after - this.before;
+      const activations = this.after.sub(this.before);
       return quantifyInt("time", activations);
     },
     isVeryLarge() {
       return this.isBlackHole
         ? false
-        : Decimal.gt(this.before, Decimal.pow10(1e12));
+        : Decimal.gt(this.before, Decimal.pow10(1e9));
     }
   },
   methods: {
@@ -84,7 +84,7 @@ export default {
       // not any text is even shown at all and sometimes this gets checked on variables which don't have values yet
       if (number === undefined) return "";
       // Surrounding text is formatted differently to specify that this is log10
-      if (this.isVeryLarge) return formatInt(Math.floor(number.log10()));
+      if (this.isVeryLarge) return format(Decimal.floor(number.max(1).log10()));
       if (Decimal.lt(number, 1e9)) {
         // Both numbers and decimals get passed in here so this is needed
         // Not a fan of this solution but whatever
@@ -249,11 +249,11 @@ export default {
 }
 
 .c-modal-away-progress__cante-memories {
-  color: var(--color-cante);
+  color: var(--color-cante--base);
 }
 
 .c-modal-away-progress__null-memories {
-  color: var(--color-null);
+  color: var(--color-null--base);
 }
 
 .c-modal-away-progress__disabled b,

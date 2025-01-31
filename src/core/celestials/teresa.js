@@ -1,11 +1,12 @@
 import { BitUpgradeState, RebuyableMechanicState } from "../game-mechanics";
+import { DC } from "../constants";
 import { GameDatabase } from "../secret-formula/game-database";
 
 import { Quotes } from "./quotes";
 
 export const Teresa = {
   timePoured: 0,
-  lastUnlock: "effarig",
+  lastUnlock: "EC6RequireActive",
   pouredAmountCap: 1e30,
   displayName: "Teresa",
   possessiveName: "Teresa's",
@@ -15,8 +16,8 @@ export const Teresa = {
   pourRM(diff) {
     if (this.pouredAmount >= Teresa.pouredAmountCap) return;
     this.timePoured += diff;
-    const rm = Currency.realityMachines.value;
-    const rmPoured = Math.min((this.pouredAmount + 1e6) * 0.25 * Math.pow(this.timePoured, 2), rm.toNumber());
+    const rm = Currency.realityMachines.value.max(1e100);
+    const rmPoured = Math.min((this.pouredAmount + 1e6) * 0.1 * Math.pow(this.timePoured, 2), rm.toNumber());
     this.pouredAmount += Math.min(rmPoured, Teresa.pouredAmountCap - this.pouredAmount);
     Currency.realityMachines.subtract(rmPoured);
     this.checkForUnlocks();
@@ -31,23 +32,9 @@ export const Teresa = {
     player.celestials.teresa.run = true;
   },
   rewardMultiplier(antimatter) {
-    let effect = Decimal.max(Decimal.pow(antimatter.plus(1).log10() / 1.5e8, 12), 1);
-    if (effect.gte(1e100)) return effect.mul(effect.div(1e100).pow(2));
-    return GlitchRealityUpgrades.all[11].isBought ? Decimal.pow(effect, 1.5) : effect;
-  },
-  get sacrificeAmount() {
-    const sac = player.reality.glyphs.sac;
-
-    return {
-      power: new Decimal(sac.power),
-      infinity: new Decimal(sac.infinity),
-      time: new Decimal(sac.time),
-      replication: new Decimal(sac.replication),
-      dilation: new Decimal(sac.dilation),
-      effarig: new Decimal(sac.effarig),
-      reality: new Decimal(sac.reality),
-      glitch: new Decimal(sac.glitch),
-    };
+    let effect = Decimal.max(Decimal.pow(antimatter.plus(1).log10().div(1.5e8), 12), 1);
+    if (effect.gte(1e100)) effect = effect.mul(effect.div(1e100).pow(2));
+    return GlitchRealityUpgrade(12).isBought ? effect.pow(1.5) : effect;
   },
   get pouredAmount() {
     return player.celestials.teresa.pouredAmount;
@@ -59,10 +46,10 @@ export const Teresa = {
     return Math.min(Math.log10(this.pouredAmount) / 30, 1);
   },
   get possibleFill() {
-    return Math.min(Currency.realityMachines.value.plus(this.pouredAmount).log10() / 30, 1);
+    return Decimal.min(Currency.realityMachines.value.plus(this.pouredAmount).max(1).log10().div(30), 1).toNumber();
   },
   get rmMultiplier() {
-    return Math.max(250 * Math.pow(this.pouredAmount / 1e20, 0.1), 1);
+    return Decimal.max(250 * Math.pow(this.pouredAmount / 1e20, 0.1), 1);
   },
   get runRewardMultiplier() {
     return this.rewardMultiplier(player.celestials.teresa.bestRunAM);
@@ -76,16 +63,17 @@ export const Teresa = {
   quotes: Quotes.teresa,
   symbol: "Ϟ",
 
-  reset(){
-    player.celestials.teresa.bestRunAM = new Decimal();
-    player.celestials.teresa.lastRepeatedMachines = new Decimal();
+  reset() {
+    player.celestials.teresa.run = false;
+    player.celestials.teresa.bestRunAM = DC.D1;
+    player.celestials.teresa.lastRepeatedMachines = DC.D0;
+    player.celestials.teresa.lastRepeatediM = DC.D0;
     player.celestials.teresa.bestAMSet = [];
     if(MetaFabricatorUpgrade(8).isBought) return;
-    this.pouredAmount = 0;
+    player.celestials.teresa.pouredAmount = 0;
     player.celestials.teresa.unlockBits = 0;
-    player.celestials.teresa.perkShop = [0,0,0,0,0,0,0,0];
-  }
-
+    player.celestials.teresa.perkShop = [DC.D0, DC.D0, DC.D0, DC.D0, DC.D0, DC.D0, DC.D0, DC.D0];
+  },
 };
 
 class PerkShopUpgradeState extends RebuyableMechanicState {
@@ -107,12 +95,12 @@ class PerkShopUpgradeState extends RebuyableMechanicState {
   }
 
   get isCapped() {
-    return this.cost >= this.costCap(this.bought);
+    return Decimal.gte(this.cost, this.costCap());
   }
 
   get isAvailableForPurchase() {
     const otherReq = this.config.otherReq ? this.config.otherReq() : true;
-    return this.cost <= this.currency.value && otherReq;
+    return this.currency.value.gte(this.cost) && otherReq;
   }
 
   onPurchased() {

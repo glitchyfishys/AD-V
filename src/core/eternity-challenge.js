@@ -10,7 +10,7 @@ export function startEternityChallenge() {
   Replicanti.reset();
   resetChallengeStuff();
   AntimatterDimensions.reset();
-  player.replicanti.galaxies = 0;
+  player.replicanti.galaxies = DC.D0;
   Currency.infinityPoints.reset();
   InfinityDimensions.resetAmount();
   player.records.bestInfinity.bestIPminEternity = DC.D0;
@@ -162,8 +162,8 @@ export class EternityChallengeState extends GameMechanicState {
 
   completionsAtIP(ip) {
     if (ip.lt(this.initialGoal)) return 0;
-    const completions = 1 + (ip.dividedBy(this.initialGoal)).log10() / this.goalIncrease.log10();
-    return Math.min(Math.floor(completions), this.maxCompletions);
+    const completions = (ip.dividedBy(this.initialGoal)).max(1).log10().div(this.goalIncrease.max(1).log10()).add(1);
+    return Decimal.min(Decimal.floor(completions), this.maxCompletions).toNumber();
   }
 
   addCompletion(auto = false) {
@@ -209,7 +209,7 @@ export class EternityChallengeState extends GameMechanicState {
     if (Player.canEternity) eternity(false, auto, { enteringEC: true });
     player.challenge.eternity.current = this.id;
     if (this.id === 12) {
-      if (enteringGamespeed.lt(0.001)) SecretAchievement(42).unlock();
+      if (enteringGamespeed.lt(1e-3)) SecretAchievement(42).unlock();
       player.requirementChecks.reality.slowestBH = DC.D1;
     }
     if (Enslaved.isRunning) {
@@ -310,19 +310,19 @@ export const EternityChallenges = {
   get completions() {
     return EternityChallenges.all
       .map(ec => ec.completions)
-      .sum();
+      .nSum();
   },
 
   get maxCompletions() {
     return EternityChallenges.all
       .map(ec => ec.maxCompletions)
-      .sum();
+      .nSum();
   },
 
   get remainingCompletions() {
     return EternityChallenges.all
       .map(ec => ec.remainingCompletions)
-      .sum();
+      .nSum();
   },
 
   autoComplete: {
@@ -354,7 +354,7 @@ export const EternityChallenges = {
         next.addCompletion(true);
         next = this.nextChallenge;
       }
-      player.reality.lastAutoEC = new Decimal(player.reality.lastAutoEC.toNumber() % interval.toNumber());
+      player.reality.lastAutoEC = player.reality.lastAutoEC.mod(interval);
     },
 
     get nextChallenge() {
@@ -362,14 +362,14 @@ export const EternityChallenges = {
     },
 
     get interval() {
-      if (!Perk.autocompleteEC1.canBeApplied) return new Decimal(Decimal.NUMBER_MAX_VALUE);
+      if (!Perk.autocompleteEC1.canBeApplied) return DC.BEMAX;
       let minutes = Effects.min(
         Number.MAX_VALUE,
         Perk.autocompleteEC1,
         Perk.autocompleteEC2,
         Perk.autocompleteEC3
       );
-      minutes /= VUnlocks.fastAutoEC.effectOrDefault(1);
+      minutes = minutes.div(VUnlocks.fastAutoEC.effectOrDefault(1));
       return TimeSpan.fromMinutes(minutes).totalMilliseconds;
     }
   }

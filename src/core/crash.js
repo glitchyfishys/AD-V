@@ -1,5 +1,3 @@
-import { DEV } from "@/env";
-
 window.NotImplementedError = class NotImplementedError extends Error {
   constructor() {
     super("The method is not implemented.");
@@ -40,7 +38,7 @@ window.GlobalErrorHandler = {
       Modal.message.show(`${message}<br>Check the console for more details`, {}, 3);
     }
     // eslint-disable-next-line no-debugger
-    debugger;
+    // debugger; remember to turn this back on
   }
 };
 

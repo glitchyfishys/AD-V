@@ -3,7 +3,7 @@
 // Because apparently making the z-index of PelleStrike change with its expanded/contracted state is bad.
 // As such it may not be perfectly generalised. Changes should be made to generalise it more.
 export default {
-  name: "CustomizableTooltip",
+  name: "CustomizeableTooltip",
   props: {
     tooltipContentStyle: {
       type: Object,

@@ -5,11 +5,11 @@ export default {
     return {
       requirement: {
         tier: 1,
-        amount: 0
+        amount: new Decimal()
       },
       isBuyable: false,
-      purchasedBoosts: 0,
-      imaginaryBoosts: 0,
+      purchasedBoosts: new Decimal(),
+      imaginaryBoosts: new Decimal(),
       lockText: null,
       unlockedByBoost: null,
       creditsClosed: false,
@@ -25,12 +25,12 @@ export default {
     boostCountText() {
       if (this.requirementText) return this.requirementText;
       const parts = [this.purchasedBoosts];
-      if (this.imaginaryBoosts !== 0) {
+      if (this.imaginaryBoosts.neq(0)) {
         parts.push(this.imaginaryBoosts);
       }
-      const sum = parts.map(x => format(x, 2)).join(" + ");
+      const sum = parts.map(formatInt).join(" + ");
       if (parts.length >= 2) {
-        return `${sum} = ${format(parts.sum(), 2)}`;
+        return `${sum} = ${formatInt(parts.sum())}`;
       }
       return sum;
     },
@@ -47,14 +47,14 @@ export default {
     update() {
       const requirement = DimBoost.requirement;
       this.requirement.tier = requirement.tier;
-      this.requirement.amount = requirement.amount;
+      this.requirement.amount.copyFrom(requirement.amount);
       this.isBuyable = requirement.isSatisfied && DimBoost.canBeBought;
-      this.purchasedBoosts = DimBoost.purchasedBoosts;
-      this.imaginaryBoosts = DimBoost.imaginaryBoosts;
+      this.purchasedBoosts.copyFrom(DimBoost.purchasedBoosts);
+      this.imaginaryBoosts.copyFrom(DimBoost.imaginaryBoosts);
       this.lockText = DimBoost.lockText;
       this.unlockedByBoost = DimBoost.unlockedByBoost;
       this.creditsClosed = GameEnd.creditsEverClosed;
-      if (this.isDoomed) this.requirementText = format(this.purchasedBoosts, 2);
+      if (this.isDoomed) this.requirementText = formatInt(this.purchasedBoosts);
       this.hasTutorial = Tutorial.isActive(TUTORIAL_STATE.DIMBOOST);
     },
     dimensionBoost(bulk) {
@@ -68,7 +68,7 @@ export default {
 <template>
   <div class="reset-container dimboost">
     <h4>Dimension Boost ({{ boostCountText }})</h4>
-    <span>Requires: {{ format(requirement.amount, 2) }} {{ dimName }} Antimatter D</span>
+    <span>Requires: {{ formatInt(requirement.amount) }} {{ dimName }} Antimatter D</span>
     <button
       :class="classObject"
       @click.exact="dimensionBoost(true)"

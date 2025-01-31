@@ -54,6 +54,9 @@ Vue.mixin({
     format(value, places, placesUnder1000) {
       return format(value, places, placesUnder1000);
     },
+    formatSmall(value, places, placesUnder1000) {
+      return formatSmall(value, places, placesUnder1000);
+    },
     formatInt(value) {
       return formatInt(value);
     },
@@ -200,6 +203,9 @@ export const ui = new Vue({
   computed: {
     notation() {
       return Notations.find(this.notationName);
+    },
+    lnotation() {
+      return LNotations.find(this.lnotationName);
     },
     currentGlyphTooltip() {
       return this.view.tabs.reality.currentGlyphTooltip;

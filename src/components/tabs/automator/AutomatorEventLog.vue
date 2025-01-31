@@ -14,7 +14,7 @@ export default {
   },
   computed: {
     events() {
-      // eslint-disable-next-line no-nested-ternary
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties, no-nested-ternary
       const sorted = this.unsortedEvents.sort((a, b) => (a.timestamp === b.timestamp
         ? (a.thisReality === b.thisReality
           ? a.line - b.line
@@ -86,12 +86,12 @@ export default {
         case AUTOMATOR_EVENT_TIMESTAMP_MODE.DISABLED:
           return "";
         case AUTOMATOR_EVENT_TIMESTAMP_MODE.THIS_REALITY:
-          return `, ${TimeSpan.fromSeconds(entry.thisReality).toStringShort()} (real-time) in Reality`;
+          return `, ${TimeSpan.fromSeconds(new Decimal(entry.thisReality)).toStringShort()} (real-time) in Reality`;
         case AUTOMATOR_EVENT_TIMESTAMP_MODE.RELATIVE_NOW:
-          return `, ${TimeSpan.fromMilliseconds(this.currentTime - entry.timestamp).toStringShort()} ago`;
+          return `, ${TimeSpan.fromMilliseconds(new Decimal(this.currentTime - entry.timestamp)).toStringShort()} ago`;
         case AUTOMATOR_EVENT_TIMESTAMP_MODE.RELATIVE_PREV:
           if (entry.timegap === entry.timestamp) return `, first logged event`;
-          return `, ${TimeSpan.fromMilliseconds(entry.timegap).toStringShort()} after previous event`;
+          return `, ${TimeSpan.fromMilliseconds(new Decimal(entry.timegap)).toStringShort()} after previous event`;
         case AUTOMATOR_EVENT_TIMESTAMP_MODE.DATE_TIME:
           return `, ${Time.toDateTimeString(entry.timestamp)}`;
         default:

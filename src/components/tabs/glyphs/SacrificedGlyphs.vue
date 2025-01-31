@@ -1,7 +1,10 @@
 <script>
+import { GlyphInfo } from "../../../core/secret-formula/index";
+
 import { DC } from "@/core/constants";
 
 import TypeSacrifice from "./TypeSacrifice";
+
 
 export default {
   name: "SacrificedGlyphs",
@@ -14,13 +17,13 @@ export default {
       hasDragover: false,
       hasAlteration: false,
       hideAlteration: false,
-      maxSacrifice: new Decimal(0),
-      teresaMult: new Decimal(0),
+      maxSacrifice: 0,
+      teresaMult: 0,
       lastMachinesTeresa: new Decimal(0),
     };
   },
   computed: {
-    types: () => GLYPH_TYPES.filter(type => type !== "cursed" && type !== "companion"),
+    types: () => GlyphInfo.sacrificeGlyphTypes,
     lastMachines() {
       return this.lastMachinesTeresa.lt(DC.E10000)
         ? `${quantify("Reality Machine", this.lastMachinesTeresa, 2)}`
@@ -62,7 +65,7 @@ export default {
   },
   methods: {
     update() {
-      this.anySacrifices = GameCache.logTotalGlyphSacrifice.value.neq(0);
+      this.anySacrifices = GameCache.logTotalGlyphSacrifice !== 0;
       this.hasAlteration = Ra.unlocks.alteredGlyphs.canBeApplied;
       this.hideAlteration = player.options.hideAlterationEffects;
       this.maxSacrifice = GlyphSacrificeHandler.maxSacrificeForEffects;
@@ -102,7 +105,7 @@ export default {
       player.options.hideAlterationEffects = !player.options.hideAlterationEffects;
     },
     glyphSymbol(type) {
-      return this.cosmeticTypes[type].currentSymbol.symbol;
+      return GlyphInfo[type].regularGlyphSymbol;
     }
   }
 };

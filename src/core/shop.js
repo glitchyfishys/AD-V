@@ -1,5 +1,5 @@
 import { RebuyableMechanicState } from "./game-mechanics";
-
+import { DC } from "./constants";
 import Payments from "./payments";
 
 export const shop = {};
@@ -75,7 +75,7 @@ class ShopPurchaseState extends RebuyableMechanicState {
   }
 
   get isAffordable() {
-    return this.currency >= this.cost;
+    return this.currency.gte(this.cost);
   }
 
   get description() {
@@ -91,18 +91,18 @@ class ShopPurchaseState extends RebuyableMechanicState {
   // ShopPurchaseData for any particular key is undefined in between page load and STD load,
   // so we need to guard against that causing NaNs to propagate through the save
   get purchases() {
-    return player.IAP[this.config.key] ?? 0;
+    return player.IAP[this.config.key] ?? DC.D0;
   }
   get playerpurchases() {
-    return player.IAP[this.config.key] ?? 0;
+    return player.IAP[this.config.key] ?? DC.D0;
   }
   
   set purchases(value) {
-    if (!Number.isFinite(value)) return;
+    if (!Decimal.isFinite(value)) return;
     ShopPurchaseData[this.config.key] = value;
   }
   set playerpurchases(value) {
-    if (!Number.isFinite(value)) return;
+    if (!Decimal.isFinite(value)) return;
     player.IAP[this.config.key] = value;
   }
   
@@ -121,12 +121,12 @@ class ShopPurchaseState extends RebuyableMechanicState {
 
   get currentMult() {
     if (!this.shouldDisplayMult) return "";
-    return this.config.multiplier(ShopPurchaseData.isIAPEnabled ? this.purchases : 0);
+    return this.config.multiplier(ShopPurchaseData.isIAPEnabled ? this.purchases : DC.D0);
   }
 
   get nextMult() {
     if (!this.shouldDisplayMult) return "";
-    return this.config.multiplier(ShopPurchaseData.isIAPEnabled ? this.purchases + 1 : 0);
+    return this.config.multiplier(ShopPurchaseData.isIAPEnabled ? this.purchases.add(1) : DC.D0);
   }
 
   // We want to still display the correct value in the button, so we need separate getters for it
@@ -137,7 +137,7 @@ class ShopPurchaseState extends RebuyableMechanicState {
 
   get nextMultForDisplay() {
     if (!this.shouldDisplayMult) return "";
-    return this.config.multiplier(this.purchases + 1);
+    return this.config.multiplier(this.purchases.add(1));
   }
 
   formatEffect(effect) {
@@ -155,9 +155,9 @@ class ShopPurchaseState extends RebuyableMechanicState {
 
     if (player.IAP.enabled) Speedrun.setSTDUse(true);
     if (this.config.instantPurchase) this.config.onPurchase();
-    if (!this.config.instantPurchase) this.playerpurchases++;
-    this.purchases++;
-    player.IAP.STDcoins -= this.cost;
+    if (!this.config.instantPurchase) this.playerpurchases = this.playerpurchases.add(1);
+    this.purchases = this.purchases.add(1);
+    player.IAP.STDcoins = player.IAP.STDcoins.sub(this.cost);
 
     if(this.config.key === "singleCosmeticSet") player.reality.glyphs.cosmetics.unlockedFromNG.push(cosmeticId);
     if(this.config.key === "allCosmeticSets") dev.unlockAllCosmeticSets();
@@ -178,12 +178,12 @@ shop.purchaseTimeSkip = function() {
   Speedrun.setSTDUse(true);
  
   if(Enslaved.isStoringRealTime){
-    player.celestials.enslaved.storedReal += time * 1000;
-    time = (player.celestials.enslaved.storedReal - Enslaved.storedRealTimeCap) / 1000
-    player.celestials.enslaved.storedReal = Math.min(player.celestials.enslaved.storedReal, Enslaved.storedRealTimeCap);
+    player.celestials.enslaved.storedReal = player.celestials.enslaved.storedReal.add(time * 1000);
+    time = player.celestials.enslaved.storedReal.sub(Enslaved.storedRealTimeCap).div(1000).toNumber();
+    player.celestials.enslaved.storedReal = Decimal.min(player.celestials.enslaved.storedReal, Enslaved.storedRealTimeCap);
   }
 
-  player.IAP.STDcoins -= time / 150;
+  player.IAP.STDcoins = player.IAP.STDcoins.sub(time / 150);
   simulateTime(time);
 };
 
@@ -192,11 +192,11 @@ shop.purchaseLongerTimeSkip = function() {
   Speedrun.setSTDUse(true);
   
   if(Enslaved.isStoringRealTime){
-    player.celestials.enslaved.storedReal += time * 1000;
-    time = (player.celestials.enslaved.storedReal - Enslaved.storedRealTimeCap) / 1000
-    player.celestials.enslaved.storedReal = Math.min(player.celestials.enslaved.storedReal, Enslaved.storedRealTimeCap);
+    player.celestials.enslaved.storedReal = player.celestials.enslaved.storedReal.add(time * 1000);
+    time = player.celestials.enslaved.storedReal.sub(Enslaved.storedRealTimeCap).div(1000).toNumber();
+    player.celestials.enslaved.storedReal = Decimal.min(player.celestials.enslaved.storedReal, Enslaved.storedRealTimeCap);
   }
 
-  player.IAP.STDcoins -= time / 150;
+  player.IAP.STDcoins = player.IAP.STDcoins.sub(time / 150);
   simulateTime(time);
 };

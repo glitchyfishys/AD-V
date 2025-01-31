@@ -1,3 +1,5 @@
+import { EPMultAutobuyerState, IPMultAutobuyerState } from "./prestige-currency-multiplier-autobuyer";
+
 import { AnnihilationAutobuyerState } from "./annihilation-autobuyer";
 import { AntimatterDimensionAutobuyerState } from "./antimatter-dimension-autobuyer";
 import { BigCrunchAutobuyerState } from "./big-crunch-autobuyer";
@@ -10,7 +12,6 @@ import { EternityAutobuyerState } from "./eternity-autobuyer";
 import { GalaxyAutobuyerState } from "./galaxy-autobuyer";
 import { ImaginaryUpgradeAutobuyerState } from "./imaginary-upgrade-autobuyer";
 import { InfinityDimensionAutobuyerState } from "./infinity-dimension-autobuyer";
-import { EPMultAutobuyerState, IPMultAutobuyerState } from "./prestige-currency-multiplier-autobuyer";
 import { RealityAutobuyerState } from "./reality-autobuyer";
 import { RealityUpgradeAutobuyerState } from "./reality-upgrade-autobuyer";
 import { ReplicantiGalaxyAutobuyerState } from "./replicanti-galaxy-autobuyer";
@@ -43,6 +44,8 @@ import { GalaxyGeneratorUpgradeAutobuyerState } from './galgen-autobuyer';
 import { GalaxyGeneratorSacrificeAutobuyerState } from './galgen-autobuyer';
 
 import { MetaAutobuyerState } from "./meta-autobuyer";
+
+import { CanteReplicatorAutobuyerState } from "./cante-replicator-autobuyer";
 
 export const Autobuyer = {
   annihilation: new AnnihilationAutobuyerState(),
@@ -91,14 +94,17 @@ export const Autobuyer = {
   galgenSac: new GalaxyGeneratorSacrificeAutobuyerState(),
 
   meta: new MetaAutobuyerState(),
+
+  replecator: CanteReplicatorAutobuyerState.createAccessor(),
 };
 
 export const Autobuyers = (function() {
   const antimatterDimensions = Autobuyer.antimatterDimension.zeroIndexed;
   const infinityDimensions = Autobuyer.infinityDimension.zeroIndexed;
   const timeDimensions = Autobuyer.timeDimension.zeroIndexed;
+  const replecator = Autobuyer.replecator.zeroIndexed;
 
-  const dimensions = [antimatterDimensions, infinityDimensions, timeDimensions];
+  const dimensions = [antimatterDimensions, infinityDimensions, timeDimensions, replecator];
 
   const prestige = [
     Autobuyer.bigCrunch,
@@ -154,6 +160,7 @@ export const Autobuyers = (function() {
     Autobuyer.antimatterDimension,
     Autobuyer.infinityDimension,
     Autobuyer.timeDimension,
+    Autobuyer.replecator,
     Autobuyer.replicantiUpgrade,
     Autobuyer.dilationUpgrade,
     Autobuyer.blackHolePower,
@@ -167,6 +174,7 @@ export const Autobuyers = (function() {
     Autobuyer.glitchMem,
     Autobuyer.canteMem,
     Autobuyer.nullMem,
+
     Autobuyer.glitchUpgrades,
     Autobuyer.galgenUpgrade,
   ];

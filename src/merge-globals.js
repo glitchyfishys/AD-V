@@ -18,6 +18,8 @@ function mergeIntoGlobal(object) {
 import * as Utils from "./core/utils";
 mergeIntoGlobal(Utils);
 
+Decimal.NUMBER_MAX_VALUE = new Decimal(Number.MAX_VALUE);
+
 import * as GameDB from "./core/secret-formula";
 mergeIntoGlobal(GameDB);
 

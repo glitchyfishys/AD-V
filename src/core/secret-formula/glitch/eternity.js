@@ -6,7 +6,7 @@ export const eternityUG = [
     requirement: () => `Reach ${format("1e350")} Infinity Points on your first Eternity (pre-Eternity)`,
     hasFailed: () => false,
     progLock: () => PlayerProgress.eternityUnlocked(),
-    checkRequirement: () => player.infinityPoints.e >= 350,
+    checkRequirement: () => player.infinityPoints.gte('1e350'),
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
     description: "gain x5 more EP",
     effect: () => 5,
@@ -30,7 +30,7 @@ export const eternityUG = [
     id: 2,
     requirement: () => `Have exactly ${format(15)} Replacnti Galaxies`,
     progLock: () => false,
-    checkRequirement: () => player.replicanti.galaxies == 15,
+    checkRequirement: () => player.replicanti.galaxies.eq(15),
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
     description: "Gain 3 additional RG",
     effect: () => 3,
@@ -56,7 +56,7 @@ export const eternityUG = [
     progLock: () => PlayerProgress.realityUnlocked(),
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
     description: "Get more EP based on IP",
-    effect: () => player.infinityPoints.log10() ** 0.5,
+    effect: () => player.infinityPoints.add(1).log10().sqrt(),
     formatEffect: value => formatX(value, 2, 2)
   },
   {

@@ -28,6 +28,7 @@ const packageLockContents = fs.readFileSync(packageLockPath, { encoding: "utf-8"
 const newHash = getHash(packageLockContents);
 
 if (newHash !== currentHash) {
+  console.log('Old Hash', currentHash, 'New Hash', newHash);
   const tmpPath = path.resolve(__dirname, "../.tmp");
   if (!fs.existsSync(tmpPath)) {
     fs.mkdirSync(tmpPath);
