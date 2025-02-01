@@ -5,18 +5,23 @@ function D(x) {
 
 const BEMAX = new Decimal("10^^9000000000000000");
 
+const glyphEffects = {
+  power: ["powerpow", "powermult", "powerdimboost", "powerbuy10"],
+  infinity: ["infinitypow", "infinityinfmult", "infinityIP", "infinityrate"],
+  replication: ["replicationpow", "replicationdtgain", "replicationspeed", "replicationglyphlevel"],
+  time: ["timepow", "timeEP", "timeetermult", "timespeed","timeshardpow"],
+  dilation: ["dilationpow", "dilationTTgen", "dilationDT", "dilationgalaxyThreshold"],
+  effarig: ["effarigrm", "effarigglyph", "effarigblackhole", "effarigachievement",
+  "effarigforgotten", "effarigdimensions", "effarigantimatter"],
+  cursed: ["cursedgalaxies", "cursedtickspeed", "curseddimensions", "cursedEP"],
+  reality: ["realityglyphlevel", "realitygalaxies", "realityrow1pow", "realityDTglyph"],
+  companiond: ["companiondescription", "companionEP"],
+  glitch: ["glitchChaosPow", "glitchADCelPow"],
+}
+
 function updateGlyphs(glyph) {
   if (glyph.effects instanceof Array) return glyph;
-  let intIDindex = (["companion", "cursed", "reality"].includes(glyph.type) ? 28 : 0);
-  const effectList = [];
-  for (let i = 0; i < 32; i++) {
-    if ((glyph.effects >> i) % 2 === 1) {
-      // eslint-disable-next-line no-loop-func, eqeqeq
-      effectList.push(GlyphEffects.all.filter(e => e.intID == intIDindex)[0].id);
-    }
-    intIDindex += 1;
-  }
-  glyph.effects = effectList;
+  glyph.effects = glyphEffects[glyph.type].filter((e, ind) => ((1 << ind) & (1 << i)) != 0);
   delete glyph.isGenerated;
   glyph.level = D(glyph.level);
   glyph.rawLevel = D(glyph.rawLevel);

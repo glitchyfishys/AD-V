@@ -258,7 +258,7 @@ export function buyOneDimension(tier) {
 
   if ((!preInfinityUGs.all[3].config.hasFailed() && !preInfinityUGs.all[3].isBought) && (player.options.confirmations.glitchCL && 
  !PlayerProgress.metaUnlocked()) && player.dimensionBoosts.eq(4) && player.galaxies.eq(0)) {
-    if(dimension.bought > 0) {
+    if(dimension.bought.gt(0)) {
       Modal.message.show(`you will fail glitch challenge ${preInfinityUGs.all[3].config.name} <br> which is to ${preInfinityUGs.all[3].config.requirement()} <br> you can disable this for <i>all</i> challenges in confirmations`);
       return;
     }

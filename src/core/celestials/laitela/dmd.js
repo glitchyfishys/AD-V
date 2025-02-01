@@ -85,7 +85,7 @@ export class DarkMatterDimensionState extends DimensionState {
       .times(Laitela.realityReward)
       .times(Laitela.darkMatterMult)
       .times(this.commonDarkMult)
-      .times(Decimal.pow(this.powerDMPerAscension, this.ascensions))
+      .times(Decimal.pow(this.powerDMPerAscension, this.ascensions)).mul(realityUG(10).effectOrDefault(1))
       .timesEffectsOf(SingularityMilestone.darkMatterMult, SingularityMilestone.multFromInfinitied).pow(GlitchRealityUpgrade(12).isBought ? 2.5 : 1)
       .dividedBy(Decimal.pow(1e4, Decimal.pow(this.tier - 1, 0.5)));
   }
@@ -97,7 +97,7 @@ export class DarkMatterDimensionState extends DimensionState {
     return this.data.powerDEUpgrades.div(10).add(1)
       .mul(Decimal.pow(1.005, this.data.powerDEUpgrades)).mul(tierFactor).div(1000)
       .times(this.commonDarkMult)
-      .times(Decimal.pow(POWER_DE_PER_ASCENSION, this.ascensions))
+      .times(Decimal.pow(POWER_DE_PER_ASCENSION, this.ascensions)).mul(realityUG(10).effectOrDefault(1))
       .timesEffectsOf(
         SingularityMilestone.darkEnergyMult,
         SingularityMilestone.realityDEMultiplier,

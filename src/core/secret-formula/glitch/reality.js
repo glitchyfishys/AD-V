@@ -125,7 +125,7 @@ export const realityUG = [
     checkEvent: GAME_EVENT.GAME_TICK_BEFORE,
     description: () => `Gain ${format(50)} times more Dark Matter and Energy`,
     effect: 50,
-    formatEffect: () => value => format(value, 2)
+    formatEffect: value => format(value, 2)
   },
   {
     name: "Galactic Overload",

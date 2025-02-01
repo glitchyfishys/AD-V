@@ -429,7 +429,7 @@ export const migrations = {
     26: player => {
       player.celestials.cante.replicators =
       Array.range(0, 10).map(() => ({
-        bought: 0,
+        bought: new Decimal(1),
         amount: new Decimal(1)
       }))
     },
