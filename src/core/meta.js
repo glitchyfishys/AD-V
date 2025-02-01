@@ -37,6 +37,7 @@ export function runMetaAnimation() {
   document.getElementById("ui").style.pointerEvents = "none";
 
   setTimeout(() => {
+    processManualMeta();
     document.getElementById("ui").style.userSelect = "auto";
     document.getElementById("ui").style.pointerEvents = "";
     MetaAnimation = false;

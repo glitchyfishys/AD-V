@@ -82,13 +82,13 @@ class BlackHoleUpgradeState {
     if(Currency.realityMachines.lt('e311')){
       const amount = DC.E30.div(this.config.initialCost).log(this.config.costMult).add(1).floor();
       if(amount.gt(this.boughtAmount)) {
-        const cost = this.config.hybridCostScaling(amount);
+        const cost = this.hybridCostScaling(amount);
         if(Currency.realityMachines.gt(cost)) {
           this.config.setAmount(amount);
         }
       }
       if(this._lazyValue.lt(this._infinityAmount)) {
-        const infinityCost = this.config.hybridCostScaling(amount);
+        const infinityCost = this.hybridCostScaling(amount);
         if(Currency.realityMachines.gt(infinityCost)) {
           this.config.setAmount(new Decimal(this._infinityAmount));
         }

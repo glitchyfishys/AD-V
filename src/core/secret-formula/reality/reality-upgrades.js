@@ -233,7 +233,7 @@ export const realityUpgrades = [
       const availableSlots = Glyphs.activeSlotCount - Glyphs.activeList.length;
       return equipped + Math.min(availableGlyphs, availableSlots) < 4;
     },
-    checkRequirement: () => Glyphs.activeWithoutCompanion.countWhere(g => g.strength.gte(1.5)) === 4,
+    checkRequirement: () => Glyphs.activeWithoutCompanion.countWhere(g => g.strength.gte(1.5)) >= 4,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     description: "Improve the Glyph rarity formula",
     effect: new Decimal(1.3),
@@ -252,7 +252,7 @@ export const realityUpgrades = [
       const availableSlots = Glyphs.activeSlotCount - Glyphs.activeList.length;
       return equipped + Math.min(availableGlyphs, availableSlots) < 4;
     },
-    checkRequirement: () => Glyphs.activeWithoutCompanion.countWhere(g => g.effects.length >= 2) === 4,
+    checkRequirement: () => Glyphs.activeWithoutCompanion.countWhere(g => g.effects.length >= 2) >= 4,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     description: () => `${formatPercents(0.5)} chance to get an additional effect on Glyphs`,
     effect: DC.D0_5,
@@ -270,7 +270,7 @@ export const realityUpgrades = [
       const availableSlots = Glyphs.activeSlotCount - Glyphs.activeList.length;
       return equipped + Math.min(availableGlyphs, availableSlots) < 4;
     },
-    checkRequirement: () => Glyphs.activeWithoutCompanion.countWhere(g => g.level.gte(10)) === 4,
+    checkRequirement: () => Glyphs.activeWithoutCompanion.countWhere(g => g.level.gte(10)) >= 4,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     description: "Eternity count boosts Glyph level",
     effect: () => Decimal.sqrt(Currency.eternities.value.plus(1).log10()).mul(0.45).max(1),
@@ -280,10 +280,10 @@ export const realityUpgrades = [
     name: "Scour to Empower",
     id: 19,
     cost: 1500,
-    requirement: () => `Have a total of ${formatInt(30)} or more Glyphs at once
+    requirement: () => `Have a total of ${formatInt(20)} or more Glyphs at once
       (You have ${formatInt(Glyphs.allGlyphs.countWhere(g => g.type !== "companion"))})`,
-    hasFailed: () => Glyphs.allGlyphs.countWhere(g => g.type !== "companion") < 30,
-    checkRequirement: () => Glyphs.allGlyphs.countWhere(g => g.type !== "companion") >= 30,
+    hasFailed: () => Glyphs.allGlyphs.countWhere(g => g.type !== "companion") < 20,
+    checkRequirement: () => Glyphs.allGlyphs.countWhere(g => g.type !== "companion") >= 20,
     checkEvent: GAME_EVENT.REALITY_RESET_BEFORE,
     description: "You can sacrifice Glyphs for permanent bonuses (Shift + click)",
     formatCost: value => format(value, 1, 0)

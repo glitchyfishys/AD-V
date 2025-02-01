@@ -15,10 +15,11 @@ export const changelog = [
       <b>New stuff:</b><br>
       We now use the BE port <br>
       Cante the Celestial of Replicanti<br>
-      Added Pandemonium < br>
+      Added Pandemonium <br>
       Unique Meta animation <br>
       Timewalls <br>
-      Removed Pandemonium < br>
+      Removed Pandemonium <br>
+      <br>
       Oh and uhh... <br>
       Fixed tiepoles and bugs
     `

@@ -193,7 +193,7 @@ export const imaginaryUpgrades = [
     requirement: () => `Automatically condense at least ${formatInt(20)} Singularities at once (req: dmd 2)`,
     hasFailed: () => !ImaginaryUpgrade(16).isBought,
     checkRequirement: () => Singularity.singularitiesGained.gte(20) &&
-      Currency.darkEnergy.gte(Singularity.cap.mul(SingularityMilestone.autoCondense.effectOrDefault(Infinity))),
+      Currency.darkEnergy.gte(Singularity.cap.mul(SingularityMilestone.autoCondense.effectOrDefault(Infinity))) && ImaginaryUpgrade(16).isBought,
     checkEvent: GAME_EVENT.SINGULARITY_RESET_BEFORE,
     description: "Unlock the 3rd Dark Matter Dimension",
   },
@@ -205,7 +205,7 @@ export const imaginaryUpgrades = [
     requirement: () => `Have ${format(80000)} total Galaxies (req: dmd 3)`,
     hasFailed: () => !ImaginaryUpgrade(17).isBought,
     checkRequirement: () => player.dilation.totalTachyonGalaxies.add(Replicanti.galaxies.total)
-      .add(player.galaxies).gte(80000),
+      .add(player.galaxies).gte(80000) && ImaginaryUpgrade(17).isBought,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
     description: "Unlock the 4th Dark Matter Dimension",
   },
