@@ -15,12 +15,13 @@ const glyphEffects = {
   "effarigforgotten", "effarigdimensions", "effarigantimatter"],
   cursed: ["cursedgalaxies", "cursedtickspeed", "curseddimensions", "cursedEP"],
   reality: ["realityglyphlevel", "realitygalaxies", "realityrow1pow", "realityDTglyph"],
-  companiond: ["companiondescription", "companionEP"],
+  companion: ["companiondescription", "companionEP"],
   glitch: ["glitchChaosPow", "glitchADCelPow"],
 }
 
 function updateGlyphs(glyph) {
-  if (glyph.effects instanceof Array) return glyph;
+  if (Array.isArray(glyph.effects)) return glyph;
+  console.log(glyph)
   glyph.effects = glyphEffects[glyph.type].filter((e, ind) => ((1 << ind) & glyph.effects) != 0);
   delete glyph.isGenerated;
   glyph.level = D(glyph.level);

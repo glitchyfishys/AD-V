@@ -12,8 +12,8 @@ export const cante = {
         condition: () => Currency.artificialMatter.gt(1e10),
     },
     {
-        unlock: () => `Have ${format(1e50)} Meta Relays`,
-        condition: () => Currency.metaRelays.gte(1e50),
+        unlock: () => `Have ${format(1e55)} Meta Relays`,
+        condition: () => Currency.metaRelays.gte(1e55),
     },
     {
         unlock: () => `Have ${format(1e100)} Artificial Matter and ${format(1e75)} Meta Relays`,
