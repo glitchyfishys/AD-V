@@ -16,8 +16,8 @@ export const cante = {
         condition: () => Currency.metaRelays.gte(1e50),
     },
     {
-        unlock: () => `Have ${format(1e100)} Artificial Matter and ${format(1e70)} Meta Relays`,
-        condition: () => Currency.artificialMatter.gt(1e100) && Currency.metaRelays.gte(1e70),
+        unlock: () => `Have ${format(1e100)} Artificial Matter and ${format(1e75)} Meta Relays`,
+        condition: () => Currency.artificialMatter.gt(1e100) && Currency.metaRelays.gte(1e75),
     },
     {
         unlock: () => `Unlocked Via upgrade`,
@@ -69,14 +69,14 @@ export const cante = {
         id: 3,
         description: "Peak Gamespeed partly affects Replicators and divide cost scaling by 2",
         cost: new Decimal(1e130),
-        effect: () => player.celestials.ra.peakGamespeed.max(10).log10().pow(3),
+        effect: () => player.celestials.ra.peakGamespeed.max(10).log10().pow(3.75),
         formatEffect: e => formatX(e, 2, 2),
     },
     {
         id: 4,
         description: "Delay cost scaling based on ArtM",
         cost: new Decimal(1e200),
-        effect: () => Currency.artificialMatter.value.pow(0.23).max(1),
+        effect: () => Currency.artificialMatter.value.pow(0.24).max(1),
         formatEffect: e => formatX(e, 2, 2),
     },
     {
