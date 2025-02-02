@@ -87,7 +87,7 @@ class BlackHoleUpgradeState {
           this.config.setAmount(amount);
         }
       }
-      if(this._lazyValue.lt(this._infinityAmount)) {
+      if(Decimal.lt(this._lazyValue, this._infinityAmount)) {
         const infinityCost = this.hybridCostScaling(amount);
         if(Currency.realityMachines.gt(infinityCost)) {
           this.config.setAmount(new Decimal(this._infinityAmount));

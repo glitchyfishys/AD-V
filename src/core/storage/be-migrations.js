@@ -21,7 +21,7 @@ const glyphEffects = {
 
 function updateGlyphs(glyph) {
   if (glyph.effects instanceof Array) return glyph;
-  glyph.effects = glyphEffects[glyph.type].filter((e, ind) => ((1 << ind) & (1 << i)) != 0);
+  glyph.effects = glyphEffects[glyph.type].filter((e, ind) => ((1 << ind) & glyph.effects) != 0);
   delete glyph.isGenerated;
   glyph.level = D(glyph.level);
   glyph.rawLevel = D(glyph.rawLevel);
