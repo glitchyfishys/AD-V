@@ -8,7 +8,7 @@ export default {
   },
   computed: {
     upgrades: () => MetaFabricatorUpgrades.all,
-    costScalingTooltip: () => `Prices start increasing faster above ${format(1e50)} RM and then even faster
+    costScalingTooltip: () => `Prices start increasing faster above ${format(1e50)} MR and then even faster
     above ${format(Decimal.NUMBER_MAX_VALUE, 1)} MR`,
     possibleTooltip: () => `Checkered upgrades are impossible to unlock this Reality. Striped upgrades are
     still possible.`,

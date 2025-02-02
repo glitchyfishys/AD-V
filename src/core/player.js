@@ -388,7 +388,7 @@ window.player = {
       [Number.MAX_VALUE, DC.BEMAX, DC.BEMAX, DC.D1, DC.D1, "", DC.D0]),
     recentRealities: Array.range(0, 10).map(() =>
       [Number.MAX_VALUE, DC.BEMAX, DC.BEMAX, DC.D1, DC.D1, "", DC.D0, DC.D0]),
-    recentMetas: Array.range(0, 10).map(() => [Decimal.BEMAX, Decimal.BEMAX, Decimal.BEMAX, DC.D1, 1, ""]),
+    recentMetas: Array.range(0, 10).map(() => [1e300, DC.BEMAX, DC.BEMAX, DC.D1, 1, ""]),
     thisInfinity: {
       time: DC.D0,
       realTime: DC.D0,

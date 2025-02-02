@@ -327,7 +327,7 @@ export const alchemyResources = {
     isBaseResource: false,
     effect: amount => {
       let eff = Decimal.sqrt(amount.div(25000)).mul(160).mul(GlitchRealityUpgrades.all[2].effectOrDefault(1));
-      if(amount.gt(1e5)) eff = eff.mul(amount.div).mul(amount.pow(0.7));
+      if(amount.gt(1e5)) eff = eff.mul(amount.div(1e5)).mul(amount.pow(0.7));
       return eff;
     },
     tier: 4,
