@@ -16,7 +16,7 @@ export class PlayerProgress {
   }
 
   get isMetaUnlocked() {
-    return this._player.meta.metas.gt(0);
+    return new Decimal(this._player?.meta?.metas).gt(0);
   }
 
   get hasFullCompletion() {

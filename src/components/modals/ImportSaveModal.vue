@@ -173,7 +173,10 @@ export default {
           Realities: {{ formatPostBreak(player.realities, 2) }}
         </div>
         <div v-if="progress.hasFullCompletion">
-          Full game completions: {{ formatInt(player.records.fullGameCompletions) }}
+          Finished Doomed: {{ formatInt(player.records.fullGameCompletions) }}
+        </div>
+        <div v-if="progress.isMetaUnlocked">
+          Metas: {{ formatPostBreak(player.meta.metas, 2) }}
         </div>
         <div class="c-modal-import__warning">
           (Your current save file will be overwritten!)
