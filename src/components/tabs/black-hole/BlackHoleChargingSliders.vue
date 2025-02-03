@@ -52,7 +52,7 @@ export default {
       this.isLaitela = Laitela.isRunning;
       this.negativeSlider = Decimal.log10(player.blackHoleNegative).toNumber();
       this.negativeBHDivisor = Decimal.pow(10, this.negativeSlider);
-      const maxInversion = player.requirementChecks.reality.slowestBH.lte(1e-300);
+      const maxInversion = player.requirementChecks.reality.slowestBH.gte(1e300);
       this.isDisabled = ImaginaryUpgrade(24).isLockingMechanics && Ra.isRunning && maxInversion;
       this.maxNegativeBlackHole = (GlitchSpeedUpgrades.all[2].isBought ? 1e300 : 300);
       this.lowermax = GlitchSpeedUpgrades.all[2].isBought;
@@ -65,7 +65,7 @@ export default {
     adjustSliderNegative(value) {
       this.negativeSlider = value;
       player.blackHoleNegative = Decimal.pow10(this.negativeSlider);
-      player.requirementChecks.reality.slowestBH = Decimal.max(
+      player.requirementChecks.reality.slowestBH = Decimal.min(
         player.requirementChecks.reality.slowestBH,
         player.blackHoleNegative
       );
@@ -76,7 +76,7 @@ export default {
 
       this.negativeSlider = value;
       player.blackHoleNegative = Decimal.pow(10, this.negativeSlider);
-      player.requirementChecks.reality.slowestBH = Decimal.max(
+      player.requirementChecks.reality.slowestBH = Decimal.min(
         player.requirementChecks.reality.slowestBH,
         player.blackHoleNegative);
         
@@ -108,7 +108,7 @@ export default {
       if (this.isValid) {
         this.negativeSlider = this.typeFunctions.copyValue(this.actualValue);
         player.blackHoleNegative = Decimal.pow(10, this.negativeSlider);
-        player.requirementChecks.reality.slowestBH = Decimal.max(
+        player.requirementChecks.reality.slowestBH = Decimal.min(
           player.requirementChecks.reality.slowestBH,
           player.blackHoleNegative);
       } else {

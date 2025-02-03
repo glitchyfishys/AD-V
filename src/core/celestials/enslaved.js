@@ -114,7 +114,7 @@ export const Enslaved = {
   // "autoRelease" should only be true when called with the Ra upgrade
   useStoredTime(autoRelease) {
     if (!this.canRelease(autoRelease)) return;
-    const maxInversion = player.requirementChecks.reality.slowestBH.lte(1e-300);
+    const maxInversion = player.requirementChecks.reality.slowestBH.gte(1e300);
     if (ImaginaryUpgrade(24).isLockingMechanics && Ra.isRunning && maxInversion) {
       if (!autoRelease) ImaginaryUpgrade(24).tryShowWarningModal("discharge your Black Hole");
       return;

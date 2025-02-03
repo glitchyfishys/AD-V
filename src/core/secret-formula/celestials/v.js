@@ -180,7 +180,7 @@ export const v = {
       currentValue: () => (
         // Dirty hack I know lmao
         Currency.timeTheorems.gte(400000)
-          ? Decimal.log10(player.requirementChecks.reality.slowestBH).neg()
+          ? player.requirementChecks.reality.slowestBH.log10()
           : new Decimal()),
       formatRecord: x => `${formatInt(1)} / ${format(Decimal.pow(10, x))}`,
       shardReduction: tiers => 50 * tiers,
