@@ -747,7 +747,7 @@ class AntimatterDimensionState extends DimensionState {
     const postBI = false;
     const postBreak = (player.break && !NormalChallenge.isRunning) ||
       InfinityChallenge.isRunning || Enslaved.isRunning;
-    if (postBI && postBreak) return DC.BEMAX;
+    if ((postBI && postBreak) || Pelle.isDoomed) return DC.BEMAX;
     return postBreak ? DC.PREMETAMAX.pow(MetaFabricatorUpgrade(23).effectOrDefault(1)) : DC.E315;
   }
 

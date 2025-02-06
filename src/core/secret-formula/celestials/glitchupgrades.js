@@ -124,7 +124,7 @@ export const glitchRealityUpgrades = [
     name: "Cosmic Reconstructor",
     id: 10,
     cost: 1e13,
-    requirement: () => `Reach ${format("1e1.66E\e9", 2, 2)} Antimatter with Effarig, Nameless one's Dim limit, and both Ra effects active`,
+    requirement: () => `Reach ${format("1e1.66e9", 2, 2)} Antimatter with Effarig, Nameless one's Dim limit, and both Ra effects active`,
     hasFailed: () => Glitch.augmentEffectBits != 202,
     checkRequirement: () => Currency.antimatter.gte("1e1.66e9") && Glitch.isRunning && Glitch.augmentEffectBits == 202,
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
