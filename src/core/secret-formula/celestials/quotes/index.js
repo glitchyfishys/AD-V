@@ -7,6 +7,7 @@ import { teresaQuotes } from "./teresa";
 import { vQuotes } from "./v";
 import { glitchQuotes } from "./glitch";
 import { canteQuotes } from "./cante";
+import { nullQuotes } from "./null";
 
 export const quotes = {
   teresa: teresaQuotes,
@@ -17,5 +18,6 @@ export const quotes = {
   laitela: laitelaQuotes,
   pelle: pelleQuotes,
   glitch: glitchQuotes,
-  cante: canteQuotes
+  cante: canteQuotes,
+  null: nullQuotes,
 };

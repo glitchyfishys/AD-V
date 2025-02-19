@@ -1,9 +1,9 @@
 const Matter = ["Antimatter", "Pseudomatter", "Nullmatter", "Realmatter"];
 
 const celBackground = cel => [[cel, 0]];
-const primaryBackground = cel => [["cante", 1.5],[cel, 1.5]];
+const primaryBackground = cel => [["null", 1.5],[cel, 1.5]];
 
-export const canteQuotes = {
+export const nullQuotes = {
   show: {
     id: 0,
     lines: [

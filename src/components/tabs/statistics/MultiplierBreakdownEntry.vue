@@ -182,8 +182,8 @@ export default {
             return `${formatX(undilated, 2, 2)} ➜ ${formatX(x, 2, 2)}`;
           }
           return entry.isBase
-            ? format(x, 2, 2)
-            : formatX(x, 2, 2);
+            ? formatSmall(x, 2, 2)
+            : `x${formatSmall(x, 2, 2)}`;
         };
 
         if (Decimal.neq(entry.data.mult, 1) && Decimal.neq(entry.data.mult, 0)) values.push(formatFn(entry.data.mult));
@@ -201,15 +201,12 @@ export default {
       // Display both multiplier and powers, but make sure to give an empty string if there's neither
       const overrideStr = entry.displayOverride;
       let valueStr;
-      const formatFn = entry.isBase
-        ? x => format(x, 2, 2)
-        : x => `/${format(x.reciprocal(), 2, 2)}`;
 
       if (overrideStr) valueStr = `(${overrideStr})`;
       else {
         const values = [];
 
-          if (Decimal.neq(entry.data.mult, 1) && Decimal.neq(entry.data.mult, 0) ) values.push(formatFn(entry.data.mult));
+          if (Decimal.neq(entry.data.mult, 1) && Decimal.neq(entry.data.mult, 0) ) values.push(`x${formatSmall(entry.data.mult, 2, 2)}`);
           if (Decimal.neq(entry.data.pow, 1) && Decimal.neq(entry.data.pow, 0) ) values.push(formatPow(entry.data.pow, 2, 3));
           if (Decimal.neq(entry.data.tet, 1) && Decimal.neq(entry.data.tet, 0)) values.push(formatTet(entry.data.tet, 2, 3));
         
@@ -226,8 +223,8 @@ export default {
 
       const val = resource.mult;
       return resource.isBase
-        ? `${name}: ${format(val, 2, 2)}`
-        : `${name}: ${formatX(val, 2, 2)}`;
+        ? `${name}: ${formatSmall(val, 2, 2)}`
+        : `${name}: x${formatSmall(val, 2, 2)}`;
     },
     applyDilationExp(value, exp) {
       return value.log10().pow(exp).pow10();
@@ -256,8 +253,8 @@ export default {
       }
 
       const formatFn = resource.isBase
-        ? x => format(x, 2, 2)
-        : x => formatX(x, 2, 2);
+        ? x => formaSmall(x, 2, 2)
+        : x => `x${formatSmall(x, 2, 2)}`;
       return `Dilation Effect: Exponent${formatPow(this.dilationExponent, 2, 3)}
         (${formatFn(beforeMult, 2, 2)} ➜ ${formatFn(afterMult, 2, 2)})`;
     },

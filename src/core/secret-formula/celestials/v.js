@@ -299,7 +299,7 @@ export const v = {
       values: [3e2, 9e3, 24e3, 4e3],
       condition: () => V.isRunningExtreme && V.isExtreme && VRunUnlock(10).completions > 2 && player.requirementChecks.reality.slowestBH.gte(1e10) && player.requirementChecks.reality.maxGlyphs < ((VRunUnlock(15).completions > 0) ? -6 : -10),
       currentValue: () => Currency.antimatter.value.log10(),
-      formatRecord: x => format(x, 2),
+      formatRecord: x => format(Decimal.pow10(x), 2),
       shardReduction: tiers => 250 * (tiers * 10),
       maxShardReduction: goal => goal - (goal * 0.2),
       perReductionStep: 25,

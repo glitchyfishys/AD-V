@@ -77,7 +77,7 @@ export const metaFabricatorUpgrades = [
     initialCost: 1,
     costMult: 20,
     textTemplate: "The Extreme-V Nerf is lowered by {value} times",
-    effect: 1.4
+    effect: 1.3
   }),
   {
     name: "Acomplate",

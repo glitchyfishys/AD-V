@@ -349,6 +349,24 @@ export const Pelle = {
     return zalgo(str, Math.floor(stage ** 2 * 7));
   },
 
+  zalgo(text, stage = 1.5) {
+    const len = Math.round((text.length * (1 - stage) + text.length * stage) * 1e8) / 1e8;
+    const toInterval = len * (1 - stage);
+    let req = toInterval;
+    let str = "";
+    for (let i = 0; i < len; i++) {
+      if (i >= req) {
+        const idx = Math.floor(i * (text.length / len));
+        str += text[idx];
+        req += toInterval;
+      } else {
+        const idx = Math.floor(i * (text.length / len));
+        str += text[idx];
+      }
+    }
+    return zalgo(str, Math.floor(stage ** 2 * 7));
+  },
+
   endTabNames: "I Need To Put A Joke Here Just Like The Redemption Mod Um Eh Uh ???".split(" "),
 
   quotes: Quotes.pelle,

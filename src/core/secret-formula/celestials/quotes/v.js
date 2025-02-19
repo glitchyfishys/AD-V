@@ -92,6 +92,7 @@ export const vQuotes = {
       {text: "They have to be getting stronger.", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
       "I worked so hard to get them...",
       "I am the greatest...",
+      {text: "You must have cheated.", displayed: () => SecretAchievement(23).isUnlocked },
       {text: "This has to explain the corruptions.", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch'), glitched: true},
       "No one is better than me...",
       "No one... no one... no on-",

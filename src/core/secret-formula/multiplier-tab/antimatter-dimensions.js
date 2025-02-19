@@ -308,7 +308,7 @@ export const AD = {
     },
     powValue: () => {
       const totalPow = getAdjustedGlyphEffect("powerpow").mul(getAdjustedGlyphEffect("effarigdimensions"));
-      return totalPow.mul(player.dilation.active ? getAdjustedGlyphEffect("dilationpow") : 1);
+      return totalPow.mul(player.dilation.active ? getAdjustedGlyphEffect("dilationpow") : 1).mul(getAdjustedGlyphEffect('glitchADCelPow'));
     },
     isActive: () => PlayerProgress.realityUnlocked() && !EternityChallenge(11).isRunning,
     icon: MultiplierTabIcons.GENERIC_GLYPH,

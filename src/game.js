@@ -352,7 +352,7 @@ export function addRealityTime(trueTime, time, realTime, rm, level, realities, a
 
 export function gainedInfinities() {
   if (EternityChallenge(4).isRunning || Pelle.isDisabled("InfinitiedMults")) return DC.D1;
-  let infGain = Decimal.max(1, Achievement(87));
+  let infGain = Decimal.max(1, Achievement(87).effectOrDefault(1));
 
   infGain = infGain.timesEffectsOf(
     TimeStudy(32),

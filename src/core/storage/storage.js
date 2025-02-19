@@ -571,6 +571,7 @@ export const GameStorage = {
     // when online or simulating time. When only storing offline, the condition is never actually entered in the
     // gameLoop due to the option technically being false, so we need to check it on-load too.
     if (player.celestials.enslaved.storedReal.gte(24 * 3600000)) SecretAchievement(46).unlock();
+    
     GameUI.update();
 
     for (const resource of AlchemyResources.all) {

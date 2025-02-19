@@ -306,7 +306,7 @@ export function buyManyDimension(tier) {
 
   if ((!preInfinityUGs.all[3].config.hasFailed() && !preInfinityUGs.all[3].isBought) && (player.options.confirmations.glitchCL && 
  !PlayerProgress.metaUnlocked()) && player.dimensionBoosts.eq(4) && player.galaxies.eq(0)) {
-    if(dimension.bought < 1) buyOneDimension(tier);
+    if(dimension.bought.lt(1)) buyOneDimension(tier);
     return;
   }
   else if(((!preInfinityUGs.all[4].config.hasFailed() && !preInfinityUGs.all[4].isBought) && (player.options.confirmations.glitchCL && 
@@ -342,7 +342,7 @@ export function buyAsManyAsYouCanBuy(tier) {
   
   if ((!preInfinityUGs.all[3].config.hasFailed() && !preInfinityUGs.all[3].isBought) && (player.options.confirmations.glitchCL && 
  !PlayerProgress.metaUnlocked()) && player.dimensionBoosts.eq(4) && player.galaxies.eq(0)) {
-    if(dimension.bought < 1) buyOneDimension(tier);
+    if(dimension.bought.lt(1)) buyOneDimension(tier);
     return;
   }
   else if(((!preInfinityUGs.all[4].config.hasFailed() && !preInfinityUGs.all[4].isBought) && (player.options.confirmations.glitchCL && 
@@ -445,7 +445,7 @@ export function buyMaxDimension(tier, bulk = Infinity) {
   
   if ((!preInfinityUGs.all[3].config.hasFailed() && !preInfinityUGs.all[3].isBought) && (player.options.confirmations.glitchCL && 
  !PlayerProgress.metaUnlocked()) && player.dimensionBoosts.eq(4) && player.galaxies.eq(0)) {
-    if(dimension.bought < 1) buyOneDimension(tier);
+    if(dimension.bought.lt(1)) buyOneDimension(tier);
     return;
   }
 

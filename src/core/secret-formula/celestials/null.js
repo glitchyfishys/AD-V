@@ -1,7 +1,7 @@
 import { Currency } from "../../currency";
 import wordShift from "@/core/word-shift";
 
-export const cante = {
+export const Null = {
   repUnlocks:[
     {
         unlock: () => `Have ${format(1e20)} Metas`,
@@ -101,7 +101,7 @@ export const cante = {
     {
         id: 8,
         description: "Unlock the autobuyers for Replicators",
-        cost: new Decimal('1e1500'),
+        cost: new Decimal('se1500'),
         noLabel: true,
     },
     {

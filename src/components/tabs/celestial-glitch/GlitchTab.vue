@@ -56,6 +56,7 @@ export default {
       this.bits = Glitch.augmentEffectBits;
       this.augments = makeEnumeration(Glitch.activeAugments);
       this.riftForce = format(Currency.riftForce.value,2);
+      this.RFGain = Glitch.riftForceGain;
     },
     sName(){
       if(player.options.themeModern == "S15") return "Teresa-Glitch's";
@@ -111,7 +112,7 @@ export default {
 
     <div class="c-glitch-compact-top">
       <div>
-        <p>you have <span class="o-riftForce">{{ riftForce}}</span> RiftForce </p>
+        <p>you have <span class="o-riftForce">{{ riftForce}}</span> RiftForce +<span class="o-riftForce">{{format(RFGain)}}</span>/s </p>
         
         <CelestialQuoteHistory celestial="glitch"/>
         <GlitchRunButton />

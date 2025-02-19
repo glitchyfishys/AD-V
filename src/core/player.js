@@ -971,7 +971,8 @@ window.player = {
         bought: DC.D0,
         amount: DC.D1
       })),
-      replicatorUnlockbits: 0
+      replicatorUnlockbits: 0,
+      purges: 0
     },
     null: {
       run: false,
