@@ -221,7 +221,14 @@ export function finishProcessMeta() {
 
   player.reality.hasCheckedFilter = false;
 
-  Tab.dimensions.antimatter.show()
+  Tab.dimensions.antimatter.show();
+
+  if (player.options.automatorEvents.clearOnReality) AutomatorData.clearEventLog();
+  if (Player.automatorUnlocked && AutomatorBackend.state.forceRestart) {
+    // Make sure to restart the current script instead of using the editor script - the editor script might
+    // not be a valid script to run; this at best stops it from running and at worst causes a crash
+    AutomatorBackend.start(AutomatorBackend.state.topLevelScript);
+  }
 }
 
 function resetReality(){

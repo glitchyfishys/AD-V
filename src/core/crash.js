@@ -35,10 +35,10 @@ window.GlobalErrorHandler = {
   },
   crash(message) {
     if (window.GameUI !== undefined && GameUI.initialized) {
-      Modal.message.show(`${message}<br>Check the console for more details`, {}, 3);
+      Modal.message.show(`${messages[Math.floor(Math.random() * messages.length)]} <br>${message} <br>Check the console for more details`, {}, 3);
     }
     // eslint-disable-next-line no-debugger
-    // debugger; remember to turn this back on
+    debugger;
   }
 };
 
@@ -46,3 +46,7 @@ window.onerror = (event, source) => {
   if (!source.endsWith(".js")) return;
   GlobalErrorHandler.onerror(event);
 };
+
+const messages = ['Bruh', 'Did you do that?', 'What were you thinking', 'The dev made an oopsy and crashed your game', 'My bad',
+  'Umm', 'Are you gonna send me that so i can fix it?', 'LOL', 'You should probably stop trying to do that', "That's not my falt",
+]

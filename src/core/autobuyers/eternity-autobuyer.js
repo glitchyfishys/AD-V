@@ -76,7 +76,7 @@ export class EternityAutobuyerState extends AutobuyerState {
   }
 
   get timeToNextTick() {
-    return Math.clampMin(this.time - Time.thisEternityTrueTime.totalSeconds.toNumber(), 0);
+    return Math.clampMin(this.time - Time.thisEternityRealTime.totalSeconds.toNumber(), 0);
   }
 
   get willEternity() {
