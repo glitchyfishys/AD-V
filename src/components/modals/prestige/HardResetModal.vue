@@ -47,7 +47,7 @@ export default {
     <div class="c-modal-message__text">
       Please confirm your desire to hard reset this save slot.
       <span class="c-modal-hard-reset-danger">Deleting your save will not unlock anything secret.</span>
-      Type in "Shrek is love, Shrek is life" to confirm.
+      Type in "This mod is so perfected in balancing that i want to play again" to confirm.
       <div class="c-modal-hard-reset-danger">
         THIS WILL WIPE YOUR SAVE.
         <span v-if="hasExtraNG">
