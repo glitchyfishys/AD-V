@@ -23,6 +23,8 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
+          run: npm cache verify
+          cache-dependency-path: package-lock.json
       - run: npm ci
       - run: npm run build:release
       - uses: JamesIves/github-pages-deploy-action@v4
