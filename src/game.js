@@ -6,7 +6,6 @@ import { SpeedrunMilestones } from "./core/speedrun";
 import { supportedBrowsers } from "./supported-browsers";
 
 import Payments from "./core/payments";
-import { Pelle } from "./core/globals";
 
 if (GlobalErrorHandler.handled) {
   throw new Error("Initialization failed");
@@ -14,7 +13,6 @@ if (GlobalErrorHandler.handled) {
 GlobalErrorHandler.cleanStart = true;
 
 export function playerInfinityUpgradesOnReset() {
-
   const infinityUpgrades = new Set(
     ["timeMult", "dimMult", "timeMult2",
       "skipReset1", "skipReset2", "unspentBonus",
