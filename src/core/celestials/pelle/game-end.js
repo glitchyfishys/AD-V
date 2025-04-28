@@ -37,6 +37,7 @@ export const GameEnd = {
   creditsEverClosed: false,
 
   gameLoop(diffr) {
+    if(!Pelle.isDoomed) return;
     const diff = isDecimal(diffr) ? diffr.toNumber() : diffr;
     if (this.removeAdditionalEnd) {
       this.additionalEnd -= Math.min(diff / 200, 0.5);
@@ -46,7 +47,7 @@ export const GameEnd = {
       }
     }
     if (!this.removeAdditionalEnd && this.endState >= END_STATE_MARKERS.GAME_END &&
-        ui.$viewModel.modal.progressBar === undefined) {
+      ui.$viewModel.modal.progressBar === undefined) {
       player.isGameEnd = true;
       this.additionalEnd += Math.min(diff / 1000 / 2, 0.1);
     }

@@ -18,30 +18,46 @@ export default {
     return {
       unlockReq: '',
       unlocked: false,
-      cycle: {},
+      cyc: {},
       amount: new Decimal(),
       cost: new Decimal(),
       multiplier: new Decimal(),
+      highestUnlocked: 2
     };
   },
   computed: {
     symbol: () => Null.symbol,
     isDoomed: () => Pelle.isDoomed,
+    pos() {
+      const dst = 42 * ((this.highestUnlocked / 16) ** 0.8);
+      const step = Math.PI_2 / this.highestUnlocked;
+      const offset = (step * (0.75 + (0.25 * (this.highestUnlocked - 3))));
+      const a = (this.tier - 1) * step - offset;
+      const x = Math.cos(a) * dst;
+      const y = Math.sin(a) * dst;
+      return {
+        left: 50 + x + '%',
+        top: 50 + y + '%',
+      }
+    },
   },
   methods: {
     update() {
-      this.rep = NullReplicator(this.tier);
-      this.unlocked = this.rep.unlocked;
-      this.unlockReq = this.rep.unlockReq;
-      this.cost.copyFrom(this.rep.cost);
-      this.amount.copyFrom(this.rep.amount);
-      this.multiplier.copyFrom(this.rep.multiplier);
-      this.purged  = Null.purged;
+      this.cyc = NullCycle(this.tier);
+      this.unlocked = this.cyc.unlocked;
+      this.unlockReq = this.cyc.unlockReq;
+      this.cost.copyFrom(this.cyc.cost);
+      this.amount.copyFrom(this.cyc.amount);
+      this.multiplier.copyFrom(this.cyc.multiplier);
+      this.highestUnlocked = NullCycles.highestUnlocked;
     },
     buy(bulk = false){
       if(this.unlocked){
-        this.rep.buy(bulk);
+        this.cyc.buy(bulk);
       }
+    },
+    data() {
+      return `Cost: ${format(this.cost, 2)} Abyssal Matter`
     }
   }
 };
@@ -49,22 +65,20 @@ export default {
 
 <template>
   <PrimaryButton
-  :class="this.tier > 5 ? 'c-null-button-chaos': 'c-null-button'"
-  v-if='(purged && this.tier > 5) || this.tier < 6'
+  :class="this.tier > 8 ? 'c-null-button-chaos': 'c-null-button'"
+  :style="pos"
   @click.exact="buy(false)"
   @click.shift.exact="buy(true)"
   >
-    {{rep.shortDisplayName}} Replicator
-    <div v-if="unlocked">
-        {{ format(amount, 2, 2) }} <br> x{{ formatSmall(multiplier) }}
-        <br>
-      <div>
-        Cost: {{ format(cost, 2) }} Artificial Matter
-      </div>
+    <div class="c-cycle-num">
+      {{cyc.shortDisplayName}} Cycle
     </div>
-    <div v-else>
-      Unlock Requirement:
-      {{ unlockReq }}
+    <div v-if="unlocked">
+        {{ formatSmall(amount, 2, 2) }} <br>
+        x{{formatSmall(multiplier) }} 
+        <span style="font-size: 11px;">
+          Cost: {{ format(this.cost, 2, 2) }} AbM
+        </span>
     </div>
   </PrimaryButton>
 </template>
@@ -72,17 +86,38 @@ export default {
 <style scoped>
 .c-null-button {
   height: 100px;
-  width: 200px;
+  width: 100px;
   background: var(--color-null--base);
   margin: 5px;
   border-color: #1d4087;
+  position: absolute;
+  margin-top: -50px;
+  margin-left: -50px;
+  border-radius: 50%;
 }
 
 .c-null-button-chaos {
   height: 100px;
-  width: 200px;
-  background: var(--color-null--chaos);
+  width: 100px;
+  background: var(--color-null--corrupt);
   margin: 5px;
-  border-color: #1d4087;
+  border-color: #26045d;
+  position: absolute;
+  margin-top: -50px;
+  margin-left: -50px;
+  border-radius: 50%;
 }
+
+.c-cycle-num {
+  top: -15px;
+  left: 10px;
+  width: 80px;
+  z-index: 2;
+  position: absolute;
+  color: var(--color-text);
+  border-radius: 11px;
+  border: solid 2px white;
+  background-image: linear-gradient(white 5%, black 25% 75%, white 100%);
+}
+
 </style>

@@ -72,11 +72,11 @@ export default {
 
 <template>
   <div class="l-pelle-celestial-tab">
-    <div
+      <CelestialQuoteHistory celestial="pelle" />
+      <div
       v-if="isDoomed"
       class="l-pelle-all-content-container"
     >
-      <CelestialQuoteHistory celestial="pelle" />
       <div class="button-container">
         <button
           class="o-pelle-button"

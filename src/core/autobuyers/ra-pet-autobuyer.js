@@ -9,6 +9,10 @@ export class RaPetAutobuyerState extends AutobuyerState{
     /**
      * @abstract
      */
+    get realTime(){
+        return true;
+      }
+
     get _petName(){ throw new NotImplementedError(); }
 
     get data() {
@@ -34,8 +38,6 @@ export class RaPetAutobuyerState extends AutobuyerState{
     get isUnlocked() {
         return MetaFabricatorUpgrade(9).isBought;
     }
-
-
 
     tick(){
         const petName = this._petName;

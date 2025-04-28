@@ -4,7 +4,6 @@ import ModalWrapper from "@/components/modals/ModalWrapper";
 import PrimaryButton from "@/components/PrimaryButton";
 
 import { AutoBackupSlots } from "@/core/storage";
-import { STEAM } from "@/env";
 
 export default {
   name: "BackupWindowModal",
@@ -22,7 +21,7 @@ export default {
   },
   computed: {
     backupSlots: () => AutoBackupSlots,
-    deleteText: () => (STEAM ? "fully uninstalling the game" : "clearing your browser cookies"),
+    deleteText: () => "clearing your browser cookies",
   },
   watch: {
     ignoreOffline(newValue) {

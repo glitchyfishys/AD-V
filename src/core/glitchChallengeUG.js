@@ -65,7 +65,6 @@ class preInfinityUGState extends BitPurchasableMechanicState {
 
   onPurchased() {
     const id = this.id;
-    console.log(id)
   }
 }
 
@@ -148,7 +147,6 @@ class breakInfinityUGState extends BitPurchasableMechanicState {
 
   onPurchased() {
     const id = this.id;
-    console.log(id)
   }
 }
 
@@ -231,7 +229,6 @@ class eternityUGState extends BitPurchasableMechanicState {
 
   onPurchased() {
     const id = this.id;
-    console.log(id)
   }
 }
 
@@ -313,7 +310,6 @@ class realityUGState extends BitPurchasableMechanicState {
 
   onPurchased() {
     const id = this.id;
-    console.log(id)
   }
 }
 

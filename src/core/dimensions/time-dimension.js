@@ -306,6 +306,11 @@ class TimeDimensionState extends DimensionState {
     if (V.isRunning) mult = mult.pow(0.5);
 
     if(Glitch.isRunning) mult = mult.pow(Glitch.TDnerf);
+
+    
+    if(mult.gt("ee50")) mult = mult.pow( mult.log10().div(1e50).pow(0.3).recip() );
+    if(mult.gt("ee100")) mult = mult.pow( mult.log10().div(1e100).pow(0.75).recip() );
+    if(mult.gt("ee200")) mult = mult.pow( mult.log10().div(1e200).pow(0.95).recip() );
     
     return mult;
   }

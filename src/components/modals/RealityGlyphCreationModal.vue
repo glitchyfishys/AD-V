@@ -20,10 +20,8 @@ export default {
     update() {
       this.isDoomed = Pelle.isDoomed;
       this.realityGlyphLevel.copyFrom(AlchemyResource.reality.effectValue);
-      const realityEffectConfigs = GlyphEffects.all
-        .filter(eff => eff.glyphTypes.includes("reality"))
-        .sort((a, b) => a.intID - b.intID);
-      const minRealityEffectIndex = realityEffectConfigs.map(cfg => cfg.intID).min();
+      const realityEffectConfigs = GlyphEffects.all.filter(eff => eff.glyphTypes[0]?.() == "reality");
+      const minRealityEffectIndex = realityEffectConfigs.map(cfg => cfg.intID).nMin();
       this.possibleEffects = realityEffectConfigs
         .map(cfg => [realityGlyphEffectLevelThresholds[cfg.intID - minRealityEffectIndex], cfg.id]);
     },

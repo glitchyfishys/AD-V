@@ -1,7 +1,5 @@
 import Mousetrap from "mousetrap";
 
-import { ElectronRuntime } from "@/steam";
-
 import { GameKeyboard } from "./keyboard";
 
 // Add your hotkeys and combinations here
@@ -317,34 +315,6 @@ export const shortcuts = [
     type: "bind",
     // eslint-disable-next-line no-empty-function
     function: () => {},
-    visible: () => false
-  },
-  {
-    name: "Zoom In",
-    keys: ["ctrl", "="],
-    type: "bind",
-    function: () => ElectronRuntime.increaseZoom(),
-    visible: () => false
-  },
-  {
-    name: "Zoom In",
-    keys: ["ctrl", "+"],
-    type: "bind",
-    function: () => ElectronRuntime.increaseZoom(),
-    visible: () => false
-  },
-  {
-    name: "Zoom Out",
-    keys: ["ctrl", "-"],
-    type: "bind",
-    function: () => ElectronRuntime.decreaseZoom(),
-    visible: () => false
-  },
-  {
-    name: "Reset Zoom",
-    keys: ["ctrl", "0"],
-    type: "bind",
-    function: () => ElectronRuntime.resetZoom(),
     visible: () => false
   },
 ];

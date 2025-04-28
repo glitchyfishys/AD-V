@@ -1,10 +1,8 @@
-import TWEEN from "tween.js";
-import { ElectronRuntime, SteamRuntime } from "@/steam";
+import TWEEN from "@tweenjs/tween.js";
 import { DC } from "./core/constants";
 import { deepmergeAll } from "@/utility/deepmerge";
 import { DEV } from "@/env";
 import { SpeedrunMilestones } from "./core/speedrun";
-import { Cloud } from "./core/storage";
 import { supportedBrowsers } from "./supported-browsers";
 
 import Payments from "./core/payments";
@@ -140,6 +138,10 @@ export function gainedInfinityPoints() {
   if (GlyphAlteration.isAdded("infinity")) {
     ip = ip.pow(getSecondaryGlyphEffect("infinityIP"));
   }
+
+  if(ip.gt("ee50")) ip = ip.pow( ip.log10().div(1e50).pow(0.3).recip() );
+  if(ip.gt("ee100")) ip = ip.pow( ip.log10().div(1e100).pow(0.75).recip() );
+  if(ip.gt("ee200")) ip = ip.pow( ip.log10().div(1e200).pow(0.95).recip() );
   
   return ip.floor();
 }
@@ -186,6 +188,10 @@ export function gainedEternityPoints() {
     ep = ep.pow(getSecondaryGlyphEffect("timeEP"));
   }
 
+  if(ep.gt("ee50")) ep = ep.pow( ep.log10().div(1e50).pow(0.3).recip() );
+  if(ep.gt("ee100")) ep = ep.pow( ep.log10().div(1e100).pow(0.75).recip() );
+  if(ep.gt("ee200")) ep = ep.pow( ep.log10().div(1e200).pow(0.95).recip() );
+
   return ep.floor();
 }
 
@@ -209,7 +215,8 @@ export function gainedMetas() {
 
   metas = metas.mul(MetaFabricatorUpgrade(21).effectOrDefault(1));
   metas = metas.mul(Ra.unlocks.nullMetaBoost.effectOrDefault(1));
-
+  metas = metas.mul(Ra.unlocks.canteMetaBoost.effectOrDefault(1));
+  
   return metas;
 }
 
@@ -220,12 +227,16 @@ export function gainedMetaRelays() {
   mr = mr.mul(MetaFabricatorUpgrade(13).effectOrDefault(1));
   mr = mr.mul(Ra.unlocks.nullMetaAntimatter.effectOrDefault(1));
   mr = mr.mul(Ra.unlocks.canteMetaBoost.effectOrDefault(1));
+
   let ArtM = Currency.artificialMatter.value.add(1).pow(0.2).min(Decimal.NUMBER_MAX_VALUE.pow(Currency.chaosMatter.value.add(10).log10().pow(2)));
   if(ArtM.gt('e100')) ArtM = ArtM.div(ArtM.div('e100').pow(0.25));
   if(ArtM.gt('e1000')) ArtM = ArtM.div(ArtM.div('e1000').pow(0.75));
   if(ArtM.gt('e5000')) ArtM = ArtM.div(ArtM.div('e5000').pow(0.65));
   if(ArtM.gt('ee4')) ArtM = ArtM.div(ArtM.div('ee4').pow(0.75));
   mr = mr.mul(ArtM);
+  
+  mr = mr.pow(Ra.unlocks.nullDamagedMRGain.effectOrDefault(1));
+
   return mr.floor();
 }
 
@@ -488,7 +499,7 @@ export function trueTimeMechanics(trueDiff) {
     Enslaved.nextTickDiff = trueDiff;
   }
 
-  Autobuyers.tick();
+  if (Enslaved.isStoringRealTime) Autobuyers.trueTick();
   Tutorial.tutorialLoop();
 
   if (Achievement(165).isUnlocked && player.celestials.effarig.autoAdjustGlyphWeights) {
@@ -526,6 +537,7 @@ export function realTimeMechanics(realDiff) {
   DarkMatterDimensions.tick(realDiff);
 
   CanteReplicators.tick(realDiff);
+  if(Null.isUnlocked) NullCycles.tick(realDiff);
   Currency.artificialMatter.add(CanteUpgrades.all[11].canBeApplied ? CanteReplicators.totalArtMatterGain().mul(realDiff.div(1000)) : 0);
   Currency.chaosMatter.add(CanteUpgrades.all[17].effectOrDefault(DC.D0).mul(realDiff.div(1000)));
 
@@ -1178,7 +1190,6 @@ window.onload = function() {
   GameUI.initialized = supportedBrowser;
   ui.view.initialized = supportedBrowser;
   setTimeout(() => {
-    ElectronRuntime.updateZoom();
     document.getElementById("loading").style.display = "none";
   }, 500);
   if (!supportedBrowser) {
@@ -1215,9 +1226,6 @@ export function init() {
     // eslint-disable-next-line no-console
     console.log("👨‍💻 Development Mode 👩‍💻");
   }
-  ElectronRuntime.initialize();
-  SteamRuntime.initialize();
-  Cloud.init();
   GameStorage.load();
   Tabs.all.find(t => t.config.id === player.options.lastOpenTab).show(true);
   Payments.init();

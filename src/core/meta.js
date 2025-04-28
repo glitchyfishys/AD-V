@@ -236,20 +236,10 @@ function resetReality(){
   const G = R.glyphs;
 
   AlchemyResources.reset();
-  
-  player.records.thisReality.time = DC.D0;
-  player.records.bestReality.time = DC.D0;
-  player.records.thisReality.realTime = DC.D0;
-  player.records.thisReality.trueTime = 0;
-  player.records.bestReality.realTime = DC.D0;
-  player.records.bestReality.trueTime = 0;
-  player.records.thisReality.maxReplicanti = DC.D0;
 
   R.maxRM = DC.D0;
   R.iMCap = DC.D0;
   R.imaginaryMachines = DC.D0;
-  R.maxRM = DC.D0;
-  R.maxRM = DC.D0;
 
   G.sac = {
     power: DC.D0,
@@ -354,7 +344,7 @@ function resetReality(){
 
   player.records.bestReality = {
     time: Decimal.NUMBER_MAX_VALUE,
-    realTime: Number.MAX_VALUE,
+    realTime: Decimal.NUMBER_MAX_VALUE,
     trueTime: 0,
     glyphStrength: DC.D0,
     RM: DC.D0,

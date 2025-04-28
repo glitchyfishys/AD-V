@@ -1,6 +1,10 @@
 import { IntervaledAutobuyerState } from "./autobuyer";
 
 export class DarkMatterDimensionAutobuyerState extends IntervaledAutobuyerState {
+  get realTime(){
+    return true;
+  }
+
   get data() {
     return player.auto.darkMatterDims;
   }

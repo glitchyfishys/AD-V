@@ -1,4 +1,3 @@
-import { GameDatabase } from "./secret-formula/game-database";
 import { GlyphInfo } from "./secret-formula/reality/core-glyph-info";
 
 /**

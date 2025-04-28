@@ -44,7 +44,7 @@ export const metaFabricatorUpgrades = [
     id: 1,
     initialCost: 1,
     costMult: 60,
-    textTemplate: "All Reality Aplifiers are {value} times higher per-purchase",
+    textTemplate: "All Reality Aplifiers are {value} times higher per purchase",
     effect: 1.5
   }),
   rebuyablePow({
@@ -142,12 +142,12 @@ export const metaFabricatorUpgrades = [
     noLabel: true
   },
   {
-    name: "Fall",
+    name: "Rise And Fall",
     id: 13,
     cost: 4,
     description: "Metas boost Meta Relay gain",
     effect: () => Currency.metas.value.pow(1.44).div(15).add(1).min(1e10), // just in case of someone getting alot (we don't need that much yet)
-    formatEffect: value => format(value)
+    formatEffect: value => formatX(value, 2, 2)
   },
   {
     name: "Insert Meme Here",
@@ -188,7 +188,7 @@ export const metaFabricatorUpgrades = [
     name: "Perky",
     id: 18,
     cost: 12,
-    description: "Keep all perks",
+    description: "Keep all perks and Dilation autbuyer buy max",
     effect: () => 1,
     formatEffect: value => "",
     noLabel: true

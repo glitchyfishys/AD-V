@@ -17,11 +17,9 @@ export default {
   },
   methods: {
     update() {
-      this.glitchAmount = structuredClone(AlchemyResource.glitch.amount);
-      const glitchEffectConfigs = GlyphEffects.all
-        .filter(eff => eff.glyphTypes.includes("glitch"))
-        .sort((a, b) => a.intID - b.intID);;
-      const minGlitchEffectIndex = glitchEffectConfigs.map(cfg => cfg.intID).min();
+      this.glitchGlyphLevel.copyFrom(AlchemyResource.glitch.amount);
+      const glitchEffectConfigs = GlyphEffects.all.filter(eff => eff.glyphTypes[0]?.() == "glitch");
+      const minGlitchEffectIndex = glitchEffectConfigs.map(cfg => cfg.intID).nMin();
       this.possibleEffects = glitchEffectConfigs
         .map(cfg => [glitchGlyphEffectLevelThresholds[cfg.intID - minGlitchEffectIndex], cfg.id]);
     },

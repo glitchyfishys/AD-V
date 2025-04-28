@@ -39,7 +39,7 @@ window.player = {
     chaos: Array.range(0, 12).map(() => ({
       bought: DC.D0,
       amount: DC.D0
-    }))
+    })),
   },
   buyUntil10: true,
   sacrificed: DC.D0,
@@ -164,6 +164,13 @@ window.player = {
     },
     canteRep: {
       all: Array.range(0, 10).map(() => ({
+        isActive: true,
+        lastTick: 0,
+      })),
+      isActive: true,
+    },
+    nullCyc: {
+      all: Array.range(0, 16).map(() => ({
         isActive: true,
         lastTick: 0,
       })),
@@ -297,8 +304,9 @@ window.player = {
     galgenSac: { isActive: false },
     singularity: { isActive: true },
     singCap: { isActive: true },
-    ipMultBuyer: { isActive: true, },
-    epMultBuyer: { isActive: true, },
+    ipMultBuyer: { isActive: true },
+    epMultBuyer: { isActive: true },
+    nullUG: { isActive: true }
   },
   infinityPoints: DC.D0,
   infinities: DC.D0,
@@ -967,16 +975,27 @@ window.player = {
       quoteBits: 0,
       artificialMatter: DC.D0,
       chaoticMatter: DC.D0,
+      upgradeBits: 0,
+      replicatorUnlockbits: 0,
+      purges: 0,
       replicators: Array.range(0, 10).map(() => ({
         bought: DC.D0,
         amount: DC.D1
-      })),
-      replicatorUnlockbits: 0,
-      purges: 0
+      }))
     },
     null: {
       run: false,
+      unlockes: 0,
+      quoteBits: 0,
+      upgradeBits: 0,
+      parallax: DC.D0,
+      corrupt: DC.D0,
       abyssalMatter: DC.D0,
+      corruptMatter: DC.D0,
+      cycle: Array.range(0, 16).map(() => ({
+        bought: DC.D0,
+        amount: DC.D0
+      }))
     }
   },
   isGameEnd: false,
@@ -991,6 +1010,7 @@ window.player = {
       AIChance: 0,
       speed: 1,
       includeAnimated: true,
+      onlyVisNews: false,
     },
     notation: "Mixed scientific",
     lnotation: "Stacked Scientific",

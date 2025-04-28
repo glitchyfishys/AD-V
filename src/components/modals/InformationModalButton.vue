@@ -1,5 +1,4 @@
 <script>
-import { openExternalLink } from "@/utility/open-external-link";
 
 export default {
   name: "InformationModalButton",
@@ -28,7 +27,7 @@ export default {
       Modal[this.showModal].show();
     },
     openLink() {
-      openExternalLink(this.link);
+      window.open(this.link, "_blank").focus();
     }
   }
 };

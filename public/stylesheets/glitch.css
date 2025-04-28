@@ -20,6 +20,10 @@
 
   --color-cante--base: #44a8da;
   --color-cante--chaos: #ff3333;
+
+  --color-null--base: #555555;
+  --color-null--chaos: #aa5555;
+  --color-null--corrupt: #5b2ca6;
 }
 
 .l-glitch-celestial-tab {
@@ -297,3 +301,4 @@ Chaos Styles
 .o-meta-reset{
   background-image: url("../images/meta.png");
 }
+

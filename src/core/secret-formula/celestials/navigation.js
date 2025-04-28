@@ -363,7 +363,7 @@ export const celestialNavigation = {
     // If the upgrade to unlock the reality isn't yet bought, clamp the progress at 99.9%,
     // even if the player has enough relic shards to buy it.
     complete: () => (EffarigUnlock.run.isUnlocked
-      ? 1 : Decimal.pLog10(Currency.relicShards.value)
+      ? 1 : Decimal.pLog10(Currency.relicShards.value.add(1))
         .div(Decimal.log10(EffarigUnlock.run.cost)).clampMax(1).toNumber()),
     node: {
       clickAction: () => Tab.celestials.effarig.show(true),

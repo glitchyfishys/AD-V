@@ -1,6 +1,6 @@
 import { IntervaledAutobuyerState } from "./autobuyer";
 
-export class CanteReplicatorAutobuyerState extends IntervaledAutobuyerState {
+export class NullCycleAutobuyerState extends IntervaledAutobuyerState {
   get realTime(){
     return true;
   }
@@ -10,15 +10,15 @@ export class CanteReplicatorAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get name() {
-    return CanteReplicator(this.tier).shortDisplayName;
+    return NullCycle(this.tier).shortDisplayName;
   }
 
   get fullName() {
-    return `${this.name} Cante Replicator`;
+    return `${this.name} Null Cycle`;
   }
 
   get data() {
-    return player.auto.canteRep.all[this.tier - 1];
+    return player.auto.nullCyc.all[this.tier - 1];
   }
 
   get interval() {
@@ -30,7 +30,7 @@ export class CanteReplicatorAutobuyerState extends IntervaledAutobuyerState {
   }
   
   get isUnlocked() {
-    return CanteUpgrades.all[8].canBeApplied;
+    return NullUpgrades.all[15].canBeApplied;
   }
 
   // We don't want to directly call super.canTick here because the game logic works really weirdly in terms of
@@ -40,7 +40,7 @@ export class CanteReplicatorAutobuyerState extends IntervaledAutobuyerState {
   get canTick() {
     // AD autobuyer-specific logic; if the UI is collapsed then we are unable to toggle groupSetting.
     // In terms of UX for this case it makes the most sense to ignore it and pretend it's true
-    const settingConfig = player.auto.canteRep;
+    const settingConfig = player.auto.nullCyc;
     const individualSetting = settingConfig.all[this.tier - 1];
     const groupSetting = settingConfig.isActive;
     const thisSetting = individualSetting && groupSetting;
@@ -55,18 +55,18 @@ export class CanteReplicatorAutobuyerState extends IntervaledAutobuyerState {
 
   tick() {
     super.tick();
-    CanteReplicator(this.tier).buy(true);
+    NullCycle(this.tier).buy(true);
   }
 
   reset() {
     super.reset();
   }
 
-  static get entryCount() { return 10; }
-  static get autobuyerGroupName() { return "Cante Replicator"; }
+  static get entryCount() { return 16; }
+  static get autobuyerGroupName() { return "Null Cycle"; }
 
   // These are toggled on and off from the group autobuyer checkbox
-  static get isActive() { return player.auto.canteRep.isActive; }
-  static set isActive(value) { player.auto.canteRep.isActive = value; }
+  static get isActive() { return player.auto.nullCyc.isActive; }
+  static set isActive(value) { player.auto.nullCyc.isActive = value; }
 
 }

@@ -24,6 +24,7 @@ export class DilationUpgradeAutobuyerState extends IntervaledAutobuyerState {
   }
 
   get bulk() {
+    if (MetaFabricatorUpgrade(18).isBought) return new Decimal('1ee15');
     return Effects.product(PerkShopUpgrade.bulkDilation, Perk.dilationAutobuyerBulk);
   }
 

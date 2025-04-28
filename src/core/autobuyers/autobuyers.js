@@ -46,6 +46,8 @@ import { GalaxyGeneratorSacrificeAutobuyerState } from './galgen-autobuyer';
 import { MetaAutobuyerState } from "./meta-autobuyer";
 
 import { CanteReplicatorAutobuyerState } from "./cante-replicator-autobuyer";
+import { NullCycleAutobuyerState } from "./null-cycle-autobuyer";
+import { NullUpgradeAutobuyerState } from "./null-upgrade-autobuyer";
 
 export const Autobuyer = {
   annihilation: new AnnihilationAutobuyerState(),
@@ -95,16 +97,19 @@ export const Autobuyer = {
 
   meta: new MetaAutobuyerState(),
 
-  replecator: CanteReplicatorAutobuyerState.createAccessor(),
+  replicator: CanteReplicatorAutobuyerState.createAccessor(),
+  cycle: NullCycleAutobuyerState.createAccessor(),
+  nullUpgrade: new NullUpgradeAutobuyerState(),
 };
 
 export const Autobuyers = (function() {
   const antimatterDimensions = Autobuyer.antimatterDimension.zeroIndexed;
   const infinityDimensions = Autobuyer.infinityDimension.zeroIndexed;
   const timeDimensions = Autobuyer.timeDimension.zeroIndexed;
-  const replecator = Autobuyer.replecator.zeroIndexed;
+  const replicator = Autobuyer.replicator.zeroIndexed;
+  const cycle = Autobuyer.cycle.zeroIndexed;
 
-  const dimensions = [antimatterDimensions, infinityDimensions, timeDimensions, replecator];
+  const dimensions = [antimatterDimensions, infinityDimensions, timeDimensions, replicator, cycle,];
 
   const prestige = [
     Autobuyer.bigCrunch,
@@ -130,6 +135,7 @@ export const Autobuyers = (function() {
     Autobuyer.singCap,
     Autobuyer.tess,
     Autobuyer.galgenSac,
+    Autobuyer.nullUpgrade,
   ];
 
   const singleComplex = [
@@ -160,7 +166,8 @@ export const Autobuyers = (function() {
     Autobuyer.antimatterDimension,
     Autobuyer.infinityDimension,
     Autobuyer.timeDimension,
-    Autobuyer.replecator,
+    Autobuyer.replicator,
+    Autobuyer.cycle,
     Autobuyer.replicantiUpgrade,
     Autobuyer.dilationUpgrade,
     Autobuyer.blackHolePower,
@@ -213,6 +220,19 @@ export const Autobuyers = (function() {
       // The canTick condition must be checked after the previous autobuyer has triggered
       // in order to avoid slow dimension autobuyers.
       for (const autobuyer of Autobuyers.all) {
+        if (autobuyer.canTick) autobuyer.tick();
+      }
+
+      PerformanceStats.end();
+    },
+
+    trueTick() {
+      if (!player.auto.autobuyersOn) return;
+      PerformanceStats.start("Autobuyers");
+
+      // The canTick condition must be checked after the previous autobuyer has triggered
+      // in order to avoid slow dimension autobuyers.
+      for (const autobuyer of Autobuyers.all.filter(a => a.realTime)) {
         if (autobuyer.canTick) autobuyer.tick();
       }
 

@@ -5,7 +5,7 @@ export const Cante = {
   displayName: "Cante",
   possessiveName: "Cante's",
   get isUnlocked() {
-    return false;
+    return Ra.unlocks.canteUnlock.isUnlocked;
   },
 
   initializeRun() {

@@ -7,51 +7,84 @@ export const nullQuotes = {
   show: {
     id: 0,
     lines: [
-      "Oh it's you",
-      "Your almost there",
-      "Seeking my help are you?",
-      "Giggle, you better be ready",
-      {text: "Cante what are you doing?", name: "Glitch", background: celBackground('glitch')},
-      "Huh, Confusion what do you mean",
-      {text: "And why are you saying actions too?", name: "Glitch", background: celBackground('glitch')},
-      "Oh that? Zegary is making a Celestial... it has some issuses",
-      {text: "Intriguing... what is it's name?", name: "Glitch", background: celBackground('glitch')},
-      "It does not have a name yet but the project is call uncynify. Laugh, I'm still missing some info on that",
-      {text: "WHY DID YOU SAY \"LAUGH\" AND NOT JUST LAUGH", name: "Glitch", background: celBackground('glitch')},
-      "You know you can't stop me. Smile",
-      {text: "Destroyer Just... get to it", name: "Glitch", background: celBackground('glitch')},
+      "...",
+      "What are you doing here?",
+      "You can do anything.",
+      "And yet your here.",
+      "WHAT DO YOU WANT!",
+      "GLITCH ARE YOU THE REASON.",
+      {text: "Null what are you doing to them?", name: "Glitch", background: celBackground('glitch')},
+      "UGH. Go away.",
+      "They are not ready.",
+      {text: "After all, You can not create without destroying.", displayed: () => CanteUpgrades.all[19].isUnlocked, glitched: true},
     ],
   },
-  reforge: {
+  parallax1: {
     id: 1,
     lines: [
-      {text: 'Stop Destroying Realites, we need them.', displayed: () => CanteUpgrades.all[19].isUnlocked, glitched: true},
-      "I see what Glitch was talking about.",
-      "You ability to create... i should not explain that... for lore purposes.",
-      "I'll go get Glitch in a bit, for now just continue.",
+      "You are really annoying.",
+      "Why don't you just leave.",
+      {text: "Stop this Nonsense NOW.", glitched: true},
+      "...",
+      "You are being force to do this aren't you?",
+      "I don't want you here",
+      "My Parallaxes are perfect.",
     ],
   },
-  purge: {
+  parallax2: {
     id: 2,
     lines: [
-      "So they have finished... what happened?",
-      {text: "Did they just make a new type of $1?", 1: Matter, name: "Glitch", background: celBackground('glitch')},
-      "That's... new... Is this safe for a non-celestial being this powerful?",
-      "They could destory everything maybe even Null!",
-      {text: "Is it time for them to know..?", name: "Glitch", background: celBackground('glitch')},
-      "It would be dangerous right now, HE could be watching.",
+      "WHY ARE YOU DOING THIS!",
+      "I HAVE DONE NOTHING TO YOU!",
+      {text: "Enough Null.", name: 'Glitch', background: celBackground('glitch')},
+      "...",
+      {text: "Why are you looking at me like that?", name: 'Glitch', background: celBackground('glitch')},
+      {text: "This is the one you wanted. Is it not?", name: 'Glitch', background: celBackground('glitch')},
+      {text: "They are barely even the right person.", glitched: true},
+      "Both of you can leave.",
+      "I would just erase you otherwise.",
     ],
   },
-  thePast: {
+  parallax3: {
     id: 3,
     lines: [
-      "NO NO NO, YOU SHOULD NOT REVEAL THE PAST",
-      "IT'S FAR TOO DANGEROUS FOR YOU TOO KNOW",
-      {text: "I think it's safe", name: "Glitch", background: celBackground('glitch')},
-      {text: "They either know or will find out", name: "Glitch", background: celBackground('glitch')},
-      {text: "Just let them do it", name: "Glitch", background: celBackground('glitch')},
-      "... Ok?",
-      {text: "... Don't be fooled, I'm stronger than you think", glitched: true}
+      "...",
+      "Good Luck."
     ],
   },
+  enrage: {
+    id: 4,
+    lines: [
+      "YOU!",
+      "WHY CAN'T YOU JUST LEAVE.",
+      "Go do something else.",
+      "Why do you persist?"
+    ]
+  },
+  outrage: {
+    id: 5,
+    lines: [
+      "ENOUGH.",
+      "YOU CAN GO AWAY.",
+      "THERE IS NOTHING FOR YOU.",
+      "YOU. MAKE YOUR WAY HERE JUST TO ANNOY ME?",
+      "AND FOR NO OTHER REASON?",
+      "WHAT IS THE POINT?",
+      "... LEAVE NOW!"
+    ]
+  },
+  end: {
+    id: 6,
+    lines: [
+      "...",
+      "What is there to say?",
+      "You just can't stop, Can you.",
+      "Just two left before you go away.",
+      "You'll have to find the others yourself",
+      "...",
+      "You can leave now.",
+      "Go on your wasting time.",
+      "Go back to Ra..."
+    ]
+  }
 };

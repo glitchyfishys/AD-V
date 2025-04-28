@@ -46,6 +46,7 @@ function glyphSacCap() {
 // To prevent issues, make sure there is always as many note().mp4 files (with the numbers 1-x) as there are glyph types, else you might get errors with music glyphs and audio
 // Its not perfect, you will likely still need to touch GlyphSetName.vue to implement new glyphs completely, but i tried my best :P
 
+
 const complexIncludes = (x, filterItem) => x.map(n => n().includes(filterItem)).includes(true);
 
 export const GlyphInfo = {

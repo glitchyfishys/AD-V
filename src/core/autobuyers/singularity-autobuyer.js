@@ -1,6 +1,10 @@
 import { AutobuyerState } from "./autobuyer";
 
 export class SingularityAutobuyerState extends AutobuyerState {
+  get realTime(){
+    return true;
+  }
+
   get data() {
     return player.auto.singularity;
   }

@@ -19,6 +19,7 @@ export default {
       AIChance: 0,
       speed: 1,
       includeAnimated: false,
+      onlyVisNews: false
     };
   },
   computed: {
@@ -38,7 +39,7 @@ export default {
       return {
         min: 0,
         max: 1,
-        interval: 0.15,
+        interval: 0.01,
         width: "98%",
         tooltip: false
       };
@@ -47,7 +48,7 @@ export default {
       return {
         min: 0.5,
         max: 10,
-        interval: 0.01,
+        interval: 0.05,
         width: "98%",
         tooltip: false
       };
@@ -69,6 +70,9 @@ export default {
     includeAnimated(newValue) {
       player.options.news.includeAnimated = newValue;
     },
+    onlyVisNews(newValue) {
+      player.options.news.onlyVisNews = newValue;
+    },
   },
   methods: {
     update() {
@@ -77,6 +81,7 @@ export default {
       this.repeatBuffer = options.repeatBuffer;
       this.AIChance = options.AIChance;
       this.speed = options.speed;
+      this.onlyVisNews = options.onlyVisNews;
       this.includeAnimated = options.includeAnimated;
     },
     adjustSliderValueRepeatBuffer(value) {
@@ -137,6 +142,11 @@ export default {
       v-model="includeAnimated"
       class="o-primary-btn o-primary-btn--option-wide"
       text="Animation Effects:"
+    />
+    <ModalOptionsToggleButton
+      v-model="onlyVisNews"
+      class="o-primary-btn o-primary-btn--option-wide"
+      text="Only Vis News:"
     />
   </ModalWrapperOptions>
 </template>

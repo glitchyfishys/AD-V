@@ -25,6 +25,7 @@ export const enslavedQuotes = {
       "So little space... but no... prison... is perfect.",
       "They squeezed... this Reality... too tightly. Cracks appeared.",
       "Search... everywhere. We will help... where we can.",
+      {text: "You seem lost.", displayed: () => {return Parallax.parallaxes.gte(3) }, name: 'Null', background: celBackground('null'), glitched: true}
     ]
   },
   hintUnlock: {
@@ -32,7 +33,7 @@ export const enslavedQuotes = {
     lines: [
       "... you need... to look harder...",
       "We think... we can help...",
-      { text: "You have unlocked help from The Nameless Ones.", showCelestialName: false }
+      { text: "You have unlocked help from The Nameless Ones.", showCelestialName: false },
     ]
   },
   ec6C10: {

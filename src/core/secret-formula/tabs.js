@@ -604,6 +604,15 @@ export const tabs = [
         id: 3,
         hidable: true
       },
+      {
+        key: "NullTab",
+        name: "Null",
+        symbol: "Θ",
+        condition: () => Ra.unlocks.nullUnlock.isUnlocked,
+        component: "NullTab",
+        id: 4,
+        hidable: true
+      },
     ],
   },
 ];

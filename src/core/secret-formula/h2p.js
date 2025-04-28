@@ -251,14 +251,16 @@ ${Laitela.isUnlocked ? "- <b>DE</b>: Dark Energy<br>" : ""}
 
 ${Glitch.isUnlocked ? "- <b>RF</b>: Rift Force<br>" : ""}
 ${GlitchSpeedUpgrade(4).isBought ? "- <b>CC</b>: Chaos Cores<br>" : ""}
-${Ra.unlocks.canteUnlock.isUnlocked ? "- <b>ArtM</b>: Artificial Matter<br>" : ""}
+${Cante.isUnlocked ? "- <b>ArtM</b>: Artificial Matter<br>" : ""}
 ${player.celestials.cante.purges > 0 ? "- <b>CM</b>: Chaotic Matter<br>" : ""}
+${Null.isUnlocked > 0 ? "- <b>AbM</b>: Abssal Matter<br>" : ""}
+${player.celestials.null.corrupts > 0 ? "- <b>CoM</b>: Corrupt Matter<br>" : ""}
 
 
 `,
       isUnlocked: () => true,
       tags: ["abbreviation", "shorten", "am", "ad", "ag", "ip", "nc", "ic", "id", "rg", "ep", "tt", "td", "ec", "tp",
-        "dt", "tg", "rm", "ap", "bh", "im", "dm", "de", 'artm', 'cm'],
+        "dt", "tg", "rm", "ap", "bh", "im", "dm", "de", 'artm', 'cm', 'abm', 'com'],
       tab: ""
     }, {
       name: "Antimatter Dimensions",
@@ -448,7 +450,10 @@ Dimensions, Dimension Boosts, and your Antimatter Galaxies. Doing a Big Crunch i
 <br>
 <br>
 You will eventually be able to pass ${formatPostBreak(Number.MAX_VALUE, 6)}, but until then any larger numbers will
-display as ${format(Infinity)}.
+display as Infinity.
+<br>
+Very large number display as ${format(new Decimal('F3.50195'))}.<br>
+Very small number display as ${formatSmall(0.005)} (0.005), ${formatSmall(0.0005)} (0.0005).
 <br>
 <br>
 Each Infinity completed will give an Infinity Point, which can be spent on upgrades in the new Infinity tab.
@@ -1806,20 +1811,20 @@ ${Pelle.isDoomed
     }, {
       name: "Pelle Strikes",
       info: () => `
-Pelle Strikes are encountered on different events in the Doomed Reality. You have encountered the first Pelle Strike by
-reaching Infinity for the first time within a Doomed Reality. More Strikes eventually occur by further progression.
-Each Pelle Strike adds a nerf to a specific aspect of the game, which can be seen by clicking on the Strike name.
-Each Pelle Strike also unlocks a Rift bar.
-<br>
-<br>
-Rift bars can be filled by clicking them to toggle between "Idle" and "Filling", although only two Rifts can be
-"Filling" at any given time. When active, Rifts consume ${formatInt(3)}% of a Rift-specific resource per second. Each
-Rift offers a Rift-specific effect which are based on the total amount filled.
-${PelleStrikes.eternity.hasStrike
-    ? `An exception for this is Decay/Collapse/Disarray, whose effect gets capped once you have drained a total of
-    ${formatPostBreak(DC.E2000)} Replicanti.`
-    : ""}
-In addition, each Rift offers three milestone rewards for filling them up to a certain percentage.
+        Pelle Strikes are encountered on different events in the Doomed Reality. You have encountered the first Pelle Strike by
+        reaching Infinity for the first time within a Doomed Reality. More Strikes eventually occur by further progression.
+        Each Pelle Strike adds a nerf to a specific aspect of the game, which can be seen by clicking on the Strike name.
+        Each Pelle Strike also unlocks a Rift bar.
+        <br>
+        <br>
+        Rift bars can be filled by clicking them to toggle between "Idle" and "Filling", although only two Rifts can be
+        "Filling" at any given time. When active, Rifts consume ${formatInt(3)}% of a Rift-specific resource per second. Each
+        Rift offers a Rift-specific effect which are based on the total amount filled.
+        ${PelleStrikes.eternity.hasStrike
+            ? `An exception for this is Decay/Collapse/Disarray, whose effect gets capped once you have drained a total of
+            ${formatPostBreak(DC.E2000)} Replicanti.`
+            : ""}
+        In addition, each Rift offers three milestone rewards for filling them up to a certain percentage.
 `,
       isUnlocked: () => PelleStrikes.infinity.hasStrike,
       tags: ["reality", "antimatter", "lategame", "endgame", "final", "pelle", "strike", "rift", "celestial"],
@@ -1827,16 +1832,16 @@ In addition, each Rift offers three milestone rewards for filling them up to a c
     }, {
       name: "The Galaxy Generator",
       info: () => `
-When you reach ${formatInt(100)}% Recursion/Dispersion/Destruction, you unlock the <b>Galaxy Generator</b>, which can
-passively generate Galaxies. Generated Galaxies are like Replicanti Galaxies and Tachyon Galaxies in that they affect
-tickspeed as if they were Antimatter Galaxies, but they do not increase the cost of your next Antimatter Galaxy. You
-also unlock five new upgrades. The first upgrade increases the base amount of Galaxies generated. The other four
-upgrades then give a multiplier to this base amount. The first two upgrades can be bought by spending antimatter and
-Generated Galaxies. Replicanti or Tachyon Galaxies cannot be spent for purchasing those upgrades.
-<br>
-<br>
-The <b>Galaxy Generator</b> has a maximum number of Galaxies it can generate, which can only be increased by draining
-Rifts once the current cap has been reached.`,
+        When you reach ${formatInt(100)}% Recursion/Dispersion/Destruction, you unlock the <b>Galaxy Generator</b>, which can
+        passively generate Galaxies. Generated Galaxies are like Replicanti Galaxies and Tachyon Galaxies in that they affect
+        tickspeed as if they were Antimatter Galaxies, but they do not increase the cost of your next Antimatter Galaxy. You
+        also unlock five new upgrades. The first upgrade increases the base amount of Galaxies generated. The other four
+        upgrades then give a multiplier to this base amount. The first two upgrades can be bought by spending antimatter and
+        Generated Galaxies. Replicanti or Tachyon Galaxies cannot be spent for purchasing those upgrades.
+        <br>
+        <br>
+        The <b>Galaxy Generator</b> has a maximum number of Galaxies it can generate, which can only be increased by draining
+        Rifts once the current cap has been reached.`,
       isUnlocked: () => Pelle.hasGalaxyGenerator,
       tags: ["reality", "antimatter", "lategame", "endgame", "final", "pelle", "galaxy",
         "galaxies", "generator", "celestial"],
@@ -1847,44 +1852,65 @@ Rifts once the current cap has been reached.`,
       tab: "glitch/entropy",
       isUnlocked: () => true,
       info: () => `
-      Glitch's Challenges prove you can handle <i>his</i> Reality <br>
-      Some of Glitch's Challenges can only be completed at certain parts of the game, so try to get them soon <br>
-      Glitch will warn you if you will be locked out of completing a Challenge which can be disabled in confirmations <br>
+      Glitch's Challenges prove you can handle <i>his</i> Reality. <br>
+      Some of Glitch's Challenges can only be completed at certain parts of the game, so try to get them soon. <br>
+      Glitch will warn you if you will be locked out of completing a Challenge which can be disabled in confirmations. <br>
       
-      Completing a Challenge also fills a Rift with Entropy, which unlock more Rewards <br>
-      Completing all of the Challenges unlocks Glitch, The Celestial of Programing <br>
+      Completing a Challenge also fills a Rift with Entropy, which unlock more Rewards. <br>
+      Completing all of the Challenges unlocks Glitch, The Celestial of Programing. <br>
 `,
     }, {
       name: "Meta",
       alias: "Meta Reset",
       tags: ["Glitch", "Meta", "Celestial", "EXV", "EX-V", "VEX", "V-EX"],
       tab: "meta/metaFabricator",
-      isUnlocked: () => true,
+      isUnlocked: () => PlayerProgress.metaUnlocked(),
       info: () => `
-      Meta is a reset for making the Meta Fabricator once complete you will be able to enter the Meta realm<br><br>
+      Meta is a reset for making the Meta Fabricator once complete you will be able to enter the Meta realm.<br><br>
       
-      The Fabricator has 5 rebuyable upgrades and 20 single purchase<br>
-      There are also milestone 4 for Metas and 4 for speed<br>
+      The Fabricator has 5 rebuyable upgrades and 20 single purchase. <br>
+      There are also milestone 4 for Metas and 4 for speed. <br>
 
-      Going Meta will reset Celestials and Achivements along with all of Reality
+      Going Meta will reset Celestials and Achivements along with all of Reality.
       `,
     },{
       name: "Cante",
       tags: ["Cante", "Recplicanor", "Celestial", "Artificial Matter", "Chaotic Matter"],
-      tab: "meta/cante",
+      tab: "meta/CanteTab",
       isUnlocked: () => Cante.isUnlocked,
       info: () => `
-      Cante is unlocked via Ra at level 150 <br>
-      Replicators have requierments but will stay unlokced <br>
-      The Replicator muliplier is how much is added <b>not</b> multiplied <br>
-      Cante has Replicators with can be reforged to make Artificial Matter <br>
-      Artificial Matter is used to make replicators faster and buy upgrades <br>
+      Cante is unlocked via Ra at level 150. <br>
+      Replicators have requierments but will stay unlokced. <br>
+      The Replicator muliplier is how much is added <b>not</b> multiplied. <br>
+      Cante has Replicators with can be reforged to make Artificial Matter. <br>
+      Artificial Matter is used to make replicators faster and buy upgrades. <br>
       <br>
       ${ Cante.purged ?
-        `Purging is like reforgeing but you get Chaotic Matter insted<br>
-        Chaotic Matter boost every Replicators base and per-purchase multiplier<br>
-        Chaotic Matter is only used for buying upgrades<br>` : ''
+        `Purging is like reforgeing but you get Chaotic Matter instead. <br>
+        Chaotic Matter boost every Replicators base and per purchase multiplier. <br>
+        Chaotic Matter is only used for buying upgrades. <br>` : ''
       }
+      `,
+    },{
+      name: "Null",
+      tags: ["Null", "Cycle", "Dark Circles", "Abyssal Matter"],
+      tab: "meta/NullTab",
+      isUnlocked: () => Ra.unlocks.nullUnlock.isUnlocked,
+      info: () => `
+      Null is unlocked via Ra at level 150. <br>
+      To start Null you need a passcode which he says, sometimes he will skip words. <br>
+
+      Null has Cycles, the last one makes Abyssal Matter and the 1st Cycle. <br>
+      Abyssal Matter is used to make Cycles faster and buy upgrades <br>
+
+      Each Cycle's multipler deceases based on how much you have. <br>
+      <br>
+      ${ Null.isCorrupt ?
+        `Corrupt is like Parallax. <br>
+        Corrupts generate Corrupt Matter based on the highest unlocked Cycle. <br>
+        Corrupt Matter is only used for buying upgrades. <br>` : ''
+      }
+
       `,
     }, {
       name: "Mod",
@@ -1893,48 +1919,38 @@ Rifts once the current cap has been reached.`,
       isUnlocked: () => true,
       info: () => `
       This Mod changes: <br>
-      Four Achievement info and unlock requirements and two Rewards <br>
+      Four Achievement info, unlock requirements and two Rewards. <br>
 
-      Lower EC1 eternity requirement <br>
+      Lower EC1 eternity requirement. <br>
 
-      Teresa RM pouring cap <br>
-      V Achievement requirements and for Unlocking V <br>
-      Ra memory level cap <br>
-      Alchemy cap <br>
-      One Pelle Quote <br>
-      End tab names <br>
-      End Game <br>
+      Teresa RM pouring cap and pouring speed. <br>
+      V Achievement requirements and for Unlocking V. <br>
+      Ra memory level cap. <br>
+      Alchemy cap. <br>
+      One Pelle Quote. <br>
+      End tab names. <br>
+      End Game. <br>
       <br>
       And Adds: <br>
-      New Teresa pouring Milestone <br>
-      New Effarig upgrade <br>
-      New Hard V Achievement <br>
+      New Teresa pouring Milestone. <br>
+      New Effarig upgrade. <br>
+      New Hard V Achievement. <br>
       <br>
-      <br>
-      Main Content: <br>
-      Glitch Challenges and Rifts <br>
-      Glitch Celestial and upgrades <br>
-      Destroying Pelle many times <br>
-      <br>
-      Chaos Dimensions <br>
-      <br>
-      Secret Achievements (not complete) <br>
-      Glitch Glyph <br>
       <br>
       QOL: <br>
-      Buy max AD Autobuyer upgrades <br>
-      Toggle ADs buy max <br>
-      Sticky Header, The Prestige buttons and Currencys will scroll down with you <br>
-      Complete ECs based on the amount of EP that you would have needed to complete that Challenge <br>
-      Time study Export, Respec and Import are added to the side of the Time Theorem shop <br>
-      Shift clicking rebuyable Reality upgrades, Black hole upgrades and Glitch rebuyable upgrades bulk buys 25 <br>
-      Shift clicking the Infinity Prestige button will buy a Tesseract without switching tabs <br>
-      STD coins are gained over time at one per 2.5 minutes <br>
+      Buy max AD Autobuyer upgrades. <br>
+      Toggle ADs buy max. <br>
+      Sticky Header for modern UI, The Prestige buttons and Currencys will scroll down with you. <br>
+      Complete ECs based on the amount of EP that you would have needed to complete that Challenge. <br>
+      Time study Export, Respec and Import are added to the side of the Time Theorem shop. <br>
+      Shift clicking some rebuyable upgrades bulk buys 25. <br>
+      Shift clicking the Infinity Prestige button will buy a Tesseract without switching tabs. <br>
+      STD coins are gained over time at one per 2.5 minutes. <br>
       <br>
       Other: <br>
-      News ticker speed can go upto 1000% <br>
-      One secret themes for each Celestial<br>
-`,
+      News ticker speed can go upto 1000%. <br>
+      One secret theme for each vanilla Celestial. <br>
+      `,
     }
   ]
 };

@@ -498,16 +498,17 @@ export const ra = {
       level: 150,
       displayIcon: `<span class="fas fa-droplet"></span>`,
     },
-    nullUpgrade3: {
+    nullDamagedMRGain: {
       id: 48,
-      reward: () => `Gain more MR based on ???`,
+      reward: () => `Gain more MR based on Cante and Null Currences`,
+      effect: () => Currency.artificialMatter.value.pow(Currency.chaosMatter.value).mul(Currency.abyssalMatter.value.pow(Currency.corruptMatter.value)).add(10).log10().add(10).log10().add(10).log10(),
       pet: "null",
       level: 175,
       displayIcon: `<span class="fas fa-droplet"></span>`,
     },
     nullUpgrade4: {
       id: 50,
-      reward: () => `Unlock the Celestial of ???`,
+      reward: () => `Unlock the Celestial of ??? (NYI)`,
       pet: "null",
       level: 200,
       displayIcon: `<span class="fas fa-droplet"></span>`,

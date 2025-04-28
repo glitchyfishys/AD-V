@@ -66,7 +66,8 @@ export const pelleQuotes = {
       { text: "Not even the $1, the 6 named and the innumerable unnamed.", 1: deities },
       { text: "The complex, the irrational, those that go $1.", 1: unseen },
       { text: "Of course, the great $1 does not remember this.", 1: destroyer },
-      { text: "All those $1 that you hide every time.", 1: battles }
+      { text: "All those $1 that you hide every time.", 1: battles },
+      {text: "Why... just why?", displayed: () => {return Parallax.parallaxes.gte(5) }, name: 'Null', background: celBackground('null'), glitched: true}
     ],
   },
   arm: {

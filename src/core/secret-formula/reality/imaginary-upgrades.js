@@ -152,7 +152,7 @@ export const imaginaryUpgrades = [
     hasFailed: () => false,
     checkRequirement: () => EternityChallenge(5).isRunning && Tickspeed.perSecond.add(1).log(10).gte(7.5e10),
     checkEvent: GAME_EVENT.GAME_TICK_AFTER,
-    description: () => `Raise all Dimension per-purchase multipliers to ${formatPow(1.5, 0, 1)}`,
+    description: () => `Raise all Dimension per purchase multipliers to ${formatPow(1.5, 0, 1)}`,
     effect: 1.5,
     isDisabledInDoomed: true
   },

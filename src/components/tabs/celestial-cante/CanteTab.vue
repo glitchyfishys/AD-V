@@ -1,7 +1,6 @@
 <script>
 import CelestialQuoteHistory from "@/components/CelestialQuoteHistory";
 import PrimaryButton from "@/components/PrimaryButton";
-import GlitchEffect from "@/components/GlitchEffect";
 import CanteRep from "./CanteRep";
 import canteUpgrade from "./CanteUpgrade"
 
@@ -12,7 +11,6 @@ export default {
     CanteRep,
     PrimaryButton,
     canteUpgrade,
-    GlitchEffect
   },
   data() {
     return {
@@ -103,16 +101,14 @@ export default {
         </span><br>
         Which multiplies Meta Relay gain up to {{ format(chaosEffect, 2, 2) }} Artificial Matter.
         <span v-if="data.hasPurge">
-          Which amplifies the per-purchase multiplier, base multiplier and ArtM effect.
+          Which amplifies the per purchase multiplier, base multiplier and ArtM effect.
         </span><br>
         <br>
-        <div>
-          formating does not work with numbers less than 1 so you have to deal with it, softcaps
-          <span v-tooltip="softCaps()"><i class="fas fa-question-circle"></i></span><br>
-          shift clicking buys max
-        </div>
+        shift clicking buys max
+        softcaps
+        <span v-tooltip="softCaps()"><i class="fas fa-question-circle"></i></span><br>
 
-      </div>
+      </div><br>
       <div class="c-cante-tab">
         <div
         v-for="k in 10"

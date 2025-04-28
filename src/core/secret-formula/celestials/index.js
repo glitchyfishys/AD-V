@@ -18,6 +18,7 @@ import { GlitchRifts } from "./glitchrift";
 import { glitchRealityUpgrades } from "./glitchupgrades";
 import { glitchSpeedUpgrades } from "./glitchspeed";
 import { cante } from "./cante";
+import { NullData } from "./null";
 
 export const celestials = {
   effarig: {
@@ -48,5 +49,6 @@ export const celestials = {
   GlitchRifts,
   glitchRealityUpgrades,
   glitchSpeedUpgrades,
-  cante: cante,
+  cante,
+  null: NullData
 };

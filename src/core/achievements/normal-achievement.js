@@ -1,6 +1,5 @@
 import { DC } from "../constants";
 import { GameMechanicState } from "../game-mechanics";
-import { SteamRuntime } from "@/steam";
 
 class AchievementState extends GameMechanicState {
   constructor(config) {
@@ -76,7 +75,6 @@ class AchievementState extends GameMechanicState {
       GameUI.notify.reality(`Automatically unlocked: ${this.name}`);
     } else {
       GameUI.notify.success(`Achievement: ${this.name}`);
-      SteamRuntime.activateAchievement(this.id);
     }
     if (player.speedrun.isActive && !player.speedrun.achievementTimes[this.id]) {
       // This stores a lot of data in the savefile and seems particularly suceptible to floating-point rounding issues
@@ -185,11 +183,6 @@ export const Achievements = {
     return Achievements._power.value;
   },
 
-  updateSteamStatus() {
-    for (const achievement of Achievements.all.filter(x => x.isUnlocked)) {
-      SteamRuntime.activateAchievement(achievement.id);
-    }
-  }
 };
 
 EventHub.logic.on(GAME_EVENT.PERK_BOUGHT, () => {

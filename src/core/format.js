@@ -8,15 +8,24 @@ function isEND() {
   return player.celestials.pelle.doomed && Math.random() < threshold;
 }
 
+function invertOOM(x){
+  let e = x.log10().floor();
+  let m = x.div(Decimal.pow(10, e));
+  e = e.neg();
+  x = new Decimal(10).pow(e).times(m);
+
+  return x
+}
+
 window.formatSmall = function formatSmall(value, places = 2, placesUnder1000 = 3) {
   if (isEND()) return "END";
   // eslint-disable-next-line no-param-reassign 
   if (!isDecimal(value)) value = new Decimal(value);
-  if(value.gt(1)) return format(value, places, placesUnder1000);
+  if(value.gte(1)) return format(value, places, placesUnder1000);
 
-  if(value.gt(0.001)) return format(value, 3, 3)
-  value = invertOOM(value)
-  const val = format(value, places, placesUnder1000)
+  if(value.gte(0.01)) return format(value, 3, 3);
+  value = invertOOM(value);
+  const val = Notation.scientific.format(value, places, placesUnder1000);
   return val.replace(/([^(?:e|F| )]*)$/, '-$1');
 };
 
@@ -208,6 +217,8 @@ const pluralDatabase = new Map([
   ["Meta Relay", "Meta Relays"],
   ["Artificial Matter", "Artificial Matter"],
   ["Chaotic Matter", "Chaotic Matter"],
+  ["Abyssal Matter", "Abyssal Matter"],
+  ["Corrupt Matter", "Corrupt Matter"]
 ]);
 
 /**
@@ -297,12 +308,3 @@ window.makeEnumerationOR = function makeEnumeration(items) {
   const last = items[items.length - 1];
   return `${commaSeparated}, or ${last}`;
 };
-
-function invertOOM(x){
-  let e = x.log10().ceil()
-  let m = x.div(Decimal.pow(10, e))
-  e = e.neg()
-  x = new Decimal(10).pow(e).times(m)
-
-  return x
-}

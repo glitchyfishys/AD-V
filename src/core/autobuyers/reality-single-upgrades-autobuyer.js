@@ -1,5 +1,4 @@
 import { AutobuyerState } from "./autobuyer";
-import { GlyphSacrificeHandler, ImaginaryUpgrade, MendingMilestone, RealityUpgrade } from "../globals";
 
 export class NonRepeatableImaginaryUpgradeAutobuyerState extends AutobuyerState {
   get data() {

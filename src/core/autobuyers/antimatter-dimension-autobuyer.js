@@ -90,6 +90,8 @@ export class AntimatterDimensionAutobuyerState extends UpgradeableAutobuyerState
   // unmodifiable in some conditions. This is basically the lowest-effort solution to support legacy behavior
   // because the proper alternatve of an AD autobuyer refactor to untangle this mess is likely not worth the effort
   get canTick() {
+
+    if (Laitela.continuumActive) return false;
     // AD autobuyer-specific logic; if the UI is collapsed then we are unable to toggle groupSetting.
     // In terms of UX for this case it makes the most sense to ignore it and pretend it's true
     const settingConfig = player.auto.antimatterDims;

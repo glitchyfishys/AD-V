@@ -40,8 +40,8 @@ export const cante = {
         condition: () => Currency.artificialMatter.gt('ee12') && Currency.metaRelays.gte('e8000') && Currency.chaosMatter.gte(1e15),
     },
     {
-        unlock: () => `(NYI)`,
-        condition: () => false,
+        unlock: () => `Have ${format('ee9')} Artificial Matter and Null unlocked`,
+        condition: () => Currency.artificialMatter.gt('ee9') && Null.isUnlocked,
     },
   ],
   upgrades: [

@@ -17,8 +17,6 @@ class CanteUpgradeState extends BitUpgradeState {
   purchase() {
     if(this.config.chaos){
       if (this.isUnlocked || !Currency.chaosMatter.purchase(this.cost)) return;
-      this.unlock();
-      this.config.onPurchased?.();
     }
     else if (this.isUnlocked || !Currency.artificialMatter.purchase(this.cost)) return;
     this.unlock();

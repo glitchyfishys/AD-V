@@ -546,6 +546,9 @@ export const Glyphs = {
   isObjectivelyUseless(glyph, threshold, inventoryIn) {
     if (player.reality.applyFilterToPurge && AutoGlyphProcessor.wouldKeep(glyph)) return false;
     function hasSomeBetterEffects(glyphA, glyphB, comparedEffects) {
+      if (glyphA.level.gte(glyphB.level)){
+        if (glyphA.strength.gte(glyphB.strength)) return true;
+      }
       for (const effect of comparedEffects) {
         const c = effect.compareValues(
           effect.effect(glyphA.level, glyphA.strength),
@@ -788,7 +791,7 @@ export const Glyphs = {
     }
   },
   swapIntoActive(glyph, targetSlot) {
-    if(this.active.filter(x => x == null ? false : x.type == "cursed" ).length <= Glitch.forceGlyphs && Glitch.isRunning) {
+    if( this.active[targetSlot].type == "cursed" && this.active.filter(x => x == null ? false : x.type == "cursed" ).length <= Glitch.forceGlyphs && Glitch.isRunning) {
         Modal.message.show(`you can not swap due to being forced have at least ${Glitch.forceGlyphs} cursed glyphs`, { closeEvent: GAME_EVENT.GLYPHS_CHANGED });
       return;
     }

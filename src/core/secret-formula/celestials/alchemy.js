@@ -377,7 +377,7 @@ export const alchemyResources = {
     name: "Multiversal",
     symbol: "Σ",
     isBaseResource: false,
-    effect: amount => Decimal.pow(amount.div(25000), 2).mul(32).min(50),
+    effect: amount => Decimal.pow(amount.div(25000), 2).mul(32).min(32),
     tier: 4,
     uiOrder: 5,
     unlockedAt: 16,

@@ -20,17 +20,17 @@ export default {
   },
   data() {
     return {
-      ug: {bought: false, isAfordable: false, purged: false, chaos: false,},
+      ug: {bought: false, isAfordable: false, corrupt: false, corrupted: false},
     };
   },
   computed: {
     symbol: () => Null.symbol,
     isDoomed: () => Pelle.isDoomed,
     classList(){
-      if(this.ug.chaos){
+      if(this.ug.corrupt){
         return {
-         "c-null-button-bought-chaos": this.ug.bought,
-         "c-null-button-buyable-chaos": this.ug.isAfordable && !this.ug.bought,
+         "c-null-button-bought-corrupt": this.ug.bought,
+         "c-null-button-buyable-corrupt": this.ug.isAfordable && !this.ug.bought,
          "c-null-button-unbought": !this.ug.bought && !this.ug.isAfordable,
          "c-null-button": true,
         }
@@ -46,7 +46,9 @@ export default {
   methods: {
     update() {
       this.ug.bought = this.upgrade.isUnlocked;
-      this.ug.isAfordable = Currency.artificialMatter.gte(this.upgrade.config.cost);
+      this.ug.corrupt = this.upgrade.config.corrupt;
+      this.ug.isAfordable = this.ug.corrupt ? Currency.corruptMatter.gte(this.upgrade.config.cost) : Currency.abyssalMatter.gte(this.upgrade.config.cost);
+      this.ug.corrupted = Null.isCorrupt;
     },
     buy(){
       this.upgrade.purchase();
@@ -59,14 +61,14 @@ export default {
   <PrimaryButton
   :class="classList"
   @click="buy"
-  v-if='(ug.chaos && ug.purged) || !ug.chaos'
+  v-if='(ug.corrupt && ug.corrupted) || !ug.corrupt'
   >
     <DescriptionDisplay :config='upgrade.config' />
     <div >
       <CostDisplay
       :config='upgrade.config'
       br
-      :name='"Artificial Matter"'
+      :name='ug.corrupt ? "Corrupt Matter" : "Abyssal Matter"'
       />
 
       <EffectDisplay
@@ -87,24 +89,24 @@ export default {
 }
 
 .c-null-button-unbought {
-  background: #555555;
+  background: #313131;
   color: var(--text-color);
 }
 
 .c-null-button-buyable {
-  background: #ccccff;
+  background: #33334b;
 }
 
 .c-null-button-bought {
   background: var(--color-null--base);
 }
 
-.c-null-button-buyable-chaos {
-  background: #ffcccc;
+.c-null-button-buyable-corrupt {
+  background: #433356;
 }
 
-.c-null-button-bought-chaos {
-  background: var(--color-null--chaos);
+.c-null-button-bought-corrupt {
+  background: var(--color-null--corrupt);
 }
 
 </style>

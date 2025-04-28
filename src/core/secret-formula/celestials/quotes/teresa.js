@@ -8,6 +8,7 @@ export const teresaQuotes = {
       "You have shown promise with your bending of Reality.",
       "We are the Celestials, and we want you to join us.",
       "My name is Teresa, the Celestial Of Reality.",
+      {text: "You are horrible.", displayed: () => {return Null.isCorrupt }, name: 'Null', background: celBackground('null'), glitched: true},
       "Prove your worth.",
     ]
   },

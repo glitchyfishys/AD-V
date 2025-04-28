@@ -40,7 +40,7 @@ export default {
       return Math.ceil(this.entryCount / 8);
     },
     entryCountPerRow() {
-      return this.rowCount === 1 ? this.entryCount : 5;
+      return this.rowCount % 1 === 0 ? this.entryCount / this.rowCount : 5;
     },
     boxSize() {
       // The 1% reduced flex-basis is used to prevent wrapping due to the margins.

@@ -57,9 +57,6 @@ export const GameIntervals = (function() {
     save: interval(() => GameStorage.save(), () =>
       player.options.autosaveInterval - Math.clampMin(0, Date.now() - GameStorage.lastSaveTime)
     ),
-    checkCloudSave: interval(() => {
-      if (player.options.cloudEnabled && Cloud.loggedIn) Cloud.saveCheck();
-    }, 600 * 1000),
     // This simplifies auto-backup code to check every second instead of dynamically stopping and
     // restarting the interval every save operation, and is how it's structured on Android as well
     checkEverySecond: interval(() => {

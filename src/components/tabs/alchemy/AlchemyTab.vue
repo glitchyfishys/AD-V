@@ -232,11 +232,23 @@ export default {
         View Reality Glyph creation
       </PrimaryButton>
       <PrimaryButton
+        v-else
+        :class="realityGlyphCreationClass"
+      >
+        Reality Glyph creation is locked
+      </PrimaryButton>
+      <PrimaryButton
         v-if="glitchCreationVisible"
         :class="glitchGlyphCreationClass"
         onclick="Modal.glitchGlyph.show()"
       >
         View Glitch Glyph creation
+      </PrimaryButton>
+      <PrimaryButton
+        v-else
+        :class="glitchGlyphCreationClass"
+      >
+        Glitch Glyph creation is locked
       </PrimaryButton>
     </div>
     <AlchemyResourceInfo

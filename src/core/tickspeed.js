@@ -199,11 +199,14 @@ export const Tickspeed = {
       tickspeed = tickspeed.pow(0.00025);
     }
 
-    if(tickspeed.gt("1e1E20")) tickspeed = tickspeed.pow( tickspeed.log10().div(1e20).pow(0.95).recip() );
+    if(tickspeed.gt("ee20")) tickspeed = tickspeed.pow( tickspeed.log10().div(1e20).pow(0.95).recip() );
     
     if(tickspeed.gt("ee50")) tickspeed = tickspeed.pow( tickspeed.log10().div(1e50).pow(0.95).recip() );
-    if(tickspeed.gt("1e1E100")) tickspeed = tickspeed.pow( tickspeed.log10().div(1e100).pow(0.99).recip() );
-    if(tickspeed.gt("1e1E200")) tickspeed = tickspeed.pow( tickspeed.log10().div(1e200).pow(0.99).recip() );
+    if(tickspeed.gt("ee100")) tickspeed = tickspeed.pow( tickspeed.log10().div(1e100).pow(0.999).recip() );
+    if(tickspeed.gt("ee150")) tickspeed = tickspeed.pow( tickspeed.log10().div(1e100).pow(0.9999).recip() );
+    if(tickspeed.gt("ee200")) tickspeed = tickspeed.pow( tickspeed.log10().div(1e200).pow(0.9999).recip() );
+
+    
 
     return tickspeed;
   },

@@ -298,7 +298,7 @@ export const Ra = {
   },
   get CandNChunkProduction() {
     return DC.D1.mul(Decimal.max( Ra.pets.null.memoryProductionMultiplier, 1))
-    .mul(Decimal.max( Ra.pets.cante.memoryProductionMultiplier, 1));
+    .mul(Decimal.max( Ra.pets.cante.memoryProductionMultiplier, 1)).pow(NullUpgrades.all[19].isUnlocked ? 2.63 : 1);
 
   },
   get memoryBoostResources() {
@@ -319,8 +319,8 @@ export const Ra = {
     if (level >= Ra.levelCap) return DC.BEMAX;
     const adjustedLevel = Decimal.pow(level, 2).div(10).add(level);
     const post15Scaling = Decimal.pow(1.5, Decimal.max(0, level - 15));
-    const post100Scaling = Decimal.pow(2.9, Decimal.max(0, level - 100));
-    const post150Scaling = Decimal.pow(36, Decimal.max(0, level - 150));
+    const post100Scaling = Decimal.pow(2.75, Decimal.max(0, level - 100));
+    const post150Scaling = Decimal.pow(26, Decimal.max(0, level - 150));
     const post175Scaling = Decimal.pow(120, Decimal.max(0, level - 175));
     return Decimal.floor(Decimal.pow(adjustedLevel, 5.52).mul(post15Scaling).mul(post100Scaling).mul(post150Scaling).mul(post175Scaling).mul(DC.E6));
   },
@@ -402,6 +402,7 @@ export const Ra = {
     player.celestials.ra.petWithRemembrance = name;
   },
   updateAlchemyFlow(realityRealTime) {
+    if (MetaFabricatorUpgrade(17).isBought) return;
     const perSecond = Decimal.div(1000, realityRealTime);
     
     let primeboost = AlchemyResource.shifter.effectOrDefault(0);
@@ -416,6 +417,7 @@ export const Ra = {
     }
   },
   applyAlchemyReactions(realityRealTime) {
+    if (MetaFabricatorUpgrade(17).isBought) return;
     if (!Ra.unlocks.effarigUnlock.canBeApplied) return;
     const sortedReactions = AlchemyReactions.all
       .compact()

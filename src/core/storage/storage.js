@@ -107,7 +107,6 @@ export const GameStorage = {
     const root = GameSaveSerializer.deserialize(save);
 
     this.loadRoot(root);
-    Achievements.updateSteamStatus();
   },
 
   loadRoot(root) {
@@ -150,7 +149,6 @@ export const GameStorage = {
     Modal.hideAll();
     Cloud.resetTempState();
     GameUI.notify.info("Game loaded");
-    Achievements.updateSteamStatus();
   },
 
   import(saveData) {
@@ -179,7 +177,6 @@ export const GameStorage = {
     // is showing
     Tab.options.subtabs[0].show();
     GameUI.notify.info("Game imported");
-    Achievements.updateSteamStatus();
   },
 
   importAsFile() {

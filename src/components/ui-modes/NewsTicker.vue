@@ -1,6 +1,4 @@
 <script>
-import { openExternalLink } from "@/utility/open-external-link";
-import { STEAM } from "@/env";
 
 export default {
   name: "NewsTicker",
@@ -60,7 +58,13 @@ export default {
         this.currentNews = GameDatabase.news
           .filter(message => message.isAdvertising && canShow(message))
           .randomElement();
-      } else {
+      } 
+      else if (player.options.news.onlyVisNews) {
+        this.currentNews = GameDatabase.news
+          .filter(message => message.id.includes("vis"))
+          .filter(message => canShow(message))
+          .randomElement();
+      }else {
         const isAI = Math.random() < player.options.news.AIChance;
         this.currentNews = GameDatabase.news
           .filter(message => message.id.includes("ai") === isAI)
@@ -76,13 +80,6 @@ export default {
       }
 
       let text = this.currentNews.text;
-      if (STEAM) {
-        window.openNewsLink = openExternalLink;
-        text = text.replace(
-          /href=['"]([^"']+)['"]/gu,
-          "href onClick='window.openNewsLink(\"$1\"); return false;'"
-        );
-      }
       line.innerHTML = text;
 
       line.style["transition-duration"] = "0ms";

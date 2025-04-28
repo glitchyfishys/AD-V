@@ -90,7 +90,7 @@ export class RealityAutobuyerState extends AutobuyerState {
       const gainedLevel = gainedGlyphLevel();
       const checkModes = [AUTO_REALITY_MODE.GLYPH, AUTO_REALITY_MODE.EITHER, AUTO_REALITY_MODE.BOTH];
       const levelToCheck = checkModes.includes(this.mode)
-        ? { actualLevel: Decimal.min(this.glyph, Glyphs.levelCap), rawLevel: DC.D1 }
+        ? { actualLevel: Decimal.min(this.glyph, Glyphs.levelCap), rawLevel: new Decimal(1) }
         : gainedLevel;
       const choices = GlyphSelection.glyphList(GlyphSelection.choiceCount, levelToCheck,
         { isChoosingGlyph: false });

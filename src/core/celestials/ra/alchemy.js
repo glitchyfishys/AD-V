@@ -147,6 +147,7 @@ class AlchemyReaction {
   // 100%, but the reaction will be forced to occur at higher than 100% if there is significantly more reagent than
   // product. This allows resources to be created quickly when its reaction is initially turned on with saved reagents.
   get reactionYield() {
+    if (MetaFabricatorUpgrade(17).isBought) return new Decimal(0);
     if (!this._product.isUnlocked || this._reagents.some(r => !r.resource.isUnlocked)) return new Decimal();
     let forcingFactor = (this._reagents
       .map(r => r.resource.amount))
@@ -168,6 +169,7 @@ class AlchemyReaction {
 
   // Check each reagent for if a full reaction would drop it below the product amount.  If so, reduce reaction yield
   get actualYield() {
+    if (MetaFabricatorUpgrade(17).isBought) return new Decimal(0);
     // Assume a full reaction to see what the maximum possible product is
     const maxFromReaction = this.baseProduction.mul(this.reactionYield).mul(this.reactionEfficiency);
     const prodBefore = this._product.amount;
@@ -187,6 +189,7 @@ class AlchemyReaction {
   // is that if we assume that all the reactions are cap-limited, then by assigning priority in this way, reactions
   // get applied so that earlier reactions are less likely to reduce the yield of later reactions.
   get priority() {
+    if (MetaFabricatorUpgrade(17).isBought) return new Decimal(0);
     let maxReagent = Glyphs.levelCap;
     for (const reagent of this._reagents) {
       const afterReaction = reagent.resource.amount.sub(reagent.cost.mul(this.actualYield));

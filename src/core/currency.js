@@ -205,7 +205,7 @@ Currency.antimatter = new class extends DecimalCurrency {
     if(value.gte('ee100')) value = value.pow(value.add('ee100').log('ee100').pow(0.99).recip());
 
     if (InfinityChallenges.nextIC) InfinityChallenges.notifyICUnlock(value);
-    if (GameCache.cheapestAntimatterAutobuyer.value && value.gte(GameCache.cheapestAntimatterAutobuyer.value)) {
+    if (!PlayerProgress.realityUnlocked() && GameCache.cheapestAntimatterAutobuyer.value && value.gte(GameCache.cheapestAntimatterAutobuyer.value)) {
       // Clicking into the automation tab clears the trigger and prevents it from retriggering as long as the player
       // stays on the tab; leaving the tab with an available autobuyer will immediately force it to trigger again
       TabNotification.newAutobuyer.clearTrigger();
@@ -374,6 +374,11 @@ Currency.timeTheorems = new class extends DecimalCurrency {
   }
 
   reset() {
+    super.reset();
+    player.timestudy.maxTheorem = this.startingValue;
+  }
+
+  respec() {
     respecTimeStudies(true);
     super.reset();
     TimeTheoremPurchaseType.am.reset();
@@ -448,7 +453,7 @@ Currency.imaginaryMachines = new class extends DecimalCurrency {
 Currency.darkMatter = new class extends DecimalCurrency {
   get value() { return player.celestials.laitela.darkMatter; }
   set value(value) {
-    const capped = Decimal.min(value, "1e10000000");
+    const capped = Decimal.min(value, "ee100");
     player.celestials.laitela.darkMatter = capped;
     player.celestials.laitela.maxDarkMatter = player.celestials.laitela.maxDarkMatter.max(capped);
   }
@@ -563,6 +568,14 @@ Currency.chaosMatter = new class extends DecimalCurrency {
 Currency.abyssalMatter = new class extends DecimalCurrency {
   get value() { return player.celestials.null.abyssalMatter; }
   set value(value) { player.celestials.null.abyssalMatter = value; }
+  reset(){
+    this.value = DC.D0;
+  }
+}();
+
+Currency.corruptMatter = new class extends DecimalCurrency {
+  get value() { return player.celestials.null.corruptMatter; }
+  set value(value) { player.celestials.null.corruptMatter = value; }
   reset(){
     this.value = DC.D0;
   }

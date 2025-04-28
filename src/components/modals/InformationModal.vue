@@ -49,7 +49,7 @@ export default {
         link="https://play.google.com/store/apps/details?id=kajfosz.antimatterdimensions"
       />
       <InformationModalButton
-        name="Antimatter Dimensions on Steam"
+        name="<u>Antimatter Dimensions on Steam</u> this is a mod and will not go on Steam"
         icon="fa-brands fa-steam"
         link="https://store.steampowered.com/app/1399720/Antimatter_Dimensions/"
       />

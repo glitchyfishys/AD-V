@@ -101,11 +101,11 @@ export const Enslaved = {
     player.lastUpdate = thisUpdate;
   },
   autoStoreRealTime(diffMs) {
-    const maxGain = this.storedRealTimeCap - player.celestials.enslaved.storedReal;
-    const used = Math.min(diffMs, Math.max(0, maxGain / this.storedRealTimeEfficiency));
-    player.celestials.enslaved.storedReal += used * this.storedRealTimeEfficiency;
-    player.lastUpdate += used;
-    return diffMs - used;
+    const maxGain = this.storedRealTimeCap.sub(player.celestials.enslaved.storedReal);
+    const used = Decimal.min(diffMs, maxGain.div(this.storedRealTimeEfficiency).max(0));
+    player.celestials.enslaved.storedReal = player.celestials.enslaved.storedReal.add(used.mul(this.storedRealTimeEfficiency));
+    player.lastUpdate += used.toNumber();
+    return diffMs - used.toNumber();
   },
   canRelease(auto) {
     return !Enslaved.isStoringRealTime && !EternityChallenge(12).isRunning && !Laitela.isRunning &&

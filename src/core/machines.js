@@ -12,7 +12,7 @@ export const MachineHandler = {
   },
 
   get realityMachineMultiplier() {
-    return new Decimal(ShopPurchase.RMPurchases.currentMult).mul(Teresa.rmMultiplier).times(PerkShopUpgrade.rmMult.effectOrDefault(DC.D1))
+    return ShopPurchase.RMPurchases.currentMult.mul(Teresa.rmMultiplier).times(PerkShopUpgrade.rmMult.effectOrDefault(DC.D1))
       .times(getAdjustedGlyphEffect("effarigrm")).times(Achievement(167).effectOrDefault(1));
   },
 
@@ -38,8 +38,9 @@ export const MachineHandler = {
   },
 
   get baseIMCap() {
-    return (Decimal.pow(Decimal.clampMin(this.uncappedRM.max(1).log10().sub(1000), 0), 2))
-      .times((Decimal.pow(Decimal.clampMin(this.uncappedRM.max(1).log10().sub(100000), 1), 0.2)));
+    const uRM = this.uncappedRM.max(1).log10();
+    return (Decimal.pow(Decimal.clampMin(uRM.sub(1000), 0), 2))
+      .times((Decimal.pow(Decimal.clampMin(uRM.sub(100000), 1), 0.2)));
   },
 
   get currentIMCap() {
