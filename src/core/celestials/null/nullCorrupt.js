@@ -5,7 +5,7 @@ class CorruptRequirement {
   }
 
   get isSatisfied() {
-    return Parallax.parallaxes.gte(this.amount.floor());
+    return Parallax.parallaxes.gte(Decimal.floor(this.amount));
   }
 }
 
