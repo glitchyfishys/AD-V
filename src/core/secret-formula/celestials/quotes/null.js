@@ -15,10 +15,11 @@ export const nullQuotes = {
       {text: "Null what are you doing to them?", name: "Glitch", background: celBackground('glitch')},
       "UGH. Go away.",
       "They are not ready.",
-      {text: "I thnk you missing something?.", displayed: () => !CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch')},
+      {text: "I thnk you missing something?", displayed: () => !CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch')},
       {text: "After all, You can not create without destroying.", displayed: () => CanteUpgrades.all[19].isUnlocked, glitched: true},
       {text: "A code?", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch')},
-      {text: "Look out for Glitched things Null says. You may have to remove some words. It might help you find the code. I can't help anymore that that.", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch')},
+      {text: "Look out for Glitched things Null says. You may have to remove some words. It might help you find the code.", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch')},
+      {text: "I can't help anymore that that.", displayed: () => CanteUpgrades.all[19].isUnlocked, name: "Glitch", background: celBackground('glitch')},
     ],
   },
   parallax1: {
