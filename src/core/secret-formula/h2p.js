@@ -1898,7 +1898,7 @@ ${Pelle.isDoomed
       isUnlocked: () => Ra.unlocks.nullUnlock.isUnlocked,
       info: () => `
       Null is unlocked via Ra at level 150. <br>
-      To start Null you need a passcode which he says, sometimes he will skip words. <br>
+      To start Null you need a passcode which he says, you may have to remove some words. <br>
 
       Null has Cycles, the last one makes Abyssal Matter and the 1st Cycle. <br>
       Abyssal Matter is used to make Cycles faster and buy upgrades <br>

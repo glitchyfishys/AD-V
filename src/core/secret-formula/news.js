@@ -7726,7 +7726,7 @@ export const news = [
   {
     id: "vis95",
     get text() {
-      return `This message is<span style='animation: a-text-stretch ${newsAnimSpd(35)}s 1 forwards'> (softcaped)</span>`;
+      return `This message is<span style='animation: a-text-stretch ${newsAnimSpd(150)}s 1 forwards'> (softcaped)</span>`;
     },
   },
   {
@@ -7748,6 +7748,51 @@ export const news = [
   {
     id: "vis100",
     text: `Say my name.`,
+  },
+  {
+    id: "vis101",
+    text: `It's show time!`,
+  },
+  {
+    id: "vis102",
+    text: `Nanomachines son.`,
+  },
+  {
+    id: "vis103",
+    text: `You shouldn't have read this.`,
+  },
+  {
+    id: "vis104",
+    text: `Calling all mod makers. We need make the amalgam mod.`,
+  },
+  {
+    id: "vis105",
+    text: `Yeah, your baned.`,
+  },
+  {
+    id: "vis106",
+    text: `Where are all the good Mods at?`,
+  },
+  {
+    id: "vis107",
+    text: `Apparently Celesitals are genderless. Please stop stating otherwise.`,
+    get unlocked() {return Teresa.isUnlocked}
+  },
+  {
+    id: "vis108",
+    text: `Why did you read this?`,
+  },
+  {
+    id: "vis109",
+    get text() {return `${new Date()}`},
+  },
+  {
+    id: "vis110",
+    text: `I shouldn't hoever.`,
+  },
+  {
+    id: "vis111",
+    text: `[REDACTED]`,
   },
 ];
 

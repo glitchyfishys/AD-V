@@ -11,12 +11,13 @@ export default {
   },
   methods:{
     clipping(){
-      const l =  () => `${Math.floor(Math.random() * 41)}%`;
-      const u =  () => `${Math.floor(Math.random() * 41) + 60}%`;
+      const l =  () => `${Math.floor(Math.random() * 31)}%`;
+      const u =  () => `${Math.floor(Math.random() * 31) + 70}%`;
       return {
         clipPath: `polygon(${l()} ${l()}, ${u()} ${l()}, ${u()} ${u()}, ${l()} ${u()})`,
         position: 'absolute',
-        transform: 'translateX(-50%)'
+        transform: 'translateX(-50%)',
+        filter: 'invert(1)'
       };
     },
   }
