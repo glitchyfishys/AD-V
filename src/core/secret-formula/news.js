@@ -7794,6 +7794,42 @@ export const news = [
     id: "vis111",
     text: `[REDACTED]`,
   },
+  {
+    id: "vis112",
+    text: `Glitch is stronger than Kohler... by a lot.`,
+  },
+  {
+    id: "vis113",
+    text: `You can't win.`,
+  },
+  {
+    id: "vis114",
+    text: `Reality can be what ever i want.`,
+  },
+  {
+    id: "vis115",
+    text: `I should put jetstream sam in the news.`,
+  },
+  {
+    id: "vis116",
+    text: `Have you seen this before?`,
+  },
+  {
+    id: "vis117",
+    text: `What is Love?`,
+  },
+  {
+    id: "vis118",
+    get text() {`There are ${formatInt(Math.floor(Math.random() * 1e15)) } variations of this news message.`},
+  },
+  {
+    id: "vis119",
+    text: `This is the best mod out there. Have a look at the other modders have played this.`,
+  },
+  {
+    id: "vis120",
+    text: `Silence, I can't think.`,
+  },
 ];
 
 

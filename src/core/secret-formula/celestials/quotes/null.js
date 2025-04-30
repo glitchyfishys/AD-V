@@ -70,7 +70,7 @@ export const nullQuotes = {
       "ENOUGH.",
       "YOU CAN GO AWAY.",
       "THERE IS NOTHING FOR YOU.",
-      "YOU. MAKE YOUR WAY HERE JUST TO ANNOY ME?",
+      "YOU MADE YOUR WAY HERE JUST TO ANNOY ME?",
       "AND FOR NO OTHER REASON?",
       "WHAT IS THE POINT?",
       "... LEAVE NOW!"
