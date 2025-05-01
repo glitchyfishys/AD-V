@@ -53,9 +53,9 @@ export const NullData = {
       },
       {
         id: 6,
-        description: () => `The first Cycle boosts all other Cycles`,
+        description: () => `The first Cycle boosts all Cycles`,
         cost: new Decimal(1e40),
-        effect: () => NullCycle(1).amount.add(10).log10().pow(1.3),
+        effect: () => NullCycle(1).amount.add(10).log10().pow(1.35),
         formatEffect: e => `${formatX(e,2,2)}`,
       },
       {

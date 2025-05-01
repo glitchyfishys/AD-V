@@ -115,9 +115,11 @@ class NullCycleState extends DimensionState {
     
     if (NullUpgrades.all[10].isUnlocked && this.tier == NullCycles.highestUnlocked) mult = mult.mul(this.amount.add(10).absLog10().pow(2.5));
 
-
-    mult = mult.pow(Parallax.power);
-    mult = mult.pow(NullUpgrades.all[13].effectOrDefault(1));
+    if (mult.gt(1)) {
+      mult = mult.pow(Parallax.power);
+      mult = mult.pow(NullUpgrades.all[1].effectOrDefault(1));
+      mult = mult.pow(NullUpgrades.all[13].effectOrDefault(1));
+    }
 
     
     if(mult.gt(1e15)) mult = mult.div(mult.div(1e15).pow(NullUpgrades.all[17].isUnlocked ? 0.2 : 0.35));
@@ -126,6 +128,7 @@ class NullCycleState extends DimensionState {
     if(mult.gt('e6000')) mult = mult.div(mult.div('e6000').pow(0.85));
     if(mult.gte('ee4')) mult = mult.pow(mult.add('ee4').log('ee4').pow(0.5).recip());
     if(mult.gte('ee6')) mult = mult.pow(mult.add('ee6').log('ee6').pow(0.8).recip());
+    if(mult.gte('ee10')) mult = mult.pow(mult.add('ee10').log('ee10').pow(0.95).recip());
 
     return mult;
   }

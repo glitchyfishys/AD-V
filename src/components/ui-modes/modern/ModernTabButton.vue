@@ -140,6 +140,10 @@ export default {
   background-color: var(--color-glitch);
 }
 
+.o-tab-btn--meta::before {
+  background-color: var(--color-meta);
+}
+
 .o-subtab-btn--active {
   border-bottom-width: 0.5rem;
 }
