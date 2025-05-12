@@ -1,0 +1,279 @@
+
+:root .t-s13 {
+  --color-text: var(--color-v--base);
+  --color-text-inverted: var(--color-v--accent);
+  --color-base: #ad7b32;
+  --color-accent: var(--color-v--base);
+  --color-notification: var(--color-v--base);
+
+  --color-prestige--accent: var(--color-v--accent);
+  --color-background: var(--color-v--accent);
+
+  --color-teresa--base: var(--color-v--base);
+  --color-teresa--accent: var(--color-v--accent);
+
+  --color-effarig--base: var(--color-v--base);
+
+  --color-enslaved--base: var(--color-v--base);
+
+  --color-v--light: #ffffc4;
+  --color-v--base: #ead584;
+  --color-v--accent: #472305;
+
+  --color-ra--base: var(--color-v--base);
+  --color-ra-pet--teresa: var(--color-v--light);
+  --color-ra-pet--effarig: var(--color-v--light);
+  --color-ra-pet--enslaved: var(--color-v--light);
+  --color-ra-pet--v: var(--color-v--base);
+  --color-ra-pet--glitch: var(--color-v--light);
+
+  --color-laitela--base: var(--color-v--base);
+  --color-laitela--accent: var(--color-v--accent);
+
+  --color-pelle--base: var(--color-v--base);
+  --color-pelle--secondary: pink;
+
+  --color-glitch--accent: var(--color-v--light);
+  --color-glitch--base: var(--color-v--base);
+
+}
+
+/* Celestial styles */
+@keyframes a-effarig-run-button--not-running-glow {
+  from {
+    text-shadow:
+      0 0 1rem black,
+      0 0 2rem black,
+      0 0 3rem #fbca1a,
+      0 0 4rem #fbca1a,
+      0 0 5rem #fbca1a,
+      0 0 6rem #fbca1a,
+      0 0 7rem #fbca1a;
+    box-shadow: 0 0 0.5rem #fbca1a, 0 0 1rem #fbca1a, 0 0 1.5rem #fbca1a;
+  }
+
+  to {
+    text-shadow:
+      0 0 2rem black,
+      0 0 3rem #cb9a1a,
+      0 0 4rem #cb9a1a,
+      0 0 5rem #cb9a1a,
+      0 0 6rem #cb9a1a,
+      0 0 7rem #cb9a1a,
+      0 0 8rem #cb9a1a;
+    box-shadow: 0 0 0.5rem #cb9a1a, 0 0 1rem #cb9a1a, 0 0 1.5rem #cb9a1a, 0 0 2rem #cb9a1a;
+  }
+}
+
+@keyframes a-effarig-run-button--running-glow {
+  from {
+    box-shadow:
+      0 0 0.5rem #cb9a1a inset,
+      0 0 1rem   #cb9a1a inset,
+      0 0 1.5rem #cb9a1a inset,
+      0 0 1.5rem #cb9a1a,
+      0 0 1.5rem #cb9a1a,
+      0 0 1.5rem #cb9a1a;
+  }
+
+  to {
+    box-shadow:
+      0 0 0.5rem #9b6a1a inset,
+      0 0 1rem   #9b6a1a inset,
+      0 0 1.5rem #9b6a1a inset,
+      0 0 1.5rem #9b6a1a,
+      0 0 1.5rem #9b6a1a,
+      0 0 1.5rem #9b6a1a,
+      0 0 2rem   #9b6a1a inset,
+      0 0 2rem   #9b6a1a;
+  }
+}
+
+@keyframes a-effarig-run-button__inner--running-glow {
+  from {
+    text-shadow: 0 0 0.5rem #cb9a1a, 0 0 1rem #cb9a1a, 0 0 1.5rem #cb9a1a;
+  }
+
+  to {
+    text-shadow: 0 0 0.5rem #9b6a1a, 0 0 1rem #9b6a1a, 0 0 1.5rem #9b6a1a, 0 0 2rem #9b6a1a;
+  }
+}
+
+@keyframes a-effarig-run-button--running-noise {
+  0% {
+    -webkit-text-fill-color: rgba(255, 220, 0, 100%);
+  }
+
+  20% {
+    background-position: -50px 0;
+
+    -webkit-text-fill-color: rgba(255, 220, 0, 100%);
+  }
+
+  22% {
+    background-position: 100px -10px;
+
+    -webkit-text-fill-color: rgba(255, 220, 0, 50%);
+  }
+
+  24% {
+    background-position: 0 -150px;
+
+    -webkit-text-fill-color: rgba(255, 220, 0, 100%);
+  }
+
+  50% {
+    background-position: -50px 0;
+
+    -webkit-text-fill-color: rgba(255, 220, 0, 100%);
+  }
+
+  51% {
+    background-position: 100px -10px;
+
+    -webkit-text-fill-color: rgba(255, 220, 0, 50%);
+  }
+
+  52% {
+    background-position: 0 -150px;
+
+    -webkit-text-fill-color: rgba(255, 220, 0, 100%);
+  }
+
+  54% {
+    background-position: 50px 0;
+
+    -webkit-text-fill-color: rgba(255, 220, 0, 100%);
+  }
+
+  56% {
+    background-position: -100px 10px;
+
+    -webkit-text-fill-color: rgba(255, 220, 0, 50%);
+  }
+
+  58% {
+    background-position: 0 50px;
+
+    -webkit-text-fill-color: rgba(255, 220, 0, 100%);
+  }
+
+  90% {
+    background-position: 50px 50px;
+
+    -webkit-text-fill-color: rgba(255, 220, 0, 100%);
+  }
+
+  91% {
+    background-position: 100px -110px;
+
+    -webkit-text-fill-color: rgba(255, 220, 0, 50%);
+  }
+
+  92% {
+    background-position: 0 70px;
+
+    -webkit-text-fill-color: rgba(255, 220, 0, 100%);
+  }
+
+  100% {
+    -webkit-text-fill-color: rgba(255, 220, 0, 100%);
+  }
+}
+
+.t-s13 .c-enslaved-run-button{
+  border-color: var(--color-v--base);
+}
+
+.t-s13 .l-cursed-glyph-creation{
+  background-color: var(--color-base);
+}
+
+.t-s13 .c-effarig-run-button--running:hover{
+  background-color: #404000;
+}
+
+.t-s13 .pelle-icon-container{
+  text-shadow: 0 0 1.5rem #9b6101;
+}
+
+.t-s13 .o-glitch-run-button{
+  background-color: var(--color-v--accent);
+}
+
+.t-s13 .c-pelle-rift{
+  box-shadow: inset 0 0 1rem 0.1rem rgba(177, 130, 21, 45%), 0 0 1rem 0.1rem rgba(212, 150, 21, 45%);
+}
+
+.t-s13 .pelle-icon-container{
+  box-shadow: inset 0 0 1rem 0.1rem rgba(177, 130, 21, 45%), 0 0 1rem 0.1rem rgba(212, 150, 21, 45%);
+}
+
+.t-s13 .o-enslaved-mechanic-button{
+  background-color: #ead3a0;
+  border: var(--var-border-width, 0.2rem) solid #efc090;
+  box-shadow: 0 0 2rem inset rgba(224, 104, 6, 50%);
+}
+
+.t-s13 .o-enslaved-mechanic-button--storing-time {
+background-color: #ead584;
+}
+
+.t-s13 .o-enslaved-shop-button--bought {
+background-color: #ead584;
+;
+}
+
+/* Normal stuff*/
+
+.t-s13 .c-background-overlay{
+  background-color: #000000;
+}
+
+.t-s13 .o-sidebar-currency--antimatter{
+  color: var(--color-antimatter);
+}
+
+.t-s13 .c-game-header__antimatter{
+  color: var(--color-antimatter);
+}
+
+body.t-s13 {
+  color: var(--color-v--base);
+  background-color: var(--color-v--accent);
+}
+
+.t-s13 .container {
+  color: var(--color-v--base);
+}
+
+.t-s13 .c-ra-run-button{
+  color: var(--color-ra--base);
+}
+/* metro  theme with less box shadows */
+
+.t-s13 input,
+.t-s13 select {
+  border: 0.1rem solid #a9a9a9;
+}
+
+.t-s13 .c-tt-buy-button--unlocked {
+  color: var(--color-v--base);
+  background: #212121;
+  border: 0.1rem solid var(--color-v--light);
+}
+
+.t-s13 .c-tt-buy-button--unlocked:hover {
+  color: #212121;
+  background: var(--color-v--light);
+}
+
+.t-s13 .c-tt-buy-button--locked {
+  background: #9e9e9e;
+  border: none;
+  box-shadow: 1px 1px 1px 0 #000000;
+}
+
+.t-s8 .c-tt-buy-button--locked:hover {
+  background: #b12320;
+}

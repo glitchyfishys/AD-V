@@ -1,0 +1,293 @@
+
+:root .t-s14 {
+  --color-text: #daa0ff;
+  --color-text-inverted: var(--color-ra--accent);
+  --color-base: #200039;
+  --color-accent: var(--color-ra--base);
+  --color-notification: var(--color-ra--base);
+
+  --color-prestige--accent: var(--color-ra--accent);
+  --color-background: var(--color-ra--accent);
+
+  --color-teresa--base: var(--color-ra--base);
+  --color-teresa--accent: var(--color-ra--accent);
+
+  --color-effarig--base: var(--color-ra--base);
+
+  --color-enslaved--base: var(--color-ra--base);
+
+  --color-ra--light: #c7b1df;
+  --color-ra--base: #8652d9;
+  --color-ra--accent: #3f0b78;
+
+  --color-v--base: var(--color-ra--base);
+
+  --color-ra-pet--teresa: var(--color-ra--base);
+  --color-ra-pet--effarig: var(--color-ra--base);
+  --color-ra-pet--enslaved: var(--color-ra--base);
+  --color-ra-pet--v: var(--color-ra--base);
+  --color-ra-pet--glitch: var(--color-ra--base);
+
+  --color-laitela--base: var(--color-ra--base);
+  --color-laitela--accent: var(--color-ra--accent);
+
+  --color-pelle--base: var(--color-ra--base);
+  --color-pelle--secondary: magenta;
+
+  --color-glitch--accent: var(--color-ra--light);
+  --color-glitch--base: var(--color-ra--base);
+
+}
+
+/* Celestial styles */
+@keyframes a-effarig-run-button--not-running-glow {
+  from {
+    text-shadow:
+      0 0 1rem black,
+      0 0 2rem black,
+      0 0 3rem #603d9a,
+      0 0 4rem #603d9a,
+      0 0 5rem #603d9a,
+      0 0 6rem #603d9a,
+      0 0 7rem #603d9a;
+    box-shadow: 0 0 0.5rem #603d9a, 0 0 1rem #603d9a, 0 0 1.5rem #603d9a;
+  }
+
+  to {
+    text-shadow:
+      0 0 2rem black,
+      0 0 3rem #411e61,
+      0 0 4rem #411e61,
+      0 0 5rem #411e61,
+      0 0 6rem #411e61,
+      0 0 7rem #411e61,
+      0 0 8rem #411e61;
+    box-shadow: 0 0 0.5rem #411e61, 0 0 1rem #411e61, 0 0 1.5rem #411e61, 0 0 2rem #411e61;
+  }
+}
+
+@keyframes a-effarig-run-button--running-glow {
+  from {
+    box-shadow:
+      0 0 0.5rem #411e61 inset,
+      0 0 1rem   #411e61 inset,
+      0 0 1.5rem #411e61 inset,
+      0 0 1.5rem #411e61,
+      0 0 1.5rem #411e61,
+      0 0 1.5rem #411e61;
+  }
+
+  to {
+    box-shadow:
+      0 0 0.5rem #311551 inset,
+      0 0 1rem   #311551 inset,
+      0 0 1.5rem #311551 inset,
+      0 0 1.5rem #311551,
+      0 0 1.5rem #311551,
+      0 0 1.5rem #311551,
+      0 0 2rem   #311551 inset,
+      0 0 2rem   #311551;
+  }
+}
+
+@keyframes a-effarig-run-button__inner--running-glow {
+  from {
+    text-shadow: 0 0 0.5rem #411e61, 0 0 1rem #411e61, 0 0 1.5rem #411e61;
+  }
+
+  to {
+    text-shadow: 0 0 0.5rem #311551, 0 0 1rem #311551, 0 0 1.5rem #311551, 0 0 2rem #311551;
+  }
+}
+
+@keyframes a-effarig-run-button--running-noise {
+  0% {
+    -webkit-text-fill-color: rgba(120, 70, 220, 100%);
+  }
+
+  20% {
+    background-position: -50px 0;
+
+    -webkit-text-fill-color: rgba(120, 70, 220, 100%);
+  }
+
+  22% {
+    background-position: 100px -10px;
+
+    -webkit-text-fill-color: rgba(120, 70, 220, 50%);
+  }
+
+  24% {
+    background-position: 0 -150px;
+
+    -webkit-text-fill-color: rgba(120, 70, 220, 100%);
+  }
+
+  50% {
+    background-position: -50px 0;
+
+    -webkit-text-fill-color: rgba(120, 70, 220, 100%);
+  }
+
+  51% {
+    background-position: 100px -10px;
+
+    -webkit-text-fill-color: rgba(120, 70, 220, 50%);
+  }
+
+  52% {
+    background-position: 0 -150px;
+
+    -webkit-text-fill-color: rgba(120, 70, 220, 100%);
+  }
+
+  54% {
+    background-position: 50px 0;
+
+    -webkit-text-fill-color: rgba(120, 70, 220, 100%);
+  }
+
+  56% {
+    background-position: -100px 10px;
+
+    -webkit-text-fill-color: rgba(120, 70, 220, 50%);
+  }
+
+  58% {
+    background-position: 0 50px;
+
+    -webkit-text-fill-color: rgba(120, 70, 220, 100%);
+  }
+
+  90% {
+    background-position: 50px 50px;
+
+    -webkit-text-fill-color: rgba(120, 70, 220, 100%);
+  }
+
+  91% {
+    background-position: 100px -110px;
+
+    -webkit-text-fill-color: rgba(120, 70, 220, 50%);
+  }
+
+  92% {
+    background-position: 0 70px;
+
+    -webkit-text-fill-color: rgba(120, 70, 220, 100%);
+  }
+
+  100% {
+    -webkit-text-fill-color: rgba(120, 70, 220, 100%);
+  }
+}
+
+.t-s14 .o-v-milestone{
+  background-color: var(--color-ra--base);
+}
+
+.t-s14 .o-v-milestone--unlocked{
+  background-color: var(--color-ra--light);
+  border-color: var(--color-ra--base);
+}
+
+.t-s14 .c-enslaved-run-button{
+  border-color: var(--color-ra--base);
+}
+
+.c-v-run-button__line {
+  background: var(--color-ra--accent);
+}
+
+.t-s14 .l-cursed-glyph-creation{
+  background-color: var(--color-base);
+}
+
+.t-s14 .c-effarig-run-button--running:hover{
+  background-color: #400040;
+}
+
+.t-s14 .pelle-icon-container{
+  text-shadow: 0 0 1.5rem #502090;
+}
+
+.t-s14 .o-glitch-run-button{
+  background-color: var(--color-ra--accent);
+}
+
+.t-s14 .c-pelle-rift{
+  box-shadow: inset 0 0 1rem 0.1rem rgba(37, 20, 61, 45%), 0 0 1rem 0.1rem rgba(50, 20, 91, 45%);
+}
+
+.t-s14 .pelle-icon-container{
+  box-shadow: inset 0 0 1rem 0.1rem rgba(37, 20, 61, 45%), 0 0 1rem 0.1rem rgba(50, 20, 91, 45%);
+}
+
+.t-s14 .o-enslaved-mechanic-button{
+    background-color: #ad43f0;
+    border: var(--var-border-width, 0.2rem) solid purple;
+    box-shadow: 0 0 2rem inset rgba(124, 24, 206, 50%);
+}
+
+.t-s14 .o-enslaved-mechanic-button--storing-time {
+  background-color: #7f23ff;
+}
+
+.t-s14 .o-enslaved-shop-button--bought {
+  background-color: #7f23ff;
+;
+}
+
+/* Normal stuff*/
+
+.t-s14 .c-background-overlay{
+  background-color: #000000;
+}
+
+.t-s14 .o-sidebar-currency--antimatter{
+  color: var(--color-antimatter);
+}
+
+.t-s14 .c-game-header__antimatter{
+  color: var(--color-antimatter);
+}
+
+body.t-s14 {
+  color: var(--color-ra--base);
+  background-color: var(--color-ra--accent);
+}
+
+.t-s14 .container {
+  color: var(--color-ra--base);
+}
+
+.t-s14 .c-ra-run-button{
+  color: var(--color-ra--base);
+}
+/* metro  theme with less box shadows */
+
+.t-s14 input,
+.t-s14 select {
+  border: 0.1rem solid #a9a9a9;
+}
+
+.t-s14 .c-tt-buy-button--unlocked {
+  color: var(--color-ra--base);
+  background: #212121;
+  border: 0.1rem solid var(--color-ra--light);
+}
+
+.t-s14 .c-tt-buy-button--unlocked:hover {
+  color: #212121;
+  background: var(--color-ra--light);
+}
+
+.t-s14 .c-tt-buy-button--locked {
+  background: #9e9e9e;
+  border: none;
+  box-shadow: 1px 1px 1px 0 #000000;
+}
+
+.t-s8 .c-tt-buy-button--locked:hover {
+  background: #b12320;
+}
