@@ -111,9 +111,9 @@ export const NullData = {
         cost: new Decimal(50),
         effect: () => {
             let v = Currency.corruptMatter.value.pow(0.2).div(10).add(1);
-            if(v.gt(15)) v = v.div(v.div(15).pow(0.45));
-            if(v.gt(50)) v = v.div(v.div(50).pow(0.55));
-            return v.clamp(1, NullUpgrades.all[18].isUnlocked ? 1e5 : 15);
+            if(v.gt(12)) v = v.div(v.div(12).pow(0.75));
+            // if(v.gt(50)) v = v.div(v.div(50).pow(0.35));
+            return v.clamp(1, NullUpgrades.all[18].isUnlocked ? 1e5 : 12);
         },
         formatEffect: e => `${formatPow(e,2,2)}`,
         corrupt: true,

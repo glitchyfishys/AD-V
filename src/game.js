@@ -551,12 +551,15 @@ export function realTimeMechanics(realDiff) {
     Enslaved.storeRealTime(realDiff);
     // Most autobuyers will only tick usefully on the very first tick, but this needs to be here in order to allow
     // the autobuyers unaffected by time storage to tick as well
-    Autobuyers.tick();
     GameUI.update();
-    if(realityUGs.all[7].isBought) return false;
+    if(realityUGs.all[7].isBought) {
+      Autobuyers.tick();
+      return false;
+    }
     return true
   }
   
+  Autobuyers.tick();
   BlackHoles.updatePhases(realDiff);
   return false;
 }

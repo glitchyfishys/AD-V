@@ -74,7 +74,6 @@ export const GameStorage = {
   },
   saved: 0,
   lastSaveTime: Date.now(),
-  lastCloudSave: Date.now(),
   offlineEnabled: undefined,
   offlineTicks: undefined,
   lastUpdateOnLoad: 0,
@@ -147,7 +146,6 @@ export const GameStorage = {
     this.backupOfflineSlots();
     Tabs.all.find(t => t.id === player.options.lastOpenTab).show(false);
     Modal.hideAll();
-    Cloud.resetTempState();
     GameUI.notify.info("Game loaded");
   },
 
@@ -168,7 +166,6 @@ export const GameStorage = {
     GlyphAppearanceHandler.clearInvalidCosmetics();
     if (player.speedrun?.isActive) Speedrun.setSegmented(true);
     this.save(true);
-    Cloud.resetTempState();
     this.resetBackupTimer();
 
     // This is to fix a very specific exploit: When the game is ending, some tabs get hidden
@@ -417,7 +414,6 @@ export const GameStorage = {
     this.loadPlayerObject(Player.defaultStart);
     this.save(true);
     Tab.dimensions.antimatter.show();
-    Cloud.resetTempState();
   },
 
   // eslint-disable-next-line complexity
