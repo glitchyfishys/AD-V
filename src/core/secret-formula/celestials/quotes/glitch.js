@@ -30,7 +30,7 @@ export const glitchQuotes = {
     id: 2,
     lines: [
       "Only Eight Dimensions?",
-      "It looks like your the one.",
+      "It looks like you're the one.",
       "It took so long to find you.",
       "Welcome Destroyer, There is a lot to cover."
     ],
@@ -38,8 +38,8 @@ export const glitchQuotes = {
   galaxy: {
     id: 3,
     lines: [
-      "Ah yes Galaxies, Their a bit strange.",
-      "Let's just say that your Dimensions are not effected by them exactly.",
+      "Ah yes Galaxies, They're a bit strange.",
+      "Let's just say that your Dimensions are not affected by them exactly.",
       "They boost Tickspeed (I made that for you), the effect of mass.",
       "Getting more is harder due to how big they are.",
       "You have no idea how much room they take up."
@@ -50,23 +50,23 @@ export const glitchQuotes = {
     lines: [
       "So fast.",
       "It is going to be fun, you and me are going to stop HIM.",
-      "... I'll come back when you have Infinited fast enough."
+      "... I'll come back when you have Infinitied fast enough."
     ],
   },
   break: {
     id: 5,
     lines: [
-      "Good you found it.",
+      "Good, you found it.",
       "I hope that didn't take long.",
-      "The next thing you need is Replacanti.",
-      "It's something I made (with help) to fill up space, though it has it's limits."
+      "The next thing you need is Replicanti.",
+      "It's something I made (with help) to fill up space, though it has its limits."
     ],
   },
   eternity: {
     id: 6,
     lines: [
       "You may have completed Challenges getting here.",
-      "Don't worry there's more for you, have fun completing them all.",
+      "Don't worry, there's more for you, have fun completing them all.",
       "Also the Time Studies I have designed for you, they will help a lot.",
       "I will let you make some later."
     ],
@@ -99,13 +99,13 @@ export const glitchQuotes = {
   glitchReality: {
     id: 10,
     lines: [
-      "Hey \"Destroyer\", can you complete my reality with all the others realitys combined?",
+      "Hey \"Destroyer\", can you complete my reality with all the others realities combined?",
       { text: "You would need this $1 to $2 HIM.", 1: Power, 2: Destroy },
       "Also you may have notice me saying \"HIM\" a lot he's one of the most powerful celestials, I can't say his name here.",
       "I must be careful, I have been a bit strange.",
       {text: "My Reality has got corrupted... I made it safe.", displayed: () => CanteUpgrades.all[19].isUnlocked, glitched: true},
       {text: "Why didn't it work... is it just that strong?", displayed: () => CanteUpgrades.all[19].isUnlocked, glitched: true},
-      "Huh? these upgrades are broken, take your time to fix them I'll be waiting."
+      "Huh? these upgrades are broken, take your time to fix them, I'll be waiting."
     ],
   },
   glitchFinishPowerUGs: {
