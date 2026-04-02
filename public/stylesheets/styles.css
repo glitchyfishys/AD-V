@@ -812,6 +812,16 @@ button:focus {
   background: var(--color-meta);
 }
 
+.o-tab-btn--fools {
+  color: var(--color-fools);
+  background-color: var(--color-prestige--accent);
+  border-color: var(--color-fools);
+}
+
+.o-tab-btn--fools:hover {
+  background: var(--color-fools);
+}
+
 /* #endregion tab buttons */
 
 #loading {

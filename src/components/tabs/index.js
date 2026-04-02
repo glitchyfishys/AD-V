@@ -57,6 +57,8 @@ import MetaMilestonesTab from "./meta/MetaMilestonesTab";
 import CanteTab from "./celestial-cante/CanteTab";
 import NullTab from "./celestial-null/NullTab";
 
+import AITab from "./april-fools/AITab";
+
 
 const TabComponents = {
   AntimatterDimensionsTab,
@@ -100,7 +102,7 @@ const TabComponents = {
   AlchemyTab,
   ShopTab,
   MultiplierBreakdownTab,
-  entropy,
+  entropy, // new stuff
   GlitchChallengesTab,
   RemakeTab,
   GlitchTab,
@@ -108,7 +110,9 @@ const TabComponents = {
   MetaFabricatorTab,
   MetaMilestonesTab,
   CanteTab,
-  NullTab
+  NullTab,
+
+  AITab // the fools stuff
 };
 
 export default TabComponents;

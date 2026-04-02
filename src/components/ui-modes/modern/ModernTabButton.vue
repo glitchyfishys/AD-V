@@ -144,6 +144,10 @@ export default {
   background-color: var(--color-meta);
 }
 
+.o-tab-btn--fools::before {
+  background-color: var(--color-fools);
+}
+
 .o-subtab-btn--active {
   border-bottom-width: 0.5rem;
 }

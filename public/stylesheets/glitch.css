@@ -24,6 +24,9 @@
   --color-null--base: #555555;
   --color-null--chaos: #aa5555;
   --color-null--corrupt: #5b2ca6;
+
+  --color-fools: #e494fc;
+
 }
 
 .l-glitch-celestial-tab {
@@ -199,6 +202,16 @@ Chaos Styles
 
 .o-tab-btn--glitch:hover {
   background: var(--color-glitch);
+}
+
+.o-tab-btn--fools {
+  color: var(--color-fools);
+  background-color: var(--color-prestige--accent);
+  border-color: var(--color-fools);
+}
+
+.o-tab-btn--fools:hover {
+  background: var(--color-fools);
 }
 
 .o-tab-btn--meta {

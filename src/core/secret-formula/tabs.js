@@ -589,4 +589,23 @@ export const tabs = [
       },
     ],
   },
+  {
+    key: "fools",
+    name: "April Fools",
+    hideAt: 1,
+    UIClass: "o-tab-btn--fools",
+    condition: () => Date().includes("Apr"),
+    id: 13,
+    hidable: false,
+    subtabs: [
+      {
+        key: "AITab",
+        name: "AI",
+        symbol: "AI",
+        component: "AITab",
+        id: 0,
+        hidable: false
+      },
+    ],
+  },
 ];

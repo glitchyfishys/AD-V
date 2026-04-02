@@ -188,6 +188,10 @@ body.t-s12 {
   border-left-color: var(--color-meta);
 }
 
+.o-tab-btn--fools::after {
+  border-left-color: var(--color-fools);
+}
+
 .tab-button.shop {
   background-color: #d9bb26;
 }
@@ -360,6 +364,16 @@ body.t-s12 {
 
 .o-tab-btn--meta .o-subtab__tooltip::after {
   border-top-color: var(--color-meta);
+}
+
+.o-tab-btn--fools .o-subtab__tooltip {
+  color: var(--color-fools);
+  background: var(--color-prestige--accent);
+  border-color: var(--color-fools);
+}
+
+.o-tab-btn--fools .o-subtab__tooltip::after {
+  border-top-color: var(--color-fools);
 }
 
 .active {

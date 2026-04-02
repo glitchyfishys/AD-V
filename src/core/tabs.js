@@ -208,7 +208,8 @@ export const Tabs = (function() {
       Tab.celestials,
       Tab.glitch,
       Tab.meta,
-      Tab.shop
+      Tab.shop,
+      Tab.fools
     ],
     newUI: [
       Tab.dimensions,
@@ -223,7 +224,8 @@ export const Tabs = (function() {
       Tab.achievements,
       Tab.statistics,
       Tab.options,
-      Tab.shop
+      Tab.shop,
+      Tab.fools
     ],
     get currentUIFormat() {
       return ui.view.newUI ? this.newUI : this.oldUI;
