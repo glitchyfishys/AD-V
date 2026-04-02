@@ -12,7 +12,7 @@ export default {
     },
     send() {
       const P = prompt("Prompt");
-      if (P == "") return;
+      if (P == "" || P == null) return;
       this.user.push(P);
     }
   }
