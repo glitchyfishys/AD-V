@@ -40,7 +40,7 @@ export default {
 
             <div
             style="border: 5px solid green; text-align: left; font-size: 2rem;"
-            > As an AI language modal I can't not help with that request.
+            > As an AI language modal I can't help with that request.
             </div>
           </div>
         </div>
