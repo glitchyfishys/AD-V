@@ -594,7 +594,7 @@ export const tabs = [
     name: "April Fools",
     hideAt: 1,
     UIClass: "o-tab-btn--fools",
-    condition: () => Date().includes("Apr"),
+    condition: () => new Date().getMonth() == 3 && new Date().getDate() < 15,
     id: 13,
     hidable: false,
     subtabs: [

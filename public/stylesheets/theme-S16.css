@@ -37,6 +37,10 @@
   --color-glitch--accent: var(--color-effarig--light);
   --color-glitch--base: var(--color-effarig--base);
 
+  --color-glitch: var(--color-effarig--base);
+  --color-glitch-light: var(--color-effarig--base);
+  --color-glitch-dark: var(--color-effarig--base);
+
 }
 
 /* Celestial styles */

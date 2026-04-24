@@ -21,7 +21,8 @@ export default {
 
 <template>
   <div>
-     YOU FOOLS
+     This is not an actual LLM/AI
+     <br>
      <br>
       <div style="display: inline-flex; justify-content: center; height: 100%; width: 100%;">
         <div
