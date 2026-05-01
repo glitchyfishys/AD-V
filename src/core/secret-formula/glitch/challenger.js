@@ -118,7 +118,7 @@ export const ChallengerUpgrades = [
     name: "Rift apart",
     id: 19,
     cost: new Decimal(23),
-    description: "All Rifts are auto filled without draining resorces",
+    description: "All Rifts are faster and auto filled without draining resorces",
   },
   {
     name: "Fragments",

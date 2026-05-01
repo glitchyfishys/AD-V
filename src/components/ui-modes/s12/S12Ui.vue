@@ -32,7 +32,6 @@ export default {
     return {
       bigCrunch: false,
       hasReality: false,
-      newGameKey: "",
       tabName: "",
       S12Windows,
     };
@@ -53,9 +52,6 @@ export default {
       const crunchButtonVisible = !player.break && Player.canCrunch;
       this.bigCrunch = crunchButtonVisible && Time.bestInfinityRealTime.totalMinutes.gt(1);
       this.hasReality = PlayerProgress.realityUnlocked();
-      // This only exists to force a key-swap after pressing the button to start a new game; the news ticker can break
-      // if it isn't redrawn
-      this.newGameKey = Pelle.isDoomed;
       this.tabName = Tabs.current[this.$viewModel.subtab].name;
     },
   },
@@ -81,7 +77,6 @@ export default {
       {{ tabName }}
     </span>
     <div
-      :key="newGameKey"
       class="game-container c-s12-window__inner"
       :class="isOldUi ? 'c-old-ui l-old-ui' : ''"
       :style="topPadding"

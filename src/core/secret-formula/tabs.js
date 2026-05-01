@@ -412,7 +412,7 @@ export const tabs = [
     name: "Celestials",
     hideAt: 2.4,
     UIClass: "o-tab-btn--celestial",
-    condition: () => (Teresa.isUnlocked || GlitchRifts.gamma.milestones[5].effectOrDefault(0)) || PlayerProgress.metaUnlocked(),
+    condition: () => (Teresa.isUnlocked || GlitchRifts.gamma.milestones[5].effectOrDefault(0)),
     id: 9,
     hidable: true,
     subtabs: [

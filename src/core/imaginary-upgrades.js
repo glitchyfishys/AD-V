@@ -144,7 +144,7 @@ class RebuyableImaginaryUpgradeState extends RebuyableMechanicState {
   }
 
   purchaseHybrid(){
-    const value = Decimal.log(this.currency.value.div(this.config.initialCost), this.config.costMult).add(1).floor();
+    const value = Decimal.log(this.currency.value.div(this.config.initialCost).add(1), this.config.costMult).add(1).floor();
     this.boughtAmount = value;
   }
 }

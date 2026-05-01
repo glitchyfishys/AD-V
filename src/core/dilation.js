@@ -261,7 +261,7 @@ export function getDilationTimeEstimate(goal) {
   const rawDTGain = currentDTGain.times(getGameSpeedupForDisplay());
   const currentDT = Currency.dilatedTime.value;
   if (currentDTGain.eq(0)) return null;
-  if (PelleRifts.paradox.isActive) {
+  if (!ChallengerUpgrade(19).isBought && PelleRifts.paradox.isActive) {
     const drain = Pelle.riftDrainPercent;
     const goalNetRate = rawDTGain.minus(Decimal.multiply(goal, drain));
     const currNetRate = rawDTGain.minus(currentDT.times(drain));

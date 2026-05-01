@@ -220,6 +220,7 @@ const pluralDatabase = new Map([
   ["Abyssal Matter", "Abyssal Matter"],
   ["Corrupt Matter", "Corrupt Matter"],
   ["Challengers Essence", "Challengers Essence"],
+  ["Rift Force", "Rift Force"],
 ]);
 
 /**

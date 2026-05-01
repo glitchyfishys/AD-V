@@ -32,5 +32,5 @@ export class PelleUpgradeAutobuyerState extends AutobuyerState {
 
   static get autobuyerGroupName(){ return "Pelle Upgrades"; }
   static get isActive(){ return player.auto.pelleUpgrades.isActive; }
-  static set isActive(value){ player.auto.galgenUpgrades.isActive = value; }
+  static set isActive(value){ player.auto.pelleUpgrades.isActive = value; }
 }

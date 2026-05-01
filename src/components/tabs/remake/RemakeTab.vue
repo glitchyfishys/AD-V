@@ -17,7 +17,7 @@ export default {
   },
   computed: {
     Upgrades: () => ChallengerUpgrades.all,
-    HardUpgrades: () => HardChallengerUpgrades.all,
+    HardUpgrades: () => GlitchRealityUpgrade(16).isBought ? HardChallengerUpgrades.all : [],
     Text: () => {
       if (Pelle.joined) return "Your Reality is enhanced by your Doomed one";
       if (ChallengerUpgrades.allBought) return "Conjoin your Reality with your Doomed Reaity";

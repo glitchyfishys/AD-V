@@ -55,15 +55,15 @@ export const HardChallengerUpgrades = [
     formatEffect: value => formatX(value, 2, 2)
   },
   {
-    name: "Dimenion Boost",
+    name: "Dimension Boost",
     id: 6,
     cost: new Decimal(1e10),
-    description: "Unlock Plynia, reset Chaos Dimenions for a boost on them selves"
+    description: "Unlock Plynia, which reset Chaos Dimenions for a boost on them selves"
   },
   {
-    name: "Again",
+    name: "Yet Again",
     id: 7,
-    cost: new Decimal(2e13),
+    cost: new Decimal(1e12),
     description: "Chaos Cores and Rift Force multiplies Challenger Essence",
     effect: () =>  {
       return Currency.riftForce.value.add(10).log10().mul(Currency.chaosCores.value.add(10).log10()).pow(1.25);

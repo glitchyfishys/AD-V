@@ -55,8 +55,8 @@ export default {
     :class="buttonClassObject"
     @click="manualArmageddon"
   >
-    <span v-if="reset"> Escape your Doomed Reality<br></span>
-    <span v-else-if="isHeader">Your far too weak to escape a Doomed Reality!<br></span>
+    <span v-if="reset">Escape your Doomed Reality<br></span>
+    <span v-else-if="isHeader">You are far too weak to escape a Doomed Reality<br></span>
 
     <span class="c-remnant-gain-display">
       Armageddon for

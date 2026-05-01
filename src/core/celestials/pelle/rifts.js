@@ -128,6 +128,7 @@ class RiftState extends GameMechanicState {
   }
 
   get isMaxed() {
+    if (ChallengerUpgrade(19).isBought) return false;
     return this.percentage >= 1;
   }
 
@@ -153,12 +154,14 @@ class RiftState extends GameMechanicState {
     }
     if (!this.isActive || this.isMaxed) return;
 
+    if (ChallengerUpgrade(19).isBought) diff = diff.mul(10);
+    
     if (this.fillCurrency.value instanceof Decimal) {
       // Don't drain resources if you only have 1 of it.
       // This is in place due to the fix to replicanti below.
       if (this.fillCurrency.value.lte(1)) return;
       if(this.fillCurrency.value.gt('ee10')){
-        this.totalFill = this.totalFill.plus(this.fillCurrency.value).min(this.maxValue);
+        this.totalFill = this.totalFill.plus(this.fillCurrency.value);
       }
       else{
         const afterTickAmount = this.fillCurrency.value.times(Decimal.pow(1 - Pelle.riftDrainPercent, diff.div(1e3)));
@@ -166,7 +169,7 @@ class RiftState extends GameMechanicState {
         // We limit this to 1 instead of 0 specifically for the case of replicanti; certain interactions with offline
         // time can cause it to drain to 0, where it gets stuck unless you reset it with some prestige
         if (!ChallengerUpgrade(19).isBought) this.fillCurrency.value = this.fillCurrency.value.minus(spent).max(1);
-        this.totalFill = this.totalFill.plus(spent).min(this.maxValue);
+        this.totalFill = this.totalFill.plus(spent);
       }
     } else {
       // eslint-disable-next-line max-len

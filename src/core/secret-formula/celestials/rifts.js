@@ -41,7 +41,7 @@ export const pelleRifts = {
         resource: "vacuum",
         requirement: 0.4,
         description: () => `${wordShift.wordCycle(PelleRifts.vacuum.name)} also affects EP gain`,
-        effect: () => Decimal.pow(4, PelleRifts.vacuum.totalFill.max(1).log10().div(616).add(3)),
+        effect: () => Decimal.pow(4, Decimal.maxReducer(Currency.infinityPoints.value, PelleRifts.vacuum.totalFill).max(1).log10().div(616).add(3)).min('e12500'),
         formatEffect: x => `EP gain ${formatX(x, 2, 2)}`
       },
     ],
@@ -238,11 +238,7 @@ export const pelleRifts = {
       get value() {
         return player.galaxies;
       },
-      set value(val) {
-        const spent = player.galaxies.sub(val);
-        player.celestials.pelle.rifts.glitch.fill = 
-        player.celestials.pelle.rifts.glitch.fill.add(spent);
-      }
+      set value(val) {}
     }),
     galaxyGeneratorThreshold: DC.E1,
     milestones: [

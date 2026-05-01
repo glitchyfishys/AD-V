@@ -1394,8 +1394,8 @@ export const normalAchievements = [
     id: 192,
     name: "A Blessing From The Lord",
     displayId: 777,
-    get description() {return `Get a ${format("1e1000")} Sacrifice multiplier from Teresa's Reality`},
-    checkRequirement: () => Teresa.runRewardMultiplier.gte("1e1000"),
+    get description() {return `Get a ${format("1e600")} Sacrifice multiplier from Teresa's Reality`},
+    checkRequirement: () => Teresa.runRewardMultiplier.gte("1e600"),
     checkEvent: GAME_EVENT.REALITY_RESET_AFTER,
     get reward() {
       return `Uncap Glyph Sacrifice and Glyph Rarity`;

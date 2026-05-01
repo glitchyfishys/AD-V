@@ -263,7 +263,7 @@ export const GlyphInfo = {
     hasAlchemyResource: false,
     pelleUniqueEffect: true,
     isGenerated: false,
-    canCustomize: false,
+    canCustomize: () => false,
     adjNounImportance: 5,
     color: "#feaec9",
     setColor: true,
@@ -478,6 +478,7 @@ export const cosmeticGlyphs = {
     symbol: "♫",
     color: "#FF80AB",
     isUnlocked: () => TeresaUnlocks.shop.isUnlocked,
+    canCustomize: () => false,
   },
   blob: {
     id: "blob",

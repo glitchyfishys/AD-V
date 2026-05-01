@@ -57,7 +57,7 @@ export default {
     update() {
       this.isUnlocked = Pelle.hasGalaxyGenerator;
       this.isCapped = GalaxyGenerator.isCapped;
-      this.isCollapsed = player.celestials.pelle.collapsed.galaxies && !this.isCapped;
+      this.isCollapsed = player.celestials.pelle.collapsed.galaxies;
       if (this.isCollapsed || !this.isUnlocked) return;
       this.galaxies.copyFrom(player.galaxies.add(GalaxyGenerator.galaxies));
       this.generatedGalaxies.copyFrom(GalaxyGenerator.generatedGalaxies);
@@ -88,7 +88,6 @@ export default {
   <div class="l-pelle-panel-container">
     <div class="c-pelle-panel-title">
       <i
-        v-if="!isCapped"
         :class="collapseIcon"
         class="c-collapse-icon-clickable"
         @click="toggleCollapse"

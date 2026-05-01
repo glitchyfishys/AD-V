@@ -7767,7 +7767,7 @@ export const news = [
   },
   {
     id: "vis105",
-    text: `Yeah, your baned.`,
+    text: `Yeah, your banned.`,
   },
   {
     id: "vis106",
@@ -7788,7 +7788,7 @@ export const news = [
   },
   {
     id: "vis110",
-    text: `I shouldn't, however.`,
+    text: `I shouldn't... However.`,
   },
   {
     id: "vis111",
@@ -7796,7 +7796,7 @@ export const news = [
   },
   {
     id: "vis112",
-    text: `Glitch is stronger than Kohler... by a lot.`,
+    text: `Who's Kohler???`,
   },
   {
     id: "vis113",
@@ -7836,7 +7836,7 @@ export const news = [
   },
   {
     id: "vis122",
-    text: `Pelle get out of the news room.`,
+    text: `Hevipelle! Get out of the news room`,
   },
   {
     id: "vis123",
@@ -7856,7 +7856,7 @@ export const news = [
   },
   {
     id: "vis127",
-    text: `Arch btw`,
+    text: `I use arch btw`,
   },
   {
     id: "vis128",
@@ -7952,7 +7952,7 @@ export const news = [
   },
   {
     id: "vis151",
-    text: `AI user: ceates a game in seconds. Me: Look what they need to mimic a fraction of my power`,
+    text: `AI user: ceates a generic and unoriginal game in seconds. Me: Look what they need to mimic a fraction of my power.`,
   },
   {
     id: "vis152",
@@ -7988,6 +7988,70 @@ export const news = [
   },
   {
     id: "vis160",
-    text: `More optimized then vanilla`,
+    text: `More optimized then vanilla... sometimes`,
+  },
+  {
+    id: "vis161",
+    text: `<a href='https://glitchyfishys.github.io/' target='_blank'>check this out</a>`,
+  },
+  {
+    id: "vis162",
+    text: `Telemetry? I don't even know how. But you can check <a href='https://clickclickclick.click/' target='_blank'>this out</a>`,
+  },
+  {
+    id: "vis163",
+    text: `GO TO BED`,
+  },
+  {
+    id: "vis164",
+    text: `Redemption is not the end`,
+  },
+  {
+    id: "vis165",
+    text: `Darkness is only the begining`,
+  },
+  {
+    id: "vis166",
+    text: `A Legendary mod is forever`,
+  },
+  {
+    id: "vis167",
+    text: `This Paradox will cause the end`,
+  },
+  {
+    id: "vis168",
+    text: `We are in the Endgame now`,
+  },
+  {
+    id: "vis169",
+    text: `The Space around you is getting more complex`,
+  },
+  {
+    id: "vis170",
+    text: `The Atomic era is long gone`,
+  },
+  {
+    id: "vis171",
+    text: `It has been Refined, Simplified and then Resimplified again`,
+  },
+  {
+    id: "vis172",
+    text: `It was Fast, Faster and had Too much Speedrun`,
+  },
+  {
+    id: "vis173",
+    text: `But you never got the Reward you deserve`,
+  },
+  {
+    id: "vis174",
+    text: `Somethings are Unoriginal`,
+  },
+  {
+    id: "vis175",
+    text: `Vis energy has filled the air`,
+  },
+  {
+    id: "vis176",
+    text: `Balancing this mod is way too hard`,
   },
 ];

@@ -13,7 +13,7 @@ export const V_REDUCTION_MODE = {
   DIVISION: 2
 };
 
-const STreq = [110, 145, 190, 225, 0];
+const STreq = [110, 140, 190, 225, 0];
 
 export const v = {
   // Note: mainUnlock IDs here are one-indexed to match with navigation indices
@@ -226,7 +226,7 @@ export const v = {
         `<br> You have a ${MetaFabricatorUpgrade(5).effectValue.gte(1000) ? `^${format(V.rageDimPower, 2, 2)} buff` :
         `^${format(V.rageDimPower.recip(), 2, 2)} nerf`} to AD,ID,TD and tickspeed`) : "" }`,
 
-      values: [1e25, 4e19, 1e18, 2e15],
+      values: [1e25, 7.5e18, 1e18, 2e15],
       condition: value => V.isRunning && Glitch.isRunning && V.isExtreme && V.spaceTheorems.gte(STreq[VRunUnlock(10).completions]) && Currency.antimatter.value.log10().gt(value),
       currentValue: () => Currency.antimatter.value.log10(),
       formatRecord: x => format(Decimal.pow10(x), 2),
@@ -296,7 +296,7 @@ export const v = {
       id: 15,
       name: "Glitch's Reinforcement",
       description: value => `Reach ${format(Decimal.pow10(value), 2)} Antimatter in V's Extreme Reality with a ${format(1e100)} negative black hole and ${(VRunUnlock(15).completions > 1) ? 3 : 4} Cursed Glyphs, with three Revengeance Completions`,
-      values: [3e2, 8e3, 24e3, 4e4],
+      values: [3e2, 8e3, 24e3, 45e3],
       condition: () => V.isRunningExtreme && V.isExtreme && VRunUnlock(10).completions > 2 && player.requirementChecks.reality.slowestBH.gte(1e100) && player.requirementChecks.reality.maxGlyphs < ((VRunUnlock(15).completions > 1) ? -6 : -10),
       currentValue: () => Currency.antimatter.value.log10(),
       formatRecord: x => format(Decimal.pow10(x), 2),

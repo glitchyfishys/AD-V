@@ -174,7 +174,7 @@ export class DimBoost {
   }
 
   static get startingDimensionBoosts() {
-    if(GlitchRealityUpgrades.all[7].isBought) return DC.D5;
+    if (GlitchRealityUpgrades.all[7].isBought) return DC.D5;
     if (InfinityUpgrade.skipResetGalaxy.isBought) return DC.D4;
     if (InfinityUpgrade.skipReset3.isBought) return DC.D3;
     if (InfinityUpgrade.skipReset2.isBought) return DC.D2;

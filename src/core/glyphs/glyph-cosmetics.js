@@ -16,6 +16,7 @@ class CosmeticGlyphType {
   // types and must be false for cursed, reality, and companion glyphs. However, we use it to determine
   // if a type should be displayed at all in the case of cosmetic types
   get canCustomize() {
+    console.log(this)
     return (!this.isCosmetic || (this.isUnlocked?.() ?? true)) && (this._canCustomize?.() ?? true);
   }
 
@@ -81,7 +82,7 @@ export const CosmeticGlyphTypes = {
   ...functionalGlyphs,
   ...cosmeticGlyphs,
   get list() {
-    return Object.keys({ ...GameDatabase.reality.glyphTypes, ...GameDatabase.reality.cosmeticGlyphs })
+    return Object.keys({ ...functionalGlyphs, ...cosmeticGlyphs })
       .map(e => CosmeticGlyphTypes[e]);
   },
 };

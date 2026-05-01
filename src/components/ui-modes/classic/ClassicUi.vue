@@ -24,7 +24,6 @@ export default {
     return {
       bigCrunch: false,
       smallCrunch: false,
-      newGameKey: "",
     };
   },
   computed: {
@@ -37,9 +36,6 @@ export default {
     update() {
       const crunchButtonVisible = !player.break && Player.canCrunch;
       this.bigCrunch = crunchButtonVisible && Time.bestInfinityRealTime.totalMinutes.gt(1);
-      // This only exists to force a key-swap after pressing the button to start a new game; the news ticker can break
-      // if it isn't redrawn
-      this.newGameKey = Pelle.isDoomed;
     }
   },
 };
@@ -48,7 +44,6 @@ export default {
 <template>
   <div
     id="container"
-    :key="newGameKey"
     class="container c-old-ui l-old-ui"
   >
     <link
