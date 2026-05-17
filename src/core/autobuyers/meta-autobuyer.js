@@ -76,7 +76,7 @@ export class MetaAutobuyerState extends AutobuyerState {
         proc = mrProc.gte(Currency.metaRelays.value.mul(this.xHighest));
         break;
       case AUTO_META_MODE.TIME:
-        proc = (player.records.thisMeta.realTime / 1000) > this.time;
+        proc = player.records.thisMeta.realTime.div().gt(this.time);
         break;
     }
     if (proc) processManualMeta();
