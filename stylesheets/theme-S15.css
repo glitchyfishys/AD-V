@@ -1,0 +1,292 @@
+
+:root .t-s15 {
+  --color-text: #8ac0ff;
+  --color-text-inverted: var(--color-teresa--accent);
+  --color-base: #200039;
+  --color-accent: var(--color-teresa--base);
+  --color-notification: var(--color-teresa--base);
+
+  --color-prestige--accent: var(--color-teresa--accent);
+  --color-background: var(--color-teresa--accent);
+
+  --color-teresa--light: #71c1fc;
+  --color-teresa--base: #5181ec;
+  --color-teresa--accent: #000027;
+
+  --color-effarig--base: var(--color-teresa--base);
+
+  --color-enslaved--base: var(--color-teresa--base);
+
+  --color-ra--base: var(--color-teresa--base);
+
+  --color-v--base: var(--color-teresa--base);
+
+  --color-ra-pet--teresa: var(--color-teresa--base);
+  --color-ra-pet--effarig: var(--color-teresa--light);
+  --color-ra-pet--enslaved: var(--color-teresa--light);
+  --color-ra-pet--v: var(--color-teresa--light);
+  --color-ra-pet--glitch: var(--color-teresa--light);
+
+  --color-laitela--base: var(--color-teresa--base);
+  --color-laitela--accent: var(--color-teresa--accent);
+
+  --color-pelle--base: var(--color-teresa--base);
+  --color-pelle--secondary: magenta;
+
+  --color-glitch--accent: var(--color-teresa--light);
+  --color-glitch--base: var(--color-teresa--base);
+
+}
+
+/* Celestial styles */
+@keyframes a-effarig-run-button--not-running-glow {
+  from {
+    text-shadow:
+      0 0 1rem black,
+      0 0 2rem black,
+      0 0 3rem #3140cb,
+      0 0 4rem #3140cb,
+      0 0 5rem #3140cb,
+      0 0 6rem #3140cb,
+      0 0 7rem #3140cb;
+    box-shadow: 0 0 0.5rem #3140cb, 0 0 1rem #3140cb, 0 0 1.5rem #3140cb;
+  }
+
+  to {
+    text-shadow:
+      0 0 2rem black,
+      0 0 3rem #212c86,
+      0 0 4rem #212c86,
+      0 0 5rem #212c86,
+      0 0 6rem #212c86,
+      0 0 7rem #212c86,
+      0 0 8rem #212c86;
+    box-shadow: 0 0 0.5rem #212c86, 0 0 1rem #212c86, 0 0 1.5rem #212c86, 0 0 2rem #212c86;
+  }
+}
+
+@keyframes a-effarig-run-button--running-glow {
+  from {
+    box-shadow:
+      0 0 0.5rem #212c86 inset,
+      0 0 1rem   #212c86 inset,
+      0 0 1.5rem #212c86 inset,
+      0 0 1.5rem #212c86,
+      0 0 1.5rem #212c86,
+      0 0 1.5rem #212c86;
+  }
+
+  to {
+    box-shadow:
+      0 0 0.5rem #11184f inset,
+      0 0 1rem   #11184f inset,
+      0 0 1.5rem #11184f inset,
+      0 0 1.5rem #11184f,
+      0 0 1.5rem #11184f,
+      0 0 1.5rem #11184f,
+      0 0 2rem   #11184f inset,
+      0 0 2rem   #11184f;
+  }
+}
+
+@keyframes a-effarig-run-button__inner--running-glow {
+  from {
+    text-shadow: 0 0 0.5rem #212c86, 0 0 1rem #212c86, 0 0 1.5rem #212c86;
+  }
+
+  to {
+    text-shadow: 0 0 0.5rem #11184f, 0 0 1rem #11184f, 0 0 1.5rem #11184f, 0 0 2rem #11184f;
+  }
+}
+
+@keyframes a-effarig-run-button--running-noise {
+  0% {
+    -webkit-text-fill-color: rgba(50, 70, 220, 100%);
+  }
+
+  20% {
+    background-position: -50px 0;
+
+    -webkit-text-fill-color: rgba(50, 70, 220, 100%);
+  }
+
+  22% {
+    background-position: 100px -10px;
+
+    -webkit-text-fill-color: rgba(50, 70, 220, 50%);
+  }
+
+  24% {
+    background-position: 0 -150px;
+
+    -webkit-text-fill-color: rgba(50, 70, 220, 100%);
+  }
+
+  50% {
+    background-position: -50px 0;
+
+    -webkit-text-fill-color: rgba(50, 70, 220, 100%);
+  }
+
+  51% {
+    background-position: 100px -10px;
+
+    -webkit-text-fill-color: rgba(50, 70, 220, 50%);
+  }
+
+  52% {
+    background-position: 0 -150px;
+
+    -webkit-text-fill-color: rgba(50, 70, 220, 100%);
+  }
+
+  54% {
+    background-position: 50px 0;
+
+    -webkit-text-fill-color: rgba(50, 70, 220, 100%);
+  }
+
+  56% {
+    background-position: -100px 10px;
+
+    -webkit-text-fill-color: rgba(50, 70, 220, 50%);
+  }
+
+  58% {
+    background-position: 0 50px;
+
+    -webkit-text-fill-color: rgba(50, 70, 220, 100%);
+  }
+
+  90% {
+    background-position: 50px 50px;
+
+    -webkit-text-fill-color: rgba(50, 70, 220, 100%);
+  }
+
+  91% {
+    background-position: 100px -110px;
+
+    -webkit-text-fill-color: rgba(50, 70, 220, 50%);
+  }
+
+  92% {
+    background-position: 0 70px;
+
+    -webkit-text-fill-color: rgba(50, 70, 220, 100%);
+  }
+
+  100% {
+    -webkit-text-fill-color: rgba(50, 70, 220, 100%);
+  }
+}
+
+.t-s15 .o-v-milestone{
+  background-color: var(--color-teresa--base);
+}
+
+.t-s15 .o-v-milestone--unlocked{
+  background-color: var(--color-teresa--light);
+  border-color: var(--color-teresa--base);
+}
+
+.t-s15 .c-enslaved-run-button{
+  border-color: var(--color-teresa--base);
+}
+
+.c-v-run-button__line {
+  background: var(--color-teresa--accent);
+}
+
+.t-s15 .l-cursed-glyph-creation{
+  background-color: var(--color-base);
+}
+
+.t-s15 .c-effarig-run-button--running:hover{
+  background-color: #000a56;
+}
+
+.t-s15 .pelle-icon-container{
+  text-shadow: 0 0 1.5rem #202090;
+}
+
+.t-s15 .o-glitch-run-button{
+  background-color: var(--color-teresa--accent);
+}
+
+.t-s15 .c-pelle-rift{
+  box-shadow: inset 0 0 1rem 0.1rem rgba(24, 30, 195, 0.45), 0 0 1rem 0.1rem rgba(9, 32, 205, 0.45);
+}
+
+.t-s15 .pelle-icon-container{
+  box-shadow: inset 0 0 1rem 0.1rem rgba(24, 30, 195, 45%), 0 0 1rem 0.1rem rgba(9, 32, 205, 45%);
+}
+
+.t-s15 .o-enslaved-mechanic-button{
+    background-color: #1f2fbd;
+    border: var(--var-border-width, 0.2rem) solid skyblue;
+    box-shadow: 0 0 2rem inset rgba(24, 24, 206, 50%);
+}
+
+.t-s15 .o-enslaved-mechanic-button--storing-time {
+  background-color: #3223ff;
+}
+
+.t-s15 .o-enslaved-shop-button--bought {
+  background-color: #3923ff;
+;
+}
+
+/* Normal stuff*/
+
+.t-s15 .c-background-overlay{
+  background-color: #000000;
+}
+
+.t-s15 .o-sidebar-currency--antimatter{
+  color: var(--color-antimatter);
+}
+
+.t-s15 .c-game-header__antimatter{
+  color: var(--color-antimatter);
+}
+
+body.t-s15 {
+  color: var(--color-teresa--base);
+  background-color: var(--color-teresa--accent);
+}
+
+.t-s15 .container {
+  color: var(--color-teresa--base);
+}
+
+.t-s15 .c-teresa-run-button{
+  color: var(--color-teresa--base);
+}
+/* metro  theme with less box shadows */
+
+.t-s15 input,
+.t-s15 select {
+  border: 0.1rem solid #a9a9a9;
+}
+
+.t-s15 .c-tt-buy-button--unlocked {
+  color: var(--color-teresa--base);
+  background: #212121;
+  border: 0.1rem solid var(--color-teresa--light);
+}
+
+.t-s15 .c-tt-buy-button--unlocked:hover {
+  color: #212121;
+  background: var(--color-teresa--light);
+}
+
+.t-s15 .c-tt-buy-button--locked {
+  background: #9e9e9e;
+  border: none;
+  box-shadow: 1px 1px 1px 0 #000000;
+}
+
+.t-s8 .c-tt-buy-button--locked:hover {
+  background: #b12320;
+}

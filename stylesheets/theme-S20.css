@@ -1,0 +1,23 @@
+
+:root .t-s20{
+  --color-text: #000000;
+  --color-text-inverted: white;
+  --color-base: #f2f2f2;
+  --color-disabled: #a3a3a3;
+  --color-accent: #4980cc;
+  --color-good: #5ac467;
+  --color-good-dark: #127a20;
+  --color-good-paused: #e3e638;
+  --color-bad: #b84b5f;
+  --color-gh-purple: #8957e5;
+  --color-notification: red;
+  --color-overlay: rgba(30, 30, 50, 70%);
+
+}
+
+body.t-s20 {
+  opacity: 0.07;
+  filter: blur(15px);
+  color: black;
+  background-color: black;
+}

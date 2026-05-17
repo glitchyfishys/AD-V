@@ -1,0 +1,278 @@
+
+:root .t-s17 {
+  --color-text: #efd2c0;
+  --color-text-inverted: var(--color-enslaved--accent);
+  --color-base: #362921;
+  --color-accent: var(--color-enslaved--base);
+  --color-notification: var(--color-enslaved--base);
+
+  --color-prestige--accent: var(--color-enslaved--accent);
+  --color-background: var(--color-enslaved--accent);
+
+  --color-teresa--base: var(--color-enslaved--base);
+  --color-teresa--accent: var(--color-enslaved--accent);
+
+  --color-effarig--base: var(--color-enslaved--base);
+
+  --color-enslaved--light: #f1d6c0;
+  --color-enslaved--base: #f1aa7f;
+  --color-enslaved--accent: #392a1e;
+
+  --color-ra--base: var(--color-enslaved--base);
+
+  --color-v--base: var(--color-enslaved--base);
+
+  --color-ra-pet--teresa: var(--color-enslaved--light);
+  --color-ra-pet--effarig: var(--color-enslaved--light);
+  --color-ra-pet--enslaved: var(--color-enslaved--base);
+  --color-ra-pet--v: var(--color-enslaved--light);
+  --color-ra-pet--glitch: var(--color-enslaved--light);
+
+  --color-laitela--base: var(--color-enslaved--base);
+  --color-laitela--accent: var(--color-enslaved--accent);
+
+  --color-pelle--base: var(--color-enslaved--base);
+  --color-pelle--secondary: magenta;
+
+  --color-glitch--accent: var(--color-enslaved--light);
+  --color-glitch--base: var(--color-enslaved--base);
+
+}
+
+/* Celestial styles */
+@keyframes a-effarig-run-button--not-running-glow {
+  from {
+    text-shadow:
+      0 0 1rem black,
+      0 0 2rem black,
+      0 0 3rem #855b41,
+      0 0 4rem #855b41,
+      0 0 5rem #855b41,
+      0 0 6rem #855b41,
+      0 0 7rem #855b41;
+    box-shadow: 0 0 0.5rem #855b41, 0 0 1rem #855b41, 0 0 1.5rem #855b41;
+  }
+
+  to {
+    text-shadow:
+      0 0 2rem black,
+      0 0 3rem #543929,
+      0 0 4rem #543929,
+      0 0 5rem #543929,
+      0 0 6rem #543929,
+      0 0 7rem #543929,
+      0 0 8rem #543929;
+    box-shadow: 0 0 0.5rem #543929, 0 0 1rem #543929, 0 0 1.5rem #543929, 0 0 2rem #543929;
+  }
+}
+
+@keyframes a-effarig-run-button--running-glow {
+  from {
+    box-shadow:
+      0 0 0.5rem #543929 inset,
+      0 0 1rem   #543929 inset,
+      0 0 1.5rem #543929 inset,
+      0 0 1.5rem #543929,
+      0 0 1.5rem #543929,
+      0 0 1.5rem #543929;
+  }
+
+  to {
+    box-shadow:
+      0 0 0.5rem #271d17 inset,
+      0 0 1rem   #271d17 inset,
+      0 0 1.5rem #271d17 inset,
+      0 0 1.5rem #271d17,
+      0 0 1.5rem #271d17,
+      0 0 1.5rem #271d17,
+      0 0 2rem   #271d17 inset,
+      0 0 2rem   #271d17;
+  }
+}
+
+@keyframes a-effarig-run-button__inner--running-glow {
+  from {
+    text-shadow: 0 0 0.5rem #543929, 0 0 1rem #543929, 0 0 1.5rem #543929;
+  }
+
+  to {
+    text-shadow: 0 0 0.5rem #271d17, 0 0 1rem #271d17, 0 0 1.5rem #271d17, 0 0 2rem #271d17;
+  }
+}
+
+@keyframes a-effarig-run-button--running-noise {
+  0% {
+    -webkit-text-fill-color: rgba(200, 150, 80, 100%);
+  }
+
+  20% {
+    background-position: -50px 0;
+
+    -webkit-text-fill-color: rgba(200, 150, 80, 100%);
+  }
+
+  22% {
+    background-position: 100px -10px;
+
+    -webkit-text-fill-color: rgba(200, 150, 80, 50%);
+  }
+
+  24% {
+    background-position: 0 -150px;
+
+    -webkit-text-fill-color: rgba(200, 150, 80, 100%);
+  }
+
+  50% {
+    background-position: -50px 0;
+
+    -webkit-text-fill-color: rgba(200, 150, 80, 100%);
+  }
+
+  51% {
+    background-position: 100px -10px;
+
+    -webkit-text-fill-color: rgba(200, 150, 80, 50%);
+  }
+
+  52% {
+    background-position: 0 -150px;
+
+    -webkit-text-fill-color: rgba(200, 150, 80, 100%);
+  }
+
+  54% {
+    background-position: 50px 0;
+
+    -webkit-text-fill-color: rgba(200, 150, 80, 100%);
+  }
+
+  56% {
+    background-position: -100px 10px;
+
+    -webkit-text-fill-color: rgba(200, 150, 80, 50%);
+  }
+
+  58% {
+    background-position: 0 50px;
+
+    -webkit-text-fill-color: rgba(200, 150, 80, 100%);
+  }
+
+  90% {
+    background-position: 50px 50px;
+
+    -webkit-text-fill-color: rgba(200, 150, 80, 100%);
+  }
+
+  91% {
+    background-position: 100px -110px;
+
+    -webkit-text-fill-color: rgba(200, 150, 80, 50%);
+  }
+
+  92% {
+    background-position: 0 70px;
+
+    -webkit-text-fill-color: rgba(200, 150, 80, 100%);
+  }
+
+  100% {
+    -webkit-text-fill-color: rgba(200, 150, 80, 100%);
+  }
+}
+
+.t-s17 .o-v-milestone{
+  background-color: var(--color-enslaved--base);
+}
+
+.t-s17 .o-v-milestone--unlocked{
+  background-color: var(--color-enslaved--light);
+  border-color: var(--color-enslaved--base);
+}
+
+.t-s17 .c-enslaved-run-button{
+  border-color: var(--color-enslaved--base);
+}
+
+.c-v-run-button__line {
+  background: var(--color-enslaved--accent);
+}
+
+.t-s17 .l-cursed-glyph-creation{
+  background-color: var(--color-base);
+}
+
+.t-s17 .c-effarig-run-button--running:hover{
+  background-color: #493f32;
+}
+
+.t-s17 .pelle-icon-container{
+  text-shadow: 0 0 1.5rem #aa7637;
+}
+
+.t-s17 .o-glitch-run-button{
+  background-color: var(--color-enslaved--accent);
+}
+
+.t-s17 .c-pelle-rift{
+  box-shadow: inset 0 0 1rem 0.1rem rgba(204, 140, 105, 0.45), 0 0 1rem 0.1rem rgba(50, 32, 5, 0.45);
+}
+
+.t-s17 .pelle-icon-container{
+  box-shadow: inset 0 0 1rem 0.1rem rgba(204, 140, 105, 45%), 0 0 1rem 0.1rem rgba(50, 32, 5, 45%);
+}
+
+/* Normal stuff*/
+
+.t-s17 .c-background-overlay{
+  background-color: #000000;
+}
+
+.t-s17 .o-sidebar-currency--antimatter{
+  color: var(--color-antimatter);
+}
+
+.t-s17 .c-game-header__antimatter{
+  color: var(--color-antimatter);
+}
+
+body.t-s17 {
+  color: var(--color-enslaved--base);
+  background-color: var(--color-enslaved--accent);
+}
+
+.t-s17 .container {
+  color: var(--color-enslaved--base);
+}
+
+.t-s17 .c-enslaved-run-button{
+  color: var(--color-enslaved--base);
+}
+/* metro  theme with less box shadows */
+
+.t-s17 input,
+.t-s17 select {
+  border: 0.1rem solid #a9a9a9;
+}
+
+.t-s17 .c-tt-buy-button--unlocked {
+  color: var(--color-enslaved--base);
+  background: #212121;
+  border: 0.1rem solid var(--color-enslaved--light);
+}
+
+.t-s17 .c-tt-buy-button--unlocked:hover {
+  color: #212121;
+  background: var(--color-enslaved--light);
+}
+
+.t-s17 .c-tt-buy-button--locked {
+  background: #9e9e9e;
+  border: none;
+  box-shadow: 1px 1px 1px 0 #000000;
+}
+
+.t-s8 .c-tt-buy-button--locked:hover {
+  background: #b12320;
+}
